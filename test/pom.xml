@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>ir.msob.jima.crud</groupId>
+        <artifactId>crud-parent</artifactId>
+        <version>1.1.01</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <artifactId>crud-test</artifactId>
+    <name>test</name>
+    <description>test</description>
+    <packaging>jar</packaging>
+    <dependencies>
+        <!-- MSob -->
+        <dependency>
+            <groupId>ir.msob.jima.crud</groupId>
+            <artifactId>crud-service</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ir.msob.jima.core</groupId>
+            <artifactId>core-test</artifactId>
+            <version>${core-parent.version}</version>
+        </dependency>
+        <!-- Test -->
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+        </dependency>
+    </dependencies>
+</project>
