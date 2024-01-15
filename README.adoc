@@ -1,0 +1,73 @@
+= Jima CRUD
+:toc: macro
+:toc-title:
+:doctype: book
+
+toc::[]
+
+== Introduction
+
+Jima CRUD is a comprehensive project that leverages the power of Java and Maven for backend development, and Angular for frontend development. It provides a robust platform for implementing Create, Read, Update, and Delete (CRUD) operations.
+
+== Prerequisites
+
+Before you begin, ensure you have the following software and tools installed:
+
+* Java
+* Maven
+* npm
+* Angular
+
+== Getting Started
+
+Follow these steps to get started with the Jima CRUD project:
+
+1. Clone the repository.
+2. Install all the software and tools listed in the Prerequisites section.
+3. Install the npm dependencies.
+4. Install the project with the `mvn install` command.
+
+You can also add the following dependency to the `pom.xml` file of your project:
+
+[source,xml]
+----
+<dependencies>
+    <dependency>
+        <groupId>ir.msob.jima.crud</groupId>
+        <artifactId>crud-*</artifactId>
+        <version>1.1.01</version>
+    </dependency>
+</dependencies>
+----
+
+== Features
+
+Jima CRUD offers a wide range of features:
+
+* CRUD Operations: Interfaces for Create, Read, Update, and Delete operations are included.
+
+* API Exposure: APIs for CRUD services are exposed using Restful, gRPC, RSocket, and GraphQL. These technologies ensure efficient, contract-first remote procedure calls, reactive stream communication, real-time data streaming, and flexible data querying.
+
+* Exception Handling: Custom exceptions such as `DomainNotFoundException` and `BadRequestException` are included to handle specific scenarios.
+
+* Reactive Programming: Project Reactor is used for handling asynchronous data streams.
+
+== Running the Tests
+
+To run the tests, use the `mvn test` command.
+
+== Contributing
+
+We welcome contributions to Jima! Please fork the repository, make your changes, and submit a pull request.
+
+== License
+
+Jima is licensed under the Apache License 2.0. Please see the `LICENSE` file for more details.
+
+== Built With
+
+* [Java](https://www.java.com) - The main programming language used.
+* [Maven](https://maven.apache.org/) - Dependency Management.
+* [TypeScript](https://www.typescriptlang.org/) - Used for static typing in JavaScript code.
+* [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) - Used for front-end development.
+* [Angular](https://angular.io/) - Web framework used.
