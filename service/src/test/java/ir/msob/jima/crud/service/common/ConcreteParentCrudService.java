@@ -1,4 +1,4 @@
-package ir.msob.jima.crud.commons.common;
+package ir.msob.jima.crud.service.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.msob.jima.core.commons.data.BaseRepository;
@@ -6,9 +6,11 @@ import ir.msob.jima.core.commons.model.criteria.SampleCriteria;
 import ir.msob.jima.core.commons.model.domain.SampleDomain;
 import ir.msob.jima.core.commons.model.dto.SampleDto;
 import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.crud.commons.BaseBeforeAfterService;
-import ir.msob.jima.crud.commons.ParentCrudService;
+import ir.msob.jima.crud.commons.BaseBeforeAfterDomainService;
+import ir.msob.jima.crud.service.BeforeAfterComponent;
+import ir.msob.jima.crud.service.ParentCrudService;
 
+import java.util.Collection;
 import java.util.Optional;
 
 public class ConcreteParentCrudService implements
@@ -38,7 +40,12 @@ public class ConcreteParentCrudService implements
     }
 
     @Override
-    public BaseBeforeAfterService getBeforeAfterComponent() {
+    public BeforeAfterComponent getBeforeAfterComponent() {
+        return null;
+    }
+
+    @Override
+    public Collection<BaseBeforeAfterDomainService<String, BaseUser<String>, SampleDto<String>, SampleCriteria<String>>> getBeforeAfterDomainServices() {
         return null;
     }
 

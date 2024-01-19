@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
@@ -42,12 +41,8 @@ public interface BaseDeleteCrudService<ID extends Comparable<ID> & Serializable,
      * @param id   The ID of the entity to be deleted.
      * @param user An optional user associated with the operation.
      * @return The ID of the entity that was deleted.
-     * @throws DomainNotFoundException   if the entity to be deleted is not found.
-     * @throws BadRequestException       if the operation encounters a bad request scenario.
-     * @throws InvocationTargetException if an error occurs during invocation.
-     * @throws NoSuchMethodException     if a required method is not found.
-     * @throws InstantiationException    if an instance of a class cannot be created.
-     * @throws IllegalAccessException    if an illegal access operation occurs.
+     * @throws DomainNotFoundException if the entity to be deleted is not found.
+     * @throws BadRequestException     if the operation encounters a bad request scenario.
      */
     @Transactional
     @MethodStats
@@ -69,15 +64,14 @@ public interface BaseDeleteCrudService<ID extends Comparable<ID> & Serializable,
     default Mono<ID> delete(C criteria, Optional<USER> user) throws DomainNotFoundException, BadRequestException {
         log.debug("Delete, criteria: {}, user: {}", criteria, user.orElse(null));
 
-        getBeforeAfterComponent().beforeDelete(criteria, user);
+        getBeforeAfterComponent().beforeDelete(criteria, user, getBeforeAfterDomainServices());
 
         return this.preDelete(criteria, user)
                 .then(this.deleteExecute(criteria, user))
                 .flatMap(deletedDomain -> {
                     Collection<ID> ids = Collections.singletonList(deletedDomain.getDomainId());
-                    Collection<D> domains = Collections.singletonList(deletedDomain);
-                    return this.postDelete(ids, domains, criteria, user)
-                            .doOnSuccess(x -> afterDelete(ids, domains, criteria, user))
+                    return this.postDelete(ids, criteria, user)
+                            .doOnSuccess(x -> getBeforeAfterComponent().afterDelete(ids, criteria, getDtoClass(), user, getBeforeAfterDomainServices()))
                             .thenReturn(deletedDomain.getDomainId());
                 });
     }

@@ -69,15 +69,15 @@ public interface BaseDeleteManyCrudService<ID extends Comparable<ID> & Serializa
     default Mono<Collection<ID>> deleteMany(C criteria, Optional<USER> user) throws DomainNotFoundException, BadRequestException {
         log.debug("DeleteMany, criteria: {}, user: {}", criteria, user.orElse(null));
 
-        getBeforeAfterComponent().beforeDelete(criteria, user);
+        getBeforeAfterComponent().beforeDelete(criteria, user, getBeforeAfterDomainServices());
 
         return this.preDelete(criteria, user)
                 .thenMany(this.deleteManyExecute(criteria, user))
                 .collectList()
                 .flatMap(deletedDomains -> {
                     Collection<ID> ids = prepareIds(deletedDomains);
-                    return this.postDelete(ids, deletedDomains, criteria, user)
-                            .doOnSuccess(x -> afterDelete(ids, deletedDomains, criteria, user))
+                    return this.postDelete(ids, criteria, user)
+                            .doOnSuccess(x -> getBeforeAfterComponent().afterDelete(ids, criteria, getDtoClass(), user, getBeforeAfterDomainServices()))
                             .thenReturn(ids);
                 });
     }

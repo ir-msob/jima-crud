@@ -49,10 +49,10 @@ public interface BaseCountAllCrudService<ID extends Comparable<ID> & Serializabl
         log.debug("CountAll, user: {}", user.orElse(null));
 
         C criteria = newCriteriaClass();
-        getBeforeAfterComponent().beforeCount(criteria, user);
+        getBeforeAfterComponent().beforeCount(criteria, user, getBeforeAfterDomainServices());
 
         return this.countAllExecute(user)
-                .doOnSuccess(aLong -> getBeforeAfterComponent().afterCount(criteria, user));
+                .doOnSuccess(aLong -> getBeforeAfterComponent().afterCount(criteria, user, getBeforeAfterDomainServices()));
     }
 
     /**

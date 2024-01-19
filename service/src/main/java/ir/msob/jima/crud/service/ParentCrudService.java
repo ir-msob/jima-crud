@@ -1,4 +1,4 @@
-package ir.msob.jima.crud.commons;
+package ir.msob.jima.crud.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.msob.jima.core.commons.data.BaseRepository;
@@ -11,6 +11,7 @@ import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.service.BaseService;
 import ir.msob.jima.core.commons.util.GenericTypeUtil;
+import ir.msob.jima.crud.commons.BaseBeforeAfterDomainService;
 import lombok.SneakyThrows;
 import reactor.core.publisher.Mono;
 
@@ -203,11 +204,13 @@ public interface ParentCrudService<
     D toDomain(DTO dto, Optional<USER> user);
 
     /**
-     * Get the before-after service component associated with the CRUD service.
+     * Get the before/after component for the service.
      *
-     * @return The before-after service component.
+     * @return The before/after component.
      */
-    BaseBeforeAfterService getBeforeAfterComponent();
+    BeforeAfterComponent getBeforeAfterComponent();
+
+    Collection<BaseBeforeAfterDomainService<ID, USER, DTO, C>> getBeforeAfterDomainServices();
 
     /**
      * Get the ObjectMapper for handling JSON data.

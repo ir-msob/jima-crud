@@ -73,16 +73,16 @@ public interface BaseUpdateManyCrudService<ID extends Comparable<ID> & Serializa
 
         Collection<D> domains = prepareDomain(dtos, user);
         Collection<ID> ids = prepareIds(domains);
-        getBeforeAfterComponent().beforeUpdate(ids, previousDtos, dtos, user);
+        getBeforeAfterComponent().beforeUpdate(ids, previousDtos, dtos, user, getBeforeAfterDomainServices());
 
-        return this.updateValidation(ids, dtos, domains, user)
-                .then(this.preUpdate(ids, dtos, domains, user))
+        return this.updateValidation(ids, dtos, user)
+                .then(this.preUpdate(ids, dtos, user))
                 .then(addAudit(dtos, AuditDomainActionType.UPDATE, user))
                 .thenMany(this.updateManyExecute(dtos, domains, user))
                 .collectList()
-                .doOnSuccess(updatedDomains -> this.postUpdate(ids, dtos, domains, updatedDomains, user))
+                .doOnSuccess(updatedDomains -> this.postUpdate(ids, dtos, updatedDomains, user))
                 .flatMap(updatedDomains -> getManyByDomain(updatedDomains, user))
-                .doOnSuccess(updatedDtos -> afterUpdate(ids, previousDtos, updatedDtos, user));
+                .doOnSuccess(updatedDtos -> getBeforeAfterComponent().afterUpdate(ids, previousDtos, updatedDtos, user, getBeforeAfterDomainServices()));
     }
 
     /**

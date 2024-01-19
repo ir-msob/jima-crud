@@ -75,7 +75,7 @@ public interface BaseGetStreamCrudService<ID extends Comparable<ID> & Serializab
     default Flux<DTO> getStream(C criteria, Optional<USER> user) throws DomainNotFoundException, BadRequestException {
         log.debug("GetStream, criteria: {}, user: {}", criteria, user.orElse(null));
 
-        getBeforeAfterComponent().beforeGet(criteria, user);
+        getBeforeAfterComponent().beforeGet(criteria, user, getBeforeAfterDomainServices());
 
         return this.preGet(criteria, user)
                 .thenMany(this.getStreamExecute(criteria, user))
@@ -85,7 +85,7 @@ public interface BaseGetStreamCrudService<ID extends Comparable<ID> & Serializab
                     Collection<DTO> dtos = Collections.singleton(dto);
                     Collection<ID> ids = Collections.singleton(domain.getDomainId());
                     return this.postGet(ids, domains, dtos, criteria, user)
-                            .doOnSuccess(x -> getBeforeAfterComponent().afterGet(ids, domains, dtos, criteria, user))
+                            .doOnSuccess(x -> getBeforeAfterComponent().afterGet(ids, dtos, criteria, user, getBeforeAfterDomainServices()))
                             .thenReturn(dto);
                 });
     }

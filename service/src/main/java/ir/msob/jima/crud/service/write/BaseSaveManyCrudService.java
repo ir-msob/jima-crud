@@ -51,16 +51,16 @@ public interface BaseSaveManyCrudService<ID extends Comparable<ID> & Serializabl
         log.debug("SaveMany, dtos.size: {}, user {}", dtos.size(), user.orElse(null));
 
         Collection<D> domains = prepareDomain(dtos, user);
-        getBeforeAfterComponent().beforeSave(dtos, user);
+        getBeforeAfterComponent().beforeSave(dtos, user, getBeforeAfterDomainServices());
 
-        return this.saveValidation(dtos, domains, user)
-                .then(this.preSave(dtos, domains, user))
+        return this.saveValidation(dtos, user)
+                .then(this.preSave(dtos, user))
                 .then(addAudit(dtos, AuditDomainActionType.CREATE, user))
                 .thenMany(this.saveManyExecute(dtos, domains, user))
                 .collectList()
-                .doOnSuccess(savedDomains -> this.postSave(prepareIds(savedDomains), dtos, domains, savedDomains, user))
+                .doOnSuccess(savedDomains -> this.postSave(prepareIds(savedDomains), dtos, savedDomains, user))
                 .flatMap(savedDtos -> getManyByDomain(savedDtos, user))
-                .doOnSuccess(savedDtos -> afterSave(prepareIds(savedDtos), dtos, savedDtos, user));
+                .doOnSuccess(savedDtos -> getBeforeAfterComponent().afterSave(prepareIds(savedDtos), dtos, savedDtos, user, getBeforeAfterDomainServices()));
     }
 
     /**

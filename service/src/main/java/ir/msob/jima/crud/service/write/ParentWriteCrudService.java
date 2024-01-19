@@ -15,7 +15,7 @@ import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
-import ir.msob.jima.crud.commons.ParentCrudService;
+import ir.msob.jima.crud.service.ParentCrudService;
 import lombok.SneakyThrows;
 import reactor.core.publisher.Mono;
 
@@ -108,12 +108,11 @@ public interface ParentWriteCrudService<
     /**
      * Validate entities before saving.
      *
-     * @param dtos    A collection of DTOs to be saved.
-     * @param domains A collection of domain objects to be saved.
-     * @param user    An optional user object.
+     * @param dtos A collection of DTOs to be saved.
+     * @param user An optional user object.
      * @return A Mono that emits void.
      */
-    default Mono<Void> saveValidation(Collection<DTO> dtos, Collection<D> domains, Optional<USER> user) {
+    default Mono<Void> saveValidation(Collection<DTO> dtos, Optional<USER> user) {
         return Mono.empty();
     }
 
@@ -148,66 +147,59 @@ public interface ParentWriteCrudService<
     /**
      * Perform actions before saving entities.
      *
-     * @param dtos    A collection of DTOs to be saved.
-     * @param domains A collection of domain objects to be saved.
-     * @param user    An optional user object.
+     * @param dtos A collection of DTOs to be saved.
+     * @param user An optional user object.
      * @return A Mono that emits void.
      */
-    default Mono<Void> preSave(Collection<DTO> dtos, Collection<D> domains, Optional<USER> user) {
+    default Mono<Void> preSave(Collection<DTO> dtos, Optional<USER> user) {
         return Mono.empty();
     }
 
     /**
      * Perform actions after saving entities.
      *
-     * @param ids          A collection of entity IDs that were saved.
-     * @param dtos         A collection of DTOs that were saved.
-     * @param domains      A collection of domain objects that were saved.
-     * @param savedDomains A collection of domain objects that were saved successfully.
-     * @param user         An optional user object.
+     * @param ids  A collection of entity IDs that were saved.
+     * @param dtos A collection of DTOs that were saved.
+     * @param user An optional user object.
      * @return A Mono that emits void.
      */
-    default Mono<Void> postSave(Collection<ID> ids, Collection<DTO> dtos, Collection<D> domains, Collection<D> savedDomains, Optional<USER> user) {
+    default Mono<Void> postSave(Collection<ID> ids, Collection<DTO> dtos, Collection<D> savedDomains, Optional<USER> user) {
         return Mono.empty();
     }
 
     /**
      * Validate entities before updating.
      *
-     * @param ids     A collection of entity IDs to be updated.
-     * @param dtos    A collection of DTOs to be updated.
-     * @param domains A collection of domain objects to be updated.
-     * @param user    An optional user object.
+     * @param ids  A collection of entity IDs to be updated.
+     * @param dtos A collection of DTOs to be updated.
+     * @param user An optional user object.
      * @return A Mono that emits void.
      */
-    default Mono<Void> updateValidation(Collection<ID> ids, Collection<DTO> dtos, Collection<D> domains, Optional<USER> user) {
+    default Mono<Void> updateValidation(Collection<ID> ids, Collection<DTO> dtos, Optional<USER> user) {
         return Mono.empty();
     }
 
     /**
      * Perform actions before updating entities.
      *
-     * @param ids     A collection of entity IDs to be updated.
-     * @param dtos    A collection of DTOs to be updated.
-     * @param domains A collection of domain objects to be updated.
-     * @param user    An optional user object.
+     * @param ids  A collection of entity IDs to be updated.
+     * @param dtos A collection of DTOs to be updated.
+     * @param user An optional user object.
      * @return A Mono that emits void.
      */
-    default Mono<Void> preUpdate(Collection<ID> ids, Collection<DTO> dtos, Collection<D> domains, Optional<USER> user) {
+    default Mono<Void> preUpdate(Collection<ID> ids, Collection<DTO> dtos, Optional<USER> user) {
         return Mono.empty();
     }
 
     /**
      * Perform actions after updating entities.
      *
-     * @param ids            A collection of entity IDs that were updated.
-     * @param dtos           A collection of old DTOs before update.
-     * @param domains        A collection of domain objects before update.
-     * @param updatedDomains A collection of domain objects after update.
-     * @param user           An optional user object.
+     * @param ids  A collection of entity IDs that were updated.
+     * @param dtos A collection of old DTOs before update.
+     * @param user An optional user object.
      * @return A Mono that emits void.
      */
-    default Mono<Void> postUpdate(Collection<ID> ids, Collection<DTO> dtos, Collection<D> domains, Collection<D> updatedDomains, Optional<USER> user) {
+    default Mono<Void> postUpdate(Collection<ID> ids, Collection<DTO> dtos, Collection<D> updatedDomains, Optional<USER> user) {
         return Mono.empty();
     }
 
@@ -225,29 +217,15 @@ public interface ParentWriteCrudService<
     /**
      * Perform actions after deleting entities based on criteria.
      *
-     * @param ids            A collection of entity IDs that were deleted.
-     * @param deletedDomains A collection of domain objects that were deleted.
-     * @param criteria       The criteria used for deleting entities.
-     * @param user           An optional user object.
+     * @param ids      A collection of entity IDs that were deleted.
+     * @param criteria The criteria used for deleting entities.
+     * @param user     An optional user object.
      * @return A Mono that emits void.
      */
-    default Mono<Void> postDelete(Collection<ID> ids, Collection<D> deletedDomains, C criteria, Optional<USER> user) {
+    default Mono<Void> postDelete(Collection<ID> ids, C criteria, Optional<USER> user) {
         return Mono.empty();
     }
 
-    /**
-     * Perform actions after deleting entities based on criteria. This method is called synchronously after deletion.
-     *
-     * @param ids            A collection of entity IDs that were deleted.
-     * @param deletedDomains A collection of domain objects that were deleted.
-     * @param criteria       The criteria used for deleting entities.
-     * @param user           An optional user object.
-     * @throws Exception If there is an issue with the operation.
-     */
-    @SneakyThrows
-    default void afterDelete(Collection<ID> ids, Collection<D> deletedDomains, C criteria, Optional<USER> user) {
-        getBeforeAfterComponent().afterDelete(ids, deletedDomains, criteria, getDtoClass(), user);
-    }
 
     /**
      * Prepare a collection of domain objects from a collection of DTOs.
@@ -261,33 +239,6 @@ public interface ParentWriteCrudService<
                 .stream()
                 .map(dto -> toDomain(dto, user))
                 .toList();
-    }
-
-    /**
-     * Perform actions after saving entities. This method is called synchronously after save.
-     *
-     * @param ids       A collection of entity IDs that were saved.
-     * @param dtos      A collection of DTOs that were saved.
-     * @param savedDtos A collection of DTOs that were saved successfully.
-     * @param user      An optional user object.
-     */
-    @SneakyThrows
-    default void afterSave(Collection<ID> ids, Collection<DTO> dtos, Collection<DTO> savedDtos, Optional<USER> user) {
-        getBeforeAfterComponent().afterSave(ids, dtos, savedDtos, user);
-    }
-
-    /**
-     * Perform actions after updating entities.
-     *
-     * @param ids         A collection of entity IDs that were updated.
-     * @param oldDtos     A collection of old DTOs before the update.
-     * @param updatedDtos A collection of updated DTOs after the update.
-     * @param user        An optional user object.
-     */
-    @SneakyThrows
-    default void afterUpdate(Collection<ID> ids, Collection<DTO> oldDtos, Collection<DTO> updatedDtos, Optional<USER> user) {
-        getBeforeAfterComponent().afterUpdate(ids, oldDtos, updatedDtos, user);
-
     }
 
     /**
