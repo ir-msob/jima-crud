@@ -1,30 +1,28 @@
 package ir.msob.jima.crud.commons;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
-import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
 
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Optional;
 
 /**
- * This interface defines before and after service methods for CRUD operations on domain entities.
+ * This interface provides a set of methods that are called before and after each CRUD operation.
+ * It is designed to be implemented by domain services that need to perform additional processing or validation.
  */
 public interface BaseBeforeAfterService {
 
     /**
-     * Called before counting entities based on provided criteria.
+     * This method is called before the count operation.
      *
-     * @param criteria The criteria for counting entities.
-     * @param user     An optional user context.
-     * @throws DomainNotFoundException If the domain is not found.
-     * @throws BadRequestException     If the request is invalid.
+     * @param criteria the criteria used for counting
+     * @param user     the current user
+     * @throws DomainNotFoundException if the domain is not found
+     * @throws BadRequestException     if the request is bad
      */
     default <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser<ID>,
@@ -32,12 +30,12 @@ public interface BaseBeforeAfterService {
     }
 
     /**
-     * Called after counting entities based on provided criteria.
+     * This method is called after the count operation.
      *
-     * @param criteria The criteria for counting entities.
-     * @param user     An optional user context.
-     * @throws DomainNotFoundException If the domain is not found.
-     * @throws BadRequestException     If the request is invalid.
+     * @param criteria the criteria used for counting
+     * @param user     the current user
+     * @throws DomainNotFoundException if the domain is not found
+     * @throws BadRequestException     if the request is bad
      */
     default <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser<ID>,
@@ -45,12 +43,12 @@ public interface BaseBeforeAfterService {
     }
 
     /**
-     * Called before retrieving entities based on provided criteria.
+     * This method is called before the get operation.
      *
-     * @param criteria The criteria for retrieving entities.
-     * @param user     An optional user context.
-     * @throws DomainNotFoundException If the domain is not found.
-     * @throws BadRequestException     If the request is invalid.
+     * @param criteria the criteria used for getting
+     * @param user     the current user
+     * @throws DomainNotFoundException if the domain is not found
+     * @throws BadRequestException     if the request is bad
      */
     default <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser<ID>,
@@ -58,30 +56,28 @@ public interface BaseBeforeAfterService {
     }
 
     /**
-     * Called after retrieving entities based on provided criteria.
+     * This method is called after the get operation.
      *
-     * @param ids      The IDs of retrieved entities.
-     * @param domains  The retrieved domain entities.
-     * @param dtos     The retrieved DTOs.
-     * @param criteria The criteria for retrieving entities.
-     * @param user     An optional user context.
-     * @throws DomainNotFoundException If the domain is not found.
-     * @throws BadRequestException     If the request is invalid.
+     * @param ids      the IDs of retrieved entities
+     * @param dtos     the retrieved DTOs
+     * @param criteria the criteria used for getting
+     * @param user     the current user
+     * @throws DomainNotFoundException if the domain is not found
+     * @throws BadRequestException     if the request is bad
      */
     default <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser<ID>,
-            D extends BaseDomain<ID>,
             DTO extends BaseDto<ID>,
-            C extends BaseCriteria<ID>> void afterGet(Collection<ID> ids, Collection<D> domains, Collection<DTO> dtos, C criteria, Optional<USER> user) throws DomainNotFoundException, BadRequestException {
+            C extends BaseCriteria<ID>> void afterGet(Collection<ID> ids, Collection<DTO> dtos, C criteria, Optional<USER> user) throws DomainNotFoundException, BadRequestException {
     }
 
     /**
-     * Called before saving a collection of DTOs.
+     * This method is called before the save operation.
      *
-     * @param dtos The DTOs to be saved.
-     * @param user An optional user context.
-     * @throws DomainNotFoundException If the domain is not found.
-     * @throws BadRequestException     If the request is invalid.
+     * @param dtos the DTOs to be saved
+     * @param user the current user
+     * @throws DomainNotFoundException if the domain is not found
+     * @throws BadRequestException     if the request is bad
      */
     default <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser<ID>,
@@ -89,35 +85,30 @@ public interface BaseBeforeAfterService {
     }
 
     /**
-     * Called after saving a collection of DTOs.
+     * This method is called after the save operation.
      *
-     * @param ids       The IDs of saved entities.
-     * @param dtos      The DTOs that were saved.
-     * @param savedDtos The saved DTOs.
-     * @param user      An optional user context.
-     * @throws DomainNotFoundException   If the domain is not found.
-     * @throws BadRequestException       If the request is invalid.
-     * @throws JsonProcessingException   If there is an issue with JSON processing.
-     * @throws InvocationTargetException If there is an issue with method invocation.
-     * @throws NoSuchMethodException     If a required method is not found.
-     * @throws InstantiationException    If an instance of a class cannot be created.
-     * @throws IllegalAccessException    If there is illegal access to a class.
+     * @param ids       the IDs of saved entities
+     * @param dtos      the DTOs that were saved
+     * @param savedDtos the saved DTOs
+     * @param user      the current user
+     * @throws DomainNotFoundException   if the domain is not found
+     * @throws BadRequestException       if the request is bad
      */
     default <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser<ID>,
             DTO extends BaseDto<ID>> void afterSave(Collection<ID> ids, Collection<DTO> dtos, Collection<DTO> savedDtos, Optional<USER> user)
-            throws DomainNotFoundException, BadRequestException, JsonProcessingException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+            throws DomainNotFoundException, BadRequestException {
     }
 
     /**
-     * Called before updating a collection of DTOs.
+     * This method is called before the update operation.
      *
-     * @param ids          The IDs of entities to be updated.
-     * @param previousDtos The DTOs before the update.
-     * @param dtos         The DTOs to be updated.
-     * @param user         An optional user context.
-     * @throws DomainNotFoundException If the domain is not found.
-     * @throws BadRequestException     If the request is invalid.
+     * @param ids          the IDs of entities to be updated
+     * @param previousDtos the DTOs before the update
+     * @param dtos         the DTOs to be updated
+     * @param user         the current user
+     * @throws DomainNotFoundException if the domain is not found
+     * @throws BadRequestException     if the request is bad
      */
     default <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser<ID>,
@@ -125,33 +116,28 @@ public interface BaseBeforeAfterService {
     }
 
     /**
-     * Called after updating a collection of DTOs.
+     * This method is called after the update operation.
      *
-     * @param ids          The IDs of updated entities.
-     * @param previousDtos The DTOs before the update.
-     * @param updatedDtos  The DTOs after the update.
-     * @param user         An optional user context.
-     * @throws DomainNotFoundException   If the domain is not found.
-     * @throws BadRequestException       If the request is invalid.
-     * @throws JsonProcessingException   If there is an issue with JSON processing.
-     * @throws InvocationTargetException If there is an issue with method invocation.
-     * @throws NoSuchMethodException     If a required method is not found.
-     * @throws InstantiationException    If an instance of a class cannot be created.
-     * @throws IllegalAccessException    If there is illegal access to a class.
+     * @param ids          the IDs of updated entities
+     * @param previousDtos the DTOs before the update
+     * @param updatedDtos  the DTOs after the update
+     * @param user         the current user
+     * @throws DomainNotFoundException   if the domain is not found
+     * @throws BadRequestException       if the request is bad
      */
     default <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser<ID>,
             DTO extends BaseDto<ID>> void afterUpdate(Collection<ID> ids, Collection<DTO> previousDtos, Collection<DTO> updatedDtos, Optional<USER> user)
-            throws DomainNotFoundException, BadRequestException, JsonProcessingException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+            throws DomainNotFoundException, BadRequestException {
     }
 
     /**
-     * Called before deleting entities based on provided criteria.
+     * This method is called before the delete operation.
      *
-     * @param criteria The criteria for deleting entities.
-     * @param user     An optional user context.
-     * @throws DomainNotFoundException If the domain is not found.
-     * @throws BadRequestException     If the request is invalid.
+     * @param criteria the criteria used for deleting
+     * @param user     the current user
+     * @throws DomainNotFoundException if the domain is not found
+     * @throws BadRequestException     if the request is bad
      */
     default <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser<ID>,
@@ -159,21 +145,19 @@ public interface BaseBeforeAfterService {
     }
 
     /**
-     * Called after deleting entities based on provided criteria.
+     * This method is called after the delete operation.
      *
-     * @param ids            The IDs of deleted entities.
-     * @param deletedDomains The deleted domain entities.
-     * @param criteria       The criteria for deleting entities.
-     * @param dtoClass       The class of the DTO.
-     * @param user           An optional user context.
-     * @throws DomainNotFoundException If the domain is not found.
-     * @throws BadRequestException     If the request is invalid.
+     * @param ids            the IDs of deleted entities
+     * @param criteria       the criteria used for deleting
+     * @param dtoClass       the class of the DTO
+     * @param user           the current user
+     * @throws DomainNotFoundException if the domain is not found
+     * @throws BadRequestException     if the request is bad
      */
     default <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser<ID>,
-            D extends BaseDomain<ID>,
             DTO extends BaseDto<ID>,
-            C extends BaseCriteria<ID>> void afterDelete(Collection<ID> ids, Collection<D> deletedDomains, C criteria, Class<DTO> dtoClass, Optional<USER> user)
+            C extends BaseCriteria<ID>> void afterDelete(Collection<ID> ids, C criteria, Class<DTO> dtoClass, Optional<USER> user)
             throws DomainNotFoundException, BadRequestException {
     }
 }

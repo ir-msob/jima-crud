@@ -6,7 +6,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
-import ir.msob.jima.crud.commons.ParentCrudService;
+import ir.msob.jima.crud.service.ParentCrudService;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;

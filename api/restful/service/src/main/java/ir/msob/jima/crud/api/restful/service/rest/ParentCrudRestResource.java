@@ -8,7 +8,7 @@ import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.commons.BaseCrudResource;
-import ir.msob.jima.crud.commons.ParentCrudService;
+import ir.msob.jima.crud.service.ParentCrudService;
 
 import java.io.Serializable;
 

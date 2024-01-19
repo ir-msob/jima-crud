@@ -92,19 +92,18 @@ public interface BaseUpdateCrudService<ID extends Comparable<ID> & Serializable,
         D domain = toDomain(dto, user);
         Collection<ID> ids = Collections.singletonList(dto.getDomainId());
         Collection<DTO> dtos = Collections.singletonList(dto);
-        Collection<D> domains = Collections.singletonList(domain);
-
         Collection<DTO> previousDtos = Collections.singletonList(previousDto);
 
-        getBeforeAfterComponent().beforeUpdate(ids, previousDtos, dtos, user);
+        getBeforeAfterComponent().beforeUpdate(ids, previousDtos, dtos, user, getBeforeAfterDomainServices());
 
-        return this.updateValidation(ids, dtos, domains, user)
-                .then(this.preUpdate(ids, dtos, domains, user))
+        return this.updateValidation(ids, dtos, user)
+                .then(this.preUpdate(ids, dtos, user))
                 .then(addAudit(dtos, AuditDomainActionType.UPDATE, user))
                 .then(this.updateExecute(dto, domain, user))
-                .doOnSuccess(updatedDomain -> this.postUpdate(ids, dtos, domains, Collections.singletonList(updatedDomain), user))
+                .doOnSuccess(updatedDomain -> this.postUpdate(ids, dtos, Collections.singletonList(updatedDomain), user))
                 .flatMap(updatedDomain -> getOne(updatedDomain, user))
-                .doOnSuccess(updatedDto -> afterUpdate(ids, previousDtos, Collections.singletonList(updatedDto), user));
+                .doOnSuccess(updatedDto ->
+                        getBeforeAfterComponent().afterUpdate(ids, previousDtos, Collections.singletonList(updatedDto), user, getBeforeAfterDomainServices()));
     }
 
     /**

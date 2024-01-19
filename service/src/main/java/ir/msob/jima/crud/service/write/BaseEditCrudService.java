@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 
 /**
@@ -45,10 +44,6 @@ public interface BaseEditCrudService<ID extends Comparable<ID> & Serializable, U
      * @return A DTO representing the updated entity.
      * @throws BadRequestException       if the operation encounters a bad request scenario.
      * @throws DomainNotFoundException   if the entity to be updated is not found.
-     * @throws InvocationTargetException if an error occurs during invocation.
-     * @throws NoSuchMethodException     if a required method is not found.
-     * @throws IllegalAccessException    if an illegal access operation occurs.
-     * @throws InstantiationException    if an instance of a class cannot be created.
      */
     @Transactional
     @MethodStats

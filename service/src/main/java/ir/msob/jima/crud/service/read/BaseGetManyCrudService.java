@@ -76,7 +76,7 @@ public interface BaseGetManyCrudService<ID extends Comparable<ID> & Serializable
     default Mono<Collection<DTO>> getMany(C criteria, Optional<USER> user) throws DomainNotFoundException, BadRequestException {
         log.debug("GetMany, criteria: {}, user: {}", criteria, user.orElse(null));
 
-        getBeforeAfterComponent().beforeGet(criteria, user);
+        getBeforeAfterComponent().beforeGet(criteria, user, getBeforeAfterDomainServices());
 
         return this.preGet(criteria, user)
                 .thenMany(this.getManyExecute(criteria, user))
@@ -85,7 +85,7 @@ public interface BaseGetManyCrudService<ID extends Comparable<ID> & Serializable
                     Collection<DTO> dtos = prepareDtos(domains, user);
                     Collection<ID> ids = prepareIds(domains);
                     return this.postGet(ids, domains, dtos, criteria, user)
-                            .doOnSuccess(x -> getBeforeAfterComponent().afterGet(ids, domains, dtos, criteria, user))
+                            .doOnSuccess(x -> getBeforeAfterComponent().afterGet(ids, dtos, criteria, user, getBeforeAfterDomainServices()))
                             .thenReturn(dtos);
                 });
     }

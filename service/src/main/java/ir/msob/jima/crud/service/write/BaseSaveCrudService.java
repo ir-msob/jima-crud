@@ -52,15 +52,14 @@ public interface BaseSaveCrudService<ID extends Comparable<ID> & Serializable, U
 
         D domain = toDomain(dto, user);
         Collection<DTO> dtos = Collections.singletonList(dto);
-        Collection<D> domains = Collections.singletonList(domain);
-        getBeforeAfterComponent().beforeSave(dtos, user);
-        return this.saveValidation(dtos, domains, user)
-                .then(this.preSave(dtos, domains, user))
+        getBeforeAfterComponent().beforeSave(dtos, user, getBeforeAfterDomainServices());
+        return this.saveValidation(dtos, user)
+                .then(this.preSave(dtos, user))
                 .then(addAudit(dtos, AuditDomainActionType.CREATE, user))
                 .then(this.saveExecute(dto, domain, user))
-                .doOnSuccess(savedDomain -> this.postSave(Collections.singletonList(savedDomain.getDomainId()), dtos, domains, Collections.singletonList(savedDomain), user))
+                .doOnSuccess(savedDomain -> this.postSave(Collections.singletonList(savedDomain.getDomainId()), dtos, Collections.singletonList(savedDomain), user))
                 .flatMap(savedDomain -> getOne(savedDomain, user))
-                .doOnSuccess(savedDto -> afterSave(Collections.singletonList(savedDto.getDomainId()), dtos, Collections.singletonList(savedDto), user));
+                .doOnSuccess(savedDto -> getBeforeAfterComponent().afterSave(Collections.singletonList(savedDto.getDomainId()), dtos, Collections.singletonList(savedDto), user, getBeforeAfterDomainServices()));
     }
 
     /**

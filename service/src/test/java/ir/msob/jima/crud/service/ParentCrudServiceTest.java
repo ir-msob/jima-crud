@@ -1,9 +1,9 @@
-package ir.msob.jima.crud.commons;
+package ir.msob.jima.crud.service;
 
 import ir.msob.jima.core.commons.model.criteria.SampleCriteria;
 import ir.msob.jima.core.commons.model.domain.SampleDomain;
 import ir.msob.jima.core.commons.model.dto.SampleDto;
-import ir.msob.jima.crud.commons.common.ConcreteParentCrudService;
+import ir.msob.jima.crud.service.common.ConcreteParentCrudService;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

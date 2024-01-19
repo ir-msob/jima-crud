@@ -54,15 +54,15 @@ public interface BaseDeleteAllCrudService<ID extends Comparable<ID> & Serializab
 
         C criteria = newCriteriaClass();
 
-        getBeforeAfterComponent().beforeDelete(criteria, user);
+        getBeforeAfterComponent().beforeDelete(criteria, user, getBeforeAfterDomainServices());
 
         return this.preDelete(criteria, user)
                 .thenMany(this.deleteAllExecute(user))
                 .collectList()
                 .flatMap(deletedDomains -> {
                     Collection<ID> ids = prepareIds(deletedDomains);
-                    return this.postDelete(ids, deletedDomains, criteria, user)
-                            .doOnSuccess(x -> afterDelete(ids, deletedDomains, criteria, user))
+                    return this.postDelete(ids, criteria, user)
+                            .doOnSuccess(x -> getBeforeAfterComponent().afterDelete(ids, criteria, getDtoClass(), user, getBeforeAfterDomainServices()))
                             .thenReturn(ids);
                 });
 

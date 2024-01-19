@@ -73,7 +73,7 @@ public interface BaseGetOneCrudService<ID extends Comparable<ID> & Serializable,
     default Mono<DTO> getOne(C criteria, Optional<USER> user) throws DomainNotFoundException, BadRequestException {
         log.debug("GetOne, criteria: {}, user: {}", criteria, user.orElse(null));
 
-        getBeforeAfterComponent().beforeGet(criteria, user);
+        getBeforeAfterComponent().beforeGet(criteria, user, getBeforeAfterDomainServices());
 
         return this.preGet(criteria, user)
                 .then(this.getOneExecute(criteria, user))
@@ -84,7 +84,7 @@ public interface BaseGetOneCrudService<ID extends Comparable<ID> & Serializable,
                     Collection<DTO> dtos = Collections.singletonList(dto);
 
                     return this.postGet(ids, domains, dtos, criteria, user)
-                            .doOnSuccess(x -> getBeforeAfterComponent().afterGet(ids, domains, dtos, criteria, user))
+                            .doOnSuccess(x -> getBeforeAfterComponent().afterGet(ids, dtos, criteria, user, getBeforeAfterDomainServices()))
                             .thenReturn(dto);
                 });
     }

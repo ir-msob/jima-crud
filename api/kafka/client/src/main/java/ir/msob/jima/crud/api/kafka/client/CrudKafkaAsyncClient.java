@@ -249,7 +249,7 @@ public class CrudKafkaAsyncClient implements BaseCrudAsyncClient {
         return channelMessage;
     }
 
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, C extends BaseCriteria<ID>> ChannelMessage<ID, USER, ModelType> createChannelMessage(ModelType data, Map<String, Serializable> metadata, String callback) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>> ChannelMessage<ID, USER, ModelType> createChannelMessage(ModelType data, Map<String, Serializable> metadata, String callback) {
         ChannelMessage<ID, USER, ModelType> channelMessage = new ChannelMessage<>();
         channelMessage.setMetadata(metadata);
         channelMessage.setData(data);
@@ -297,7 +297,7 @@ public class CrudKafkaAsyncClient implements BaseCrudAsyncClient {
         return channelMessage;
     }
 
-    public <ID extends Comparable<ID> & Serializable, C extends BaseCriteria<ID>> IdMessage<ID> createData(ID id) {
+    public <ID extends Comparable<ID> & Serializable> IdMessage<ID> createData(ID id) {
         IdMessage<ID> message = new IdMessage<>();
         message.setId(id);
         return message;

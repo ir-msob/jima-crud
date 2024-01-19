@@ -78,7 +78,7 @@ public interface BaseGetPageCrudService<ID extends Comparable<ID> & Serializable
     default Mono<Page<DTO>> getPage(C criteria, Pageable pageable, Optional<USER> user) throws DomainNotFoundException, BadRequestException {
         log.debug("GetPage, criteria: {}, user: {}", criteria, user.orElse(null));
 
-        getBeforeAfterComponent().beforeGet(criteria, user);
+        getBeforeAfterComponent().beforeGet(criteria, user, getBeforeAfterDomainServices());
 
         return this.preGet(criteria, user)
                 .then(this.getPageExecute(criteria, pageable, user))
@@ -86,7 +86,7 @@ public interface BaseGetPageCrudService<ID extends Comparable<ID> & Serializable
                     Page<DTO> dtoPage = preparePage(domainPage, user);
                     Collection<ID> ids = prepareIds(domainPage.getContent());
                     return this.postGet(ids, domainPage.getContent(), dtoPage.getContent(), criteria, user)
-                            .doOnSuccess(x -> getBeforeAfterComponent().afterGet(ids, domainPage.getContent(), dtoPage.getContent(), criteria, user))
+                            .doOnSuccess(x -> getBeforeAfterComponent().afterGet(ids, dtoPage.getContent(), criteria, user, getBeforeAfterDomainServices()))
                             .thenReturn(dtoPage);
                 });
     }
