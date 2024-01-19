@@ -13,13 +13,17 @@ import ir.msob.jima.crud.service.BaseCrudService;
 import java.io.Serializable;
 
 /**
- * @param <ID>
- * @param <D>
- * @param <DTO>
- * @param <USER>
- * @param <C>
- * @param <R>
- * @param <S>
+ * This interface provides a RESTful API for CRUD operations on a domain.
+ * It extends multiple interfaces each providing a specific CRUD operation.
+ *
+ * @param <ID> the type of the ID of the domain
+ * @param <USER> the type of the user
+ * @param <D> the type of the domain
+ * @param <DTO> the type of the DTO
+ * @param <C> the type of the criteria
+ * @param <Q> the type of the query
+ * @param <R> the type of the repository
+ * @param <S> the type of the service
  * @author Yaqub Abdi
  */
 public interface BaseCrudRestResource<
@@ -30,11 +34,11 @@ public interface BaseCrudRestResource<
         C extends BaseCriteria<ID>,
         Q extends BaseQuery,
         R extends BaseCrudRepository<ID, USER, D, C, Q>,
-
         S extends BaseCrudService<ID, USER, D, DTO, C, Q, R>
         > extends
         BaseCountAllCrudRestResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseCountCrudRestResource<ID, USER, D, DTO, C, Q, R, S>,
+        BaseGetByIdCrudRestResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseGetOneCrudRestResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseGetPageCrudRestResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseGetManyCrudRestResource<ID, USER, D, DTO, C, Q, R, S>,
@@ -46,6 +50,7 @@ public interface BaseCrudRestResource<
         BaseEditCrudRestResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseEditManyCrudRestResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseUpdateManyCrudRestResource<ID, USER, D, DTO, C, Q, R, S>,
+        BaseDeleteByIdCrudRestResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseDeleteCrudRestResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseDeleteManyCrudRestResource<ID, USER, D, DTO, C, Q, R, S> {
 }

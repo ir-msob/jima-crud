@@ -26,14 +26,18 @@ public interface BaseCrudRestResourceTest<
         BaseCountAllCrudRestResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>
         , BaseCountCrudRestResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>
         , BaseGetManyCrudRestResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>
+        , BaseGetByIdCrudRestResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>
         , BaseGetOneCrudRestResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>
         , BaseGetPageCrudRestResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>
+        , BaseDeleteByIdCrudRestResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>
         , BaseDeleteCrudRestResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>
         , BaseDeleteManyCrudRestResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>
         , BaseEditManyCrudRestResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>
+        , BaseEditByIdCrudRestResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>
         , BaseEditCrudRestResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>
         , BaseSaveManyCrudRestResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>
         , BaseSaveCrudRestResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>
         , BaseUpdateManyCrudRestResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>
+        , BaseUpdateByIdCrudRestResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>
         , BaseUpdateCrudRestResourceTest<ID, USER, D, DTO, C, Q, R, S, DP> {
 }

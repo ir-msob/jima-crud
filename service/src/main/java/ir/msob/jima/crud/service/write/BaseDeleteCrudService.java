@@ -51,7 +51,7 @@ public interface BaseDeleteCrudService<ID extends Comparable<ID> & Serializable,
      */
     @Transactional
     @MethodStats
-    default Mono<ID> delete(ID id, Optional<USER> user) throws DomainNotFoundException, BadRequestException, InvocationTargetException, NoSuchMethodException, IllegalAccessException, InstantiationException {
+    default Mono<ID> delete(ID id, Optional<USER> user) throws DomainNotFoundException, BadRequestException {
         return this.delete(CriteriaUtil.idCriteria(getCriteriaClass(), id), user);
     }
 

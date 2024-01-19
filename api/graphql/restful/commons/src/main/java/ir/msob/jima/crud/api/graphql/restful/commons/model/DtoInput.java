@@ -9,5 +9,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DtoInput implements BaseType {
+    private String id;
     private String dto;
 }

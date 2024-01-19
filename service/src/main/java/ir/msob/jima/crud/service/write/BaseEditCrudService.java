@@ -52,7 +52,7 @@ public interface BaseEditCrudService<ID extends Comparable<ID> & Serializable, U
      */
     @Transactional
     @MethodStats
-    default Mono<DTO> edit(ID id, JsonPatch jsonPatch, Optional<USER> user) throws BadRequestException, DomainNotFoundException, InvocationTargetException, NoSuchMethodException, IllegalAccessException, InstantiationException {
+    default Mono<DTO> edit(ID id, JsonPatch jsonPatch, Optional<USER> user) throws BadRequestException, DomainNotFoundException {
         return this.edit(CriteriaUtil.idCriteria(getCriteriaClass(), id), jsonPatch, user);
     }
 

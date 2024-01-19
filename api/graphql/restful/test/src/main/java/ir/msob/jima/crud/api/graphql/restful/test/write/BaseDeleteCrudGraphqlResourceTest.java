@@ -38,7 +38,7 @@ import java.io.Serializable;
  * @param <DP>   The type of data provider for CRUD testing.
  * @see BaseDeleteCrudResourceTest
  * @see ParentCrudGraphqlResourceTest
- * @see ir.msob.jima.crud.test.ParentCrudGraphqlResourceTest
+ * @see ir.msob.jima.crud.api.graphql.restful.test.ParentCrudGraphqlResourceTest
  */
 public interface BaseDeleteCrudGraphqlResourceTest<
         ID extends Comparable<ID> & Serializable,

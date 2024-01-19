@@ -23,9 +23,20 @@ import org.springframework.kafka.listener.MessageListener;
 
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 
+/**
+ * Interface for a listener that handles CRUD operations for updating multiple entities.
+ *
+ * @param <ID>   The type of the ID, which must be Comparable and Serializable.
+ * @param <USER> The type of the User, which must extend BaseUser.
+ * @param <D>    The type of the Domain, which must extend BaseDomain.
+ * @param <DTO>  The type of the DTO, which must extend BaseDto.
+ * @param <C>    The type of the Criteria, which must extend BaseCriteria.
+ * @param <Q>    The type of the Query, which must extend BaseQuery.
+ * @param <R>    The type of the Repository, which must extend BaseCrudRepository.
+ * @param <S>    The type of the Service, which must extend BaseCrudService.
+ */
 public interface BaseUpdateManyCrudListener<
         ID extends Comparable<ID> & Serializable,
         USER extends BaseUser<ID>,
@@ -34,30 +45,45 @@ public interface BaseUpdateManyCrudListener<
         C extends BaseCriteria<ID>,
         Q extends BaseQuery,
         R extends BaseCrudRepository<ID, USER, D, C, Q>,
-
         S extends BaseCrudService<ID, USER, D, DTO, C, Q, R>
         > extends ParentCrudListener<ID, USER, D, DTO, C, Q, R, S> {
 
     Logger log = LoggerFactory.getLogger(BaseUpdateManyCrudListener.class);
 
+    /**
+     * Initializes the listener for the UPDATE_MANY operation.
+     */
     @PostConstruct
-    default void updateMany() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    default void updateMany() {
         String operation = Operations.UPDATE_MANY;
 
+        // Check if the operation is enabled for this class
         if (!ConditionalOnOperationUtil.hasOperation(operation, getClass()))
             return;
 
+        // Create container properties for the Kafka listener
         ContainerProperties containerProperties = createContainerProperties(operation);
+        // Set the message listener to handle incoming messages
         containerProperties.setMessageListener((MessageListener<String, String>) dto -> serviceUpdateMany(dto.value()));
+        // Start the Kafka listener container
         startContainer(containerProperties, operation);
     }
 
+    /**
+     * Handles the UPDATE_MANY operation by reading the DTOs from the message, updating the entities, and sending a callback with the result.
+     *
+     * @param dto The DTOs as a JSON string.
+     */
     @MethodStats
     @SneakyThrows
     @CallbackError("dto")
     private void serviceUpdateMany(String dto) {
+        log.debug("Received message for update many: dto {}", dto);
+        // Parse the message from the JSON string
         ChannelMessage<ID, USER, DtosMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getDtosReferenceType());
+        // Get the user from the message
         Optional<USER> user = Optional.ofNullable(message.getUser());
+        // Call the service to update the entities and send a callback with the result
         getService().updateMany(message.getData().getDtos(), user)
                 .subscribe(updatedDtos -> sendCallbackDtos(message, updatedDtos, OperationsStatus.UPDATE_MANY, user));
     }

@@ -18,6 +18,20 @@ import lombok.SneakyThrows;
 import java.io.Serializable;
 import java.util.Collection;
 
+/**
+ * This interface extends the BaseEditManyCrudResourceTest and ParentCrudRsocketResourceTest interfaces.
+ * It provides a method for editing multiple resources via RSocket.
+ *
+ * @param <ID>   the type of the ID of the domain object, which must be comparable and serializable
+ * @param <USER> the type of the user, which extends BaseUser
+ * @param <D>    the type of the domain object, which extends BaseDomain
+ * @param <DTO>  the type of the DTO object, which extends BaseDto
+ * @param <C>    the type of the criteria object, which extends BaseCriteria
+ * @param <Q>    the type of the query object, which extends BaseQuery
+ * @param <R>    the type of the repository object, which extends BaseCrudRepository
+ * @param <S>    the type of the service object, which extends BaseCrudService
+ * @param <DP>   the type of the data provider object, which extends BaseCrudDataProvider
+ */
 public interface BaseEditManyCrudRsocketResourceTest<
         ID extends Comparable<ID> & Serializable,
         USER extends BaseUser<ID>,
@@ -31,7 +45,15 @@ public interface BaseEditManyCrudRsocketResourceTest<
         extends BaseEditManyCrudResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>,
         ParentCrudRsocketResourceTest<ID, USER, D, DTO, C> {
 
-
+    /**
+     * This method sends an edit request for multiple resources via RSocket.
+     * It creates a JsonPatchMessage with the provided DTO and JsonPatch, and sends it to the specified route.
+     *
+     * @param savedDto  the DTO object that represents the saved state of the resources to be edited
+     * @param jsonPatch the JsonPatch object that represents the changes to be applied to the resources
+     * @return a collection of DTO objects that represent the edited resources
+     * @throws Exception if an error occurs during the request
+     */
     @SneakyThrows
     @Override
     default Collection<DTO> editManyRequest(DTO savedDto, JsonPatch jsonPatch) {

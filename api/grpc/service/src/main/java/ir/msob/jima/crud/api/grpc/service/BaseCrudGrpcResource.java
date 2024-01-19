@@ -37,26 +37,34 @@ public abstract class BaseCrudGrpcResource<
         C extends BaseCriteria<ID>,
         Q extends BaseQuery,
         R extends BaseCrudRepository<ID, USER, D, C, Q>,
-
         S extends BaseCrudService<ID, USER, D, DTO, C, Q, R>
         > implements
         BaseCountAllCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseCountCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseGetManyCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S>,
+        BaseGetByIdCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseGetOneCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseGetPageCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S>,
+        BaseDeleteByIdCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseDeleteCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseDeleteManyCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S>,
+        BaseEditByIdCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseEditCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseEditManyCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseSaveCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseSaveManyCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S>,
+        BaseUpdateByIdCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseUpdateCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseUpdateManyCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S> {
 
     @Autowired
     ObjectMapper objectMapper;
 
+    /**
+     * Returns the ObjectMapper instance.
+     *
+     * @return The ObjectMapper instance.
+     */
     @Override
     public ObjectMapper getObjectMapper() {
         return objectMapper;

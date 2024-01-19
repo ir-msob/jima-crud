@@ -5,13 +5,11 @@ import ir.msob.jima.core.commons.annotation.methodstats.MethodStats;
 import ir.msob.jima.core.commons.data.BaseQuery;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
-import ir.msob.jima.core.commons.exception.runtime.CommonRuntimeException;
 import ir.msob.jima.core.commons.model.channel.ChannelMessage;
 import ir.msob.jima.core.commons.model.channel.message.DtoMessage;
 import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
-import ir.msob.jima.core.commons.model.operation.ConditionalOnOperationUtil;
 import ir.msob.jima.core.commons.model.operation.Operations;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.rsocket.service.ParentCrudRsocketResource;
@@ -29,13 +27,17 @@ import java.io.Serializable;
 import java.util.Optional;
 
 /**
- * @param <ID>
- * @param <D>
- * @param <DTO>
- * @param <USER>
- * @param <C>
- * @param <R>
- * @param <S>
+ * This interface provides a RSocket API for saving a domain.
+ * It extends the ParentCrudRsocketResource interface and provides a default implementation for the save method.
+ *
+ * @param <ID> the type of the ID of the domain
+ * @param <USER> the type of the user
+ * @param <D> the type of the domain
+ * @param <DTO> the type of the DTO
+ * @param <C> the type of the criteria
+ * @param <Q> the type of the query
+ * @param <R> the type of the repository
+ * @param <S> the type of the service
  * @author Yaqub Abdi
  */
 public interface BaseSaveCrudRsocketResource<
@@ -46,12 +48,21 @@ public interface BaseSaveCrudRsocketResource<
         C extends BaseCriteria<ID>,
         Q extends BaseQuery,
         R extends BaseCrudRepository<ID, USER, D, C, Q>,
-
         S extends BaseSaveCrudService<ID, USER, D, DTO, C, Q, R>
         > extends ParentCrudRsocketResource<ID, USER, D, DTO, C, Q, R, S> {
-
     Logger log = LoggerFactory.getLogger(BaseSaveCrudRsocketResource.class);
 
+    /**
+     * This method provides a RSocket API for saving a domain.
+     * It validates the operation, retrieves the user, and then calls the service to save the domain.
+     * It returns a Mono with the saved DTO.
+     *
+     * @param dto       the DTO to save the domain
+     * @param principal the Principal object
+     * @return a Mono with the saved DTO
+     * @throws BadRequestException     if the validation operation is incorrect
+     * @throws DomainNotFoundException if the domain is not found
+     */
     @MessageMapping(Operations.SAVE)
     @MethodStats
     default Mono<DTO> save(@Payload String dto, @AuthenticationPrincipal Jwt principal)
@@ -59,13 +70,21 @@ public interface BaseSaveCrudRsocketResource<
         log.debug("RSocket request to create new domain, dto : {}", dto);
         ChannelMessage<ID, USER, DtoMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getDtoReferenceType());
 
-        if (!ConditionalOnOperationUtil.hasOperation(Operations.SAVE, getClass()))
-            throw new CommonRuntimeException("Unable to find route");
+        crudValidation(Operations.SAVE);
 
         Optional<USER> user = getUser(message.getUser(), principal);
         return this.saveResponse(message.getData().getDto(), this.getService().save(message.getData().getDto(), user), user);
     }
 
+    /**
+     * This method creates a Mono with the saved DTO.
+     * It is called by the save method.
+     *
+     * @param dto      the DTO to save the domain
+     * @param savedDto the Mono with the saved DTO
+     * @param user     the Optional object containing the user
+     * @return a Mono with the saved DTO
+     */
     default Mono<DTO> saveResponse(DTO dto, Mono<DTO> savedDto, Optional<USER> user) {
         return savedDto;
     }

@@ -20,6 +20,22 @@ import java.util.Optional;
 public interface BaseWriteAsyncClient extends BaseClient {
 
     /**
+     * Asynchronously delete data item by id.
+     *
+     * @param <ID>     The type of the entity's ID, which must be comparable and serializable.
+     * @param <USER>   The type of the user object, typically representing the user making the request.
+     * @param <DTO>    The type of the data transfer object for the entity.
+     * @param dtoClass The class representing the data transfer object.
+     * @param id       The id item to be deleted.
+     * @param metadata Additional metadata for the request.
+     * @param callback The callback for handling the response.
+     * @param user     An optional user object associated with the request.
+     * @return A Mono indicating completion of the operation.
+     */
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> Mono<Void> deleteById(Class<DTO> dtoClass, ID id, Map<String, Serializable> metadata, String callback, Optional<USER> user);
+
+
+    /**
      * Asynchronously delete data item that meet the specified criteria.
      *
      * @param <ID>     The type of the entity's ID, which must be comparable and serializable.
@@ -34,24 +50,6 @@ public interface BaseWriteAsyncClient extends BaseClient {
      * @return A Mono indicating completion of the operation.
      */
     <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> delete(Class<DTO> dtoClass, C criteria, Map<String, Serializable> metadata, String callback, Optional<USER> user);
-
-    /**
-     * Asynchronously delete item by id.
-     *
-     * @param <ID>     The type of the entity's ID, which must be comparable and serializable.
-     * @param <USER>   The type of the user object, typically representing the user making the request.
-     * @param <DTO>    The type of the data transfer object for the entity.
-     * @param <C>      The type of criteria used for filtering items.
-     * @param dtoClass The class representing the data transfer object.
-     * @param id       The id item to be deleted.
-     * @param metadata Additional metadata for the request.
-     * @param callback The callback for handling the response.
-     * @param user     An optional user object associated with the request.
-     * @return A Mono indicating completion of the operation.
-     */
-    default <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> delete(Class<DTO> dtoClass, ID id, Map<String, Serializable> metadata, String callback, Optional<USER> user) {
-        return this.delete(dtoClass, (C) CriteriaUtil.idCriteria(id), metadata, callback, user);
-    }
 
 
     /**
@@ -105,6 +103,7 @@ public interface BaseWriteAsyncClient extends BaseClient {
      */
     <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> deleteAll(Class<DTO> dtoClass, C criteria, Map<String, Serializable> metadata, String callback, Optional<USER> user);
 
+
     /**
      * Asynchronously update data item based on a JSON patch and specified criteria.
      *
@@ -122,25 +121,22 @@ public interface BaseWriteAsyncClient extends BaseClient {
      */
     <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> edit(Class<DTO> dtoClass, JsonPatch jsonPatch, C criteria, Map<String, Serializable> metadata, String callback, Optional<USER> user);
 
+
     /**
-     * Asynchronously update data item based on a JSON patch and id.
+     * Asynchronously updates a single data item by its ID using a JSON patch.
      *
      * @param <ID>      The type of the entity's ID, which must be comparable and serializable.
      * @param <USER>    The type of the user object, typically representing the user making the request.
      * @param <DTO>     The type of the data transfer object for the entity.
-     * @param <C>       The type of criteria used for filtering items.
      * @param dtoClass  The class representing the data transfer object.
+     * @param id        The ID of the item to be updated.
      * @param jsonPatch The JSON patch representing the changes to be applied.
-     * @param id        The id item to be updated.
      * @param metadata  Additional metadata for the request.
      * @param callback  The callback for handling the response.
      * @param user      An optional user object associated with the request.
      * @return A Mono indicating completion of the operation.
      */
-    default <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> edit(Class<DTO> dtoClass, JsonPatch jsonPatch, ID id, Map<String, Serializable> metadata, String callback, Optional<USER> user) {
-        return this.edit(dtoClass, jsonPatch, (C) CriteriaUtil.idCriteria(id), metadata, callback, user);
-
-    }
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> Mono<Void> editById(Class<DTO> dtoClass, ID id, JsonPatch jsonPatch, Map<String, Serializable> metadata, String callback, Optional<USER> user);
 
     /**
      * Asynchronously update multiple data items based on a JSON patch and specified criteria.
@@ -209,6 +205,23 @@ public interface BaseWriteAsyncClient extends BaseClient {
     <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> Mono<Void> saveMany(Class<DTO> dtoClass, List<DTO> dtos, Map<String, Serializable> metadata, String callback, Optional<USER> user);
 
     /**
+     * Asynchronously update a single data item by id.
+     *
+     * @param <ID>     The type of the entity's ID, which must be comparable and serializable.
+     * @param <USER>   The type of the user object, typically representing the user making the request.
+     * @param <DTO>    The type of the data transfer object for the entity.
+     * @param dtoClass The class representing the data transfer object.
+     * @param id       The id of item.
+     * @param dto      The data transfer object to be updated.
+     * @param metadata Additional metadata for the request.
+     * @param callback The callback for handling the response.
+     * @param user     An optional user object associated with the request.
+     * @return A Mono indicating completion of the operation.
+     */
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> Mono<Void> updateById(Class<DTO> dtoClass, ID id, DTO dto, Map<String, Serializable> metadata, String callback, Optional<USER> user);
+
+
+    /**
      * Asynchronously update a single data item.
      *
      * @param <ID>     The type of the entity's ID, which must be comparable and serializable.
@@ -223,24 +236,6 @@ public interface BaseWriteAsyncClient extends BaseClient {
      */
     <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> Mono<Void> update(Class<DTO> dtoClass, DTO dto, Map<String, Serializable> metadata, String callback, Optional<USER> user);
 
-    /**
-     * Asynchronously update a single data item.
-     *
-     * @param <ID>     The type of the entity's ID, which must be comparable and serializable.
-     * @param <USER>   The type of the user object, typically representing the user making the request.
-     * @param <DTO>    The type of the data transfer object for the entity.
-     * @param dtoClass The class representing the data transfer object.
-     * @param id       The id of item.
-     * @param dto      The data transfer object to be updated.
-     * @param metadata Additional metadata for the request.
-     * @param callback The callback for handling the response.
-     * @param user     An optional user object associated with the request.
-     * @return A Mono indicating completion of the operation.
-     */
-    default <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> Mono<Void> update(Class<DTO> dtoClass, ID id, DTO dto, Map<String, Serializable> metadata, String callback, Optional<USER> user) {
-        dto.setDomainId(id);
-        return update(dtoClass, dto, metadata, callback, user);
-    }
 
     /**
      * Asynchronously update multiple data items.

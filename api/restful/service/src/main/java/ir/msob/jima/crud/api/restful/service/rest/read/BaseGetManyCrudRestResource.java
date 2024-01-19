@@ -30,13 +30,17 @@ import java.util.Collection;
 import java.util.Optional;
 
 /**
- * @param <ID>
- * @param <D>
- * @param <DTO>
- * @param <USER>
- * @param <C>
- * @param <R>
- * @param <S>
+ * This interface provides a RESTful API for retrieving multiple domains based on a given criteria.
+ * It extends the ParentCrudRestResource interface and provides a default implementation for the getMany method.
+ *
+ * @param <ID> the type of the ID of the domain
+ * @param <USER> the type of the user
+ * @param <D> the type of the domain
+ * @param <DTO> the type of the DTO
+ * @param <C> the type of the criteria
+ * @param <Q> the type of the query
+ * @param <R> the type of the repository
+ * @param <S> the type of the service
  * @author Yaqub Abdi
  */
 public interface BaseGetManyCrudRestResource<
@@ -47,17 +51,26 @@ public interface BaseGetManyCrudRestResource<
         C extends BaseCriteria<ID>,
         Q extends BaseQuery,
         R extends BaseCrudRepository<ID, USER, D, C, Q>,
-
         S extends BaseGetManyCrudService<ID, USER, D, DTO, C, Q, R>
         > extends ParentCrudRestResource<ID, USER, D, DTO, C, Q, R, S> {
-
     Logger log = LoggerFactory.getLogger(BaseGetManyCrudRestResource.class);
 
+    /**
+     * This method provides a RESTful API for retrieving multiple domains based on a given criteria.
+     * It validates the operation, retrieves the user, and then calls the service to get the domains.
+     * It returns a ResponseEntity with the collection of DTOs.
+     *
+     * @param criteria          the criteria to get the domains
+     * @param serverWebExchange the ServerWebExchange object
+     * @param principal         the Principal object
+     * @return a ResponseEntity with the collection of DTOs
+     * @throws BadRequestException     if the validation operation is incorrect
+     * @throws DomainNotFoundException if the domain is not found
+     */
     @GetMapping(Operations.GET_MANY)
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Return a domain or null"),
             @ApiResponse(code = 400, message = "If the validation operation is incorrect throws BadRequestException otherwise nothing", response = BadRequestResponse.class)})
     @MethodStats
-    //@Scope(Constants.GET_MANY)
     default ResponseEntity<Mono<Collection<DTO>>> getMany(C criteria, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("REST request to get many domain, criteria {} : ", criteria);
 
@@ -67,6 +80,15 @@ public interface BaseGetManyCrudRestResource<
         return this.getManyResponse(this.getService().getMany(criteria, user), criteria, user);
     }
 
+    /**
+     * This method creates a ResponseEntity with the collection of DTOs.
+     * It is called by the getMany method.
+     *
+     * @param dtoPage  the Mono object containing the collection of DTOs
+     * @param criteria the criteria to get the domains
+     * @param user     the Optional object containing the user
+     * @return a ResponseEntity with the collection of DTOs
+     */
     default ResponseEntity<Mono<Collection<DTO>>> getManyResponse(Mono<Collection<DTO>> dtoPage, C criteria, Optional<USER> user) {
         return ResponseEntity.status(OperationsStatus.GET_MANY).body(dtoPage);
     }

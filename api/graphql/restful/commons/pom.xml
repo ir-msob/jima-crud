@@ -5,7 +5,7 @@
     <parent>
         <groupId>ir.msob.jima.crud</groupId>
         <artifactId>crud-api-graphql-restful</artifactId>
-        <version>1.1.01</version>
+        <version>1.1.2</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>crud-api-graphql-restful-commons</artifactId>

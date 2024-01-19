@@ -29,12 +29,17 @@ import java.security.Principal;
 import java.util.Optional;
 
 /**
- * @param <ID>
- * @param <D>
- * @param <USER>
- * @param <C>
- * @param <R>
- * @param <S>
+ * This interface provides a RESTful API for counting domains based on a given criteria.
+ * It extends the ParentCrudRestResource interface and provides a default implementation for the count method.
+ *
+ * @param <ID> the type of the ID of the domain
+ * @param <USER> the type of the user
+ * @param <D> the type of the domain
+ * @param <DTO> the type of the DTO
+ * @param <C> the type of the criteria
+ * @param <Q> the type of the query
+ * @param <R> the type of the repository
+ * @param <S> the type of the service
  * @author Yaqub Abdi
  */
 public interface BaseCountCrudRestResource<
@@ -45,18 +50,28 @@ public interface BaseCountCrudRestResource<
         C extends BaseCriteria<ID>,
         Q extends BaseQuery,
         R extends BaseCrudRepository<ID, USER, D, C, Q>,
-
         S extends BaseCountCrudService<ID, USER, D, DTO, C, Q, R>
         > extends ParentCrudRestResource<ID, USER, D, DTO, C, Q, R, S> {
 
     Logger log = LoggerFactory.getLogger(BaseCountCrudRestResource.class);
 
+    /**
+     * This method provides a RESTful API for counting domains based on a given criteria.
+     * It validates the operation, retrieves the user, and then calls the service to count the domains.
+     * It returns a ResponseEntity with the count of domains.
+     *
+     * @param criteria          the criteria to count the domains
+     * @param serverWebExchange the ServerWebExchange object
+     * @param principal         the Principal object
+     * @return a ResponseEntity with the count of domains
+     * @throws BadRequestException     if the validation operation is incorrect
+     * @throws DomainNotFoundException if the domain is not found
+     */
     @GetMapping(Operations.COUNT)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "If domain(s) already count return true otherwise return false", response = Long.class),
             @ApiResponse(code = 400, message = "If the validation operation is incorrect throws BadRequestException otherwise nothing", response = BadRequestResponse.class)})
     @MethodStats
-    //@Scope(Constants.COUNT)
     default ResponseEntity<Mono<Long>> count(C criteria, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("REST request to count, criteria {} : ", criteria);
 
@@ -66,6 +81,15 @@ public interface BaseCountCrudRestResource<
         return this.countResponse(this.getService().count(criteria, user), criteria, user);
     }
 
+    /**
+     * This method creates a ResponseEntity with the count of domains.
+     * It is called by the count method.
+     *
+     * @param result   the Mono object containing the count of domains
+     * @param criteria the criteria to count the domains
+     * @param user     the Optional object containing the user
+     * @return a ResponseEntity with the count of domains
+     */
     default ResponseEntity<Mono<Long>> countResponse(Mono<Long> result, C criteria, Optional<USER> user) {
         return ResponseEntity.status(OperationsStatus.COUNT).body(result);
     }
