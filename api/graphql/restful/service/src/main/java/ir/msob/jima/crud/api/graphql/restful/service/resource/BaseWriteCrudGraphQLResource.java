@@ -44,9 +44,11 @@ public interface BaseWriteCrudGraphQLResource<
         R extends BaseCrudRepository<ID, USER, D, C, Q>,
         S extends BaseCrudService<ID, USER, D, DTO, C, Q, R>
         > extends BaseDeleteCrudGraphQLResource<ID, USER, D, DTO, C, Q, R, S>,
+        BaseDeleteByIdCrudGraphQLResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseDeleteManyCrudGraphQLResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseEditCrudGraphQLResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseEditManyCrudGraphQLResource<ID, USER, D, DTO, C, Q, R, S>,
+        BaseUpdateByIdCrudGraphQLResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseUpdateCrudGraphQLResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseUpdateManyCrudGraphQLResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseSaveCrudGraphQLResource<ID, USER, D, DTO, C, Q, R, S>,

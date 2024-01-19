@@ -23,9 +23,20 @@ import org.springframework.kafka.listener.MessageListener;
 
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 
+/**
+ * Interface for a listener that handles CRUD operations for editing multiple entities based on a given criteria.
+ *
+ * @param <ID>   The type of the ID, which must be Comparable and Serializable.
+ * @param <USER> The type of the User, which must extend BaseUser.
+ * @param <D>    The type of the Domain, which must extend BaseDomain.
+ * @param <DTO>  The type of the DTO, which must extend BaseDto.
+ * @param <C>    The type of the Criteria, which must extend BaseCriteria.
+ * @param <Q>    The type of the Query, which must extend BaseQuery.
+ * @param <R>    The type of the Repository, which must extend BaseCrudRepository.
+ * @param <S>    The type of the Service, which must extend BaseCrudService.
+ */
 public interface BaseEditManyCrudListener<
         ID extends Comparable<ID> & Serializable,
         USER extends BaseUser<ID>,
@@ -34,14 +45,16 @@ public interface BaseEditManyCrudListener<
         C extends BaseCriteria<ID>,
         Q extends BaseQuery,
         R extends BaseCrudRepository<ID, USER, D, C, Q>,
-
         S extends BaseCrudService<ID, USER, D, DTO, C, Q, R>
         > extends ParentCrudListener<ID, USER, D, DTO, C, Q, R, S> {
 
     Logger log = LoggerFactory.getLogger(BaseEditManyCrudListener.class);
 
+    /**
+     * Initializes the listener for the EDIT_MANY operation.
+     */
     @PostConstruct
-    default void editMany() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    default void editMany() {
         String operation = Operations.EDIT_MANY;
 
         if (!ConditionalOnOperationUtil.hasOperation(operation, getClass()))
@@ -52,10 +65,16 @@ public interface BaseEditManyCrudListener<
         startContainer(containerProperties, operation);
     }
 
+    /**
+     * Handles the EDIT_MANY operation by reading the Criteria and JsonPatch from the message, editing multiple entities based on the criteria and JsonPatch, and sending a callback with the result.
+     *
+     * @param dto The DTO as a JSON string.
+     */
     @MethodStats
     @SneakyThrows
     @CallbackError("dto")
     private void serviceEditMany(String dto) {
+        log.debug("Received message for edit many: dto {}", dto);
         ChannelMessage<ID, USER, JsonPatchMessage<ID, C>> message = getObjectMapper().readValue(dto, getEditReferenceType());
         Optional<USER> user = Optional.ofNullable(message.getUser());
         getService().editMany(message.getData().getCriteria(), message.getData().getJsonPatch(), user)

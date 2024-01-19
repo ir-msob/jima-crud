@@ -135,6 +135,17 @@ public interface BaseCrudGraphQL<ID extends Comparable<ID> & Serializable,
     }
 
     /**
+     * Converts an ID string to an ID object.
+     *
+     * @param id The ID string.
+     * @return The ID object.
+     */
+    @SneakyThrows
+    default ID convertToId(String id) {
+        return getObjectMapper().reader().readValue(id, getService().getIdClass());
+    }
+
+    /**
      * Converts a DTO string to a DTO object.
      *
      * @param dto The DTO string.

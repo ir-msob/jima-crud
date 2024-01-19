@@ -68,6 +68,18 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
 
     @MethodStats
     @Override
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> Mono<ID> deleteById(Class<DTO> dtoClass, ID id, Optional<USER> user) {
+        return webClient
+                .delete()
+                .uri(builder -> getUriWithId(builder, dtoClass, id.toString()))
+                .headers(builder -> setDefaultHeaders(builder, user))
+                .retrieve()
+                .bodyToMono(Object.class)
+                .map(o -> (ID) o);
+    }
+
+    @MethodStats
+    @Override
     public <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<ID> delete(Class<DTO> dtoClass, C criteria, Optional<USER> user) {
         return webClient
                 .delete()
@@ -90,6 +102,18 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
                 .map(o -> (ID) o)
                 .collect(Collectors.toCollection(ArrayList::new));
 
+    }
+
+    @MethodStats
+    @Override
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> Mono<DTO> editById(Class<DTO> dtoClass, ID id, JsonPatch jsonPatch, Optional<USER> user) {
+        return webClient
+                .patch()
+                .uri(builder -> getUriWithId(builder, dtoClass, id.toString()))
+                .headers(builder -> setDefaultHeaders(builder, user))
+                .bodyValue(createBody(jsonPatch))
+                .retrieve()
+                .bodyToMono(dtoClass);
     }
 
     @MethodStats
@@ -122,7 +146,7 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
     public <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> Mono<DTO> save(Class<DTO> dtoClass, DTO dto, Optional<USER> user) {
         return webClient
                 .post()
-                .uri(builder -> getUriWithCriteria(builder, dtoClass))
+                .uri(builder -> getUriWithCriteria(builder, dtoClass, Operations.SAVE))
                 .headers(builder -> setDefaultHeaders(builder, user))
                 .bodyValue(createBody(dto))
                 .retrieve()
@@ -134,7 +158,7 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
     public <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> Mono<Collection<DTO>> saveMany(Class<DTO> dtoClass, Collection<DTO> dtos, Optional<USER> user) {
         return webClient
                 .post()
-                .uri(builder -> getUriWithCriteria(builder, dtoClass))
+                .uri(builder -> getUriWithCriteria(builder, dtoClass, Operations.SAVE_MANY))
                 .headers(builder -> setDefaultHeaders(builder, user))
                 .bodyValue(createBody(dtos))
                 .retrieve()
@@ -144,10 +168,22 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
 
     @MethodStats
     @Override
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> Mono<DTO> updateById(Class<DTO> dtoClass, ID id, DTO dto, Optional<USER> user) {
+        return webClient
+                .put()
+                .uri(builder -> getUriWithId(builder, dtoClass, id.toString()))
+                .headers(builder -> setDefaultHeaders(builder, user))
+                .bodyValue(createBody(dto))
+                .retrieve()
+                .bodyToMono(dtoClass);
+    }
+
+    @MethodStats
+    @Override
     public <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> Mono<DTO> update(Class<DTO> dtoClass, DTO dto, Optional<USER> user) {
         return webClient
                 .put()
-                .uri(builder -> getUriWithCriteria(builder, dtoClass))
+                .uri(builder -> getUriWithCriteria(builder, dtoClass, Operations.UPDATE))
                 .headers(builder -> setDefaultHeaders(builder, user))
                 .bodyValue(createBody(dto))
                 .retrieve()
@@ -159,7 +195,7 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
     public <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> Mono<Collection<DTO>> updateMany(Class<DTO> dtoClass, Collection<DTO> dtos, Optional<USER> user) {
         return webClient
                 .put()
-                .uri(builder -> getUriWithCriteria(builder, dtoClass))
+                .uri(builder -> getUriWithCriteria(builder, dtoClass, Operations.UPDATE_MANY))
                 .headers(builder -> setDefaultHeaders(builder, user))
                 .bodyValue(createBody(dtos))
                 .retrieve()
@@ -188,6 +224,18 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
                 .headers(builder -> setDefaultHeaders(builder, user))
                 .retrieve()
                 .bodyToMono(Long.class)
+                .retryWhen(Retry.backoff(retryNumber, Duration.ofMillis(retryDelay)));
+    }
+
+    @MethodStats
+    @Override
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> Mono<DTO> getById(Class<DTO> dtoClass, ID id, Optional<USER> user) {
+        return webClient
+                .get()
+                .uri(builder -> getUriWithId(builder, dtoClass, id.toString()))
+                .headers(builder -> setDefaultHeaders(builder, user))
+                .retrieve()
+                .bodyToMono(dtoClass)
                 .retryWhen(Retry.backoff(retryNumber, Duration.ofMillis(retryDelay)));
     }
 
@@ -245,30 +293,42 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
                 });
     }
 
+
     @SneakyThrows
-    public <ID extends Comparable<ID> & Serializable, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> URI getUriWithCriteria(UriBuilder builder, Class<DTO> dtoClass, String action, C criteria) {
-        return getUriWithCriteria(builder, dtoClass, action, criteria, null);
+    public <ID extends Comparable<ID> & Serializable, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> URI getUriWithCriteria(UriBuilder builder, Class<DTO> dtoClass, String suffix, C criteria) {
+        return getUriWithCriteria(builder, dtoClass, suffix, criteria, null);
     }
 
     @SneakyThrows
-    public <ID extends Comparable<ID> & Serializable, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> URI getUriWithCriteria(UriBuilder builder, Class<DTO> dtoClass, String action, C criteria, Pageable pageable) {
+    public <ID extends Comparable<ID> & Serializable, DTO extends BaseDto<ID>> URI getUriWithId(UriBuilder builder, Class<DTO> dtoClass, String suffix) {
         BaseDto<ID> baseDto = dtoClass.getDeclaredConstructor().newInstance();
         DomainService domainService = DomainService.info.getAnnotation(baseDto.getClass());
         return builder
                 .host(domainService.serviceName())
-                .path(String.format("%s/%s", RestUtil.uri(domainService), action))
+                .path(String.format("%s/%s", RestUtil.uri(domainService), suffix))
+                .build();
+
+    }
+
+    @SneakyThrows
+    public <ID extends Comparable<ID> & Serializable, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> URI getUriWithCriteria(UriBuilder builder, Class<DTO> dtoClass, String suffix, C criteria, Pageable pageable) {
+        BaseDto<ID> baseDto = dtoClass.getDeclaredConstructor().newInstance();
+        DomainService domainService = DomainService.info.getAnnotation(baseDto.getClass());
+        return builder
+                .host(domainService.serviceName())
+                .path(String.format("%s/%s", RestUtil.uri(domainService), suffix))
                 .queryParams(objectToParam.convert(criteria, pageable))
                 .build();
 
     }
 
     @SneakyThrows
-    public <ID extends Comparable<ID> & Serializable, DTO extends BaseDto<ID>> URI getUriWithCriteria(UriBuilder builder, Class<DTO> dtoClass) {
+    public <ID extends Comparable<ID> & Serializable, DTO extends BaseDto<ID>> URI getUriWithCriteria(UriBuilder builder, Class<DTO> dtoClass, String suffix) {
         BaseDto<ID> baseDto = dtoClass.getDeclaredConstructor().newInstance();
         DomainService domainService = DomainService.info.getAnnotation(baseDto.getClass());
         return builder
                 .host(domainService.serviceName())
-                .path(RestUtil.uri(domainService))
+                .path(String.format("%s/%s", RestUtil.uri(domainService), suffix))
                 .build();
     }
 

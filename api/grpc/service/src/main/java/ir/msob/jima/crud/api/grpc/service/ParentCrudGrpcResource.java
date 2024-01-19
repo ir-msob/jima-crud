@@ -54,17 +54,22 @@ public interface ParentCrudGrpcResource<
         S extends BaseCrudService<ID, USER, D, DTO, C, Q, R>>
         extends BaseResource<ID, USER>, BaseCrudResource, ReactorCrudServiceGrpc.CrudServiceImplBase {
 
+    /**
+     * Returns the ObjectMapper instance.
+     *
+     * @return The ObjectMapper instance.
+     */
     ObjectMapper getObjectMapper();
 
     /**
-     * Gets the CRUD service associated with the gRPC service.
+     * Returns the CRUD service associated with the gRPC service.
      *
      * @return The CRUD service instance.
      */
     S getService();
 
     /**
-     * Gets the user service associated with the gRPC service.
+     * Returns the user service associated with the gRPC service.
      *
      * @return The user service instance.
      */
@@ -74,6 +79,8 @@ public interface ParentCrudGrpcResource<
      * Retrieves the current authenticated user, if available.
      *
      * @return An {@link Optional} containing the authenticated user, or an empty {@link Optional} if no user is authenticated.
+     * @throws ExecutionException   If the computation threw an exception.
+     * @throws InterruptedException If the current thread was interrupted while waiting.
      */
     @SneakyThrows
     default Optional<USER> getUser() {
@@ -96,17 +103,36 @@ public interface ParentCrudGrpcResource<
                 .get();
     }
 
+    /**
+     * Converts a list of ProtocolStringList to a collection of DTOs.
+     *
+     * @param dtos The list of ProtocolStringList to be converted.
+     * @return A collection of DTOs.
+     */
     default Collection<DTO> convertToDtos(ProtocolStringList dtos) {
         return dtos.stream()
                 .map(this::convertToDto)
                 .toList();
     }
 
+    /**
+     * Converts a JSON string to a JsonPatch.
+     *
+     * @param jsonPatch The JSON string to be converted.
+     * @return A JsonPatch.
+     * @throws java.io.IOException If an I/O error occurs.
+     */
     @SneakyThrows
     default JsonPatch convertToJsonPatch(String jsonPatch) {
         return getObjectMapper().reader().readValue(jsonPatch, JsonPatch.class);
     }
 
+    /**
+     * Converts a collection of objects to a list of strings.
+     *
+     * @param result The collection of objects to be converted.
+     * @return A list of strings.
+     */
     default Iterable<String> convertToStrings(Collection<?> result) {
         return result.stream()
                 .map(this::convertToString)
@@ -114,23 +140,63 @@ public interface ParentCrudGrpcResource<
 
     }
 
+    /**
+     * Converts an object to a string.
+     *
+     * @param o The object to be converted.
+     * @return A string.
+     * @throws java.io.IOException If an I/O error occurs.
+     */
     @SneakyThrows
     default String convertToString(Object o) {
         return getObjectMapper().writeValueAsString(o);
     }
 
+    /**
+     * Converts a string to a criteria.
+     *
+     * @param criteria The string to be converted.
+     * @return A criteria.
+     * @throws java.io.IOException If an I/O error occurs.
+     */
     @SneakyThrows
     default C convertToCriteria(String criteria) {
         return getObjectMapper().reader().readValue(criteria, getService().getCriteriaClass());
     }
 
+    /**
+     * Converts a string to a DTO.
+     *
+     * @param dto The string to be converted.
+     * @return A DTO.
+     * @throws java.io.IOException If an I/O error occurs.
+     */
     @SneakyThrows
     default DTO convertToDto(String dto) {
         return getObjectMapper().reader().readValue(dto, getService().getDtoClass());
     }
 
+    /**
+     * Converts a string to a Pageable.
+     *
+     * @param pageable The string to be converted.
+     * @return A Pageable.
+     * @throws java.io.IOException If an I/O error occurs.
+     */
     @SneakyThrows
     default Pageable convertToPageable(String pageable) {
         return getObjectMapper().reader().readValue(pageable, Pageable.class);
+    }
+
+    /**
+     * Converts a string to an ID.
+     *
+     * @param dto The string to be converted.
+     * @return An ID.
+     * @throws java.io.IOException If an I/O error occurs.
+     */
+    @SneakyThrows
+    default ID convertToId(String dto) {
+        return getObjectMapper().reader().readValue(dto, getService().getIdClass());
     }
 }

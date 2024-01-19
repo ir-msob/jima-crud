@@ -54,7 +54,7 @@ public interface BaseGetOneCrudService<ID extends Comparable<ID> & Serializable,
      */
     @Transactional(readOnly = true)
     @MethodStats
-    default Mono<DTO> getOne(ID id, Optional<USER> user) throws DomainNotFoundException, BadRequestException, InvocationTargetException, NoSuchMethodException, IllegalAccessException, InstantiationException {
+    default Mono<DTO> getOne(ID id, Optional<USER> user) throws DomainNotFoundException, BadRequestException {
         return this.getOne(CriteriaUtil.idCriteria(getCriteriaClass(), id), user);
     }
 

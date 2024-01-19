@@ -16,6 +16,24 @@ import org.springframework.http.MediaType;
 import java.io.Serializable;
 import java.util.Collection;
 
+/**
+ * The {@code BaseGetManyCrudRestResourceTest} interface represents a set of RESTful-specific test methods for retrieving multiple entities.
+ * It extends both the {@code BaseGetManyCrudResourceTest} and {@code ParentCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
+ * <p>
+ * The interface includes an implementation for making a request to retrieve multiple entities using RESTful API. The result of the get operation is a collection of DTOs of the retrieved entities.
+ *
+ * @param <ID>   The type of entity ID.
+ * @param <USER> The type of the user (security context).
+ * @param <D>    The type of the domain entity.
+ * @param <DTO>  The type of the data transfer object (DTO) for the entity.
+ * @param <C>    The type of criteria used for querying entities.
+ * @param <Q>    The type of query used for retrieving entities.
+ * @param <R>    The type of the CRUD repository.
+ * @param <S>    The type of the CRUD service.
+ * @param <DP>   The type of data provider for CRUD testing.
+ * @see BaseGetManyCrudResourceTest
+ * @see ParentCrudRestResourceTest
+ */
 public interface BaseGetManyCrudRestResourceTest<
         ID extends Comparable<ID> & Serializable,
         USER extends BaseUser<ID>,
@@ -29,8 +47,20 @@ public interface BaseGetManyCrudRestResourceTest<
         extends BaseGetManyCrudResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>,
         ParentCrudRestResourceTest<ID, USER, D, DTO, C> {
 
+    /**
+     * Executes a RESTful request to retrieve multiple entities and extracts the result from the response.
+     *
+     * @param savedDto The data transfer object (DTO) representing the entities to be retrieved.
+     * @return A collection of data transfer objects (DTOs) representing the retrieved entities.
+     */
     @Override
     default Collection<DTO> getManyRequest(DTO savedDto) {
+        // Send a GET request to the GET_MANY operation URI with the ID of the entities to be retrieved
+        // Prepare the request header
+        // Expect the status to be equal to the GET_MANY operation status
+        // Expect the content type to be JSON
+        // Expect the body to be of type Collection
+        // Return the response body
         return this.getWebTestClient()
                 .get()
                 .uri(String.format("%s/%s?%s.eq=%s", getBaseUri(), Operations.GET_MANY, savedDto.getDomainIdName(), savedDto.getDomainId()))

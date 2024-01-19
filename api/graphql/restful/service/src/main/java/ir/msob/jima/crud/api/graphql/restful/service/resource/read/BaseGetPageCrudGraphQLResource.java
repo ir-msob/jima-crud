@@ -14,6 +14,8 @@ import ir.msob.jima.crud.api.graphql.restful.commons.model.PageType;
 import ir.msob.jima.crud.api.graphql.restful.service.resource.BaseCrudGraphQL;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.ContextValue;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -47,9 +49,9 @@ public interface BaseGetPageCrudGraphQLResource<
         C extends BaseCriteria<ID>,
         Q extends BaseQuery,
         R extends BaseCrudRepository<ID, USER, D, C, Q>,
-
         S extends BaseCrudService<ID, USER, D, DTO, C, Q, R>
         > extends BaseCrudGraphQL<ID, USER, D, DTO, C, Q, R, S> {
+    Logger log = LoggerFactory.getLogger(BaseGetPageCrudGraphQLResource.class);
 
     /**
      * Retrieves a paginated list of entities based on specified criteria and pageable configuration
@@ -64,6 +66,7 @@ public interface BaseGetPageCrudGraphQLResource<
     @MethodStats
     @QueryMapping
     default Mono<PageType> getPage(@Argument CriteriaPageableInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
+        log.debug("Request to get page: dto {}", input);
         crudValidation(Operations.GET_PAGE);
 
         Optional<USER> user = getUser(token);

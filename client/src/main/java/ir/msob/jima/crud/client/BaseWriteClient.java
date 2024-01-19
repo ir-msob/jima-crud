@@ -14,8 +14,23 @@ import java.util.Optional;
 /**
  * The BaseWriteClient interface provides methods for performing write operations in a client interacting with a service.
  * These operations include data deletion, modification, and creation.
+ *
+ * @author Yaqub Abdi
  */
 public interface BaseWriteClient extends BaseClient {
+
+    /**
+     * Synchronously delete data items that meet the specified criteria.
+     *
+     * @param <ID>     The type of the entity's ID, which must be comparable and serializable.
+     * @param <USER>   The type of the user object, typically representing the user making the request.
+     * @param <DTO>    The type of the data transfer object for the entity.
+     * @param dtoClass The class representing the data transfer object.
+     * @param user     An optional user object associated with the request.
+     * @return A Mono containing the ID of the deleted data item.
+     */
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> Mono<ID> deleteById(Class<DTO> dtoClass, ID id, Optional<USER> user);
+
 
     /**
      * Synchronously delete data items that meet the specified criteria.
@@ -30,22 +45,6 @@ public interface BaseWriteClient extends BaseClient {
      * @return A Mono containing the ID of the deleted data item.
      */
     <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<ID> delete(Class<DTO> dtoClass, C criteria, Optional<USER> user);
-
-    /**
-     * Synchronously delete entity.
-     *
-     * @param <ID>     The type of the entity's ID, which must be comparable and serializable.
-     * @param <USER>   The type of the user object, typically representing the user making the request.
-     * @param <DTO>    The type of the data transfer object for the entity.
-     * @param <C>      The type of criteria used for filtering items.
-     * @param dtoClass The class representing the data transfer object.
-     * @param id       The id of entity to be deleted.
-     * @param user     An optional user object associated with the request.
-     * @return A Mono containing the ID of the deleted data item.
-     */
-    default <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<ID> delete(Class<DTO> dtoClass, ID id, Optional<USER> user) {
-        return this.delete(dtoClass, (C) CriteriaUtil.idCriteria(id), user);
-    }
 
 
     /**
@@ -99,14 +98,13 @@ public interface BaseWriteClient extends BaseClient {
      * @param <ID>      The type of the entity's ID, which must be comparable and serializable.
      * @param <USER>    The type of the user object, typically representing the user making the request.
      * @param <DTO>     The type of the data transfer object for the entity.
-     * @param <C>       The type of criteria used for filtering items.
      * @param dtoClass  The class representing the data transfer object.
      * @param jsonPatch The JSON Patch describing the modifications to be applied.
-     * @param criteria  The criteria for filtering the item to be edited.
      * @param user      An optional user object associated with the request.
      * @return A Mono containing the edited data item.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<DTO> edit(Class<DTO> dtoClass, JsonPatch jsonPatch, C criteria, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> Mono<DTO> editById(Class<DTO> dtoClass, ID id, JsonPatch jsonPatch, Optional<USER> user);
+
 
     /**
      * Synchronously edit a data item using a JSON Patch.
@@ -117,13 +115,11 @@ public interface BaseWriteClient extends BaseClient {
      * @param <C>       The type of criteria used for filtering items.
      * @param dtoClass  The class representing the data transfer object.
      * @param jsonPatch The JSON Patch describing the modifications to be applied.
-     * @param id        The id of the item to be edited.
+     * @param criteria  The criteria for filtering the item to be edited.
      * @param user      An optional user object associated with the request.
      * @return A Mono containing the edited data item.
      */
-    default <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<DTO> edit(Class<DTO> dtoClass, JsonPatch jsonPatch, ID id, Optional<USER> user) {
-        return this.edit(dtoClass, jsonPatch, (C) CriteriaUtil.idCriteria(id), user);
-    }
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<DTO> edit(Class<DTO> dtoClass, JsonPatch jsonPatch, C criteria, Optional<USER> user);
 
 
     /**
@@ -195,7 +191,8 @@ public interface BaseWriteClient extends BaseClient {
      * @param user     An optional user object associated with the request.
      * @return A Mono indicating the updated data item.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> Mono<DTO> update(Class<DTO> dtoClass, DTO dto, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> Mono<DTO> updateById(Class<DTO> dtoClass, ID id, DTO dto, Optional<USER> user);
+
 
     /**
      * Synchronously update a single data item.
@@ -204,15 +201,12 @@ public interface BaseWriteClient extends BaseClient {
      * @param <USER>   The type of the user object, typically representing the user making the request.
      * @param <DTO>    The type of the data transfer object for the entity.
      * @param dtoClass The class representing the data transfer object.
-     * @param id       The id of entity.
      * @param dto      The data transfer object to be updated.
      * @param user     An optional user object associated with the request.
      * @return A Mono indicating the updated data item.
      */
-    default <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> Mono<DTO> update(Class<DTO> dtoClass, ID id, DTO dto, Optional<USER> user) {
-        dto.setDomainId(id);
-        return this.update(dtoClass, dto, user);
-    }
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> Mono<DTO> update(Class<DTO> dtoClass, DTO dto, Optional<USER> user);
+
 
     /**
      * Synchronously update multiple data items.

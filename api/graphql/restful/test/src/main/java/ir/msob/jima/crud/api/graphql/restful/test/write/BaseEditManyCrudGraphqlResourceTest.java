@@ -39,7 +39,7 @@ import java.util.Collection;
  * @param <DP>   The type of data provider for CRUD testing.
  * @see BaseEditManyCrudResourceTest
  * @see ParentCrudGraphqlResourceTest
- * @see ir.msob.jima.crud.test.ParentCrudGraphqlResourceTest
+ * @see ir.msob.jima.crud.api.graphql.restful.test.ParentCrudGraphqlResourceTest
  */
 public interface BaseEditManyCrudGraphqlResourceTest<
         ID extends Comparable<ID> & Serializable,

@@ -30,12 +30,17 @@ import java.security.Principal;
 import java.util.Optional;
 
 /**
- * @param <ID>
- * @param <D>
- * @param <USER>
- * @param <C>
- * @param <R>
- * @param <S>
+ * This interface provides a RESTful API for counting all domains.
+ * It extends the ParentCrudRestResource interface and provides a default implementation for the countAll method.
+ *
+ * @param <ID> the type of the ID of the domain
+ * @param <USER> the type of the user
+ * @param <D> the type of the domain
+ * @param <DTO> the type of the DTO
+ * @param <C> the type of the criteria
+ * @param <Q> the type of the query
+ * @param <R> the type of the repository
+ * @param <S> the type of the service
  * @author Yaqub Abdi
  */
 public interface BaseCountAllCrudRestResource<
@@ -46,18 +51,27 @@ public interface BaseCountAllCrudRestResource<
         C extends BaseCriteria<ID>,
         Q extends BaseQuery,
         R extends BaseCrudRepository<ID, USER, D, C, Q>,
-
         S extends BaseCountAllCrudService<ID, USER, D, DTO, C, Q, R>
         > extends ParentCrudRestResource<ID, USER, D, DTO, C, Q, R, S> {
 
     Logger log = LoggerFactory.getLogger(BaseCountAllCrudRestResource.class);
 
+    /**
+     * This method provides a RESTful API for counting all domains.
+     * It validates the operation, retrieves the user, and then calls the service to count all domains.
+     * It returns a ResponseEntity with the count of all domains.
+     *
+     * @param serverWebExchange the ServerWebExchange object
+     * @param principal         the Principal object
+     * @return a ResponseEntity with the count of all domains
+     * @throws BadRequestException     if the validation operation is incorrect
+     * @throws DomainNotFoundException if the domain is not found
+     */
     @GetMapping(Operations.COUNT_ALL)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "If domain(s) already count return true otherwise return false", response = Long.class),
             @ApiResponse(code = 400, message = "If the validation operation is incorrect throws BadRequestException otherwise nothing", response = BadRequestResponse.class)})
     @MethodStats
-    //@Scope(Constants.COUNT_ALL)
     default ResponseEntity<Mono<Long>> countAll(ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, JsonProcessingException {
         log.debug("REST request to count all");
 
@@ -67,6 +81,14 @@ public interface BaseCountAllCrudRestResource<
         return this.countAllResponse(this.getService().countAll(user), user);
     }
 
+    /**
+     * This method creates a ResponseEntity with the count of all domains.
+     * It is called by the countAll method.
+     *
+     * @param result the Mono object containing the count of all domains
+     * @param user   the Optional object containing the user
+     * @return a ResponseEntity with the count of all domains
+     */
     default ResponseEntity<Mono<Long>> countAllResponse(Mono<Long> result, Optional<USER> user) {
         return ResponseEntity.status(OperationsStatus.COUNT_ALL).body(result);
     }

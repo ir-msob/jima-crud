@@ -19,13 +19,19 @@ service CrudService {
   }
   rpc getOne(CriteriaMsg) returns (DtoMsg) {
   }
+  rpc getById(IdMsg) returns (DtoMsg) {
+  }
   rpc getPage(CriteriaPageableMsg) returns (PageMsg) {
   }
   rpc deleteMany(CriteriaMsg) returns (IdsMsg) {
   }
+  rpc deleteById(IdMsg) returns (IdMsg) {
+  }
   rpc delete(CriteriaMsg) returns (IdMsg) {
   }
   rpc editMany(CriteriaJsonPatchMsg) returns (DtosMsg) {
+  }
+  rpc editById(IdJsonPatchMsg) returns (DtoMsg) {
   }
   rpc edit(CriteriaJsonPatchMsg) returns (DtoMsg) {
   }
@@ -34,6 +40,8 @@ service CrudService {
   rpc save(DtoMsg) returns (DtoMsg) {
   }
   rpc updateMany(DtosMsg) returns (DtosMsg) {
+  }
+  rpc updateById(DtoMsg) returns (DtoMsg) {
   }
   rpc update(DtoMsg) returns (DtoMsg) {
   }
@@ -50,11 +58,16 @@ message CriteriaJsonPatchMsg {
   string criteria = 1;
   string jsonPatch = 2;
 }
+message IdJsonPatchMsg {
+  string id = 1;
+  string jsonPatch = 2;
+}
 message DtosMsg {
   repeated string dtos = 1;
 }
 message DtoMsg {
-  string dto = 1;
+  string id = 1;
+  string dto = 2;
 }
 message CountMsg {
   int64 count = 1;

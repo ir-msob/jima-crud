@@ -71,7 +71,6 @@ public interface BaseReadAsyncClient extends BaseClient {
      * @param <ID>     The type of the entity's ID, which must be comparable and serializable.
      * @param <USER>   The type of the user object, typically representing the user making the request.
      * @param <DTO>    The type of the data transfer object for the entity.
-     * @param <C>      The type of criteria used for filtering items.
      * @param dtoClass The class representing the data transfer object.
      * @param id       The of item.
      * @param metadata Additional metadata for the request.
@@ -79,10 +78,7 @@ public interface BaseReadAsyncClient extends BaseClient {
      * @param user     An optional user object associated with the request.
      * @return A Mono indicating completion of the operation.
      */
-    default <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> getOne(Class<DTO> dtoClass, ID id, Map<String, Serializable> metadata, String callback, Optional<USER> user) {
-        return this.getOne(dtoClass, (C) CriteriaUtil.idCriteria(id), metadata, callback, user);
-    }
-
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> Mono<Void> getById(Class<DTO> dtoClass, ID id, Map<String, Serializable> metadata, String callback, Optional<USER> user);
 
     /**
      * Asynchronously fetch a single item using a channel message for more complex requests.

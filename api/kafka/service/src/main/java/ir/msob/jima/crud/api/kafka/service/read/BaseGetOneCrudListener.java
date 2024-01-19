@@ -23,9 +23,20 @@ import org.springframework.kafka.listener.MessageListener;
 
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 
+/**
+ * Interface for a listener that handles CRUD operations for retrieving a single entity based on a given criteria.
+ *
+ * @param <ID>   The type of the ID, which must be Comparable and Serializable.
+ * @param <USER> The type of the User, which must extend BaseUser.
+ * @param <D>    The type of the Domain, which must extend BaseDomain.
+ * @param <DTO>  The type of the DTO, which must extend BaseDto.
+ * @param <C>    The type of the Criteria, which must extend BaseCriteria.
+ * @param <Q>    The type of the Query, which must extend BaseQuery.
+ * @param <R>    The type of the Repository, which must extend BaseCrudRepository.
+ * @param <S>    The type of the Service, which must extend BaseCrudService.
+ */
 public interface BaseGetOneCrudListener<
         ID extends Comparable<ID> & Serializable,
         USER extends BaseUser<ID>,
@@ -34,14 +45,16 @@ public interface BaseGetOneCrudListener<
         C extends BaseCriteria<ID>,
         Q extends BaseQuery,
         R extends BaseCrudRepository<ID, USER, D, C, Q>,
-
         S extends BaseCrudService<ID, USER, D, DTO, C, Q, R>
         > extends ParentCrudListener<ID, USER, D, DTO, C, Q, R, S> {
 
     Logger log = LoggerFactory.getLogger(BaseGetOneCrudListener.class);
 
+    /**
+     * Initializes the listener for the GET_ONE operation.
+     */
     @PostConstruct
-    default void getOne() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    default void getOne() {
         String operation = Operations.GET_ONE;
 
         if (!ConditionalOnOperationUtil.hasOperation(operation, getClass()))
@@ -52,10 +65,16 @@ public interface BaseGetOneCrudListener<
         startContainer(containerProperties, operation);
     }
 
+    /**
+     * Handles the GET_ONE operation by reading the Criteria from the message, retrieving a single entity based on the criteria, and sending a callback with the result.
+     *
+     * @param dto The DTO as a JSON string.
+     */
     @MethodStats
     @SneakyThrows
     @CallbackError("dto")
     private void serviceGetOne(String dto) {
+        log.debug("Received message for get one: dto {}", dto);
         ChannelMessage<ID, USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());
         Optional<USER> user = Optional.ofNullable(message.getUser());
         getService().getOne(message.getData().getCriteria(), user)

@@ -15,6 +15,8 @@ import java.util.Optional;
 /**
  * The BaseReadClient interface provides methods for performing read operations in a client interacting with a service.
  * These operations include counting data items, retrieving single items, retrieving multiple items, and fetching items in pages.
+ *
+ * @author Yaqub Abdi
  */
 public interface BaseReadClient extends BaseClient {
 
@@ -43,6 +45,19 @@ public interface BaseReadClient extends BaseClient {
      * @return A Mono indicating the count of all items of the specified type.
      */
     <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> Mono<Long> countAll(Class<DTO> dtoClass, Optional<USER> user);
+
+    /**
+     * Synchronously retrieve a single data item that meets the specified criteria.
+     *
+     * @param <ID>     The type of the entity's ID, which must be comparable and serializable.
+     * @param <USER>   The type of the user object, typically representing the user making the request.
+     * @param <DTO>    The type of the data transfer object for the entity.
+     * @param dtoClass The class representing the data transfer object.
+     * @param user     An optional user object associated with the request.
+     * @return A Mono containing the retrieved data item.
+     */
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> Mono<DTO> getById(Class<DTO> dtoClass, ID id, Optional<USER> user);
+
 
     /**
      * Synchronously retrieve a single data item that meets the specified criteria.

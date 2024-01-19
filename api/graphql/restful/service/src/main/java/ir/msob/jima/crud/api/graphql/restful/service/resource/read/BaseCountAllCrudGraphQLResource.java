@@ -13,6 +13,8 @@ import ir.msob.jima.crud.api.graphql.restful.commons.model.CountType;
 import ir.msob.jima.crud.api.graphql.restful.service.resource.BaseCrudGraphQL;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.graphql.data.method.annotation.ContextValue;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.http.HttpHeaders;
@@ -45,9 +47,9 @@ public interface BaseCountAllCrudGraphQLResource<
         C extends BaseCriteria<ID>,
         Q extends BaseQuery,
         R extends BaseCrudRepository<ID, USER, D, C, Q>,
-
         S extends BaseCrudService<ID, USER, D, DTO, C, Q, R>
         > extends BaseCrudGraphQL<ID, USER, D, DTO, C, Q, R, S> {
+    Logger log = LoggerFactory.getLogger(BaseCountAllCrudGraphQLResource.class);
 
     /**
      * Retrieves the count of all entities for the specified CRUD resource.
@@ -64,6 +66,7 @@ public interface BaseCountAllCrudGraphQLResource<
     @MethodStats
     @QueryMapping
     default Mono<CountType> countAll(@ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        log.debug("Request to count all");
         crudValidation(Operations.COUNT_ALL);
 
         Optional<USER> user = getUser(token);

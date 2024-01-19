@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
  * @param <DP>   The type of data provider for CRUD testing.
  * @see BaseDeleteManyCrudResourceTest
  * @see ParentCrudGraphqlResourceTest
- * @see ir.msob.jima.crud.test.ParentCrudGraphqlResourceTest
+ * @see ir.msob.jima.crud.api.graphql.restful.test.ParentCrudGraphqlResourceTest
  */
 public interface BaseDeleteManyCrudGraphqlResourceTest<
         ID extends Comparable<ID> & Serializable,

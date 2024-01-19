@@ -3,7 +3,7 @@ input CriteriaPageableInput {
     pageable:String,
     classType:String
 }
-input  CriteriaInput {
+input CriteriaInput {
     criteria:String,
     classType:String
 }
@@ -12,12 +12,22 @@ input CriteriaJsonPatchInput {
     jsonPatch:String,
     classType:String
 }
+input IdJsonPatchInput {
+    id:String,
+    jsonPatch:String,
+    classType:String
+}
 input DtosInput {
     dtos:[String],
     classType:String
 }
 input DtoInput {
+    id:String,
     dto:String,
+    classType:String
+}
+input IdInput {
+    id:String,
     classType:String
 }
 
@@ -51,18 +61,22 @@ type Query {
     countAll:CountType
     count(input: CriteriaInput):CountType
     getMany(input: CriteriaInput):DtosType
+    getById(input: IdInput):DtoType
     getOne(input: CriteriaInput):DtoType
     getPage(input: CriteriaPageableInput):PageType
 }
 
 type Mutation {
     deleteMany(input: CriteriaInput):IdsType
+    deleteById(input: IdInput):IdType
     delete(input: CriteriaInput):IdType
     editMany(input: CriteriaJsonPatchInput):DtosType
+    editById(input: IdJsonPatchInput):DtoType
     edit(input: CriteriaJsonPatchInput):DtoType
     saveMany(input:DtosInput):DtosType
     save(input:DtoInput):DtoType
     updateMany(input:DtosInput):DtosType
+    updateById(input:DtoInput):DtoType
     update(input:DtoInput):DtoType
 }
 

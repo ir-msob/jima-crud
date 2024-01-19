@@ -15,9 +15,17 @@ import ir.msob.jima.crud.commons.ParentCrudService;
 import java.io.Serializable;
 
 /**
- * @param <ID>
- * @param <USER>
- * @param <S>
+ * This interface provides a RSocket API for CRUD operations.
+ * It extends multiple interfaces each providing a specific CRUD operation.
+ *
+ * @param <ID> the type of the ID of the domain
+ * @param <USER> the type of the user
+ * @param <D> the type of the domain
+ * @param <DTO> the type of the DTO
+ * @param <C> the type of the criteria
+ * @param <Q> the type of the query
+ * @param <R> the type of the repository
+ * @param <S> the type of the service
  * @author Yaqub Abdi
  */
 public interface ParentCrudRsocketResource<
@@ -33,8 +41,17 @@ public interface ParentCrudRsocketResource<
         BaseCrudResource,
         BaseChannelTypeReference<ID, USER, DTO, C> {
 
+    /**
+     * This method returns the service that provides the CRUD operations.
+     *
+     * @return the service that provides the CRUD operations
+     */
     S getService();
 
+    /**
+     * This method returns the ObjectMapper that can be used for JSON processing.
+     *
+     * @return the ObjectMapper that can be used for JSON processing
+     */
     ObjectMapper getObjectMapper();
-
 }

@@ -16,6 +16,25 @@ import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 
+/**
+ * The {@code BaseCountAllCrudGrpcResourceTest} interface represents a set of gRPC-specific test methods for counting all entities.
+ * It extends both the {@code BaseCountAllCrudResourceTest} and {@code ParentCrudGrpcResourceTest} interfaces, providing gRPC-specific testing capabilities.
+ * <p>
+ * The interface includes an implementation for making a request to count all entities using gRPC. The result of the count operation is a {@code Long}
+ * representing the total number of entities.
+ *
+ * @param <ID>   The type of entity ID.
+ * @param <USER> The type of the user (security context).
+ * @param <D>    The type of the domain entity.
+ * @param <DTO>  The type of the data transfer object (DTO) for the entity.
+ * @param <C>    The type of criteria used for querying entities.
+ * @param <Q>    The type of query used for retrieving entities.
+ * @param <R>    The type of the CRUD repository.
+ * @param <S>    The type of the CRUD service.
+ * @param <DP>   The type of data provider for CRUD testing.
+ * @see BaseCountAllCrudResourceTest
+ * @see ParentCrudGrpcResourceTest
+ */
 public interface BaseCountAllCrudGrpcResourceTest<
         ID extends Comparable<ID> & Serializable,
         USER extends BaseUser<ID>,
@@ -29,9 +48,16 @@ public interface BaseCountAllCrudGrpcResourceTest<
         extends BaseCountAllCrudResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>,
         ParentCrudGrpcResourceTest<ID, USER, D, DTO, C, Q, R, S, DP> {
 
+    /**
+     * Executes a gRPC request to count all entities and extracts the result from the response.
+     *
+     * @return The total number of entities.
+     * @throws Exception If an error occurs during the gRPC request.
+     */
     @SneakyThrows
     @Override
     default Long countAllRequest() {
+        // Execute the gRPC request to count all entities and extract the result from the response
         return getReactorCrudServiceStub().countAll(Mono.just(Empty.newBuilder().build()))
                 .toFuture()
                 .get()

@@ -54,15 +54,19 @@ public interface BaseCrudGraphqlResourceTest<
         BaseCountAllCrudGraphqlResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>
         , BaseCountCrudGraphqlResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>
         , BaseGetManyCrudGraphqlResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>
+        , BaseGetByIdCrudGraphqlResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>
         , BaseGetOneCrudGraphqlResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>
         , BaseGetPageCrudGraphqlResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>
+        , BaseDeleteByIdCrudGraphqlResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>
         , BaseDeleteCrudGraphqlResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>
         , BaseDeleteManyCrudGraphqlResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>
         , BaseEditManyCrudGraphqlResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>
+        , BaseEditByIdCrudGraphqlResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>
         , BaseEditCrudGraphqlResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>
         , BaseSaveManyCrudGraphqlResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>
         , BaseSaveCrudGraphqlResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>
         , BaseUpdateManyCrudGraphqlResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>
+        , BaseUpdateByIdCrudGraphqlResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>
         , BaseUpdateCrudGraphqlResourceTest<ID, USER, D, DTO, C, Q, R, S, DP> {
 }
 

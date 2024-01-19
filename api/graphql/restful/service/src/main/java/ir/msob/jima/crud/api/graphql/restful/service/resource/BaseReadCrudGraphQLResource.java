@@ -44,6 +44,7 @@ public interface BaseReadCrudGraphQLResource<
         > extends BaseCountAllCrudGraphQLResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseCountCrudGraphQLResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseGetManyCrudGraphQLResource<ID, USER, D, DTO, C, Q, R, S>,
+        BaseGetByIdCrudGraphQLResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseGetOneCrudGraphQLResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseGetPageCrudGraphQLResource<ID, USER, D, DTO, C, Q, R, S> {
 }

@@ -23,9 +23,20 @@ import org.springframework.kafka.listener.MessageListener;
 
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 
+/**
+ * Interface for a listener that handles CRUD operations for updating entities.
+ *
+ * @param <ID>   The type of the ID, which must be Comparable and Serializable.
+ * @param <USER> The type of the User, which must extend BaseUser.
+ * @param <D>    The type of the Domain, which must extend BaseDomain.
+ * @param <DTO>  The type of the DTO, which must extend BaseDto.
+ * @param <C>    The type of the Criteria, which must extend BaseCriteria.
+ * @param <Q>    The type of the Query, which must extend BaseQuery.
+ * @param <R>    The type of the Repository, which must extend BaseCrudRepository.
+ * @param <S>    The type of the Service, which must extend BaseCrudService.
+ */
 public interface BaseUpdateCrudListener<
         ID extends Comparable<ID> & Serializable,
         USER extends BaseUser<ID>,
@@ -34,14 +45,16 @@ public interface BaseUpdateCrudListener<
         C extends BaseCriteria<ID>,
         Q extends BaseQuery,
         R extends BaseCrudRepository<ID, USER, D, C, Q>,
-
         S extends BaseCrudService<ID, USER, D, DTO, C, Q, R>
         > extends ParentCrudListener<ID, USER, D, DTO, C, Q, R, S> {
 
     Logger log = LoggerFactory.getLogger(BaseUpdateCrudListener.class);
 
+    /**
+     * Initializes the listener for the UPDATE operation.
+     */
     @PostConstruct
-    default void update() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    default void update() {
         String operation = Operations.UPDATE;
 
         if (!ConditionalOnOperationUtil.hasOperation(operation, getClass()))
@@ -52,10 +65,16 @@ public interface BaseUpdateCrudListener<
         startContainer(containerProperties, operation);
     }
 
+    /**
+     * Handles the UPDATE operation by reading the DTO from the message, updating the entity, and sending a callback with the result.
+     *
+     * @param dto The DTO as a JSON string.
+     */
     @MethodStats
     @SneakyThrows
     @CallbackError("dto")
     private void serviceUpdate(String dto) {
+        log.debug("Received message for update: dto {}", dto);
         ChannelMessage<ID, USER, DtoMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getDtoReferenceType());
         Optional<USER> user = Optional.ofNullable(message.getUser());
         getService().update(message.getData().getDto(), user)
