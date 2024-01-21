@@ -6,6 +6,7 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.model.operation.Operations;
+import ir.msob.jima.core.commons.model.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.grpc.commons.CriteriaJsonPatchMsg;
 import ir.msob.jima.crud.api.grpc.commons.DtoMsg;
@@ -51,8 +52,8 @@ public interface BaseEditCrudGrpcResource<
      */
     @Override
     @MethodStats
+    @Scope(Operations.EDIT)
     default Mono<DtoMsg> edit(Mono<CriteriaJsonPatchMsg> request) {
-        crudValidation(Operations.EDIT);
         return request.flatMap(this::edit);
     }
 
@@ -64,9 +65,9 @@ public interface BaseEditCrudGrpcResource<
      */
     @Override
     @MethodStats
+    @Scope(Operations.EDIT)
     default Mono<DtoMsg> edit(CriteriaJsonPatchMsg request) {
         log.debug("Request to edit: dto {}", request);
-        crudValidation(Operations.EDIT);
         return getService().edit(convertToCriteria(request.getCriteria()), convertToJsonPatch(request.getJsonPatch()), getUser())
                 .map(result -> DtoMsg.newBuilder()
                         .setDto(convertToString(result))

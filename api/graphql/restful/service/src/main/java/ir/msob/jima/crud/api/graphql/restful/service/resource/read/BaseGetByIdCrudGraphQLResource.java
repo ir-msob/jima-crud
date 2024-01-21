@@ -8,6 +8,7 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.model.operation.Operations;
+import ir.msob.jima.core.commons.model.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.DtoType;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.IdInput;
@@ -62,9 +63,9 @@ public interface BaseGetByIdCrudGraphQLResource<
      */
     @MethodStats
     @QueryMapping
+    @Scope(Operations.GET_BY_ID)
     default Mono<DtoType> getById(@Argument IdInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
         log.debug("Request to get by id: dto {}", input);
-        crudValidation(Operations.GET_BY_ID);
 
         Optional<USER> user = getUser(token);
 

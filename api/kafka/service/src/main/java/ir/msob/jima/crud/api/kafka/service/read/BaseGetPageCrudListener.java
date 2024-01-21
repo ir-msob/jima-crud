@@ -8,9 +8,10 @@ import ir.msob.jima.core.commons.model.channel.message.PageableMessage;
 import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
-import ir.msob.jima.core.commons.model.operation.ConditionalOnOperationUtil;
 import ir.msob.jima.core.commons.model.operation.Operations;
 import ir.msob.jima.core.commons.model.operation.OperationsStatus;
+import ir.msob.jima.core.commons.model.scope.Scope;
+import ir.msob.jima.core.commons.model.scope.ScopeInitializer;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.kafka.service.ParentCrudListener;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
@@ -53,12 +54,10 @@ public interface BaseGetPageCrudListener<
     /**
      * Initializes the listener for the GET_PAGE operation.
      */
+    @ScopeInitializer(Operations.GET_PAGE)
     @PostConstruct
     default void getPage() {
         String operation = Operations.GET_PAGE;
-
-        if (!ConditionalOnOperationUtil.hasOperation(operation, getClass()))
-            return;
 
         ContainerProperties containerProperties = createContainerProperties(operation);
         containerProperties.setMessageListener((MessageListener<String, String>) dto -> serviceGetPage(dto.value()));
@@ -73,6 +72,7 @@ public interface BaseGetPageCrudListener<
     @MethodStats
     @SneakyThrows
     @CallbackError("dto")
+    @Scope(Operations.GET_PAGE)
     private void serviceGetPage(String dto) {
         log.debug("Received message for get page: dto {}", dto);
         ChannelMessage<ID, USER, PageableMessage<ID, C>> message;

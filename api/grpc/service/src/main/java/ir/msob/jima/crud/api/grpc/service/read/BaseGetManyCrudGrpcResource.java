@@ -6,6 +6,7 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.model.operation.Operations;
+import ir.msob.jima.core.commons.model.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.grpc.commons.CriteriaMsg;
 import ir.msob.jima.crud.api.grpc.commons.DtosMsg;
@@ -51,8 +52,8 @@ public interface BaseGetManyCrudGrpcResource<
      */
     @Override
     @MethodStats
+    @Scope(Operations.GET_MANY)
     default Mono<DtosMsg> getMany(Mono<CriteriaMsg> request) {
-        crudValidation(Operations.GET_MANY);
         return request.flatMap(this::getMany);
     }
 
@@ -64,9 +65,9 @@ public interface BaseGetManyCrudGrpcResource<
      */
     @Override
     @MethodStats
+    @Scope(Operations.GET_MANY)
     default Mono<DtosMsg> getMany(CriteriaMsg request) {
         log.debug("Request to get many: dto {}", request);
-        crudValidation(Operations.GET_MANY);
         return getService().getMany(convertToCriteria(request.getCriteria()), getUser())
                 .map(result -> DtosMsg.newBuilder()
                         .addAllDtos(convertToStrings(result))

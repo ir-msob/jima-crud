@@ -12,6 +12,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.model.operation.Operations;
 import ir.msob.jima.core.commons.model.operation.OperationsStatus;
+import ir.msob.jima.core.commons.model.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.rest.ParentCrudRestResource;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
@@ -70,10 +71,9 @@ public interface BaseDeleteByIdCrudRestResource<
             @ApiResponse(code = 404, message = "Domain not found", response = DomainNotFoundException.class)
     })
     @MethodStats
+    @Scope(Operations.DELETE_BY_ID)
     default ResponseEntity<Mono<ID>> deleteById(@PathVariable("id") ID id, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to delete domain by id, id {}", id);
-
-        crudValidation(Operations.DELETE_BY_ID);
 
         Optional<USER> user = getUser(serverWebExchange, principal);
         return this.deleteByIdResponse(this.getService().delete(id, user), id, user);

@@ -8,6 +8,7 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.model.operation.Operations;
+import ir.msob.jima.core.commons.model.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.IdInput;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.IdType;
@@ -64,9 +65,9 @@ public interface BaseDeleteByIdCrudGraphQLResource<
      */
     @MethodStats
     @MutationMapping
+    @Scope(Operations.DELETE_BY_ID)
     default Mono<IdType> deleteById(@Argument IdInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
         log.debug("Request to delete by id: dto {}", input);
-        crudValidation(Operations.DELETE_BY_ID);
 
         Optional<USER> user = getUser(token);
 

@@ -8,9 +8,10 @@ import ir.msob.jima.core.commons.model.channel.message.IdJsonPatchMessage;
 import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
-import ir.msob.jima.core.commons.model.operation.ConditionalOnOperationUtil;
 import ir.msob.jima.core.commons.model.operation.Operations;
 import ir.msob.jima.core.commons.model.operation.OperationsStatus;
+import ir.msob.jima.core.commons.model.scope.Scope;
+import ir.msob.jima.core.commons.model.scope.ScopeInitializer;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.kafka.service.ParentCrudListener;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
@@ -53,12 +54,10 @@ public interface BaseEditByIdCrudListener<
     /**
      * Initializes the listener for the EDIT_BY_ID operation.
      */
+    @ScopeInitializer(Operations.EDIT_BY_ID)
     @PostConstruct
     default void editById() {
         String operation = Operations.EDIT_BY_ID;
-
-        if (!ConditionalOnOperationUtil.hasOperation(operation, getClass()))
-            return;
 
         ContainerProperties containerProperties = createContainerProperties(operation);
         containerProperties.setMessageListener((MessageListener<String, String>) dto -> serviceEditById(dto.value()));
@@ -73,6 +72,7 @@ public interface BaseEditByIdCrudListener<
     @MethodStats
     @SneakyThrows
     @CallbackError("dto")
+    @Scope(Operations.EDIT_BY_ID)
     private void serviceEditById(String dto) {
         log.debug("Received message for edit by id: dto {}", dto);
         ChannelMessage<ID, USER, IdJsonPatchMessage<ID>> message = getObjectMapper().readValue(dto, getIdJsonPatchReferenceType());

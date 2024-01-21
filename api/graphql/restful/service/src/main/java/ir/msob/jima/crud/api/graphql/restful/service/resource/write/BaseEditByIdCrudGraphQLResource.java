@@ -8,6 +8,7 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.model.operation.Operations;
+import ir.msob.jima.core.commons.model.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.DtoType;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.IdJsonPatchInput;
@@ -63,9 +64,9 @@ public interface BaseEditByIdCrudGraphQLResource<
      */
     @MethodStats
     @MutationMapping
+    @Scope(Operations.EDIT_BY_ID)
     default Mono<DtoType> editById(@Argument IdJsonPatchInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
         log.debug("Request to edit by id: dto {}", input);
-        crudValidation(Operations.EDIT_BY_ID);
 
         Optional<USER> user = getUser(token);
 

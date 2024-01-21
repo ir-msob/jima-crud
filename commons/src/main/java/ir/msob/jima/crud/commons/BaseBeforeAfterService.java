@@ -91,8 +91,8 @@ public interface BaseBeforeAfterService {
      * @param dtos      the DTOs that were saved
      * @param savedDtos the saved DTOs
      * @param user      the current user
-     * @throws DomainNotFoundException   if the domain is not found
-     * @throws BadRequestException       if the request is bad
+     * @throws DomainNotFoundException if the domain is not found
+     * @throws BadRequestException     if the request is bad
      */
     default <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser<ID>,
@@ -122,8 +122,8 @@ public interface BaseBeforeAfterService {
      * @param previousDtos the DTOs before the update
      * @param updatedDtos  the DTOs after the update
      * @param user         the current user
-     * @throws DomainNotFoundException   if the domain is not found
-     * @throws BadRequestException       if the request is bad
+     * @throws DomainNotFoundException if the domain is not found
+     * @throws BadRequestException     if the request is bad
      */
     default <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser<ID>,
@@ -147,10 +147,10 @@ public interface BaseBeforeAfterService {
     /**
      * This method is called after the delete operation.
      *
-     * @param ids            the IDs of deleted entities
-     * @param criteria       the criteria used for deleting
-     * @param dtoClass       the class of the DTO
-     * @param user           the current user
+     * @param ids      the IDs of deleted entities
+     * @param criteria the criteria used for deleting
+     * @param dtoClass the class of the DTO
+     * @param user     the current user
      * @throws DomainNotFoundException if the domain is not found
      * @throws BadRequestException     if the request is bad
      */

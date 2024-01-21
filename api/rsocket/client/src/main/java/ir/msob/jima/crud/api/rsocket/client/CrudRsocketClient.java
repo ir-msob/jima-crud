@@ -484,7 +484,7 @@ public class CrudRsocketClient implements BaseCrudClient {
      *
      * @param dtoClass the DTO class
      * @param criteria the criteria of the domains to be retrieved
-     * @param user the user performing the operation
+     * @param user     the user performing the operation
      * @return a Mono with the retrieved DTOs
      */
     @MethodStats
@@ -509,7 +509,7 @@ public class CrudRsocketClient implements BaseCrudClient {
      * It creates a ChannelMessage with the DTO and sends a RSocket request to the backend service.
      *
      * @param dtoClass the DTO class
-     * @param user the user performing the operation
+     * @param user     the user performing the operation
      * @return a Mono with the retrieved DTOs
      */
     @SneakyThrows
@@ -534,7 +534,7 @@ public class CrudRsocketClient implements BaseCrudClient {
      * It creates a ChannelMessage with the DTO and sends a RSocket request to the backend service.
      *
      * @param dtoClass the DTO class
-     * @param user the user performing the operation
+     * @param user     the user performing the operation
      * @return a Mono with the retrieved DTOs
      */
     @MethodStats
@@ -599,10 +599,10 @@ public class CrudRsocketClient implements BaseCrudClient {
     /**
      * Creates a ChannelMessage with the provided CriteriaMessage data.
      *
-     * @param data The CriteriaMessage data to be included in the ChannelMessage.
-     * @param <ID> The type of the ID, which must be Comparable and Serializable.
+     * @param data   The CriteriaMessage data to be included in the ChannelMessage.
+     * @param <ID>   The type of the ID, which must be Comparable and Serializable.
      * @param <USER> The type of the User, which must extend BaseUser.
-     * @param <C> The type of the Criteria, which must extend BaseCriteria.
+     * @param <C>    The type of the Criteria, which must extend BaseCriteria.
      * @return A ChannelMessage containing the provided CriteriaMessage data.
      */
     public <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, C extends BaseCriteria<ID>> ChannelMessage<ID, USER, CriteriaMessage<ID, C>> createChannelMessage(CriteriaMessage<ID, C> data) {
@@ -614,10 +614,10 @@ public class CrudRsocketClient implements BaseCrudClient {
     /**
      * Creates a ChannelMessage with the provided JsonPatchMessage data.
      *
-     * @param data The JsonPatchMessage data to be included in the ChannelMessage.
-     * @param <ID> The type of the ID, which must be Comparable and Serializable.
+     * @param data   The JsonPatchMessage data to be included in the ChannelMessage.
+     * @param <ID>   The type of the ID, which must be Comparable and Serializable.
      * @param <USER> The type of the User, which must extend BaseUser.
-     * @param <C> The type of the Criteria, which must extend BaseCriteria.
+     * @param <C>    The type of the Criteria, which must extend BaseCriteria.
      * @return A ChannelMessage containing the provided JsonPatchMessage data.
      */
     public <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, C extends BaseCriteria<ID>> ChannelMessage<ID, USER, JsonPatchMessage<ID, C>> createChannelMessage(JsonPatchMessage<ID, C> data) {
@@ -629,10 +629,10 @@ public class CrudRsocketClient implements BaseCrudClient {
     /**
      * Creates a ChannelMessage with the provided DtoMessage data.
      *
-     * @param data The DtoMessage data to be included in the ChannelMessage.
-     * @param <ID> The type of the ID, which must be Comparable and Serializable.
+     * @param data   The DtoMessage data to be included in the ChannelMessage.
+     * @param <ID>   The type of the ID, which must be Comparable and Serializable.
      * @param <USER> The type of the User, which must extend BaseUser.
-     * @param <DTO> The type of the DTO, which must extend BaseDto.
+     * @param <DTO>  The type of the DTO, which must extend BaseDto.
      * @return A ChannelMessage containing the provided DtoMessage data.
      */
     public <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> ChannelMessage<ID, USER, DtoMessage<ID, DTO>> createChannelMessage(DtoMessage<ID, DTO> data) {
@@ -644,10 +644,10 @@ public class CrudRsocketClient implements BaseCrudClient {
     /**
      * Creates a ChannelMessage with the provided DtosMessage data.
      *
-     * @param data The DtosMessage data to be included in the ChannelMessage.
-     * @param <ID> The type of the ID, which must be Comparable and Serializable.
+     * @param data   The DtosMessage data to be included in the ChannelMessage.
+     * @param <ID>   The type of the ID, which must be Comparable and Serializable.
      * @param <USER> The type of the User, which must extend BaseUser.
-     * @param <DTO> The type of the DTO, which must extend BaseDto.
+     * @param <DTO>  The type of the DTO, which must extend BaseDto.
      * @return A ChannelMessage containing the provided DtosMessage data.
      */
     public <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> ChannelMessage<ID, USER, DtosMessage<ID, DTO>> createChannelMessage(DtosMessage<ID, DTO> data) {
@@ -673,8 +673,8 @@ public class CrudRsocketClient implements BaseCrudClient {
      * Creates a ChannelMessage with the provided criteria data.
      *
      * @param criteria The data to be included in the ChannelMessage.
-     * @param <ID> The type of the ID, which must be Comparable and Serializable.
-     * @param <C> The type of the Criteria, which must extend BaseCriteria.
+     * @param <ID>     The type of the ID, which must be Comparable and Serializable.
+     * @param <C>      The type of the Criteria, which must extend BaseCriteria.
      * @return A ChannelMessage containing the provided data.
      */
     public <ID extends Comparable<ID> & Serializable, C extends BaseCriteria<ID>> CriteriaMessage<ID, C> createData(C criteria) {
@@ -701,8 +701,8 @@ public class CrudRsocketClient implements BaseCrudClient {
      * Creates a ChannelMessage with the provided JsonPatch data.
      *
      * @param jsonPatch The data to be included in the ChannelMessage.
-     * @param <ID> The type of the ID, which must be Comparable and Serializable.
-     * @param <C> The type of the Criteria, which must extend BaseCriteria.
+     * @param <ID>      The type of the ID, which must be Comparable and Serializable.
+     * @param <C>       The type of the Criteria, which must extend BaseCriteria.
      * @return A ChannelMessage containing the provided data.
      */
     public <ID extends Comparable<ID> & Serializable, C extends BaseCriteria<ID>> JsonPatchMessage<ID, C> createMessage(JsonPatch jsonPatch, C criteria) {
@@ -729,8 +729,8 @@ public class CrudRsocketClient implements BaseCrudClient {
     /**
      * Creates a ChannelMessage with the provided DTO data.
      *
-     * @param dto The data to be included in the ChannelMessage.
-     * @param <ID> The type of the ID, which must be Comparable and Serializable.
+     * @param dto   The data to be included in the ChannelMessage.
+     * @param <ID>  The type of the ID, which must be Comparable and Serializable.
      * @param <DTO> The type of the DTO, which must extend BaseDto.
      * @return A ChannelMessage containing the provided data.
      */
@@ -743,8 +743,8 @@ public class CrudRsocketClient implements BaseCrudClient {
     /**
      * Creates a ChannelMessage with the provided DTOs data.
      *
-     * @param dtos The data to be included in the ChannelMessage.
-     * @param <ID> The type of the ID, which must be Comparable and Serializable.
+     * @param dtos  The data to be included in the ChannelMessage.
+     * @param <ID>  The type of the ID, which must be Comparable and Serializable.
      * @param <DTO> The type of the DTO, which must extend BaseDto.
      * @return A ChannelMessage containing the provided data.
      */

@@ -6,6 +6,7 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.model.operation.Operations;
+import ir.msob.jima.core.commons.model.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.grpc.commons.CriteriaMsg;
 import ir.msob.jima.crud.api.grpc.commons.IdMsg;
@@ -51,8 +52,8 @@ public interface BaseDeleteCrudGrpcResource<
      */
     @Override
     @MethodStats
+    @Scope(Operations.DELETE)
     default Mono<IdMsg> delete(Mono<CriteriaMsg> request) {
-        crudValidation(Operations.DELETE);
         return request.flatMap(this::delete);
     }
 
@@ -64,9 +65,9 @@ public interface BaseDeleteCrudGrpcResource<
      */
     @Override
     @MethodStats
+    @Scope(Operations.DELETE)
     default Mono<IdMsg> delete(CriteriaMsg request) {
         log.debug("Request to delete: dto {}", request);
-        crudValidation(Operations.DELETE);
         return getService().delete(convertToCriteria(request.getCriteria()), getUser())
                 .map(result -> IdMsg.newBuilder()
                         .setId(convertToString(result))

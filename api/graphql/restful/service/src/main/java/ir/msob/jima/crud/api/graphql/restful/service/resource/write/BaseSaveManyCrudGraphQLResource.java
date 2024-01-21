@@ -8,6 +8,7 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.model.operation.Operations;
+import ir.msob.jima.core.commons.model.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.DtosInput;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.DtosType;
@@ -63,9 +64,9 @@ public interface BaseSaveManyCrudGraphQLResource<
      */
     @MethodStats
     @MutationMapping
+    @Scope(Operations.SAVE_MANY)
     default Mono<DtosType> saveMany(@Argument DtosInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
         log.debug("Request to save many: dto {}", input);
-        crudValidation(Operations.SAVE_MANY);
 
         Optional<USER> user = getUser(token);
 

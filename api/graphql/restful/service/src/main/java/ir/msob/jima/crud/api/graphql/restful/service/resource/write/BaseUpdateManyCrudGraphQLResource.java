@@ -8,6 +8,7 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.model.operation.Operations;
+import ir.msob.jima.core.commons.model.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.DtosInput;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.DtosType;
@@ -68,9 +69,9 @@ public interface BaseUpdateManyCrudGraphQLResource<
      */
     @MethodStats
     @MutationMapping
+    @Scope(Operations.UPDATE_MANY)
     default Mono<DtosType> updateMany(@Argument DtosInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         log.debug("Request to update many: dto {}", input);
-        crudValidation(Operations.UPDATE_MANY);
 
         Optional<USER> user = getUser(token);
 

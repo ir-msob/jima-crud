@@ -6,6 +6,7 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.model.operation.Operations;
+import ir.msob.jima.core.commons.model.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.grpc.commons.DtosMsg;
 import ir.msob.jima.crud.api.grpc.service.ParentCrudGrpcResource;
@@ -50,8 +51,8 @@ public interface BaseSaveManyCrudGrpcResource<
      */
     @Override
     @MethodStats
+    @Scope(Operations.SAVE_MANY)
     default Mono<DtosMsg> saveMany(Mono<DtosMsg> request) {
-        crudValidation(Operations.SAVE_MANY);
         return request.flatMap(this::saveMany);
     }
 
@@ -63,9 +64,9 @@ public interface BaseSaveManyCrudGrpcResource<
      */
     @Override
     @MethodStats
+    @Scope(Operations.SAVE_MANY)
     default Mono<DtosMsg> saveMany(DtosMsg request) {
         log.debug("Request to save many: dto {}", request);
-        crudValidation(Operations.SAVE_MANY);
         return getService().saveMany(convertToDtos(request.getDtosList()), getUser())
                 .map(result -> DtosMsg.newBuilder()
                         .addAllDtos(convertToStrings(result))

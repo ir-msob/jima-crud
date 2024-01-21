@@ -13,6 +13,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.model.operation.Operations;
 import ir.msob.jima.core.commons.model.operation.OperationsStatus;
+import ir.msob.jima.core.commons.model.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.rest.ParentCrudRestResource;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
@@ -32,14 +33,14 @@ import java.util.Optional;
  * This interface provides a RESTful API for counting domains based on a given criteria.
  * It extends the ParentCrudRestResource interface and provides a default implementation for the count method.
  *
- * @param <ID> the type of the ID of the domain
+ * @param <ID>   the type of the ID of the domain
  * @param <USER> the type of the user
- * @param <D> the type of the domain
- * @param <DTO> the type of the DTO
- * @param <C> the type of the criteria
- * @param <Q> the type of the query
- * @param <R> the type of the repository
- * @param <S> the type of the service
+ * @param <D>    the type of the domain
+ * @param <DTO>  the type of the DTO
+ * @param <C>    the type of the criteria
+ * @param <Q>    the type of the query
+ * @param <R>    the type of the repository
+ * @param <S>    the type of the service
  * @author Yaqub Abdi
  */
 public interface BaseCountCrudRestResource<
@@ -72,10 +73,9 @@ public interface BaseCountCrudRestResource<
             @ApiResponse(code = 200, message = "If domain(s) already count return true otherwise return false", response = Long.class),
             @ApiResponse(code = 400, message = "If the validation operation is incorrect throws BadRequestException otherwise nothing", response = BadRequestResponse.class)})
     @MethodStats
+    @Scope(Operations.COUNT)
     default ResponseEntity<Mono<Long>> count(C criteria, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("REST request to count, criteria {} : ", criteria);
-
-        crudValidation(Operations.COUNT);
 
         Optional<USER> user = getUser(serverWebExchange, principal);
         return this.countResponse(this.getService().count(criteria, user), criteria, user);

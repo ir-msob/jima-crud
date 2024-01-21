@@ -11,6 +11,7 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.model.operation.Operations;
+import ir.msob.jima.core.commons.model.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.rsocket.service.ParentCrudRsocketResource;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
@@ -31,14 +32,14 @@ import java.util.Optional;
  * This interface provides a RSocket API for updating multiple domains.
  * It extends the ParentCrudRsocketResource interface and provides a default implementation for the updateMany method.
  *
- * @param <ID> the type of the ID of the domain
+ * @param <ID>   the type of the ID of the domain
  * @param <USER> the type of the user
- * @param <D> the type of the domain
- * @param <DTO> the type of the DTO
- * @param <C> the type of the criteria
- * @param <Q> the type of the query
- * @param <R> the type of the repository
- * @param <S> the type of the service
+ * @param <D>    the type of the domain
+ * @param <DTO>  the type of the DTO
+ * @param <C>    the type of the criteria
+ * @param <Q>    the type of the query
+ * @param <R>    the type of the repository
+ * @param <S>    the type of the service
  * @author Yaqub Abdi
  */
 public interface BaseUpdateManyCrudRsocketResource<
@@ -66,12 +67,11 @@ public interface BaseUpdateManyCrudRsocketResource<
      */
     @MessageMapping(Operations.UPDATE_MANY)
     @MethodStats
+    @Scope(Operations.UPDATE_MANY)
     default Mono<Collection<DTO>> updateList(@Payload String dto, @AuthenticationPrincipal Jwt principal)
             throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("RSocket request to update many domain, dtos : {}", dto);
         ChannelMessage<ID, USER, DtosMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getDtosReferenceType());
-
-        crudValidation(Operations.UPDATE_MANY);
 
         Optional<USER> user = getUser(message.getUser(), principal);
         return this.updateManyResponse(message.getData().getDtos(), this.getService().updateMany(message.getData().getDtos(), user), user);

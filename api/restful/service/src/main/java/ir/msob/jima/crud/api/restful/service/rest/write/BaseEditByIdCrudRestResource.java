@@ -14,6 +14,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.model.operation.Operations;
 import ir.msob.jima.core.commons.model.operation.OperationsStatus;
+import ir.msob.jima.core.commons.model.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.rest.ParentCrudRestResource;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
@@ -76,11 +77,10 @@ public interface BaseEditByIdCrudRestResource<
             @ApiResponse(code = 400, message = "If the validation operation is incorrect throws BadRequestException otherwise nothing", response = BadRequestResponse.class),
             @ApiResponse(code = 409, message = "If the check operation is false throws ConflictException otherwise nothing", response = ConflictResponse.class)})
     @MethodStats
+    @Scope(Operations.EDIT_BY_ID)
     default ResponseEntity<Mono<DTO>> editById(@PathVariable("id") ID id, @RequestBody JsonPatch dto, ServerWebExchange serverWebExchange, Principal principal)
             throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to edit domain, id {}, dto {} ", id, dto);
-
-        crudValidation(Operations.EDIT_BY_ID);
 
         Optional<USER> user = getUser(serverWebExchange, principal);
         return this.editByIdResponse(id, dto, this.getService().edit(id, dto, user), user);
