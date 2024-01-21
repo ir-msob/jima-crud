@@ -6,6 +6,7 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.model.operation.Operations;
+import ir.msob.jima.core.commons.model.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.grpc.commons.CountMsg;
 import ir.msob.jima.crud.api.grpc.commons.CriteriaMsg;
@@ -51,8 +52,8 @@ public interface BaseCountCrudGrpcResource<
      */
     @Override
     @MethodStats
+    @Scope(Operations.COUNT)
     default Mono<CountMsg> count(Mono<CriteriaMsg> request) {
-        crudValidation(Operations.COUNT);
         return request.flatMap(this::count);
     }
 
@@ -64,9 +65,9 @@ public interface BaseCountCrudGrpcResource<
      */
     @Override
     @MethodStats
+    @Scope(Operations.COUNT)
     default Mono<CountMsg> count(CriteriaMsg request) {
         log.debug("Request to count: dto {}", request);
-        crudValidation(Operations.COUNT);
         return getService().count(convertToCriteria(request.getCriteria()), getUser())
                 .map(result -> CountMsg.newBuilder()
                         .setCount(result)

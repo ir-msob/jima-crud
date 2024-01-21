@@ -6,6 +6,7 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.model.operation.Operations;
+import ir.msob.jima.core.commons.model.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.grpc.commons.CriteriaPageableMsg;
 import ir.msob.jima.crud.api.grpc.commons.PageMsg;
@@ -51,8 +52,8 @@ public interface BaseGetPageCrudGrpcResource<
      */
     @Override
     @MethodStats
+    @Scope(Operations.GET_PAGE)
     default Mono<PageMsg> getPage(Mono<CriteriaPageableMsg> request) {
-        crudValidation(Operations.GET_PAGE);
         return request.flatMap(this::getPage);
     }
 
@@ -64,9 +65,9 @@ public interface BaseGetPageCrudGrpcResource<
      */
     @Override
     @MethodStats
+    @Scope(Operations.GET_PAGE)
     default Mono<PageMsg> getPage(CriteriaPageableMsg request) {
         log.debug("Request to get page: dto {}", request);
-        crudValidation(Operations.GET_PAGE);
         return getService().getPage(convertToCriteria(request.getCriteria()), convertToPageable(request.getPageable()), getUser())
                 .map(result -> PageMsg.newBuilder()
                         .setPage(convertToString(result))

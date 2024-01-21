@@ -8,6 +8,7 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.model.operation.Operations;
+import ir.msob.jima.core.commons.model.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.CriteriaInput;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.DtoType;
@@ -64,9 +65,9 @@ public interface BaseGetOneCrudGraphQLResource<
      */
     @MethodStats
     @QueryMapping
+    @Scope(Operations.GET_ONE)
     default Mono<DtoType> getOne(@Argument CriteriaInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
         log.debug("Request to get one: dto {}", input);
-        crudValidation(Operations.GET_ONE);
 
         Optional<USER> user = getUser(token);
 

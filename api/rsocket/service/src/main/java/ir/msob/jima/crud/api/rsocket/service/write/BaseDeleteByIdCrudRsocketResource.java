@@ -11,6 +11,7 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.model.operation.Operations;
+import ir.msob.jima.core.commons.model.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.rsocket.service.ParentCrudRsocketResource;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
@@ -67,11 +68,10 @@ public interface BaseDeleteByIdCrudRsocketResource<
      */
     @MessageMapping(Operations.DELETE_BY_ID)
     @MethodStats
+    @Scope(Operations.DELETE_BY_ID)
     default Mono<ID> deleteById(@Payload String dto, @AuthenticationPrincipal Jwt principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("RSocket request to delete domain, dto {}", dto);
         ChannelMessage<ID, USER, IdMessage<ID>> message = getObjectMapper().readValue(dto, getIdReferenceType());
-
-        crudValidation(Operations.DELETE_BY_ID);
 
         Optional<USER> user = getUser(message.getUser(), principal);
         return this.deleteByIdResponse(this.getService().delete(message.getData().getId(), user), message.getData().getId(), user);

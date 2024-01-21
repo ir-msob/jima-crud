@@ -8,9 +8,10 @@ import ir.msob.jima.core.commons.model.channel.message.CriteriaMessage;
 import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
-import ir.msob.jima.core.commons.model.operation.ConditionalOnOperationUtil;
 import ir.msob.jima.core.commons.model.operation.Operations;
 import ir.msob.jima.core.commons.model.operation.OperationsStatus;
+import ir.msob.jima.core.commons.model.scope.Scope;
+import ir.msob.jima.core.commons.model.scope.ScopeInitializer;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.kafka.service.ParentCrudListener;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
@@ -53,12 +54,10 @@ public interface BaseGetManyCrudListener<
     /**
      * Initializes the listener for the GET_MANY operation.
      */
+    @ScopeInitializer(Operations.GET_MANY)
     @PostConstruct
     default void getMany() {
         String operation = Operations.GET_MANY;
-
-        if (!ConditionalOnOperationUtil.hasOperation(operation, getClass()))
-            return;
 
         ContainerProperties containerProperties = createContainerProperties(operation);
         containerProperties.setMessageListener((MessageListener<String, String>) dto -> serviceGetMany(dto.value()));
@@ -73,6 +72,7 @@ public interface BaseGetManyCrudListener<
     @MethodStats
     @SneakyThrows
     @CallbackError("dto")
+    @Scope(Operations.GET_MANY)
     private void serviceGetMany(String dto) {
         log.debug("Received message for get many: dto {}", dto);
         ChannelMessage<ID, USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());

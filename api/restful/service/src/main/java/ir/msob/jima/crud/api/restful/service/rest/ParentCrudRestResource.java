@@ -16,14 +16,14 @@ import java.io.Serializable;
  * This interface provides a RESTful API for CRUD operations on a domain.
  * It extends the BaseRestResource and BaseCrudResource interfaces and provides a method to get the service.
  *
- * @param <ID> the type of the ID of the domain
+ * @param <ID>   the type of the ID of the domain
  * @param <USER> the type of the user
- * @param <D> the type of the domain
- * @param <DTO> the type of the DTO
- * @param <C> the type of the criteria
- * @param <Q> the type of the query
- * @param <R> the type of the repository
- * @param <S> the type of the service
+ * @param <D>    the type of the domain
+ * @param <DTO>  the type of the DTO
+ * @param <C>    the type of the criteria
+ * @param <Q>    the type of the query
+ * @param <R>    the type of the repository
+ * @param <S>    the type of the service
  * @author Yaqub Abdi
  */
 public interface ParentCrudRestResource<

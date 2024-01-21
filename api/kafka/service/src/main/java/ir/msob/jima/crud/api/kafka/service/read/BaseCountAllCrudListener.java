@@ -8,9 +8,10 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.model.dto.ModelType;
-import ir.msob.jima.core.commons.model.operation.ConditionalOnOperationUtil;
 import ir.msob.jima.core.commons.model.operation.Operations;
 import ir.msob.jima.core.commons.model.operation.OperationsStatus;
+import ir.msob.jima.core.commons.model.scope.Scope;
+import ir.msob.jima.core.commons.model.scope.ScopeInitializer;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.kafka.service.ParentCrudListener;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
@@ -53,12 +54,10 @@ public interface BaseCountAllCrudListener<
     /**
      * Initializes the listener for the COUNT_ALL operation.
      */
+    @ScopeInitializer(Operations.COUNT_ALL)
     @PostConstruct
     default void countAll() {
         String operation = Operations.COUNT_ALL;
-
-        if (!ConditionalOnOperationUtil.hasOperation(operation, getClass()))
-            return;
 
         ContainerProperties containerProperties = createContainerProperties(operation);
         containerProperties.setMessageListener((MessageListener<String, String>) dto -> serviceCountAll(dto.value()));
@@ -73,6 +72,7 @@ public interface BaseCountAllCrudListener<
     @MethodStats
     @SneakyThrows
     @CallbackError("dto")
+    @Scope(Operations.COUNT_ALL)
     private void serviceCountAll(String dto) {
         log.debug("Received message for count all: dto {}", dto);
         ChannelMessage<ID, USER, ModelType> message = getObjectMapper().readValue(dto, getModelTypeReferenceType());

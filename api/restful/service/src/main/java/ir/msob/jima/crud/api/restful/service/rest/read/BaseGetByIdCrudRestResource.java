@@ -13,6 +13,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.model.operation.Operations;
 import ir.msob.jima.core.commons.model.operation.OperationsStatus;
+import ir.msob.jima.core.commons.model.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.rest.ParentCrudRestResource;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
@@ -73,10 +74,9 @@ public interface BaseGetByIdCrudRestResource<
             @ApiResponse(code = 404, message = "Domain not found", response = DomainNotFoundException.class)
     })
     @MethodStats
+    @Scope(Operations.GET_BY_ID)
     default ResponseEntity<Mono<DTO>> getById(@PathVariable("id") ID id, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("REST request to get by id domain, id {}", id);
-
-        crudValidation(Operations.GET_BY_ID);
 
         Optional<USER> user = getUser(serverWebExchange, principal);
         return this.getByIdResponse(this.getService().getOne(id, user), id, user);

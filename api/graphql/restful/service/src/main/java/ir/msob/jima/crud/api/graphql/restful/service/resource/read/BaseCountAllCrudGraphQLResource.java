@@ -8,6 +8,7 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.model.operation.Operations;
+import ir.msob.jima.core.commons.model.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.CountType;
 import ir.msob.jima.crud.api.graphql.restful.service.resource.BaseCrudGraphQL;
@@ -65,9 +66,9 @@ public interface BaseCountAllCrudGraphQLResource<
      */
     @MethodStats
     @QueryMapping
+    @Scope(Operations.COUNT_ALL)
     default Mono<CountType> countAll(@ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         log.debug("Request to count all");
-        crudValidation(Operations.COUNT_ALL);
 
         Optional<USER> user = getUser(token);
         return getService().countAll(user)

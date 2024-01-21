@@ -11,6 +11,7 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.model.operation.Operations;
+import ir.msob.jima.core.commons.model.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.rsocket.service.ParentCrudRsocketResource;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
@@ -67,11 +68,10 @@ public interface BaseGetByIdCrudRsocketResource<
      */
     @MessageMapping(Operations.GET_BY_ID)
     @MethodStats
+    @Scope(Operations.GET_BY_ID)
     default Mono<DTO> getById(@Payload String dto, @AuthenticationPrincipal Jwt principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("RSocket request to get by id domain, dto {}", dto);
         ChannelMessage<ID, USER, IdMessage<ID>> message = getObjectMapper().readValue(dto, getIdReferenceType());
-
-        crudValidation(Operations.GET_BY_ID);
 
         Optional<USER> user = getUser(message.getUser(), principal);
         return this.getByIdResponse(this.getService().getOne(message.getData().getId(), user), message.getData().getId(), user);

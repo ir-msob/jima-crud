@@ -8,6 +8,7 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.model.operation.Operations;
+import ir.msob.jima.core.commons.model.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.CriteriaJsonPatchInput;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.DtoType;
@@ -63,9 +64,9 @@ public interface BaseEditCrudGraphQLResource<
      */
     @MethodStats
     @MutationMapping
+    @Scope(Operations.EDIT)
     default Mono<DtoType> edit(@Argument CriteriaJsonPatchInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
         log.debug("Request to edit: dto {}", input);
-        crudValidation(Operations.EDIT);
 
         Optional<USER> user = getUser(token);
 

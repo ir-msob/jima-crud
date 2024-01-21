@@ -8,9 +8,10 @@ import ir.msob.jima.core.commons.model.channel.message.CriteriaMessage;
 import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
-import ir.msob.jima.core.commons.model.operation.ConditionalOnOperationUtil;
 import ir.msob.jima.core.commons.model.operation.Operations;
 import ir.msob.jima.core.commons.model.operation.OperationsStatus;
+import ir.msob.jima.core.commons.model.scope.Scope;
+import ir.msob.jima.core.commons.model.scope.ScopeInitializer;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.kafka.service.ParentCrudListener;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
@@ -53,12 +54,10 @@ public interface BaseDeleteManyCrudListener<
     /**
      * Initializes the listener for the DELETE_MANY operation.
      */
+    @ScopeInitializer(Operations.DELETE_MANY)
     @PostConstruct
     default void deleteMany() {
         String operation = Operations.DELETE_MANY;
-
-        if (!ConditionalOnOperationUtil.hasOperation(operation, getClass()))
-            return;
 
         ContainerProperties containerProperties = createContainerProperties(operation);
         containerProperties.setMessageListener((MessageListener<String, String>) dto -> serviceDeleteMany(dto.value()));
@@ -73,6 +72,7 @@ public interface BaseDeleteManyCrudListener<
     @MethodStats
     @SneakyThrows
     @CallbackError("dto")
+    @Scope(Operations.DELETE_MANY)
     private void serviceDeleteMany(String dto) {
         log.debug("Received message for delete many: dto {}", dto);
         ChannelMessage<ID, USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());

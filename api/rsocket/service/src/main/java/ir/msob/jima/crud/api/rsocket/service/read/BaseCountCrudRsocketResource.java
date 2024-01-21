@@ -11,6 +11,7 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.model.operation.Operations;
+import ir.msob.jima.core.commons.model.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.rsocket.service.ParentCrudRsocketResource;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
@@ -30,14 +31,14 @@ import java.util.Optional;
  * This interface provides a RSocket API for counting domains that meet a specific criteria.
  * It extends the ParentCrudRsocketResource interface and provides a default implementation for the count method.
  *
- * @param <ID> the type of the ID of the domain
+ * @param <ID>   the type of the ID of the domain
  * @param <USER> the type of the user
- * @param <D> the type of the domain
- * @param <DTO> the type of the DTO
- * @param <C> the type of the criteria
- * @param <Q> the type of the query
- * @param <R> the type of the repository
- * @param <S> the type of the service
+ * @param <D>    the type of the domain
+ * @param <DTO>  the type of the DTO
+ * @param <C>    the type of the criteria
+ * @param <Q>    the type of the query
+ * @param <R>    the type of the repository
+ * @param <S>    the type of the service
  * @author Yaqub Abdi
  */
 public interface BaseCountCrudRsocketResource<
@@ -65,11 +66,10 @@ public interface BaseCountCrudRsocketResource<
      */
     @MessageMapping(Operations.COUNT)
     @MethodStats
+    @Scope(Operations.COUNT)
     default Mono<Long> count(@Payload String dto, @AuthenticationPrincipal Jwt principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("RSocket request to count, dto {} : ", dto);
         ChannelMessage<ID, USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());
-
-        crudValidation(Operations.COUNT);
 
         Optional<USER> user = getUser(message.getUser(), principal);
         return this.countResponse(this.getService().count(message.getData().getCriteria(), user), message.getData().getCriteria(), user);

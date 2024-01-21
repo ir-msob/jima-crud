@@ -6,6 +6,7 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.model.operation.Operations;
+import ir.msob.jima.core.commons.model.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.grpc.commons.DtoMsg;
 import ir.msob.jima.crud.api.grpc.commons.IdMsg;
@@ -51,8 +52,8 @@ public interface BaseGetByIdCrudGrpcResource<
      */
     @Override
     @MethodStats
+    @Scope(Operations.GET_BY_ID)
     default Mono<DtoMsg> getById(Mono<IdMsg> request) {
-        crudValidation(Operations.GET_BY_ID);
         return request.flatMap(this::getById);
     }
 
@@ -64,9 +65,9 @@ public interface BaseGetByIdCrudGrpcResource<
      */
     @Override
     @MethodStats
+    @Scope(Operations.GET_BY_ID)
     default Mono<DtoMsg> getById(IdMsg request) {
         log.debug("Request to get by id: dto {}", request);
-        crudValidation(Operations.GET_BY_ID);
         return getService().getOne(convertToId(request.getId()), getUser())
                 .map(result -> DtoMsg.newBuilder()
                         .setDto(convertToString(result))

@@ -8,6 +8,7 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.model.operation.Operations;
+import ir.msob.jima.core.commons.model.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.CountType;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.CriteriaInput;
@@ -63,9 +64,9 @@ public interface BaseCountCrudGraphQLResource<
      */
     @MethodStats
     @QueryMapping
+    @Scope(Operations.COUNT)
     default Mono<CountType> count(@Argument CriteriaInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
         log.debug("Request to count: dto {}", input);
-        crudValidation(Operations.COUNT);
 
         Optional<USER> user = getUser(token);
 

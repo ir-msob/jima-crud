@@ -8,6 +8,7 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.model.operation.Operations;
+import ir.msob.jima.core.commons.model.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.DtoInput;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.DtoType;
@@ -68,9 +69,9 @@ public interface BaseUpdateCrudGraphQLResource<
      */
     @MethodStats
     @MutationMapping
+    @Scope(Operations.UPDATE)
     default Mono<DtoType> update(@Argument DtoInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         log.debug("Request to update: dto {}", input);
-        crudValidation(Operations.UPDATE);
 
         Optional<USER> user = getUser(token);
 

@@ -8,9 +8,10 @@ import ir.msob.jima.core.commons.model.channel.message.DtosMessage;
 import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
-import ir.msob.jima.core.commons.model.operation.ConditionalOnOperationUtil;
 import ir.msob.jima.core.commons.model.operation.Operations;
 import ir.msob.jima.core.commons.model.operation.OperationsStatus;
+import ir.msob.jima.core.commons.model.scope.Scope;
+import ir.msob.jima.core.commons.model.scope.ScopeInitializer;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.kafka.service.ParentCrudListener;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
@@ -53,13 +54,10 @@ public interface BaseUpdateManyCrudListener<
     /**
      * Initializes the listener for the UPDATE_MANY operation.
      */
+    @ScopeInitializer(Operations.UPDATE_MANY)
     @PostConstruct
     default void updateMany() {
         String operation = Operations.UPDATE_MANY;
-
-        // Check if the operation is enabled for this class
-        if (!ConditionalOnOperationUtil.hasOperation(operation, getClass()))
-            return;
 
         // Create container properties for the Kafka listener
         ContainerProperties containerProperties = createContainerProperties(operation);
@@ -77,6 +75,7 @@ public interface BaseUpdateManyCrudListener<
     @MethodStats
     @SneakyThrows
     @CallbackError("dto")
+    @Scope(Operations.UPDATE_MANY)
     private void serviceUpdateMany(String dto) {
         log.debug("Received message for update many: dto {}", dto);
         // Parse the message from the JSON string

@@ -12,6 +12,7 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.model.operation.Operations;
+import ir.msob.jima.core.commons.model.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.rsocket.service.ParentCrudRsocketResource;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
@@ -53,12 +54,11 @@ public interface BaseEditByIdCrudRsocketResource<
 
     @MessageMapping(Operations.EDIT_BY_ID)
     @MethodStats
+    @Scope(Operations.EDIT_BY_ID)
     default Mono<DTO> editById(@Payload String dto, @AuthenticationPrincipal Jwt principal)
             throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("RSocket request to edit domain, dto : {}", dto);
         ChannelMessage<ID, USER, IdJsonPatchMessage<ID>> message = getObjectMapper().readValue(dto, getIdJsonPatchReferenceType());
-
-        crudValidation(Operations.EDIT_BY_ID);
 
         Optional<USER> user = getUser(message.getUser(), principal);
         return this.editByIdResponse(message.getData().getJsonPatch(), this.getService().edit(message.getData().getId(), message.getData().getJsonPatch(), user), message.getData().getId(), user);

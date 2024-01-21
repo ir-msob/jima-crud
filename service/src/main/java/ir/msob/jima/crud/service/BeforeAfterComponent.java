@@ -18,7 +18,7 @@ import java.util.Optional;
  * This class provides before and after operations for various CRUD operations.
  * It allows you to apply additional logic before and after counting, getting, saving,
  * updating, and deleting records.
- *
+ * <p>
  * It uses the strategy pattern to delegate the before and after operations to a collection of
  * BaseBeforeAfterService and BaseBeforeAfterDomainService instances.
  */
@@ -33,8 +33,8 @@ public class BeforeAfterComponent {
     /**
      * Executes before counting records based on the provided criteria.
      *
-     * @param criteria The criteria used for counting records.
-     * @param user     An optional user associated with the operation.
+     * @param criteria                  The criteria used for counting records.
+     * @param user                      An optional user associated with the operation.
      * @param beforeAfterDomainServices A collection of BaseBeforeAfterDomainService instances.
      * @throws DomainNotFoundException If the domain is not found.
      * @throws BadRequestException     If a bad request is encountered.
@@ -58,8 +58,8 @@ public class BeforeAfterComponent {
     /**
      * Executes after counting records based on the provided criteria.
      *
-     * @param criteria The criteria used for counting records.
-     * @param user     An optional user associated with the operation.
+     * @param criteria                  The criteria used for counting records.
+     * @param user                      An optional user associated with the operation.
      * @param beforeAfterDomainServices A collection of BaseBeforeAfterDomainService instances.
      * @throws DomainNotFoundException If the domain is not found.
      * @throws BadRequestException     If a bad request is encountered.
@@ -83,8 +83,8 @@ public class BeforeAfterComponent {
     /**
      * Executes before getting records based on the provided criteria.
      *
-     * @param criteria The criteria used for getting records.
-     * @param user     An optional user associated with the operation.
+     * @param criteria                  The criteria used for getting records.
+     * @param user                      An optional user associated with the operation.
      * @param beforeAfterDomainServices A collection of BaseBeforeAfterDomainService instances.
      * @throws DomainNotFoundException If the domain is not found.
      * @throws BadRequestException     If a bad request is encountered.
@@ -108,10 +108,10 @@ public class BeforeAfterComponent {
     /**
      * Executes after getting records based on the provided criteria.
      *
-     * @param ids      The IDs of the retrieved records.
-     * @param dtos     The retrieved DTO objects.
-     * @param criteria The criteria used for getting records.
-     * @param user     An optional user associated with the operation.
+     * @param ids                       The IDs of the retrieved records.
+     * @param dtos                      The retrieved DTO objects.
+     * @param criteria                  The criteria used for getting records.
+     * @param user                      An optional user associated with the operation.
      * @param beforeAfterDomainServices A collection of BaseBeforeAfterDomainService instances.
      * @throws DomainNotFoundException If the domain is not found.
      * @throws BadRequestException     If a bad request is encountered.
@@ -135,8 +135,8 @@ public class BeforeAfterComponent {
     /**
      * Executes before saving records based on the provided DTOs.
      *
-     * @param dtos The DTOs to be saved.
-     * @param user An optional user associated with the operation.
+     * @param dtos                      The DTOs to be saved.
+     * @param user                      An optional user associated with the operation.
      * @param beforeAfterDomainServices A collection of BaseBeforeAfterDomainService instances.
      * @throws DomainNotFoundException If the domain is not found.
      * @throws BadRequestException     If a bad request is encountered.
@@ -160,10 +160,10 @@ public class BeforeAfterComponent {
     /**
      * Executes after saving records based on the provided DTOs.
      *
-     * @param ids       The IDs of the saved records.
-     * @param dtos      The DTOs that were saved.
-     * @param savedDtos The saved DTOs.
-     * @param user      An optional user associated with the operation.
+     * @param ids                       The IDs of the saved records.
+     * @param dtos                      The DTOs that were saved.
+     * @param savedDtos                 The saved DTOs.
+     * @param user                      An optional user associated with the operation.
      * @param beforeAfterDomainServices A collection of BaseBeforeAfterDomainService instances.
      * @throws DomainNotFoundException If the domain is not found.
      * @throws BadRequestException     If a bad request is encountered.
@@ -187,10 +187,10 @@ public class BeforeAfterComponent {
     /**
      * Executes before updating records based on the provided DTOs.
      *
-     * @param ids          The IDs of the records to be updated.
-     * @param previousDtos The previous DTOs.
-     * @param dtos         The updated DTOs.
-     * @param user         An optional user associated with the operation.
+     * @param ids                       The IDs of the records to be updated.
+     * @param previousDtos              The previous DTOs.
+     * @param dtos                      The updated DTOs.
+     * @param user                      An optional user associated with the operation.
      * @param beforeAfterDomainServices A collection of BaseBeforeAfterDomainService instances.
      * @throws DomainNotFoundException If the domain is not found.
      * @throws BadRequestException     If a bad request is encountered.
@@ -214,10 +214,10 @@ public class BeforeAfterComponent {
     /**
      * Executes after updating records based on the provided DTOs.
      *
-     * @param ids         The IDs of the updated records.
-     * @param dtos        The updated DTOs.
-     * @param updatedDtos The updated DTOs after the update.
-     * @param user        An optional user associated with the operation.
+     * @param ids                       The IDs of the updated records.
+     * @param dtos                      The updated DTOs.
+     * @param updatedDtos               The updated DTOs after the update.
+     * @param user                      An optional user associated with the operation.
      * @param beforeAfterDomainServices A collection of BaseBeforeAfterDomainService instances.
      * @throws DomainNotFoundException If the domain is not found.
      * @throws BadRequestException     If a bad request is encountered.
@@ -241,8 +241,8 @@ public class BeforeAfterComponent {
     /**
      * Executes before deleting records based on the provided criteria.
      *
-     * @param criteria The criteria used for deleting records.
-     * @param user     An optional user associated with the operation.
+     * @param criteria                  The criteria used for deleting records.
+     * @param user                      An optional user associated with the operation.
      * @param beforeAfterDomainServices A collection of BaseBeforeAfterDomainService instances.
      * @throws DomainNotFoundException If the domain is not found.
      * @throws BadRequestException     If a bad request is encountered.
@@ -266,10 +266,10 @@ public class BeforeAfterComponent {
     /**
      * Executes after deleting records based on the provided criteria.
      *
-     * @param ids      The IDs of the deleted records.
-     * @param criteria The criteria used for deleting records.
-     * @param dtoClass The class of DTO used.
-     * @param user     An optional user associated with the operation.
+     * @param ids                       The IDs of the deleted records.
+     * @param criteria                  The criteria used for deleting records.
+     * @param dtoClass                  The class of DTO used.
+     * @param user                      An optional user associated with the operation.
      * @param beforeAfterDomainServices A collection of BaseBeforeAfterDomainService instances.
      * @throws DomainNotFoundException If the domain is not found.
      * @throws BadRequestException     If a bad request is encountered.

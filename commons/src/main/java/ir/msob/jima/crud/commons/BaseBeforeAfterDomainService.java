@@ -61,8 +61,8 @@ public interface BaseBeforeAfterDomainService<
     /**
      * This method is called after the get operation.
      *
-     * @param ids   the IDs of the DTOs that were gotten
-     * @param dtos  the DTOs that were gotten
+     * @param ids      the IDs of the DTOs that were gotten
+     * @param dtos     the DTOs that were gotten
      * @param criteria the criteria used for getting
      * @param user     the current user
      * @throws DomainNotFoundException if the domain is not found
@@ -74,8 +74,8 @@ public interface BaseBeforeAfterDomainService<
     /**
      * This method is called before the save operation.
      *
-     * @param dtos  the DTOs to be saved
-     * @param user  the current user
+     * @param dtos the DTOs to be saved
+     * @param user the current user
      * @throws DomainNotFoundException if the domain is not found
      * @throws BadRequestException     if the request is bad
      */
@@ -85,10 +85,10 @@ public interface BaseBeforeAfterDomainService<
     /**
      * This method is called after the save operation.
      *
-     * @param ids        the IDs of the DTOs that were saved
-     * @param dtos       the DTOs that were saved
-     * @param savedDtos  the DTOs that were actually saved
-     * @param user       the current user
+     * @param ids       the IDs of the DTOs that were saved
+     * @param dtos      the DTOs that were saved
+     * @param savedDtos the DTOs that were actually saved
+     * @param user      the current user
      * @throws DomainNotFoundException if the domain is not found
      * @throws BadRequestException     if the request is bad
      */
@@ -99,10 +99,10 @@ public interface BaseBeforeAfterDomainService<
     /**
      * This method is called before the update operation.
      *
-     * @param ids           the IDs of the DTOs to be updated
-     * @param previousDtos  the previous state of the DTOs to be updated
-     * @param dtos          the new state of the DTOs to be updated
-     * @param user          the current user
+     * @param ids          the IDs of the DTOs to be updated
+     * @param previousDtos the previous state of the DTOs to be updated
+     * @param dtos         the new state of the DTOs to be updated
+     * @param user         the current user
      * @throws DomainNotFoundException if the domain is not found
      * @throws BadRequestException     if the request is bad
      */
@@ -112,10 +112,10 @@ public interface BaseBeforeAfterDomainService<
     /**
      * This method is called after the update operation.
      *
-     * @param ids           the IDs of the DTOs that were updated
-     * @param previousDtos  the previous state of the DTOs that were updated
-     * @param updatedDtos   the updated DTOs
-     * @param user          the current user
+     * @param ids          the IDs of the DTOs that were updated
+     * @param previousDtos the previous state of the DTOs that were updated
+     * @param updatedDtos  the updated DTOs
+     * @param user         the current user
      * @throws DomainNotFoundException if the domain is not found
      * @throws BadRequestException     if the request is bad
      */
