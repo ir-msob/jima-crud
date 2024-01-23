@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -52,14 +51,10 @@ public interface BaseGetPageCrudService<ID extends Comparable<ID> & Serializable
      * @return A Mono emitting a Page of DTO entities.
      * @throws DomainNotFoundException   If the requested domain is not found.
      * @throws BadRequestException       If the request is not well-formed or violates business rules.
-     * @throws NoSuchMethodException     If a requested method is not found.
-     * @throws InvocationTargetException If an exception occurs during method invocation.
-     * @throws IllegalAccessException    If an illegal access exception occurs.
-     * @throws InstantiationException    If an instantiation exception occurs.
      */
     @Transactional(readOnly = true)
     @MethodStats
-    default Mono<Page<DTO>> getPage(Pageable pageable, Optional<USER> user) throws DomainNotFoundException, BadRequestException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
+    default Mono<Page<DTO>> getPage(Pageable pageable, Optional<USER> user) throws DomainNotFoundException, BadRequestException {
         return this.getPage(newCriteriaClass(), pageable, user);
     }
 
