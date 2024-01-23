@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -47,14 +46,10 @@ public interface BaseEditManyCrudService<ID extends Comparable<ID> & Serializabl
      * @return A collection of DTOs representing the updated entities.
      * @throws BadRequestException       if the operation encounters a bad request scenario.
      * @throws DomainNotFoundException   if the entities to be updated are not found.
-     * @throws InvocationTargetException if an error occurs during invocation.
-     * @throws NoSuchMethodException     if a required method is not found.
-     * @throws IllegalAccessException    if an illegal access operation occurs.
-     * @throws InstantiationException    if an instance of a class cannot be created.
      */
     @Transactional
     @MethodStats
-    default Mono<Collection<DTO>> editMany(Collection<ID> ids, JsonPatch jsonPatch, Optional<USER> user) throws BadRequestException, DomainNotFoundException, InvocationTargetException, NoSuchMethodException, IllegalAccessException, InstantiationException {
+    default Mono<Collection<DTO>> editMany(Collection<ID> ids, JsonPatch jsonPatch, Optional<USER> user) throws BadRequestException, DomainNotFoundException {
         return this.editMany(CriteriaUtil.idCriteria(getCriteriaClass(), ids), jsonPatch, user);
     }
 

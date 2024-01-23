@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
@@ -50,14 +49,10 @@ public interface BaseGetStreamCrudService<ID extends Comparable<ID> & Serializab
      * @return A Flux emitting a collection of DTO entities.
      * @throws DomainNotFoundException   If the requested domain is not found.
      * @throws BadRequestException       If the request is not well-formed or violates business rules.
-     * @throws InvocationTargetException If an exception occurs during method invocation.
-     * @throws NoSuchMethodException     If a requested method is not found.
-     * @throws IllegalAccessException    If an illegal access exception occurs, typically due to lack of access to a class or method.
-     * @throws InstantiationException    If an instantiation exception occurs, typically when trying to create an abstract class or interface.
      */
     @Transactional(readOnly = true)
     @MethodStats
-    default Flux<DTO> getStream(Collection<ID> ids, Optional<USER> user) throws DomainNotFoundException, BadRequestException, InvocationTargetException, NoSuchMethodException, IllegalAccessException, InstantiationException {
+    default Flux<DTO> getStream(Collection<ID> ids, Optional<USER> user) throws DomainNotFoundException, BadRequestException {
         return this.getStream(CriteriaUtil.idCriteria(getCriteriaClass(), ids), user);
     }
 

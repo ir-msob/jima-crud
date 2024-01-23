@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
@@ -47,10 +46,6 @@ public interface BaseGetOneCrudService<ID extends Comparable<ID> & Serializable,
      * @return A Mono emitting a single DTO entity.
      * @throws DomainNotFoundException   If the requested domain is not found.
      * @throws BadRequestException       If the request is not well-formed or violates business rules.
-     * @throws InvocationTargetException If an exception occurs during method invocation.
-     * @throws NoSuchMethodException     If a requested method is not found.
-     * @throws IllegalAccessException    If an illegal access exception occurs.
-     * @throws InstantiationException    If an instantiation exception occurs.
      */
     @Transactional(readOnly = true)
     @MethodStats

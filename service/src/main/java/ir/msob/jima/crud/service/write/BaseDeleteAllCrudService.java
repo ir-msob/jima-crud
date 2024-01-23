@@ -16,7 +16,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -41,15 +40,11 @@ public interface BaseDeleteAllCrudService<ID extends Comparable<ID> & Serializab
      * @param user An optional user associated with the operation.
      * @return A collection of entity IDs that were deleted.
      * @throws DomainNotFoundException   if the entities to be deleted are not found.
-     * @throws InvocationTargetException if an error occurs during invocation.
-     * @throws NoSuchMethodException     if a required method is not found.
-     * @throws InstantiationException    if an instance of a class cannot be created.
-     * @throws IllegalAccessException    if an illegal access operation occurs.
      * @throws BadRequestException       if the operation encounters a bad request scenario.
      */
     @Transactional
     @MethodStats
-    default Mono<Collection<ID>> deleteAll(Optional<USER> user) throws DomainNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, BadRequestException {
+    default Mono<Collection<ID>> deleteAll(Optional<USER> user) throws DomainNotFoundException, BadRequestException {
         log.debug("Delete, user: {}", user.orElse(null));
 
         C criteria = newCriteriaClass();

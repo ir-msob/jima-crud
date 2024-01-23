@@ -10,13 +10,13 @@
     </parent>
     <groupId>ir.msob.jima.crud</groupId>
     <artifactId>crud-parent</artifactId>
-    <version>1.1.4</version>
+    <version>1.1.5</version>
     <name>crud-parent</name>
     <description>crud-parent</description>
     <packaging>pom</packaging>
     <properties>
         <!-- MSob -->
-        <core-parent.version>1.1.4</core-parent.version>
+        <core-parent.version>1.1.5</core-parent.version>
     </properties>
     <modules>
         <module>commons</module>
