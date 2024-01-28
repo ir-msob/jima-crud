@@ -12,10 +12,11 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.service.BaseService;
 import ir.msob.jima.core.commons.util.GenericTypeUtil;
 import ir.msob.jima.crud.commons.BaseBeforeAfterDomainService;
+import jakarta.validation.Valid;
 import lombok.SneakyThrows;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import javax.validation.Valid;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
@@ -99,6 +100,19 @@ public interface ParentCrudService<
      */
     default Mono<Collection<DTO>> getMany(C criteria, Optional<USER> user) throws BadRequestException, DomainNotFoundException {
         return Mono.empty();
+    }
+
+    /**
+     * Get a stream of DTO entities based oncriteria.
+     *
+     * @param criteria The criteria for finding the DTO entities.
+     * @param user     An optional user context.
+     * @return A Mono that emits a collection of DTO entities.
+     * @throws BadRequestException     If the request is invalid.
+     * @throws DomainNotFoundException If the domain is not found.
+     */
+    default Flux<DTO> getStream(C criteria, Optional<USER> user) throws DomainNotFoundException, BadRequestException {
+        return Flux.empty();
     }
 
     /**
@@ -210,6 +224,11 @@ public interface ParentCrudService<
      */
     BeforeAfterComponent getBeforeAfterComponent();
 
+    /**
+     * Get the collection of before/after domain services.
+     *
+     * @return The collection of before/after domain services.
+     */
     Collection<BaseBeforeAfterDomainService<ID, USER, DTO, C>> getBeforeAfterDomainServices();
 
     /**

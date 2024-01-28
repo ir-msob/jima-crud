@@ -71,63 +71,61 @@ public interface BaseBeforeAfterService {
             C extends BaseCriteria<ID>> void afterGet(Collection<ID> ids, Collection<DTO> dtos, C criteria, Optional<USER> user) throws DomainNotFoundException, BadRequestException {
     }
 
+
     /**
      * This method is called before the save operation.
      *
-     * @param dtos the DTOs to be saved
+     * @param dto  the DTO to be saved
      * @param user the current user
      * @throws DomainNotFoundException if the domain is not found
      * @throws BadRequestException     if the request is bad
      */
     default <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser<ID>,
-            DTO extends BaseDto<ID>> void beforeSave(Collection<DTO> dtos, Optional<USER> user) throws DomainNotFoundException, BadRequestException {
+            DTO extends BaseDto<ID>> void beforeSave(DTO dto, Optional<USER> user) throws DomainNotFoundException, BadRequestException {
     }
 
     /**
      * This method is called after the save operation.
      *
-     * @param ids       the IDs of saved entities
-     * @param dtos      the DTOs that were saved
-     * @param savedDtos the saved DTOs
-     * @param user      the current user
+     * @param dto      the DTO that was saved
+     * @param savedDto the saved DTO
+     * @param user     the current user
      * @throws DomainNotFoundException if the domain is not found
      * @throws BadRequestException     if the request is bad
      */
     default <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser<ID>,
-            DTO extends BaseDto<ID>> void afterSave(Collection<ID> ids, Collection<DTO> dtos, Collection<DTO> savedDtos, Optional<USER> user)
+            DTO extends BaseDto<ID>> void afterSave(DTO dto, DTO savedDto, Optional<USER> user)
             throws DomainNotFoundException, BadRequestException {
     }
 
     /**
      * This method is called before the update operation.
      *
-     * @param ids          the IDs of entities to be updated
-     * @param previousDtos the DTOs before the update
-     * @param dtos         the DTOs to be updated
-     * @param user         the current user
+     * @param previousDto the DTO before the update
+     * @param dto         the DTO to be updated
+     * @param user        the current user
      * @throws DomainNotFoundException if the domain is not found
      * @throws BadRequestException     if the request is bad
      */
     default <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser<ID>,
-            DTO extends BaseDto<ID>> void beforeUpdate(Collection<ID> ids, Collection<DTO> previousDtos, Collection<DTO> dtos, Optional<USER> user) throws DomainNotFoundException, BadRequestException {
+            DTO extends BaseDto<ID>> void beforeUpdate(DTO previousDto, DTO dto, Optional<USER> user) throws DomainNotFoundException, BadRequestException {
     }
 
     /**
      * This method is called after the update operation.
      *
-     * @param ids          the IDs of updated entities
-     * @param previousDtos the DTOs before the update
-     * @param updatedDtos  the DTOs after the update
-     * @param user         the current user
+     * @param previousDto the DTO before the update
+     * @param updatedDto  the DTO after the update
+     * @param user        the current user
      * @throws DomainNotFoundException if the domain is not found
      * @throws BadRequestException     if the request is bad
      */
     default <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser<ID>,
-            DTO extends BaseDto<ID>> void afterUpdate(Collection<ID> ids, Collection<DTO> previousDtos, Collection<DTO> updatedDtos, Optional<USER> user)
+            DTO extends BaseDto<ID>> void afterUpdate(DTO previousDto, DTO updatedDto, Optional<USER> user)
             throws DomainNotFoundException, BadRequestException {
     }
 
@@ -147,7 +145,7 @@ public interface BaseBeforeAfterService {
     /**
      * This method is called after the delete operation.
      *
-     * @param ids      the IDs of deleted entities
+     * @param dto       the DTO of deleted entity
      * @param criteria the criteria used for deleting
      * @param dtoClass the class of the DTO
      * @param user     the current user
@@ -157,7 +155,7 @@ public interface BaseBeforeAfterService {
     default <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser<ID>,
             DTO extends BaseDto<ID>,
-            C extends BaseCriteria<ID>> void afterDelete(Collection<ID> ids, C criteria, Class<DTO> dtoClass, Optional<USER> user)
+            C extends BaseCriteria<ID>> void afterDelete(DTO dto, C criteria, Class<DTO> dtoClass, Optional<USER> user)
             throws DomainNotFoundException, BadRequestException {
     }
 }

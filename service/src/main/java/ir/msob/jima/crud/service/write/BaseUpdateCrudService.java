@@ -11,15 +11,13 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
-import javax.validation.Valid;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
 
 /**
@@ -39,6 +37,7 @@ public interface BaseUpdateCrudService<ID extends Comparable<ID> & Serializable,
 
     /**
      * Updates a single entity based on id and a DTO. Validates, prepares, and updates the entity.
+     * This method is transactional and is also annotated with @MethodStats for performance monitoring.
      *
      * @param id   The id of entity.
      * @param dto  The DTO representing the entity to be updated.
@@ -57,6 +56,7 @@ public interface BaseUpdateCrudService<ID extends Comparable<ID> & Serializable,
 
     /**
      * Updates a single entity based on a DTO. Validates, prepares, and updates the entity.
+     * This method is transactional and is also annotated with @MethodStats for performance monitoring.
      *
      * @param dto  The DTO representing the entity to be updated.
      * @param user An optional user associated with the operation.
@@ -68,12 +68,13 @@ public interface BaseUpdateCrudService<ID extends Comparable<ID> & Serializable,
     @Transactional
     @MethodStats
     default Mono<DTO> update(@Valid DTO dto, Optional<USER> user) {
-        return getOneByDto(dto, user)
+        return getOneByID(dto.getDomainId(), user)
                 .flatMap(previousDto -> this.update(previousDto, dto, user));
     }
 
     /**
      * Updates a single entity based on a previous DTO and a new DTO. Validates, prepares, and updates the entity.
+     * This method is transactional and is also annotated with @MethodStats for performance monitoring.
      *
      * @param previousDto The DTO representing the entity before the update.
      * @param dto         The new DTO representing the entity after the update.
@@ -90,24 +91,21 @@ public interface BaseUpdateCrudService<ID extends Comparable<ID> & Serializable,
         log.debug("Update, user {}", user.orElse(null));
 
         D domain = toDomain(dto, user);
-        Collection<ID> ids = Collections.singletonList(dto.getDomainId());
-        Collection<DTO> dtos = Collections.singletonList(dto);
-        Collection<DTO> previousDtos = Collections.singletonList(previousDto);
 
-        getBeforeAfterComponent().beforeUpdate(ids, previousDtos, dtos, user, getBeforeAfterDomainServices());
+        getBeforeAfterComponent().beforeUpdate(previousDto, dto, user, getBeforeAfterDomainServices());
 
-        return this.updateValidation(ids, dtos, user)
-                .then(this.preUpdate(ids, dtos, user))
-                .then(addAudit(dtos, AuditDomainActionType.UPDATE, user))
+        return this.preUpdate(dto, user)
+                .doOnSuccess(unused -> addAudit(dto, AuditDomainActionType.UPDATE, user))
                 .then(this.updateExecute(dto, domain, user))
-                .doOnSuccess(updatedDomain -> this.postUpdate(ids, dtos, Collections.singletonList(updatedDomain), user))
-                .flatMap(updatedDomain -> getOne(updatedDomain, user))
+                .doOnSuccess(updatedDomain -> this.postUpdate(dto, updatedDomain, user))
+                .flatMap(updatedDomain -> getOneByID(updatedDomain.getDomainId(), user))
                 .doOnSuccess(updatedDto ->
-                        getBeforeAfterComponent().afterUpdate(ids, previousDtos, Collections.singletonList(updatedDto), user, getBeforeAfterDomainServices()));
+                        getBeforeAfterComponent().afterUpdate(previousDto, updatedDto, user, getBeforeAfterDomainServices()));
     }
 
     /**
      * Executes the actual update operation for a single entity using a DTO and a domain entity.
+     * This method is called by the update method after the preUpdate method.
      *
      * @param dto    The DTO representing the entity after the update.
      * @param domain The domain entity to be updated.

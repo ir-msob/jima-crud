@@ -8,14 +8,15 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -36,9 +37,10 @@ public interface BaseDeleteAllCrudService<ID extends Comparable<ID> & Serializab
 
     /**
      * Executes the delete operation to remove all entities that match the specified criteria.
+     * This method is transactional and is also annotated with @MethodStats for performance monitoring.
      *
      * @param user An optional user associated with the operation.
-     * @return A collection of entity IDs that were deleted.
+     * @return A Mono of a collection of entity IDs that were deleted.
      * @throws DomainNotFoundException   if the entities to be deleted are not found.
      * @throws BadRequestException       if the operation encounters a bad request scenario.
      */
@@ -49,28 +51,30 @@ public interface BaseDeleteAllCrudService<ID extends Comparable<ID> & Serializab
 
         C criteria = newCriteriaClass();
 
-        getBeforeAfterComponent().beforeDelete(criteria, user, getBeforeAfterDomainServices());
-
-        return this.preDelete(criteria, user)
-                .thenMany(this.deleteAllExecute(user))
+        return getStream(criteria, user)
+//                .doOnNext(dto -> getBeforeAfterComponent().beforeDelete(criteria, user, getBeforeAfterDomainServices()))
+                .flatMap(dto -> this.preDelete(criteria, user).thenReturn(dto))
+                .flatMap(dto -> this.deleteAllExecute(dto, user).thenReturn(dto))
+                .flatMap(dto -> this.postDelete(dto, criteria, user).thenReturn(dto))
+//                .doOnNext(dto -> this.getBeforeAfterComponent().afterDelete(dto, criteria, getDtoClass(), user, getBeforeAfterDomainServices()))
+                .map(BaseDomain::getDomainId)
                 .collectList()
-                .flatMap(deletedDomains -> {
-                    Collection<ID> ids = prepareIds(deletedDomains);
-                    return this.postDelete(ids, criteria, user)
-                            .doOnSuccess(x -> getBeforeAfterComponent().afterDelete(ids, criteria, getDtoClass(), user, getBeforeAfterDomainServices()))
-                            .thenReturn(ids);
-                });
-
+                .map(ArrayList::new);
     }
 
     /**
      * Executes the actual removal of all entities based on the specified criteria.
+     * This method is called by the deleteAll method after the preDelete method.
      *
+     * @param dto The DTO to be deleted.
      * @param user An optional user associated with the operation.
      * @return A Flux of entities (domains) to be removed.
      * @throws DomainNotFoundException if the entities to be deleted are not found.
      */
-    default Flux<D> deleteAllExecute(Optional<USER> user) throws DomainNotFoundException {
-        return this.getRepository().removeAll();
+    default Mono<DTO> deleteAllExecute(DTO dto, Optional<USER> user) throws DomainNotFoundException {
+        C criteria = CriteriaUtil.idCriteria(getCriteriaClass(), dto.getDomainId());
+        Q baseQuery = this.getRepository().generateQuery(criteria);
+        baseQuery = this.getRepository().criteria(baseQuery, criteria, user);
+        return this.getRepository().removeOne(baseQuery).thenReturn(dto);
     }
 }

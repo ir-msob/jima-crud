@@ -16,8 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
 
 /**
@@ -37,10 +35,11 @@ public interface BaseDeleteCrudService<ID extends Comparable<ID> & Serializable,
 
     /**
      * Executes the delete operation to remove a single entity based on its ID.
+     * This method is transactional and is also annotated with @MethodStats for performance monitoring.
      *
      * @param id   The ID of the entity to be deleted.
      * @param user An optional user associated with the operation.
-     * @return The ID of the entity that was deleted.
+     * @return A Mono of the ID of the entity that was deleted.
      * @throws DomainNotFoundException if the entity to be deleted is not found.
      * @throws BadRequestException     if the operation encounters a bad request scenario.
      */
@@ -52,10 +51,11 @@ public interface BaseDeleteCrudService<ID extends Comparable<ID> & Serializable,
 
     /**
      * Executes the delete operation to remove a single entity based on the specified criteria.
+     * This method is transactional and is also annotated with @MethodStats for performance monitoring.
      *
      * @param criteria The criteria used for filtering the entity to be deleted.
      * @param user     An optional user associated with the operation.
-     * @return The ID of the entity that was deleted.
+     * @return A Mono of the ID of the entity that was deleted.
      * @throws DomainNotFoundException if the entity to be deleted is not found.
      * @throws BadRequestException     if the operation encounters a bad request scenario.
      */
@@ -66,27 +66,27 @@ public interface BaseDeleteCrudService<ID extends Comparable<ID> & Serializable,
 
         getBeforeAfterComponent().beforeDelete(criteria, user, getBeforeAfterDomainServices());
 
-        return this.preDelete(criteria, user)
-                .then(this.deleteExecute(criteria, user))
-                .flatMap(deletedDomain -> {
-                    Collection<ID> ids = Collections.singletonList(deletedDomain.getDomainId());
-                    return this.postDelete(ids, criteria, user)
-                            .doOnSuccess(x -> getBeforeAfterComponent().afterDelete(ids, criteria, getDtoClass(), user, getBeforeAfterDomainServices()))
-                            .thenReturn(deletedDomain.getDomainId());
-                });
+        return getOne(criteria, user)
+                .doOnNext(dto -> getBeforeAfterComponent().beforeDelete(criteria, user, getBeforeAfterDomainServices()))
+                .flatMap(dto -> this.preDelete(criteria, user).thenReturn(dto))
+                .flatMap(dto -> this.deleteExecute(dto, user).thenReturn(dto))
+                .flatMap(dto -> this.postDelete(dto, criteria, user).thenReturn(dto))
+                .doOnNext(dto -> this.getBeforeAfterComponent().afterDelete(dto, criteria, getDtoClass(), user, getBeforeAfterDomainServices()))
+                .map(BaseDomain::getDomainId);
     }
-
     /**
      * Executes the actual removal of a single entity based on the specified criteria.
+     * This method is called by the delete method after the preDelete method.
      *
-     * @param criteria The criteria used for filtering the entity to be deleted.
-     * @param user     An optional user associated with the operation.
-     * @return A Mono containing the entity (domain) that was removed.
+     * @param dto The DTO to be deleted.
+     * @param user An optional user associated with the operation.
+     * @return A Mono of the entity (domain) to be removed.
      * @throws DomainNotFoundException if the entity to be deleted is not found.
      */
-    default Mono<D> deleteExecute(C criteria, Optional<USER> user) throws DomainNotFoundException {
+    default Mono<DTO> deleteExecute(DTO dto, Optional<USER> user) throws DomainNotFoundException {
+        C criteria = CriteriaUtil.idCriteria(getCriteriaClass(), dto.getDomainId());
         Q baseQuery = this.getRepository().generateQuery(criteria);
         baseQuery = this.getRepository().criteria(baseQuery, criteria, user);
-        return this.getRepository().removeOne(baseQuery);
+        return this.getRepository().removeOne(baseQuery).thenReturn(dto);
     }
 }

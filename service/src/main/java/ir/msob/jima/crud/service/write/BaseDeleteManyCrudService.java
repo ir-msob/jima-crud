@@ -13,10 +13,10 @@ import ir.msob.jima.crud.commons.BaseCrudRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -37,10 +37,11 @@ public interface BaseDeleteManyCrudService<ID extends Comparable<ID> & Serializa
 
     /**
      * Executes the delete operation to remove multiple entities based on a collection of IDs.
+     * This method is transactional and is also annotated with @MethodStats for performance monitoring.
      *
      * @param ids  A collection of entity IDs to be deleted.
      * @param user An optional user associated with the operation.
-     * @return A collection of entity IDs that were deleted.
+     * @return A Mono of a collection of entity IDs that were deleted.
      * @throws DomainNotFoundException   if the entities to be deleted are not found.
      * @throws BadRequestException       if the operation encounters a bad request scenario.
      */
@@ -52,10 +53,11 @@ public interface BaseDeleteManyCrudService<ID extends Comparable<ID> & Serializa
 
     /**
      * Executes the delete operation to remove multiple entities based on the specified criteria.
+     * This method is transactional and is also annotated with @MethodStats for performance monitoring.
      *
      * @param criteria The criteria used for filtering entities to be deleted.
      * @param user     An optional user associated with the operation.
-     * @return A collection of entity IDs that were deleted.
+     * @return A Mono of a collection of entity IDs that were deleted.
      * @throws DomainNotFoundException if the entities to be deleted are not found.
      * @throws BadRequestException     if the operation encounters a bad request scenario.
      */
@@ -66,28 +68,29 @@ public interface BaseDeleteManyCrudService<ID extends Comparable<ID> & Serializa
 
         getBeforeAfterComponent().beforeDelete(criteria, user, getBeforeAfterDomainServices());
 
-        return this.preDelete(criteria, user)
-                .thenMany(this.deleteManyExecute(criteria, user))
+        return getStream(criteria, user)
+                .doOnNext(dto -> getBeforeAfterComponent().beforeDelete(criteria, user, getBeforeAfterDomainServices()))
+                .flatMap(dto -> this.preDelete(criteria, user).thenReturn(dto))
+                .flatMap(dto -> this.deleteManyExecute(dto, user).thenReturn(dto))
+                .flatMap(dto -> this.postDelete(dto, criteria, user).thenReturn(dto))
+                .doOnNext(dto -> this.getBeforeAfterComponent().afterDelete(dto, criteria, getDtoClass(), user, getBeforeAfterDomainServices()))
+                .map(BaseDomain::getDomainId)
                 .collectList()
-                .flatMap(deletedDomains -> {
-                    Collection<ID> ids = prepareIds(deletedDomains);
-                    return this.postDelete(ids, criteria, user)
-                            .doOnSuccess(x -> getBeforeAfterComponent().afterDelete(ids, criteria, getDtoClass(), user, getBeforeAfterDomainServices()))
-                            .thenReturn(ids);
-                });
+                .map(ArrayList::new);
     }
-
     /**
      * Executes the actual removal of multiple entities based on the specified criteria.
+     * This method is called by the deleteMany method after the preDelete method.
      *
-     * @param criteria The criteria used for filtering entities to be deleted.
+     * @param dto The DTO to be deleted.
      * @param user     An optional user associated with the operation.
      * @return A Flux of entities (domains) to be removed.
      * @throws DomainNotFoundException if the entities to be deleted are not found.
      */
-    default Flux<D> deleteManyExecute(C criteria, Optional<USER> user) throws DomainNotFoundException {
+    default Mono<DTO> deleteManyExecute(DTO dto, Optional<USER> user) throws DomainNotFoundException {
+        C criteria = CriteriaUtil.idCriteria(getCriteriaClass(), dto.getDomainId());
         Q baseQuery = this.getRepository().generateQuery(criteria);
         baseQuery = this.getRepository().criteria(baseQuery, criteria, user);
-        return this.getRepository().removeMany(baseQuery);
+        return this.getRepository().removeOne(baseQuery).thenReturn(dto);
     }
 }
