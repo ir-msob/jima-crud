@@ -1,0 +1,50 @@
+spring:
+  application:
+    name: test-microservice
+  profiles:
+    active: test
+  main:
+    allow-bean-definition-overriding: true
+  rsocket:
+    server:
+      port: 8005
+
+  security:
+    oauth2:
+      resource-server:
+        jwt:
+          issuer-uri: http://localhost:8004
+      client:
+        provider:
+          service-client:
+            issuer-uri: http://localhost:8004
+          front-client:
+            issuer-uri: http://localhost:8004
+        registration:
+          service-client:
+            client-name: service-client
+            client-id: service-client
+            client-secret: service-client-secret
+            authorization-grant-type: client_credentials
+            client-authentication-method: client_secret_basic
+            scope:
+              - openid
+          front-client:
+            client-name: front-client
+            client-id: front-client
+            client-secret: front-client-secret
+            authorization-grant-type:
+              - authorization_code
+              - refresh_token
+            client-authentication-method: client_secret_basic
+            scope:
+              - openid
+
+# Logging
+logging:
+  file:
+    path: log
+  logback:
+    rollingpolicy:
+      max-file-size: 5MB
+      max-history: 5

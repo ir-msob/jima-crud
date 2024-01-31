@@ -133,9 +133,9 @@ public class BeforeAfterComponent {
     }
 
     /**
-     * Executes before saving records based on the provided DTOs.
+     * Executes before saving records based on the provided DTO.
      *
-     * @param dtos                      The DTOs to be saved.
+     * @param dto                       The DTO to be saved.
      * @param user                      An optional user associated with the operation.
      * @param beforeAfterDomainServices A collection of BaseBeforeAfterDomainService instances.
      * @throws DomainNotFoundException If the domain is not found.
@@ -144,25 +144,24 @@ public class BeforeAfterComponent {
     public <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser<ID>,
             DTO extends BaseDto<ID>,
-            C extends BaseCriteria<ID>> void beforeSave(Collection<DTO> dtos, Optional<USER> user, Collection<BaseBeforeAfterDomainService<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
+            C extends BaseCriteria<ID>> void beforeSave(DTO dto, Optional<USER> user, Collection<BaseBeforeAfterDomainService<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
         if (beforeAfterServices != null && !beforeAfterServices.isEmpty()) {
             for (BaseBeforeAfterService beforeAfterService : beforeAfterServices) {
-                beforeAfterService.beforeSave(dtos, user);
+                beforeAfterService.beforeSave(dto, user);
             }
         }
         if (beforeAfterDomainServices != null && !beforeAfterDomainServices.isEmpty()) {
             for (BaseBeforeAfterDomainService<ID, USER, DTO, C> beforeAfterService : beforeAfterDomainServices) {
-                beforeAfterService.beforeSave(dtos, user);
+                beforeAfterService.beforeSave(dto, user);
             }
         }
     }
 
     /**
-     * Executes after saving records based on the provided DTOs.
+     * Executes after saving records based on the provided DTO.
      *
-     * @param ids                       The IDs of the saved records.
-     * @param dtos                      The DTOs that were saved.
-     * @param savedDtos                 The saved DTOs.
+     * @param dto                       The DTO that were saved.
+     * @param savedDto                  The saved DTO.
      * @param user                      An optional user associated with the operation.
      * @param beforeAfterDomainServices A collection of BaseBeforeAfterDomainService instances.
      * @throws DomainNotFoundException If the domain is not found.
@@ -171,25 +170,24 @@ public class BeforeAfterComponent {
     public <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser<ID>,
             DTO extends BaseDto<ID>,
-            C extends BaseCriteria<ID>> void afterSave(Collection<ID> ids, Collection<DTO> dtos, Collection<DTO> savedDtos, Optional<USER> user, Collection<BaseBeforeAfterDomainService<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
+            C extends BaseCriteria<ID>> void afterSave(DTO dto, DTO savedDto, Optional<USER> user, Collection<BaseBeforeAfterDomainService<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
         if (beforeAfterServices != null && !beforeAfterServices.isEmpty()) {
             for (BaseBeforeAfterService beforeAfterService : beforeAfterServices) {
-                beforeAfterService.afterSave(ids, dtos, savedDtos, user);
+                beforeAfterService.afterSave(dto, savedDto, user);
             }
         }
         if (beforeAfterDomainServices != null && !beforeAfterDomainServices.isEmpty()) {
             for (BaseBeforeAfterDomainService<ID, USER, DTO, C> beforeAfterService : beforeAfterDomainServices) {
-                beforeAfterService.afterSave(ids, dtos, savedDtos, user);
+                beforeAfterService.afterSave(dto, savedDto, user);
             }
         }
     }
 
     /**
-     * Executes before updating records based on the provided DTOs.
+     * Executes before updating records based on the provided DTO.
      *
-     * @param ids                       The IDs of the records to be updated.
-     * @param previousDtos              The previous DTOs.
-     * @param dtos                      The updated DTOs.
+     * @param previousDto               The previous DTO.
+     * @param dto                       The updated DTO.
      * @param user                      An optional user associated with the operation.
      * @param beforeAfterDomainServices A collection of BaseBeforeAfterDomainService instances.
      * @throws DomainNotFoundException If the domain is not found.
@@ -198,25 +196,24 @@ public class BeforeAfterComponent {
     public <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser<ID>,
             DTO extends BaseDto<ID>,
-            C extends BaseCriteria<ID>> void beforeUpdate(Collection<ID> ids, Collection<DTO> previousDtos, Collection<DTO> dtos, Optional<USER> user, Collection<BaseBeforeAfterDomainService<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
+            C extends BaseCriteria<ID>> void beforeUpdate(DTO previousDto, DTO dto, Optional<USER> user, Collection<BaseBeforeAfterDomainService<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
         if (beforeAfterServices != null && !beforeAfterServices.isEmpty()) {
             for (BaseBeforeAfterService beforeAfterService : beforeAfterServices) {
-                beforeAfterService.beforeUpdate(ids, previousDtos, dtos, user);
+                beforeAfterService.beforeUpdate(previousDto, dto, user);
             }
         }
         if (beforeAfterDomainServices != null && !beforeAfterDomainServices.isEmpty()) {
             for (BaseBeforeAfterDomainService<ID, USER, DTO, C> beforeAfterService : beforeAfterDomainServices) {
-                beforeAfterService.beforeUpdate(ids, previousDtos, dtos, user);
+                beforeAfterService.beforeUpdate(previousDto, dto, user);
             }
         }
     }
 
     /**
-     * Executes after updating records based on the provided DTOs.
+     * Executes after updating records based on the provided DTO.
      *
-     * @param ids                       The IDs of the updated records.
-     * @param dtos                      The updated DTOs.
-     * @param updatedDtos               The updated DTOs after the update.
+     * @param dto                       The updated DTO.
+     * @param updatedDto                The updated DTO after the update.
      * @param user                      An optional user associated with the operation.
      * @param beforeAfterDomainServices A collection of BaseBeforeAfterDomainService instances.
      * @throws DomainNotFoundException If the domain is not found.
@@ -225,15 +222,15 @@ public class BeforeAfterComponent {
     public <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser<ID>,
             DTO extends BaseDto<ID>,
-            C extends BaseCriteria<ID>> void afterUpdate(Collection<ID> ids, Collection<DTO> dtos, Collection<DTO> updatedDtos, Optional<USER> user, Collection<BaseBeforeAfterDomainService<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
+            C extends BaseCriteria<ID>> void afterUpdate(DTO dto, DTO updatedDto, Optional<USER> user, Collection<BaseBeforeAfterDomainService<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
         if (beforeAfterServices != null && !beforeAfterServices.isEmpty()) {
             for (BaseBeforeAfterService beforeAfterService : beforeAfterServices) {
-                beforeAfterService.afterUpdate(ids, dtos, updatedDtos, user);
+                beforeAfterService.afterUpdate(dto, updatedDto, user);
             }
         }
         if (beforeAfterDomainServices != null && !beforeAfterDomainServices.isEmpty()) {
             for (BaseBeforeAfterDomainService<ID, USER, DTO, C> beforeAfterService : beforeAfterDomainServices) {
-                beforeAfterService.afterUpdate(ids, dtos, updatedDtos, user);
+                beforeAfterService.afterUpdate(dto, updatedDto, user);
             }
         }
     }
@@ -266,7 +263,7 @@ public class BeforeAfterComponent {
     /**
      * Executes after deleting records based on the provided criteria.
      *
-     * @param ids                       The IDs of the deleted records.
+     * @param dto                        The DTO of the deleted records.
      * @param criteria                  The criteria used for deleting records.
      * @param dtoClass                  The class of DTO used.
      * @param user                      An optional user associated with the operation.
@@ -277,15 +274,15 @@ public class BeforeAfterComponent {
     public <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser<ID>,
             DTO extends BaseDto<ID>,
-            C extends BaseCriteria<ID>> void afterDelete(Collection<ID> ids, C criteria, Class<DTO> dtoClass, Optional<USER> user, Collection<BaseBeforeAfterDomainService<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
+            C extends BaseCriteria<ID>> void afterDelete(DTO dto, C criteria, Class<DTO> dtoClass, Optional<USER> user, Collection<BaseBeforeAfterDomainService<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
         if (beforeAfterServices != null && !beforeAfterServices.isEmpty()) {
             for (BaseBeforeAfterService beforeAfterService : beforeAfterServices) {
-                beforeAfterService.afterDelete(ids, criteria, dtoClass, user);
+                beforeAfterService.afterDelete(dto, criteria, dtoClass, user);
             }
         }
         if (beforeAfterDomainServices != null && !beforeAfterDomainServices.isEmpty()) {
             for (BaseBeforeAfterDomainService<ID, USER, DTO, C> beforeAfterService : beforeAfterDomainServices) {
-                beforeAfterService.afterDelete(ids, criteria, user);
+                beforeAfterService.afterDelete(dto, criteria, user);
             }
         }
     }

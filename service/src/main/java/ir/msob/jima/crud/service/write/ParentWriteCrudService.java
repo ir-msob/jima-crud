@@ -6,6 +6,7 @@ import com.github.fge.jsonpatch.JsonPatch;
 import ir.msob.jima.core.commons.data.BaseQuery;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.exception.validation.ValidationException;
 import ir.msob.jima.core.commons.model.audit.AuditDomain;
 import ir.msob.jima.core.commons.model.audit.AuditDomainActionType;
 import ir.msob.jima.core.commons.model.audit.BaseAuditDomain;
@@ -16,13 +17,13 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.ParentCrudService;
+import jakarta.validation.Valid;
 import lombok.SneakyThrows;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -47,49 +48,20 @@ public interface ParentWriteCrudService<
         extends ParentCrudService<ID, USER, D, DTO, C, R> {
 
     /**
-     * Get a single DTO by domain.
+     * Fetches a single DTO by its ID.
      *
-     * @param domain The domain object to fetch.
-     * @param user   An optional user object.
-     * @return A Mono that emits the DTO.
-     * @throws BadRequestException     If the request is malformed.
-     * @throws DomainNotFoundException If the domain is not found.
-     */
-    @SneakyThrows
-    default Mono<DTO> getOne(D domain, Optional<USER> user) {
-        return getOne(CriteriaUtil.idCriteria(getCriteriaClass(), domain.getDomainId()), user);
-    }
-
-    /**
-     * Get a single DTO by DTO object.
-     *
-     * @param dto  The DTO object to fetch.
+     * @param id   The ID of the DTO to fetch.
      * @param user An optional user object.
      * @return A Mono that emits the DTO.
      * @throws BadRequestException     If the request is malformed.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    default Mono<DTO> getOneByDto(DTO dto, Optional<USER> user) {
-        return getOne(CriteriaUtil.idCriteria(getCriteriaClass(), dto.getDomainId()), user);
+    default Mono<DTO> getOneByID(ID id, Optional<USER> user) {
+        return getOne(CriteriaUtil.idCriteria(getCriteriaClass(), id), user);
     }
 
     /**
-     * Get multiple DTOs by a collection of domain objects.
-     *
-     * @param domains A collection of domain objects to fetch.
-     * @param user    An optional user object.
-     * @return A Mono that emits a collection of DTOs.
-     * @throws BadRequestException     If the request is malformed.
-     * @throws DomainNotFoundException If a domain is not found.
-     */
-    @SneakyThrows
-    default Mono<Collection<DTO>> getManyByDomain(Collection<D> domains, Optional<USER> user) {
-        Collection<ID> ids = prepareIds(domains);
-        return this.getMany(CriteriaUtil.idCriteria(getCriteriaClass(), ids), user);
-    }
-
-    /**
-     * Get multiple DTOs by a collection of DTO objects.
+     * Fetches multiple DTOs by a collection of DTO objects.
      *
      * @param dtos A collection of DTO objects to fetch.
      * @param user An optional user object.
@@ -106,18 +78,7 @@ public interface ParentWriteCrudService<
     }
 
     /**
-     * Validate entities before saving.
-     *
-     * @param dtos A collection of DTOs to be saved.
-     * @param user An optional user object.
-     * @return A Mono that emits void.
-     */
-    default Mono<Void> saveValidation(Collection<DTO> dtos, Optional<USER> user) {
-        return Mono.empty();
-    }
-
-    /**
-     * Apply a JSON patch to a collection of DTOs.
+     * Applies a JSON patch to a collection of DTOs.
      *
      * @param dtos         A collection of DTOs to be patched.
      * @param jsonPatch    The JSON patch to apply.
@@ -131,7 +92,7 @@ public interface ParentWriteCrudService<
     }
 
     /**
-     * Apply a JSON patch to a DTO.
+     * Applies a JSON patch to a DTO.
      *
      * @param jsonPatch    The JSON patch to apply.
      * @param dto          The DTO to be patched.
@@ -145,66 +106,81 @@ public interface ParentWriteCrudService<
     }
 
     /**
-     * Perform actions before saving entities.
+     * Performs actions before saving entities.
      *
-     * @param dtos A collection of DTOs to be saved.
+     * @param dto  The DTO to be saved.
      * @param user An optional user object.
      * @return A Mono that emits void.
      */
-    default Mono<Void> preSave(Collection<DTO> dtos, Optional<USER> user) {
+    default Mono<Void> preSave(DTO dto, Optional<USER> user) {
         return Mono.empty();
     }
 
     /**
-     * Perform actions after saving entities.
+     * Performs actions after saving entities.
      *
-     * @param ids  A collection of entity IDs that were saved.
-     * @param dtos A collection of DTOs that were saved.
-     * @param user An optional user object.
+     * @param dto        The DTO that was saved.
+     * @param savedDomain The saved domain.
+     * @param user        An optional user object.
      * @return A Mono that emits void.
      */
-    default Mono<Void> postSave(Collection<ID> ids, Collection<DTO> dtos, Collection<D> savedDomains, Optional<USER> user) {
+    default Mono<Void> postSave(DTO dto, D savedDomain, Optional<USER> user) {
         return Mono.empty();
     }
 
     /**
-     * Validate entities before updating.
+     * Saves a DTO.
      *
-     * @param ids  A collection of entity IDs to be updated.
-     * @param dtos A collection of DTOs to be updated.
+     * @param dto  The DTO to be saved.
      * @param user An optional user object.
-     * @return A Mono that emits void.
+     * @return A Mono that emits the saved DTO.
+     * @throws BadRequestException     If the request is malformed.
+     * @throws DomainNotFoundException If the domain is not found.
      */
-    default Mono<Void> updateValidation(Collection<ID> ids, Collection<DTO> dtos, Optional<USER> user) {
+    default Mono<DTO> save(@Valid DTO dto, Optional<USER> user) throws BadRequestException, DomainNotFoundException {
         return Mono.empty();
     }
 
     /**
-     * Perform actions before updating entities.
+     * Updates a DTO.
      *
-     * @param ids  A collection of entity IDs to be updated.
-     * @param dtos A collection of DTOs to be updated.
-     * @param user An optional user object.
-     * @return A Mono that emits void.
+     * @param previousDto The previous DTO before update.
+     * @param dto         The DTO to be updated.
+     * @param user        An optional user object.
+     * @return A Mono that emits the updated DTO.
+     * @throws BadRequestException     If the request is malformed.
+     * @throws ValidationException     If the DTO is not valid.
+     * @throws DomainNotFoundException If the domain is not found.
      */
-    default Mono<Void> preUpdate(Collection<ID> ids, Collection<DTO> dtos, Optional<USER> user) {
+    default Mono<DTO> update(DTO previousDto, @Valid DTO dto, Optional<USER> user) throws BadRequestException, ValidationException, DomainNotFoundException {
         return Mono.empty();
     }
 
     /**
-     * Perform actions after updating entities.
+     * Performs actions before updating entities.
      *
-     * @param ids  A collection of entity IDs that were updated.
-     * @param dtos A collection of old DTOs before update.
+     * @param dto  The DTO to be updated.
      * @param user An optional user object.
      * @return A Mono that emits void.
      */
-    default Mono<Void> postUpdate(Collection<ID> ids, Collection<DTO> dtos, Collection<D> updatedDomains, Optional<USER> user) {
+    default Mono<Void> preUpdate(DTO dto, Optional<USER> user) {
         return Mono.empty();
     }
 
     /**
-     * Perform actions before deleting entities based on criteria.
+     * Performs actions after updating entities.
+     *
+     * @param dto          The DTO that was updated.
+     * @param updatedDomain The updated domain.
+     * @param user         An optional user object.
+     * @return A Mono that emits void.
+     */
+    default Mono<Void> postUpdate(DTO dto, D updatedDomain, Optional<USER> user) {
+        return Mono.empty();
+    }
+
+    /**
+     * Performs actions before deleting entities based on criteria.
      *
      * @param criteria The criteria used for deleting entities.
      * @param user     An optional user object.
@@ -215,60 +191,34 @@ public interface ParentWriteCrudService<
     }
 
     /**
-     * Perform actions after deleting entities based on criteria.
+     * Performs actions after deleting entities based on criteria.
      *
-     * @param ids      A collection of entity IDs that were deleted.
+     * @param dto       The DTO of the entity that was deleted.
      * @param criteria The criteria used for deleting entities.
      * @param user     An optional user object.
      * @return A Mono that emits void.
      */
-    default Mono<Void> postDelete(Collection<ID> ids, C criteria, Optional<USER> user) {
+    default Mono<Void> postDelete(DTO dto, C criteria, Optional<USER> user) {
         return Mono.empty();
     }
 
-
     /**
-     * Prepare a collection of domain objects from a collection of DTOs.
+     * Adds audit information to a DTO.
      *
-     * @param dtos A collection of DTOs.
-     * @param user An optional user object.
-     * @return A collection of domain objects.
+     * @param dto                  The DTO to be audited.
+     * @param actionType           The type of audit action to record.
+     * @param user                 An optional user object.
      */
-    default Collection<D> prepareDomain(Collection<DTO> dtos, Optional<USER> user) {
-        return dtos
-                .stream()
-                .map(dto -> toDomain(dto, user))
-                .toList();
-    }
-
-    /**
-     * Add audit information to a collection of DTOs.
-     *
-     * @param dtos                  A collection of DTOs to be audited.
-     * @param auditDomainActionType The type of audit action to record.
-     * @param user                  An optional user object.
-     * @return A Mono that emits void.
-     */
-    default Mono<Void> addAudit(Collection<DTO> dtos, AuditDomainActionType auditDomainActionType, Optional<USER> user) {
-        if (user.isEmpty()) {
-            return Mono.empty();
-        }
-
-        Instant now = Instant.now();
-        List<BaseAuditDomain<ID>> auditDomainDtos = dtos.stream()
-                .filter(dto -> dto instanceof BaseAuditDomain<?>)
-                .map(dto -> (BaseAuditDomain<ID>) dto)
-                .toList();
-
-        auditDomainDtos.forEach(auditDomainDto -> auditDomainDto.getAuditDomains()
-                .add(AuditDomain.<ID>builder()
-                        .actionDate(now)
-                        .actionType(auditDomainActionType)
-                        .relatedPartyId(user.get().getId())
-                        .build()
-                ));
-
-        return Mono.empty();
+    default void addAudit(DTO dto, AuditDomainActionType actionType, Optional<USER> user) {
+        user.ifPresent(u -> {
+            if (dto instanceof BaseAuditDomain auditDomainDto) {
+                auditDomainDto.getAuditDomains().add(AuditDomain.<ID>builder()
+                        .actionDate(Instant.now())
+                        .actionType(actionType)
+                        .relatedPartyId(u.getId())
+                        .build());
+            }
+        });
     }
 
 }

@@ -10,15 +10,13 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
-import javax.validation.Valid;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
 
 /**
@@ -38,6 +36,7 @@ public interface BaseSaveCrudService<ID extends Comparable<ID> & Serializable, U
 
     /**
      * Executes a save operation for a single entity (DTO). Validates, prepares, and saves the entity.
+     * This method is transactional and is also annotated with @MethodStats for performance monitoring.
      *
      * @param dto  The DTO to be saved.
      * @param user An optional user associated with the operation.
@@ -51,19 +50,18 @@ public interface BaseSaveCrudService<ID extends Comparable<ID> & Serializable, U
         log.debug("Save, user {}", user.orElse(null));
 
         D domain = toDomain(dto, user);
-        Collection<DTO> dtos = Collections.singletonList(dto);
-        getBeforeAfterComponent().beforeSave(dtos, user, getBeforeAfterDomainServices());
-        return this.saveValidation(dtos, user)
-                .then(this.preSave(dtos, user))
-                .then(addAudit(dtos, AuditDomainActionType.CREATE, user))
+        getBeforeAfterComponent().beforeSave(dto, user, getBeforeAfterDomainServices());
+        return this.preSave(dto, user)
+                .doOnSuccess(unused -> addAudit(dto, AuditDomainActionType.CREATE, user))
                 .then(this.saveExecute(dto, domain, user))
-                .doOnSuccess(savedDomain -> this.postSave(Collections.singletonList(savedDomain.getDomainId()), dtos, Collections.singletonList(savedDomain), user))
-                .flatMap(savedDomain -> getOne(savedDomain, user))
-                .doOnSuccess(savedDto -> getBeforeAfterComponent().afterSave(Collections.singletonList(savedDto.getDomainId()), dtos, Collections.singletonList(savedDto), user, getBeforeAfterDomainServices()));
+                .doOnSuccess(savedDomain -> this.postSave(dto, savedDomain, user))
+                .flatMap(savedDomain -> getOneByID(savedDomain.getDomainId(), user))
+                .doOnSuccess(savedDto -> getBeforeAfterComponent().afterSave(dto, savedDto, user, getBeforeAfterDomainServices()));
     }
 
     /**
      * Executes the actual save operation for a single entity (DTO), saving it as a domain entity.
+     * This method is called by the save method after the preSave method.
      *
      * @param dto    The DTO to be saved.
      * @param domain The domain entity to be saved.

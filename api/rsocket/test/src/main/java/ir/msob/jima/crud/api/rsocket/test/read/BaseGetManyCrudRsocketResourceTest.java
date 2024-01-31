@@ -1,6 +1,7 @@
 package ir.msob.jima.crud.api.rsocket.test.read;
 
 import ir.msob.jima.core.commons.data.BaseQuery;
+import ir.msob.jima.core.commons.model.channel.ChannelMessage;
 import ir.msob.jima.core.commons.model.channel.message.CriteriaMessage;
 import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
@@ -64,12 +65,16 @@ public interface BaseGetManyCrudRsocketResourceTest<
         // Retrieve the result as a Mono of type Collection
         // Convert the Mono to a Future
         // Get the result from the Future
-        CriteriaMessage<ID, C> message = new CriteriaMessage<>();
-        message.setCriteria(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId()));
+        CriteriaMessage<ID, C> data = new CriteriaMessage<>();
+        data.setCriteria(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId()));
+
+        ChannelMessage<ID, USER, CriteriaMessage<ID, C>> message = new ChannelMessage<>();
+        message.setData(data);
 
         return getRSocketRequester()
                 .route(getUri(Operations.GET_MANY))
-                .data(message)
+                .metadata(getRSocketRequesterMetadata()::metadata)
+                .data(getObjectMapper().writeValueAsString(message))
                 .retrieveMono(Collection.class)
                 .toFuture()
                 .get();

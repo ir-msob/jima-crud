@@ -15,9 +15,9 @@ import java.util.Optional;
  * It is designed to be implemented by domain services that need to perform additional processing or validation.
  *
  * @param <ID>   the type of the ID of the DTO, which extends Comparable and Serializable
- * @param <USER> the type of the user, which extends BaseUser
- * @param <DTO>  the type of the DTO, which extends BaseDto
- * @param <C>    the type of the criteria, which extends BaseCriteria
+ * @param <USER> the type of the user, which extends BaseUser<ID>
+ * @param <DTO>  the type of the DTO, which extends BaseDto<ID>
+ * @param <C>    the type of the criteria, which extends BaseCriteria<ID>
  */
 public interface BaseBeforeAfterDomainService<
         ID extends Comparable<ID> & Serializable,
@@ -74,52 +74,49 @@ public interface BaseBeforeAfterDomainService<
     /**
      * This method is called before the save operation.
      *
-     * @param dtos the DTOs to be saved
+     * @param dto  the DTO to be saved
      * @param user the current user
      * @throws DomainNotFoundException if the domain is not found
      * @throws BadRequestException     if the request is bad
      */
-    default void beforeSave(Collection<DTO> dtos, Optional<USER> user) throws DomainNotFoundException, BadRequestException {
+    default void beforeSave(DTO dto, Optional<USER> user) throws DomainNotFoundException, BadRequestException {
     }
 
     /**
      * This method is called after the save operation.
      *
-     * @param ids       the IDs of the DTOs that were saved
-     * @param dtos      the DTOs that were saved
-     * @param savedDtos the DTOs that were actually saved
-     * @param user      the current user
+     * @param dto      the DTO that was saved
+     * @param savedDto the DTO that was actually saved
+     * @param user     the current user
      * @throws DomainNotFoundException if the domain is not found
      * @throws BadRequestException     if the request is bad
      */
-    default void afterSave(Collection<ID> ids, Collection<DTO> dtos, Collection<DTO> savedDtos, Optional<USER> user)
+    default void afterSave(DTO dto, DTO savedDto, Optional<USER> user)
             throws DomainNotFoundException, BadRequestException {
     }
 
     /**
      * This method is called before the update operation.
      *
-     * @param ids          the IDs of the DTOs to be updated
-     * @param previousDtos the previous state of the DTOs to be updated
-     * @param dtos         the new state of the DTOs to be updated
-     * @param user         the current user
+     * @param previousDto the previous state of the DTO to be updated
+     * @param dto         the new state of the DTO to be updated
+     * @param user        the current user
      * @throws DomainNotFoundException if the domain is not found
      * @throws BadRequestException     if the request is bad
      */
-    default void beforeUpdate(Collection<ID> ids, Collection<DTO> previousDtos, Collection<DTO> dtos, Optional<USER> user) throws DomainNotFoundException, BadRequestException {
+    default void beforeUpdate(DTO previousDto, DTO dto, Optional<USER> user) throws DomainNotFoundException, BadRequestException {
     }
 
     /**
      * This method is called after the update operation.
      *
-     * @param ids          the IDs of the DTOs that were updated
-     * @param previousDtos the previous state of the DTOs that were updated
-     * @param updatedDtos  the updated DTOs
-     * @param user         the current user
+     * @param previousDto the previous state of the DTO that was updated
+     * @param updatedDto  the updated DTO
+     * @param user        the current user
      * @throws DomainNotFoundException if the domain is not found
      * @throws BadRequestException     if the request is bad
      */
-    default void afterUpdate(Collection<ID> ids, Collection<DTO> previousDtos, Collection<DTO> updatedDtos, Optional<USER> user)
+    default void afterUpdate(DTO previousDto, DTO updatedDto, Optional<USER> user)
             throws DomainNotFoundException, BadRequestException {
     }
 
@@ -137,13 +134,13 @@ public interface BaseBeforeAfterDomainService<
     /**
      * This method is called after the delete operation.
      *
-     * @param ids      the IDs of the DTOs that were deleted
+     * @param dto       the DTO of the DTO that was deleted
      * @param criteria the criteria used for deleting
      * @param user     the current user
      * @throws DomainNotFoundException if the domain is not found
      * @throws BadRequestException     if the request is bad
      */
-    default void afterDelete(Collection<ID> ids, C criteria, Optional<USER> user)
+    default void afterDelete(DTO dto, C criteria, Optional<USER> user)
             throws DomainNotFoundException, BadRequestException {
     }
 }

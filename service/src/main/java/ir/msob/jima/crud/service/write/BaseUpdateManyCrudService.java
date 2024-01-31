@@ -5,25 +5,25 @@ import ir.msob.jima.core.commons.data.BaseQuery;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.exception.validation.ValidationException;
-import ir.msob.jima.core.commons.model.audit.AuditDomainActionType;
 import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import javax.validation.Valid;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
 /**
- * This service interface defines the contract for executing update operations for multiple entities (DTOs).
+ * This service interface defines the contract for executing batch update operations on multiple entities (DTOs).
  * It extends the {@link ParentWriteCrudService} and is designed for use with CRUD operations.
  *
  * @param <ID>   The type of entity ID.
@@ -38,11 +38,12 @@ public interface BaseUpdateManyCrudService<ID extends Comparable<ID> & Serializa
     Logger log = LoggerFactory.getLogger(BaseUpdateManyCrudService.class);
 
     /**
-     * Updates multiple entities based on a collection of DTOs. Validates, prepares, and updates the entities.
+     * Updates multiple entities based on a collection of DTOs. Each DTO is validated, prepared, and updated individually.
+     * This method is transactional and is also annotated with @MethodStats for performance monitoring.
      *
      * @param dtos The collection of DTOs to be updated.
      * @param user An optional user associated with the operation.
-     * @return A collection of DTOs representing the updated entities.
+     * @return A Mono of a collection of DTOs representing the updated entities.
      * @throws BadRequestException     if the operation encounters a bad request scenario.
      * @throws DomainNotFoundException if an entity to be updated is not found.
      */
@@ -55,12 +56,13 @@ public interface BaseUpdateManyCrudService<ID extends Comparable<ID> & Serializa
     }
 
     /**
-     * Updates multiple entities based on collections of previous DTOs and new DTOs. Validates, prepares, and updates the entities.
+     * Updates multiple entities based on collections of previous DTOs and new DTOs. Each DTO is validated, prepared, and updated individually.
+     * This method is transactional and is also annotated with @MethodStats for performance monitoring.
      *
      * @param previousDtos The collection of previous DTOs representing existing entities.
      * @param dtos         The collection of new DTOs to be used for updates.
      * @param user         An optional user associated with the operation.
-     * @return A collection of DTOs representing the updated entities.
+     * @return A Mono of a collection of DTOs representing the updated entities.
      * @throws BadRequestException     if the operation encounters a bad request scenario.
      * @throws ValidationException     if validation fails during the update.
      * @throws DomainNotFoundException if an entity to be updated is not found.
@@ -71,30 +73,16 @@ public interface BaseUpdateManyCrudService<ID extends Comparable<ID> & Serializa
     default Mono<Collection<DTO>> updateMany(Collection<DTO> previousDtos, Collection<@Valid DTO> dtos, Optional<USER> user) {
         log.debug("UpdateMany, dto.size {}, user {}", dtos.size(), user.orElse(null));
 
-        Collection<D> domains = prepareDomain(dtos, user);
-        Collection<ID> ids = prepareIds(domains);
-        getBeforeAfterComponent().beforeUpdate(ids, previousDtos, dtos, user, getBeforeAfterDomainServices());
-
-        return this.updateValidation(ids, dtos, user)
-                .then(this.preUpdate(ids, dtos, user))
-                .then(addAudit(dtos, AuditDomainActionType.UPDATE, user))
-                .thenMany(this.updateManyExecute(dtos, domains, user))
+        return Flux.fromIterable(dtos)
+                .flatMap(dto -> {
+                    DTO previousDto = previousDtos.stream()
+                            .filter(pd -> pd.getDomainId().equals(dto.getDomainId()))
+                            .findFirst()
+                            .orElseThrow();
+                    return update(previousDto, dto, user);
+                })
                 .collectList()
-                .doOnSuccess(updatedDomains -> this.postUpdate(ids, dtos, updatedDomains, user))
-                .flatMap(updatedDomains -> getManyByDomain(updatedDomains, user))
-                .doOnSuccess(updatedDtos -> getBeforeAfterComponent().afterUpdate(ids, previousDtos, updatedDtos, user, getBeforeAfterDomainServices()));
+                .map(ArrayList::new);
     }
 
-    /**
-     * Executes the actual update operation for multiple entities using a collection of DTOs and domains.
-     *
-     * @param dtos    The collection of new DTOs to be used for updates.
-     * @param domains The collection of domain entities to be updated.
-     * @param user    An optional user associated with the operation.
-     * @return A Flux of updated domain entities.
-     * @throws DomainNotFoundException if an entity to be updated is not found.
-     */
-    default Flux<D> updateManyExecute(Collection<DTO> dtos, Collection<D> domains, Optional<USER> user) {
-        return this.getRepository().updateMany(domains);
-    }
 }

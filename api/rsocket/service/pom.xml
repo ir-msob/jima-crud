@@ -5,7 +5,7 @@
     <parent>
         <groupId>ir.msob.jima.crud</groupId>
         <artifactId>crud-api-rsocket</artifactId>
-        <version>1.1.5</version>
+        <version>1.1.6</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>crud-api-rsocket-service</artifactId>
@@ -32,6 +32,42 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
+        </dependency>
+        <!-- Test -->
+        <dependency>
+            <groupId>ir.msob.jima.core</groupId>
+            <artifactId>core-ral-mongo-test</artifactId>
+            <version>${core-parent.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>ir.msob.jima.security</groupId>
+            <artifactId>security-api-rsocket-it</artifactId>
+            <version>${security-parent.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>ir.msob.jima.crud</groupId>
+            <artifactId>crud-api-rsocket-test</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>ir.msob.jima.crud</groupId>
+            <artifactId>crud-ral-mongo-it</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

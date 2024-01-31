@@ -39,6 +39,7 @@ public interface BaseEditManyCrudService<ID extends Comparable<ID> & Serializabl
 
     /**
      * Executes a batch update operation on multiple entities based on a JSON patch and a collection of entity IDs.
+     * This method is transactional and is also annotated with @MethodStats for performance monitoring.
      *
      * @param jsonPatch The JSON patch document to apply to entities.
      * @param ids       The collection of entity IDs to identify the entities to be updated.
@@ -55,6 +56,7 @@ public interface BaseEditManyCrudService<ID extends Comparable<ID> & Serializabl
 
     /**
      * Executes a batch update operation on multiple entities based on a JSON patch and specified criteria.
+     * This method is transactional and is also annotated with @MethodStats for performance monitoring.
      *
      * @param jsonPatch The JSON patch document to apply to entities.
      * @param criteria  The criteria used for filtering entities to be updated.

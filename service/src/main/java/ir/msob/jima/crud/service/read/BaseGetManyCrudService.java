@@ -84,7 +84,7 @@ public interface BaseGetManyCrudService<ID extends Comparable<ID> & Serializable
                 .flatMap(domains -> {
                     Collection<DTO> dtos = prepareDtos(domains, user);
                     Collection<ID> ids = prepareIds(domains);
-                    return this.postGet(ids, domains, dtos, criteria, user)
+                    return this.postGet(ids, dtos, criteria, user)
                             .doOnSuccess(x -> getBeforeAfterComponent().afterGet(ids, dtos, criteria, user, getBeforeAfterDomainServices()))
                             .thenReturn(dtos);
                 });

@@ -75,10 +75,9 @@ public interface BaseGetOneCrudService<ID extends Comparable<ID> & Serializable,
                 .flatMap(domain -> {
                     DTO dto = toDto(domain, user);
                     Collection<ID> ids = Collections.singletonList(domain.getDomainId());
-                    Collection<D> domains = Collections.singletonList(domain);
                     Collection<DTO> dtos = Collections.singletonList(dto);
 
-                    return this.postGet(ids, domains, dtos, criteria, user)
+                    return this.postGet(ids, dtos, criteria, user)
                             .doOnSuccess(x -> getBeforeAfterComponent().afterGet(ids, dtos, criteria, user, getBeforeAfterDomainServices()))
                             .thenReturn(dto);
                 });

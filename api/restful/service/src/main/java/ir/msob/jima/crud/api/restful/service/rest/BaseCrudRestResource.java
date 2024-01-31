@@ -38,6 +38,7 @@ public interface BaseCrudRestResource<
         > extends
         BaseCountAllCrudRestResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseCountCrudRestResource<ID, USER, D, DTO, C, Q, R, S>,
+
         BaseGetByIdCrudRestResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseGetOneCrudRestResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseGetPageCrudRestResource<ID, USER, D, DTO, C, Q, R, S>,
@@ -46,10 +47,15 @@ public interface BaseCrudRestResource<
 
         BaseSaveCrudRestResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseSaveManyCrudRestResource<ID, USER, D, DTO, C, Q, R, S>,
+
+        BaseUpdateByIdCrudRestResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseUpdateCrudRestResource<ID, USER, D, DTO, C, Q, R, S>,
+        BaseUpdateManyCrudRestResource<ID, USER, D, DTO, C, Q, R, S>,
+
+        BaseEditByIdCrudRestResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseEditCrudRestResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseEditManyCrudRestResource<ID, USER, D, DTO, C, Q, R, S>,
-        BaseUpdateManyCrudRestResource<ID, USER, D, DTO, C, Q, R, S>,
+
         BaseDeleteByIdCrudRestResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseDeleteCrudRestResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseDeleteManyCrudRestResource<ID, USER, D, DTO, C, Q, R, S> {

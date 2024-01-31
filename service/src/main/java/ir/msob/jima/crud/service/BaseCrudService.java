@@ -11,6 +11,18 @@ import ir.msob.jima.crud.service.write.*;
 
 import java.io.Serializable;
 
+/**
+ * This interface represents a base service for CRUD operations.
+ * It extends multiple interfaces, each representing a specific CRUD operation.
+ *
+ * @param <ID>   The type of the entity's ID (must be comparable and serializable).
+ * @param <USER> The type of the user.
+ * @param <D>    The type of the entity domain.
+ * @param <DTO>  The type of the Data Transfer Object (DTO).
+ * @param <C>    The type of criteria used for querying.
+ * @param <Q>    The type of query.
+ * @param <R>    The repository for CRUD operations.
+ */
 public interface BaseCrudService<
         ID extends Comparable<ID> & Serializable,
         USER extends BaseUser<ID>,

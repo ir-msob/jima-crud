@@ -75,16 +75,14 @@ public interface BaseGetStreamCrudService<ID extends Comparable<ID> & Serializab
         return this.preGet(criteria, user)
                 .thenMany(this.getStreamExecute(criteria, user))
                 .flatMap(domain -> {
-                    Collection<D> domains = Collections.singleton(domain);
                     DTO dto = toDto(domain, user);
                     Collection<DTO> dtos = Collections.singleton(dto);
                     Collection<ID> ids = Collections.singleton(domain.getDomainId());
-                    return this.postGet(ids, domains, dtos, criteria, user)
+                    return this.postGet(ids, dtos, criteria, user)
                             .doOnSuccess(x -> getBeforeAfterComponent().afterGet(ids, dtos, criteria, user, getBeforeAfterDomainServices()))
                             .thenReturn(dto);
                 });
     }
-
     /**
      * Execute the retrieval of multiple domain entities based on specific criteria.
      *

@@ -37,11 +37,12 @@ public interface BaseEditCrudService<ID extends Comparable<ID> & Serializable, U
 
     /**
      * Executes an update operation on a single entity based on a JSON patch and an entity ID.
+     * This method is transactional and is also annotated with @MethodStats for performance monitoring.
      *
      * @param jsonPatch The JSON patch document to apply to the entity.
      * @param id        The entity ID to identify the entity to be updated.
      * @param user      An optional user associated with the operation.
-     * @return A DTO representing the updated entity.
+     * @return A Mono of a DTO representing the updated entity.
      * @throws BadRequestException     if the operation encounters a bad request scenario.
      * @throws DomainNotFoundException if the entity to be updated is not found.
      */
@@ -53,11 +54,12 @@ public interface BaseEditCrudService<ID extends Comparable<ID> & Serializable, U
 
     /**
      * Executes an update operation on a single entity based on a JSON patch and specified criteria.
+     * This method is transactional and is also annotated with @MethodStats for performance monitoring.
      *
      * @param jsonPatch The JSON patch document to apply to the entity.
      * @param criteria  The criteria used for filtering the entity to be updated.
      * @param user      An optional user associated with the operation.
-     * @return A DTO representing the updated entity.
+     * @return A Mono of a DTO representing the updated entity.
      * @throws BadRequestException     if the operation encounters a bad request scenario.
      * @throws DomainNotFoundException if the entity to be updated is not found.
      */

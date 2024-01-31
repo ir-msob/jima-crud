@@ -68,7 +68,7 @@ public interface BaseUpdateManyCrudRsocketResource<
     @MessageMapping(Operations.UPDATE_MANY)
     @MethodStats
     @Scope(Operations.UPDATE_MANY)
-    default Mono<Collection<DTO>> updateList(@Payload String dto, @AuthenticationPrincipal Jwt principal)
+    default Mono<Collection<DTO>> updateMany(@Payload String dto, @AuthenticationPrincipal Jwt principal)
             throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("RSocket request to update many domain, dtos : {}", dto);
         ChannelMessage<ID, USER, DtosMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getDtosReferenceType());

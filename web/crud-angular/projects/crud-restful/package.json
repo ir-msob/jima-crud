@@ -1,10 +1,10 @@
 {
   "name": "@msob-jima-crud/crud-restful",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "peerDependencies": {
     "@angular/common": "^16.2.0",
     "@angular/core": "^16.2.0",
-    "@msob-jima-core/core-restful": "^1.1.5"
+    "@msob-jima-core/core-restful": "^1.1.6"
   },
   "dependencies": {
     "tslib": "^2.3.0"

@@ -49,8 +49,8 @@ public interface BaseGetPageCrudService<ID extends Comparable<ID> & Serializable
      * @param pageable The page information, including page number, size, and sorting.
      * @param user     An optional user associated with the operation.
      * @return A Mono emitting a Page of DTO entities.
-     * @throws DomainNotFoundException   If the requested domain is not found.
-     * @throws BadRequestException       If the request is not well-formed or violates business rules.
+     * @throws DomainNotFoundException If the requested domain is not found.
+     * @throws BadRequestException     If the request is not well-formed or violates business rules.
      */
     @Transactional(readOnly = true)
     @MethodStats
@@ -80,7 +80,7 @@ public interface BaseGetPageCrudService<ID extends Comparable<ID> & Serializable
                 .flatMap(domainPage -> {
                     Page<DTO> dtoPage = preparePage(domainPage, user);
                     Collection<ID> ids = prepareIds(domainPage.getContent());
-                    return this.postGet(ids, domainPage.getContent(), dtoPage.getContent(), criteria, user)
+                    return this.postGet(ids, dtoPage.getContent(), criteria, user)
                             .doOnSuccess(x -> getBeforeAfterComponent().afterGet(ids, dtoPage.getContent(), criteria, user, getBeforeAfterDomainServices()))
                             .thenReturn(dtoPage);
                 });

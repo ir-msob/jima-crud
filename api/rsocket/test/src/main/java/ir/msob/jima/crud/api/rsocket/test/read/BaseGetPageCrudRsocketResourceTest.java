@@ -3,6 +3,7 @@ package ir.msob.jima.crud.api.rsocket.test.read;
 import ir.msob.jima.core.commons.data.BaseQuery;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.model.channel.ChannelMessage;
 import ir.msob.jima.core.commons.model.channel.message.PageableMessage;
 import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
@@ -71,13 +72,17 @@ public interface BaseGetPageCrudRsocketResourceTest<
         // Retrieve the result as a Mono of type Page
         // Convert the Mono to a Future
         // Get the result from the Future
-        PageableMessage<ID, C> message = new PageableMessage<>();
-        message.setCriteria(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId()));
-        message.setPageable(PageRequest.of(0, 10));
+        PageableMessage<ID, C> data = new PageableMessage<>();
+        data.setCriteria(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId()));
+        data.setPageable(PageRequest.of(0, 10));
+
+        ChannelMessage<ID, USER, PageableMessage<ID, C>> message = new ChannelMessage<>();
+        message.setData(data);
 
         return getRSocketRequester()
                 .route(getUri(Operations.GET_PAGE))
-                .data(message)
+                .metadata(getRSocketRequesterMetadata()::metadata)
+                .data(getObjectMapper().writeValueAsString(message))
                 .retrieveMono(Page.class)
                 .toFuture()
                 .get();
