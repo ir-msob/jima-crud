@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(TestResource.BASE_URI)
+@RequestMapping(TestDomainRestResource.BASE_URI)
 @RequiredArgsConstructor
 @Resource(value = TestDomain.DOMAIN_URI, type = "restful") // FIXME : configurable
-public class TestResource extends CrudRestResource<TestDomain, TestDto, TestCriteria, TestRepository, TestService> {
+public class TestDomainRestResource extends CrudRestResource<TestDomain, TestDto, TestCriteria, TestRepository, TestService> {
     public static final String BASE_URI = "/api/" + Microservices.VERSION + "/" + TestDomain.DOMAIN_URI;
 }

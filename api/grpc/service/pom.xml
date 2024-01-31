@@ -16,18 +16,48 @@
         <!-- MSob -->
         <dependency>
             <groupId>ir.msob.jima.crud</groupId>
-            <artifactId>crud-service</artifactId>
+            <artifactId>crud-api-grpc-test</artifactId>
             <version>${project.parent.version}</version>
+        </dependency>
+        <!-- Test -->
+        <dependency>
+            <groupId>ir.msob.jima.core</groupId>
+            <artifactId>core-ral-mongo-test</artifactId>
+            <version>${core-parent.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>ir.msob.jima.crud</groupId>
-            <artifactId>crud-api-grpc-commons</artifactId>
+            <artifactId>crud-ral-mongo-it</artifactId>
             <version>${project.parent.version}</version>
+            <scope>test</scope>
         </dependency>
-        <!-- Security -->
         <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-core</artifactId>
+            <groupId>ir.msob.jima.security</groupId>
+            <artifactId>security-api-grpc-it</artifactId>
+            <version>${security-parent.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-testing</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

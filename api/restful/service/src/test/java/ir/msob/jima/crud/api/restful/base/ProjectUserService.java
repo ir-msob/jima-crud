@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.msob.jima.core.beans.configuration.JimaConfigProperties;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.ral.mongo.it.security.BaseMongoProjectUserService;
-import ir.msob.jima.security.api.restful.it.BaseSecurityProjectUserService;
+import ir.msob.jima.security.it.BaseSecurityProjectUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

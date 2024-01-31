@@ -16,11 +16,6 @@
         <!-- MSob -->
         <dependency>
             <groupId>ir.msob.jima.crud</groupId>
-            <artifactId>crud-api-rsocket-service</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ir.msob.jima.crud</groupId>
             <artifactId>crud-test</artifactId>
             <version>${project.parent.version}</version>
         </dependency>

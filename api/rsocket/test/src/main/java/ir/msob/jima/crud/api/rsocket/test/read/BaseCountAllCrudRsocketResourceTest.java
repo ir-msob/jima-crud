@@ -1,9 +1,11 @@
 package ir.msob.jima.crud.api.rsocket.test.read;
 
 import ir.msob.jima.core.commons.data.BaseQuery;
+import ir.msob.jima.core.commons.model.channel.ChannelMessage;
 import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
+import ir.msob.jima.core.commons.model.dto.ModelType;
 import ir.msob.jima.core.commons.model.operation.Operations;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.rsocket.test.ParentCrudRsocketResourceTest;
@@ -58,8 +60,12 @@ public interface BaseCountAllCrudRsocketResourceTest<
         // Retrieve the result as a Mono of type Long
         // Convert the Mono to a Future
         // Get the result from the Future
+        ChannelMessage<ID, USER, ModelType> message = new ChannelMessage<>();
+
         return getRSocketRequester()
                 .route(getUri(Operations.COUNT_ALL))
+                .metadata(getRSocketRequesterMetadata()::metadata)
+                .data(getObjectMapper().writeValueAsString(message))
                 .retrieveMono(Long.class)
                 .toFuture()
                 .get();

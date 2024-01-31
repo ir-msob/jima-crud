@@ -1,5 +1,6 @@
 package ir.msob.jima.crud.api.rsocket.test;
 
+import ir.msob.jima.core.api.rsocket.commons.BaseRSocketRequesterMetadata;
 import ir.msob.jima.core.api.rsocket.test.BaseCoreRsocketResourceTest;
 import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
@@ -42,4 +43,8 @@ public interface ParentCrudRsocketResourceTest<
     default String getUri(String action) {
         return String.format("%s.%s", getBaseUri(), action);
     }
+
+
+    BaseRSocketRequesterMetadata getRSocketRequesterMetadata();
+
 }

@@ -1,6 +1,7 @@
 package ir.msob.jima.crud.api.rsocket.test.write;
 
 import ir.msob.jima.core.commons.data.BaseQuery;
+import ir.msob.jima.core.commons.model.channel.ChannelMessage;
 import ir.msob.jima.core.commons.model.channel.message.DtoMessage;
 import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
@@ -54,12 +55,16 @@ public interface BaseSaveCrudRsocketResourceTest<
     @SneakyThrows
     @Override
     default DTO saveRequest(DTO dto) {
-        DtoMessage<ID, DTO> message = new DtoMessage<>();
-        message.setDto(dto);
+        DtoMessage<ID, DTO> data = new DtoMessage<>();
+        data.setDto(dto);
+
+        ChannelMessage<ID, USER, DtoMessage<ID, DTO>> message = new ChannelMessage<>();
+        message.setData(data);
 
         return getRSocketRequester()
                 .route(getUri(Operations.SAVE))
-                .data(message)
+                .metadata(getRSocketRequesterMetadata()::metadata)
+                .data(getObjectMapper().writeValueAsString(message))
                 .retrieveMono(getDtoClass())
                 .toFuture()
                 .get();

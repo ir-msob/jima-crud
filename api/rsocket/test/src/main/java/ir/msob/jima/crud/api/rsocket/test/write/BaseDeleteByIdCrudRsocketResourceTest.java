@@ -3,6 +3,7 @@ package ir.msob.jima.crud.api.rsocket.test.write;
 import ir.msob.jima.core.commons.data.BaseQuery;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.model.channel.ChannelMessage;
 import ir.msob.jima.core.commons.model.channel.message.IdMessage;
 import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
@@ -65,12 +66,16 @@ public interface BaseDeleteByIdCrudRsocketResourceTest<
         // Retrieve the result as a Mono of the ID class
         // Convert the Mono to a Future
         // Get the result from the Future
-        IdMessage<ID> message = new IdMessage<>();
-        message.setId(savedDto.getDomainId());
+        IdMessage<ID> data = new IdMessage<>();
+        data.setId(savedDto.getDomainId());
+
+        ChannelMessage<ID, USER, IdMessage<ID>> message = new ChannelMessage<>();
+        message.setData(data);
 
         return getRSocketRequester()
                 .route(getUri(Operations.DELETE_BY_ID))
-                .data(message)
+                .metadata(getRSocketRequesterMetadata()::metadata)
+                .data(getObjectMapper().writeValueAsString(message))
                 .retrieveMono(getIdClass())
                 .toFuture()
                 .get();

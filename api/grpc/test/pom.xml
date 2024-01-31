@@ -16,7 +16,7 @@
         <!-- MSob -->
         <dependency>
             <groupId>ir.msob.jima.crud</groupId>
-            <artifactId>crud-api-grpc-service</artifactId>
+            <artifactId>crud-api-grpc-commons</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
@@ -40,10 +40,6 @@
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.c4-soft.springaddons</groupId>
-            <artifactId>spring-addons-oauth2-test</artifactId>
         </dependency>
     </dependencies>
 </project>

@@ -8,7 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.core.env.Environment;
 
-@SpringBootApplication(scanBasePackages = {Constants.FRAMEWORK_PACKAGE_PREFIX, "ir.msob.jima.crud.api.restful"})
+@SpringBootApplication(scanBasePackages = {Constants.FRAMEWORK_PACKAGE_PREFIX})
 public class TestMicroserviceApplication implements ApplicationRunner {
 
     @Autowired

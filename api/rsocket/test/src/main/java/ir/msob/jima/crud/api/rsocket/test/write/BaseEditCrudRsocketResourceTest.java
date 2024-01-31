@@ -2,6 +2,7 @@ package ir.msob.jima.crud.api.rsocket.test.write;
 
 import com.github.fge.jsonpatch.JsonPatch;
 import ir.msob.jima.core.commons.data.BaseQuery;
+import ir.msob.jima.core.commons.model.channel.ChannelMessage;
 import ir.msob.jima.core.commons.model.channel.message.JsonPatchMessage;
 import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
@@ -66,13 +67,17 @@ public interface BaseEditCrudRsocketResourceTest<
         // Retrieve the result as a Mono of the DTO class
         // Convert the Mono to a Future
         // Get the result from the Future
-        JsonPatchMessage<ID, C> message = new JsonPatchMessage<>();
-        message.setCriteria(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId()));
-        message.setJsonPatch(jsonPatch);
+        JsonPatchMessage<ID, C> data = new JsonPatchMessage<>();
+        data.setCriteria(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId()));
+        data.setJsonPatch(jsonPatch);
+
+        ChannelMessage<ID, USER, JsonPatchMessage<ID, C>> message = new ChannelMessage<>();
+        message.setData(data);
 
         return getRSocketRequester()
                 .route(getUri(Operations.EDIT))
-                .data(message)
+                .metadata(getRSocketRequesterMetadata()::metadata)
+                .data(getObjectMapper().writeValueAsString(message))
                 .retrieveMono(getDtoClass())
                 .toFuture()
                 .get();

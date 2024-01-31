@@ -1,6 +1,7 @@
 package ir.msob.jima.crud.api.rsocket.test.write;
 
 import ir.msob.jima.core.commons.data.BaseQuery;
+import ir.msob.jima.core.commons.model.channel.ChannelMessage;
 import ir.msob.jima.core.commons.model.channel.message.DtoMessage;
 import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
@@ -52,13 +53,17 @@ public interface BaseUpdateByIdCrudRsocketResourceTest<
     @SneakyThrows
     @Override
     default DTO updateByIdRequest(DTO dto) {
-        DtoMessage<ID, DTO> message = new DtoMessage<>();
-        message.setId(dto.getDomainId());
-        message.setDto(dto);
+        DtoMessage<ID, DTO> data = new DtoMessage<>();
+        data.setId(dto.getDomainId());
+        data.setDto(dto);
+
+        ChannelMessage<ID, USER, DtoMessage<ID, DTO>> message = new ChannelMessage<>();
+        message.setData(data);
 
         return getRSocketRequester()
                 .route(getUri(Operations.UPDATE_BY_ID))
-                .data(message)
+                .metadata(getRSocketRequesterMetadata()::metadata)
+                .data(getObjectMapper().writeValueAsString(message))
                 .retrieveMono(getDtoClass())
                 .toFuture()
                 .get();

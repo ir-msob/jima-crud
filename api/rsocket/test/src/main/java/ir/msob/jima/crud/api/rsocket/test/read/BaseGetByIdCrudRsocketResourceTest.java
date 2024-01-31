@@ -1,6 +1,7 @@
 package ir.msob.jima.crud.api.rsocket.test.read;
 
 import ir.msob.jima.core.commons.data.BaseQuery;
+import ir.msob.jima.core.commons.model.channel.ChannelMessage;
 import ir.msob.jima.core.commons.model.channel.message.IdMessage;
 import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
@@ -62,12 +63,16 @@ public interface BaseGetByIdCrudRsocketResourceTest<
         // Retrieve the result as a Mono of the DTO class
         // Convert the Mono to a Future
         // Get the result from the Future
-        IdMessage<ID> message = new IdMessage<>();
-        message.setId(savedDto.getDomainId());
+        IdMessage<ID> data = new IdMessage<>();
+        data.setId(savedDto.getDomainId());
+
+        ChannelMessage<ID, USER, IdMessage<ID>> message = new ChannelMessage<>();
+        message.setData(data);
 
         return getRSocketRequester()
                 .route(getUri(Operations.GET_BY_ID))
-                .data(message)
+                .metadata(getRSocketRequesterMetadata()::metadata)
+                .data(getObjectMapper().writeValueAsString(message))
                 .retrieveMono(getDtoClass())
                 .toFuture()
                 .get();

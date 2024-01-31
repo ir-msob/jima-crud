@@ -26,21 +26,9 @@
         </dependency>
         <!-- Test -->
         <dependency>
-            <groupId>ir.msob.jima.crud</groupId>
-            <artifactId>crud-test</artifactId>
-            <version>${project.parent.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>ir.msob.jima.crud</groupId>
-            <artifactId>crud-api-restful-test</artifactId>
-            <version>${project.parent.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>ir.msob.jima.crud</groupId>
-            <artifactId>crud-ral-mongo-commons</artifactId>
-            <version>${project.parent.version}</version>
+            <groupId>ir.msob.jima.core</groupId>
+            <artifactId>core-ral-mongo-test</artifactId>
+            <version>${core-parent.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -53,6 +41,12 @@
             <groupId>ir.msob.jima.security</groupId>
             <artifactId>security-api-restful-it</artifactId>
             <version>${security-parent.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>ir.msob.jima.crud</groupId>
+            <artifactId>crud-api-restful-test</artifactId>
+            <version>${project.parent.version}</version>
             <scope>test</scope>
         </dependency>
 
