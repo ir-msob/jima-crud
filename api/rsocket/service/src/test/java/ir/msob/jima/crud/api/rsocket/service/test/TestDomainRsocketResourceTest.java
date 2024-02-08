@@ -3,7 +3,7 @@ package ir.msob.jima.crud.api.rsocket.service.test;
 
 import io.rsocket.transport.netty.client.TcpClientTransport;
 import ir.msob.jima.core.api.rsocket.commons.BaseRSocketRequesterBuilder;
-import ir.msob.jima.core.beans.configuration.JimaConfigProperties;
+import ir.msob.jima.core.beans.properties.JimaProperties;
 import ir.msob.jima.core.commons.resource.BaseResource;
 import ir.msob.jima.core.ral.mongo.it.security.ProjectUser;
 import ir.msob.jima.core.ral.mongo.it.test.TestCriteria;
@@ -20,21 +20,17 @@ import lombok.extern.apachecommons.CommonsLog;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.messaging.rsocket.RSocketRequester;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 
-@SpringBootTest(classes = TestMicroserviceApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = {TestMicroserviceApplication.class, MongoContainerConfiguration.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration
 @Testcontainers
-@ExtendWith({MongoContainerConfiguration.class})
 @CommonsLog
 public class TestDomainRsocketResourceTest extends CrudRsocketResourceTest<TestDomain, TestDto, TestCriteria, TestRepository, TestService, TestDomainDataProvider> {
 
@@ -50,12 +46,7 @@ public class TestDomainRsocketResourceTest extends CrudRsocketResourceTest<TestD
     Integer port;
     String host = "localhost";
     @Autowired
-    JimaConfigProperties jimaConfigProperties;
-
-    @DynamicPropertySource
-    static void registry(DynamicPropertyRegistry registry) {
-        MongoContainerConfiguration.registry(registry);
-    }
+    JimaProperties jimaProperties;
 
     @SneakyThrows
     @BeforeAll

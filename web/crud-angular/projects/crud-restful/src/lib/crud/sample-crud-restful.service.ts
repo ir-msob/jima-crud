@@ -1,4 +1,4 @@
-import {Criteria, Dto} from "@msob-jima-core/core-commons";
+import {Criteria, Dto} from "@ir-msob-jima/core-commons";
 import {BaseCrudRestfulService} from "./base-crud-restful.service";
 import {HttpClient} from "@angular/common/http";
 import BaseDto = Dto.BaseDto;

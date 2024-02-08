@@ -1,6 +1,10 @@
 grpc:
   server:
     port: 9090
+jima:
+  test-container:
+    mongo:
+      image: "mongo:7-jammy"
 spring:
   application:
     name: test-microservicetes
@@ -9,6 +13,9 @@ spring:
     active: test
   main:
     allow-bean-definition-overriding: true
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/test
   security:
     oauth2:
       resource-server:

@@ -19,20 +19,16 @@ import org.bson.types.ObjectId;
 import org.junit.Rule;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.io.IOException;
 
-@SpringJUnitConfig(classes = {TestMicroserviceApplication.class})
+@SpringJUnitConfig(classes = {TestMicroserviceApplication.class, MongoContainerConfiguration.class})
 @Testcontainers
-@ExtendWith({MongoContainerConfiguration.class})
 @CommonsLog
 @EnableConfigurationProperties
 @SpringBootTest
@@ -45,11 +41,6 @@ public class TestDomainGrpcResourceTest extends CrudGrpcResourceTest<TestDomain,
     @Autowired
     TestDomainGrpcResource resource;
     private ReactorCrudServiceGrpc.ReactorCrudServiceStub reactorCrudServiceStub;
-
-    @DynamicPropertySource
-    static void registry(DynamicPropertyRegistry registry) {
-        MongoContainerConfiguration.registry(registry);
-    }
 
     @SneakyThrows
     @BeforeAll

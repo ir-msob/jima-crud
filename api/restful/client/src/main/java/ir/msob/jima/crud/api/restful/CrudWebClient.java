@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
 import ir.msob.jima.core.api.restful.beans.util.ObjectToParam;
 import ir.msob.jima.core.api.restful.commons.webclient.BaseWebClient;
-import ir.msob.jima.core.beans.configuration.JimaConfigProperties;
+import ir.msob.jima.core.beans.properties.JimaProperties;
 import ir.msob.jima.core.commons.annotation.domain.DomainService;
 import ir.msob.jima.core.commons.annotation.methodstats.MethodStats;
 import ir.msob.jima.core.commons.exception.runtime.CommonRuntimeException;
@@ -47,7 +47,7 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
     private final ObjectMapper objectMapper;
     private final ObjectToParam objectToParam;
     private final WebClient webClient;
-    private final JimaConfigProperties jimaConfigProperties;
+    private final JimaProperties jimaProperties;
 
     /**
      * This method is used to convert an object to a JSON string.
@@ -321,7 +321,7 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
                 .headers(builder -> setDefaultHeaders(builder, user))
                 .retrieve()
                 .bodyToMono(Long.class)
-                .retryWhen(jimaConfigProperties.getClient().getRetryRequest().createRetryBackoffSpec());
+                .retryWhen(jimaProperties.getClient().getRetryRequest().createRetryBackoffSpec());
     }
 
     /**
@@ -340,7 +340,7 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
                 .headers(builder -> setDefaultHeaders(builder, user))
                 .retrieve()
                 .bodyToMono(Long.class)
-                .retryWhen(jimaConfigProperties.getClient().getRetryRequest().createRetryBackoffSpec());
+                .retryWhen(jimaProperties.getClient().getRetryRequest().createRetryBackoffSpec());
     }
 
     /**
@@ -360,7 +360,7 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
                 .headers(builder -> setDefaultHeaders(builder, user))
                 .retrieve()
                 .bodyToMono(dtoClass)
-                .retryWhen(jimaConfigProperties.getClient().getRetryRequest().createRetryBackoffSpec());
+                .retryWhen(jimaProperties.getClient().getRetryRequest().createRetryBackoffSpec());
     }
 
     /**
@@ -380,7 +380,7 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
                 .headers(builder -> setDefaultHeaders(builder, user))
                 .retrieve()
                 .bodyToMono(dtoClass)
-                .retryWhen(jimaConfigProperties.getClient().getRetryRequest().createRetryBackoffSpec());
+                .retryWhen(jimaProperties.getClient().getRetryRequest().createRetryBackoffSpec());
     }
 
     /**
@@ -400,7 +400,7 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
                 .headers(builder -> setDefaultHeaders(builder, user))
                 .retrieve()
                 .bodyToFlux(dtoClass)
-                .retryWhen(jimaConfigProperties.getClient().getRetryRequest().createRetryBackoffSpec())
+                .retryWhen(jimaProperties.getClient().getRetryRequest().createRetryBackoffSpec())
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
@@ -420,7 +420,7 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
                 .headers(builder -> setDefaultHeaders(builder, user))
                 .retrieve()
                 .bodyToFlux(dtoClass)
-                .retryWhen(jimaConfigProperties.getClient().getRetryRequest().createRetryBackoffSpec());
+                .retryWhen(jimaProperties.getClient().getRetryRequest().createRetryBackoffSpec());
     }
 
     /**
@@ -440,7 +440,7 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
                 .headers(builder -> setDefaultHeaders(builder, user))
                 .retrieve()
                 .bodyToMono(Object.class)
-                .retryWhen(jimaConfigProperties.getClient().getRetryRequest().createRetryBackoffSpec())
+                .retryWhen(jimaProperties.getClient().getRetryRequest().createRetryBackoffSpec())
                 .map(res -> {
                     Page<Object> page = objectMapper.convertValue(res, Page.class);
                     List<DTO> dtos = page.getContent().stream().map(r -> objectMapper.convertValue(r, dtoClass)).toList();

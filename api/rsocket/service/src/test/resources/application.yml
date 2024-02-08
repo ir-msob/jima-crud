@@ -1,13 +1,26 @@
+jima:
+  test-container:
+    mongo:
+      image: "mongo:7-jammy"
+
 spring:
+
   application:
     name: test-microservice
+
   profiles:
     active: test
+
   main:
     allow-bean-definition-overriding: true
+
   rsocket:
     server:
       port: 8005
+
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/test
 
   security:
     oauth2:

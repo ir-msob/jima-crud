@@ -1,7 +1,7 @@
 package ir.msob.jima.crud.api.grpc.service.base;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ir.msob.jima.core.beans.configuration.JimaConfigProperties;
+import ir.msob.jima.core.beans.properties.JimaProperties;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.ral.mongo.it.security.BaseMongoProjectUserService;
 import ir.msob.jima.security.it.BaseSecurityProjectUserService;
@@ -14,12 +14,12 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class ProjectUserService implements BaseMongoProjectUserService, BaseSecurityProjectUserService {
-    private final JimaConfigProperties jimaConfigProperties;
+    private final JimaProperties jimaProperties;
     private final ObjectMapper objectMapper;
 
     @Override
-    public JimaConfigProperties getJimaConfigProperties() {
-        return jimaConfigProperties;
+    public JimaProperties getJimaProperties() {
+        return jimaProperties;
     }
 
     @Override

@@ -16,26 +16,17 @@ import lombok.extern.apachecommons.CommonsLog;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 @AutoConfigureWebTestClient
-@SpringBootTest(classes = TestMicroserviceApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = {TestMicroserviceApplication.class, MongoContainerConfiguration.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration
 @Testcontainers
-@ExtendWith({MongoContainerConfiguration.class})
 @CommonsLog
 public class TestDomainRestResourceTest extends CrudRestResourceTest<TestDomain, TestDto, TestCriteria, TestRepository, TestService, TestDomainDataProvider> {
-
-    @DynamicPropertySource
-    static void registry(DynamicPropertyRegistry registry) {
-        MongoContainerConfiguration.registry(registry);
-    }
 
     @SneakyThrows
     @BeforeAll

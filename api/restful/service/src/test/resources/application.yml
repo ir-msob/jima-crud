@@ -1,5 +1,10 @@
 server:
   port: 8080
+jima:
+  test-container:
+    mongo:
+      image: "mongo:7-jammy"
+
 spring:
   application:
     name: test-microservice
@@ -7,7 +12,9 @@ spring:
     active: test
   main:
     allow-bean-definition-overriding: true
-
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/test
   security:
     oauth2:
       resource-server:
@@ -38,12 +45,3 @@ spring:
             client-authentication-method: client_secret_basic
             scope:
               - openid
-
-# Logging
-logging:
-  file:
-    path: log
-  logback:
-    rollingpolicy:
-      max-file-size: 5MB
-      max-history: 5
