@@ -64,7 +64,7 @@ public interface BaseSaveCrudRestResourceTest<
         // Return the response body
         return this.getWebTestClient()
                 .post()
-                .uri(String.format("%s/%s", getBaseUri(), Operations.SAVE))
+                .uri(getBaseUri())
                 .headers(this::prepareHeader)
                 .bodyValue(dto)
                 .exchange()

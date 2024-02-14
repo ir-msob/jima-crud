@@ -1,4 +1,4 @@
-package ir.msob.jima.crud.api.grpc.service.test;
+package ir.msob.jima.crud.api.grpc.service;
 
 import io.grpc.inprocess.InProcessChannelBuilder;
 import io.grpc.inprocess.InProcessServerBuilder;
@@ -32,7 +32,7 @@ import java.io.IOException;
 @CommonsLog
 @EnableConfigurationProperties
 @SpringBootTest
-public class TestDomainGrpcResourceTest extends CrudGrpcResourceTest<TestDomain, TestDto, TestCriteria, TestRepository, TestService, TestDomainDataProvider> {
+public class TestDomainGrpcResourceIT extends CrudGrpcResourceTest<TestDomain, TestDto, TestCriteria, TestRepository, TestService, TestDomainDataProvider> {
 
     @Rule
     public final GrpcCleanupRule grpcCleanupRule = new GrpcCleanupRule();

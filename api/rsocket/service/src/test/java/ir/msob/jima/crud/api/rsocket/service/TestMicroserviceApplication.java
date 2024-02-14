@@ -1,4 +1,4 @@
-package ir.msob.jima.crud.api.restful.test;
+package ir.msob.jima.crud.api.rsocket.service;
 
 import ir.msob.jima.core.commons.Constants;
 import org.springframework.beans.factory.annotation.Autowired;

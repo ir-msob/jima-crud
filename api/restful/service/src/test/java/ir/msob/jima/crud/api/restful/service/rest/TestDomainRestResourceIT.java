@@ -1,4 +1,4 @@
-package ir.msob.jima.crud.api.restful.test;
+package ir.msob.jima.crud.api.restful.service.rest;
 
 import ir.msob.jima.core.commons.resource.BaseResource;
 import ir.msob.jima.core.ral.mongo.it.security.ProjectUser;
@@ -7,7 +7,7 @@ import ir.msob.jima.core.ral.mongo.it.test.TestDomain;
 import ir.msob.jima.core.ral.mongo.it.test.TestDto;
 import ir.msob.jima.core.ral.mongo.test.configuration.MongoContainerConfiguration;
 import ir.msob.jima.core.test.CoreTestData;
-import ir.msob.jima.crud.api.restful.base.CrudRestResourceTest;
+import ir.msob.jima.crud.api.restful.service.rest.base.CrudRestResourceTest;
 import ir.msob.jima.crud.ral.mongo.it.test.TestDomainDataProvider;
 import ir.msob.jima.crud.ral.mongo.it.test.TestRepository;
 import ir.msob.jima.crud.ral.mongo.it.test.TestService;
@@ -26,7 +26,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @ContextConfiguration
 @Testcontainers
 @CommonsLog
-public class TestDomainRestResourceTest extends CrudRestResourceTest<TestDomain, TestDto, TestCriteria, TestRepository, TestService, TestDomainDataProvider> {
+public class TestDomainRestResourceIT extends CrudRestResourceTest<TestDomain, TestDto, TestCriteria, TestRepository, TestService, TestDomainDataProvider> {
 
     @SneakyThrows
     @BeforeAll

@@ -1,4 +1,4 @@
-package ir.msob.jima.crud.api.rsocket.service.test;
+package ir.msob.jima.crud.api.rsocket.service;
 
 
 import com.fasterxml.jackson.core.type.TypeReference;

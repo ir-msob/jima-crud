@@ -10,14 +10,14 @@
     </parent>
     <groupId>ir.msob.jima.crud</groupId>
     <artifactId>crud-parent</artifactId>
-    <version>1.1.6</version>
+    <version>1.1.7</version>
     <name>crud-parent</name>
     <description>crud-parent</description>
     <packaging>pom</packaging>
     <properties>
         <!-- MSob -->
         <core-parent.version>1.1.8</core-parent.version>
-        <security-parent.version>1.1.3</security-parent.version>
+        <security-parent.version>1.1.4</security-parent.version>
     </properties>
     <modules>
         <module>commons</module>
@@ -27,6 +27,7 @@
         <module>api</module>
         <module>ral</module>
         <module>web</module>
+        <module>starter</module>
         <module>reports</module>
     </modules>
     <dependencyManagement>

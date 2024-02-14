@@ -15,6 +15,7 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.client.BaseCrudClient;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -214,7 +215,7 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
     public <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> Mono<DTO> save(Class<DTO> dtoClass, DTO dto, Optional<USER> user) {
         return webClient
                 .post()
-                .uri(builder -> getUriWithCriteria(builder, dtoClass, Operations.SAVE))
+                .uri(builder -> getUriWithCriteria(builder, dtoClass))
                 .headers(builder -> setDefaultHeaders(builder, user))
                 .bodyValue(createBody(dto))
                 .retrieve()
@@ -436,7 +437,7 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
     public <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Page<DTO>> getPage(Class<DTO> dtoClass, C criteria, Optional<USER> user) {
         return webClient
                 .get()
-                .uri(builder -> getUriWithCriteria(builder, dtoClass, Operations.GET_PAGE, criteria))
+                .uri(builder -> getUriWithCriteria(builder, dtoClass, criteria))
                 .headers(builder -> setDefaultHeaders(builder, user))
                 .retrieve()
                 .bodyToMono(Object.class)
@@ -460,6 +461,11 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
     @SneakyThrows
     public <ID extends Comparable<ID> & Serializable, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> URI getUriWithCriteria(UriBuilder builder, Class<DTO> dtoClass, String suffix, C criteria) {
         return getUriWithCriteria(builder, dtoClass, suffix, criteria, null);
+    }
+
+    @SneakyThrows
+    public <ID extends Comparable<ID> & Serializable, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> URI getUriWithCriteria(UriBuilder builder, Class<DTO> dtoClass, C criteria) {
+        return getUriWithCriteria(builder, dtoClass, "", criteria, null);
     }
 
 
@@ -498,10 +504,19 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
         DomainService domainService = DomainService.info.getAnnotation(baseDto.getClass());
         return builder
                 .host(domainService.serviceName())
-                .path(String.format("%s/%s", RestUtil.uri(domainService), suffix))
+                .path(getUri(suffix, domainService))
                 .queryParams(objectToParam.convert(criteria, pageable))
                 .build();
 
+    }
+
+    private static String getUri(String suffix, DomainService domainService) {
+        String uri;
+        if (Strings.isNotBlank(suffix))
+            uri = String.format("%s/%s", RestUtil.uri(domainService), suffix);
+        else
+            uri = RestUtil.uri(domainService);
+        return uri;
     }
 
     /**
@@ -518,9 +533,15 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
         DomainService domainService = DomainService.info.getAnnotation(baseDto.getClass());
         return builder
                 .host(domainService.serviceName())
-                .path(String.format("%s/%s", RestUtil.uri(domainService), suffix))
+                .path(getUri(suffix, domainService))
                 .build();
     }
+
+
+    public <ID extends Comparable<ID> & Serializable, DTO extends BaseDto<ID>> URI getUriWithCriteria(UriBuilder builder, Class<DTO> dtoClass) {
+        return getUriWithCriteria(builder, dtoClass, "");
+    }
+
 
     /**
      * This method is used to set the user information in the HTTP headers.

@@ -1,4 +1,4 @@
-package ir.msob.jima.crud.api.grpc.service.test;
+package ir.msob.jima.crud.api.grpc.service;
 
 import ir.msob.jima.core.ral.mongo.it.test.TestCriteria;
 import ir.msob.jima.core.ral.mongo.it.test.TestDomain;

@@ -1,4 +1,4 @@
-package ir.msob.jima.crud.api.restful.base;
+package ir.msob.jima.crud.api.restful.service.rest.base;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.msob.jima.core.beans.properties.JimaProperties;

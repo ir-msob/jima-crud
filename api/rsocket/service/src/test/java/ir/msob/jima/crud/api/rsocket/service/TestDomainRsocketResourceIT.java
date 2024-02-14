@@ -1,4 +1,4 @@
-package ir.msob.jima.crud.api.rsocket.service.test;
+package ir.msob.jima.crud.api.rsocket.service;
 
 
 import io.rsocket.transport.netty.client.TcpClientTransport;
@@ -32,7 +32,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @ContextConfiguration
 @Testcontainers
 @CommonsLog
-public class TestDomainRsocketResourceTest extends CrudRsocketResourceTest<TestDomain, TestDto, TestCriteria, TestRepository, TestService, TestDomainDataProvider> {
+public class TestDomainRsocketResourceIT extends CrudRsocketResourceTest<TestDomain, TestDto, TestCriteria, TestRepository, TestService, TestDomainDataProvider> {
 
     @Autowired
     TestDomainRsocketResource testDomainRsocketResource;

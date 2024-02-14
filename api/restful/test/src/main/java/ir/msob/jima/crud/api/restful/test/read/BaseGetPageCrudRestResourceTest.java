@@ -68,7 +68,7 @@ public interface BaseGetPageCrudRestResourceTest<
         // Return the response body
         return this.getWebTestClient()
                 .get()
-                .uri(String.format("%s/%s?page=0&size=10&%s.eq=%s", getBaseUri(), Operations.GET_PAGE, savedDto.getDomainIdName(), savedDto.getDomainId()))
+                .uri(String.format("%s?page=0&size=10&%s.eq=%s", getBaseUri(), savedDto.getDomainIdName(), savedDto.getDomainId()))
                 .headers(this::prepareHeader)
                 .exchange()
                 .expectStatus().isEqualTo(OperationsStatus.GET_PAGE)

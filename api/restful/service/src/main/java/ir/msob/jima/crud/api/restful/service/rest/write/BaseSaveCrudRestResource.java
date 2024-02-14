@@ -69,7 +69,7 @@ public interface BaseSaveCrudRestResource<
      * @throws BadRequestException     if the validation operation is incorrect
      * @throws DomainNotFoundException if the domain is not found
      */
-    @PostMapping(Operations.SAVE)
+    @PostMapping
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "If the domain was successfully created return true otherwise return false", response = Boolean.class),
             @ApiResponse(code = 400, message = "If the validation operation is incorrect throws BadRequestException otherwise nothing", response = BadRequestResponse.class),
@@ -77,7 +77,7 @@ public interface BaseSaveCrudRestResource<
     @MethodStats
     @Scope(Operations.SAVE)
     default ResponseEntity<Mono<DTO>> save(@RequestBody DTO dto, ServerWebExchange serverWebExchange, Principal principal)
-            throws BadRequestException, DomainNotFoundException, JsonProcessingException {
+            throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to create new domain, dto : {}", dto);
 
         Optional<USER> user = getUser(serverWebExchange, principal);

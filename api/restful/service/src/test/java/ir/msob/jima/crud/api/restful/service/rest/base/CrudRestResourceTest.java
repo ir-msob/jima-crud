@@ -1,4 +1,4 @@
-package ir.msob.jima.crud.api.restful.base;
+package ir.msob.jima.crud.api.restful.service.rest.base;
 
 import com.c4_soft.springaddons.security.oauth2.test.annotations.OpenIdClaims;
 import com.c4_soft.springaddons.security.oauth2.test.annotations.WithOAuth2Login;
