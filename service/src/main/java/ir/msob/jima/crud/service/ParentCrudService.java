@@ -8,10 +8,10 @@ import ir.msob.jima.core.commons.exception.validation.ValidationException;
 import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
+import ir.msob.jima.core.commons.operation.BaseBeforeAfterDomainOperation;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.service.BaseService;
 import ir.msob.jima.core.commons.util.GenericTypeUtil;
-import ir.msob.jima.crud.commons.BaseBeforeAfterDomainService;
 import jakarta.validation.Valid;
 import lombok.SneakyThrows;
 import reactor.core.publisher.Flux;
@@ -225,11 +225,11 @@ public interface ParentCrudService<
     BeforeAfterComponent getBeforeAfterComponent();
 
     /**
-     * Get the collection of before/after domain services.
+     * Get the collection of before/after domain operations.
      *
-     * @return The collection of before/after domain services.
+     * @return The collection of before/after domain operations.
      */
-    Collection<BaseBeforeAfterDomainService<ID, USER, DTO, C>> getBeforeAfterDomainServices();
+    Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> getBeforeAfterDomainOperations();
 
     /**
      * Get the ObjectMapper for handling JSON data.

@@ -52,7 +52,6 @@ public interface BaseSaveCrudGrpcResourceTest<
      *
      * @param dto The data transfer object (DTO) representing the entity to be saved.
      * @return The data transfer object (DTO) representing the saved entity.
-     * @throws Exception If an error occurs during the gRPC request.
      */
     @SneakyThrows
     @Override

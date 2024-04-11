@@ -79,8 +79,6 @@ public interface ParentCrudGrpcResource<
      * Retrieves the current authenticated user, if available.
      *
      * @return An {@link Optional} containing the authenticated user, or an empty {@link Optional} if no user is authenticated.
-     * @throws ExecutionException   If the computation threw an exception.
-     * @throws InterruptedException If the current thread was interrupted while waiting.
      */
     @SneakyThrows
     default Optional<USER> getUser() {
@@ -120,7 +118,6 @@ public interface ParentCrudGrpcResource<
      *
      * @param jsonPatch The JSON string to be converted.
      * @return A JsonPatch.
-     * @throws java.io.IOException If an I/O error occurs.
      */
     @SneakyThrows
     default JsonPatch convertToJsonPatch(String jsonPatch) {
@@ -145,7 +142,6 @@ public interface ParentCrudGrpcResource<
      *
      * @param o The object to be converted.
      * @return A string.
-     * @throws java.io.IOException If an I/O error occurs.
      */
     @SneakyThrows
     default String convertToString(Object o) {
@@ -157,7 +153,6 @@ public interface ParentCrudGrpcResource<
      *
      * @param criteria The string to be converted.
      * @return A criteria.
-     * @throws java.io.IOException If an I/O error occurs.
      */
     @SneakyThrows
     default C convertToCriteria(String criteria) {
@@ -169,7 +164,6 @@ public interface ParentCrudGrpcResource<
      *
      * @param dto The string to be converted.
      * @return A DTO.
-     * @throws java.io.IOException If an I/O error occurs.
      */
     @SneakyThrows
     default DTO convertToDto(String dto) {
@@ -181,7 +175,6 @@ public interface ParentCrudGrpcResource<
      *
      * @param pageable The string to be converted.
      * @return A Pageable.
-     * @throws java.io.IOException If an I/O error occurs.
      */
     @SneakyThrows
     default Pageable convertToPageable(String pageable) {
@@ -193,7 +186,6 @@ public interface ParentCrudGrpcResource<
      *
      * @param dto The string to be converted.
      * @return An ID.
-     * @throws java.io.IOException If an I/O error occurs.
      */
     @SneakyThrows
     default ID convertToId(String dto) {

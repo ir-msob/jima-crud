@@ -6,7 +6,7 @@ import {
   Page,
   SampleCriteria,
   SampleDto
-} from "@ir-msob-jima/core-commons";
+} from "@ir-msob/jima-core-commons";
 import {HttpClient,} from "@angular/common/http";
 import {SampleCrudRestfulService} from "./sample-crud-restful.service";
 import {of} from "rxjs";

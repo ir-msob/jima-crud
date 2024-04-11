@@ -52,7 +52,6 @@ public interface BaseUpdateCrudGrpcResourceTest<
      *
      * @param dto The data transfer object (DTO) representing the entity to be updated.
      * @return The data transfer object (DTO) representing the updated entity.
-     * @throws Exception If an error occurs during the gRPC request.
      */
     @SneakyThrows
     @Override

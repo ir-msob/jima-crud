@@ -50,13 +50,13 @@ public interface BaseSaveCrudService<ID extends Comparable<ID> & Serializable, U
         log.debug("Save, user {}", user.orElse(null));
 
         D domain = toDomain(dto, user);
-        getBeforeAfterComponent().beforeSave(dto, user, getBeforeAfterDomainServices());
+        getBeforeAfterComponent().beforeSave(dto, user, getBeforeAfterDomainOperations());
         return this.preSave(dto, user)
                 .doOnSuccess(unused -> addAudit(dto, AuditDomainActionType.CREATE, user))
                 .then(this.saveExecute(dto, domain, user))
                 .doOnSuccess(savedDomain -> this.postSave(dto, savedDomain, user))
                 .flatMap(savedDomain -> getOneByID(savedDomain.getDomainId(), user))
-                .doOnSuccess(savedDto -> getBeforeAfterComponent().afterSave(dto, savedDto, user, getBeforeAfterDomainServices()));
+                .doOnSuccess(savedDto -> getBeforeAfterComponent().afterSave(dto, savedDto, user, getBeforeAfterDomainOperations()));
     }
 
     /**

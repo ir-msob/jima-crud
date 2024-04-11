@@ -7,8 +7,8 @@ import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundExceptio
 import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
-import ir.msob.jima.core.commons.model.operation.Operations;
 import ir.msob.jima.core.commons.model.scope.Scope;
+import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.DtoType;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.IdInput;
@@ -35,8 +35,6 @@ import java.util.Optional;
  * @param <DTO>  The type of the DTO, which must extend BaseDto.
  * @param <C>    The type of the Criteria, which must extend BaseCriteria.
  * @param <Q>    The type of the Query, which must extend BaseQuery.
- *               public interface BaseGetByIdCrudGraphQLResource<
- *               ID extends Comparable<ID> & Serializable,
  * @param <R>    The type of the Repository, which must extend BaseCrudRepository.
  * @param <S>    The type of the Service, which must extend BaseCrudService.
  */

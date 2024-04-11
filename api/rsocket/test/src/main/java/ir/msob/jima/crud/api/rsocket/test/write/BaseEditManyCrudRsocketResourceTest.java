@@ -7,7 +7,7 @@ import ir.msob.jima.core.commons.model.channel.message.JsonPatchMessage;
 import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
-import ir.msob.jima.core.commons.model.operation.Operations;
+import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.crud.api.rsocket.test.ParentCrudRsocketResourceTest;
@@ -53,7 +53,6 @@ public interface BaseEditManyCrudRsocketResourceTest<
      * @param savedDto  the DTO object that represents the saved state of the resources to be edited
      * @param jsonPatch the JsonPatch object that represents the changes to be applied to the resources
      * @return a collection of DTO objects that represent the edited resources
-     * @throws Exception if an error occurs during the request
      */
     @SneakyThrows
     @Override

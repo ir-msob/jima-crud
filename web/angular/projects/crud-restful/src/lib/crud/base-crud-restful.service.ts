@@ -1,5 +1,5 @@
 import {Observable} from "rxjs";
-import {Criteria, Dto, JsonPatchSpace, Page} from "@ir-msob-jima/core-commons";
+import {Criteria, Dto, JsonPatchSpace, Page} from "@ir-msob/jima-core-commons";
 import {
   COUNT,
   COUNT_ALL,
@@ -15,8 +15,8 @@ import {
   UPDATE,
   UPDATE_MANY
 } from "../constants";
-import {BaseErrorHandlerService, Pagination, RestUtil} from "@ir-msob-jima/core-restful";
-import {NullableT} from "@ir-msob-jima/core-commons/lib/constants";
+import {BaseErrorHandlerService, Pagination, RestUtil} from "@ir-msob/jima-core-restful";
+import {NullableT} from "@ir-msob/jima-core-commons/lib/constants";
 import BaseDto = Dto.BaseDto;
 import BaseCriteria = Criteria.BaseCriteria;
 import JsonPatch = JsonPatchSpace.JsonPatch;

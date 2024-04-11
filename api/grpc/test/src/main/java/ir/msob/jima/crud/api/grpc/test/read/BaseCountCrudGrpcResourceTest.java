@@ -54,7 +54,6 @@ public interface BaseCountCrudGrpcResourceTest<
      *
      * @param savedDto The data transfer object (DTO) representing the saved entity.
      * @return The total number of entities that match the given criteria.
-     * @throws Exception If an error occurs during the gRPC request.
      */
     @SneakyThrows
     @Override

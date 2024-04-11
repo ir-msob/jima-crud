@@ -4,7 +4,7 @@ import ir.msob.jima.core.commons.data.BaseQuery;
 import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
-import ir.msob.jima.core.commons.model.operation.OperationsStatus;
+import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.test.ParentCrudRestResourceTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;

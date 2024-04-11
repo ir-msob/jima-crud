@@ -1,7 +1,7 @@
 package ir.msob.jima.crud.commons.domain;
 
-import ir.msob.jima.core.commons.model.operation.ConditionalOnOperationUtil;
-import ir.msob.jima.core.commons.model.operation.Operations;
+import ir.msob.jima.core.commons.operation.ConditionalOnOperationUtil;
+import ir.msob.jima.core.commons.operation.Operations;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;

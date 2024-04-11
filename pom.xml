@@ -5,19 +5,23 @@
     <parent>
         <groupId>ir.msob.jima.parent</groupId>
         <artifactId>jima-parent</artifactId>
-        <version>1.1.4</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <version>1.1.7</version>
     </parent>
     <groupId>ir.msob.jima.crud</groupId>
     <artifactId>crud-parent</artifactId>
-    <version>1.1.7</version>
+    <version>1.1.8</version>
     <name>crud-parent</name>
     <description>crud-parent</description>
     <packaging>pom</packaging>
+    <scm>
+        <url>scm:git:https://github.com/ir-msob/jima-crud.git</url>
+        <connection>scm:git:https://github.com/ir-msob/jima-crud.git</connection>
+        <developerConnection>scm:git:https://github.com/ir-msob/jima-crud.git</developerConnection>
+    </scm>
     <properties>
         <!-- MSob -->
-        <core-parent.version>1.1.8</core-parent.version>
-        <security-parent.version>1.1.4</security-parent.version>
+        <core-parent.version>1.1.17</core-parent.version>
+        <security-parent.version>1.1.5</security-parent.version>
     </properties>
     <modules>
         <module>commons</module>

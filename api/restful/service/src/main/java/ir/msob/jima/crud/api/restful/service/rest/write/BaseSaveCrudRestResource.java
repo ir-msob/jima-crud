@@ -1,6 +1,5 @@
 package ir.msob.jima.crud.api.restful.service.rest.write;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import ir.msob.jima.core.commons.annotation.methodstats.MethodStats;
@@ -12,9 +11,9 @@ import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundExceptio
 import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
-import ir.msob.jima.core.commons.model.operation.Operations;
-import ir.msob.jima.core.commons.model.operation.OperationsStatus;
 import ir.msob.jima.core.commons.model.scope.Scope;
+import ir.msob.jima.core.commons.operation.Operations;
+import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.rest.ParentCrudRestResource;
 import ir.msob.jima.crud.commons.BaseCrudRepository;

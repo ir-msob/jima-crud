@@ -53,7 +53,6 @@ public interface BaseUpdateManyCrudGrpcResourceTest<
      *
      * @param dtos A collection of data transfer objects (DTOs) representing the entities to be updated.
      * @return A collection of data transfer objects (DTOs) representing the updated entities.
-     * @throws Exception If an error occurs during the gRPC request.
      */
     @SneakyThrows
     @Override

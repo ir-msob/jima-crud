@@ -56,7 +56,6 @@ public interface BaseEditCrudGrpcResourceTest<
      * @param savedDto  The data transfer object (DTO) representing the saved entity.
      * @param jsonPatch The JSON Patch representing the changes to be applied to the entity.
      * @return The updated data transfer object (DTO) representing the edited entity.
-     * @throws Exception If an error occurs during the gRPC request.
      */
     @SneakyThrows
     @Override

@@ -6,7 +6,7 @@ import ir.msob.jima.core.commons.model.channel.message.DtosMessage;
 import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
-import ir.msob.jima.core.commons.model.operation.Operations;
+import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.rsocket.test.ParentCrudRsocketResourceTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
@@ -50,7 +50,6 @@ public interface BaseUpdateManyCrudRsocketResourceTest<
      *
      * @param dtos the collection of DTO objects that represent the resources to be updated
      * @return a collection of updated DTO objects
-     * @throws Exception if an error occurs during the request
      */
     @SneakyThrows
     @Override

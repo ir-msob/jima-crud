@@ -92,7 +92,7 @@ public interface BaseUpdateCrudService<ID extends Comparable<ID> & Serializable,
 
         D domain = toDomain(dto, user);
 
-        getBeforeAfterComponent().beforeUpdate(previousDto, dto, user, getBeforeAfterDomainServices());
+        getBeforeAfterComponent().beforeUpdate(previousDto, dto, user, getBeforeAfterDomainOperations());
 
         return this.preUpdate(dto, user)
                 .doOnSuccess(unused -> addAudit(dto, AuditDomainActionType.UPDATE, user))
@@ -100,7 +100,7 @@ public interface BaseUpdateCrudService<ID extends Comparable<ID> & Serializable,
                 .doOnSuccess(updatedDomain -> this.postUpdate(dto, updatedDomain, user))
                 .flatMap(updatedDomain -> getOneByID(updatedDomain.getDomainId(), user))
                 .doOnSuccess(updatedDto ->
-                        getBeforeAfterComponent().afterUpdate(previousDto, updatedDto, user, getBeforeAfterDomainServices()));
+                        getBeforeAfterComponent().afterUpdate(previousDto, updatedDto, user, getBeforeAfterDomainOperations()));
     }
 
     /**

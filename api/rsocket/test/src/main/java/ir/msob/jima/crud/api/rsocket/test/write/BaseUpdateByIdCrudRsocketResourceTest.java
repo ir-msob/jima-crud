@@ -6,7 +6,7 @@ import ir.msob.jima.core.commons.model.channel.message.DtoMessage;
 import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
-import ir.msob.jima.core.commons.model.operation.Operations;
+import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.rsocket.test.ParentCrudRsocketResourceTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;

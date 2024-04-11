@@ -80,7 +80,6 @@ public interface ParentCrudGrpcResourceTest<
      *
      * @param jsonPatch The JSON string.
      * @return The JsonPatch.
-     * @throws Exception If an error occurs during the conversion.
      */
     @SneakyThrows
     default JsonPatch convertToJsonPatch(String jsonPatch) {
@@ -104,7 +103,6 @@ public interface ParentCrudGrpcResourceTest<
      *
      * @param o The object.
      * @return The JSON string.
-     * @throws Exception If an error occurs during the conversion.
      */
     @SneakyThrows
     default String convertToString(Object o) {
@@ -116,7 +114,6 @@ public interface ParentCrudGrpcResourceTest<
      *
      * @param criteria The JSON string.
      * @return The criteria object.
-     * @throws Exception If an error occurs during the conversion.
      */
     @SneakyThrows
     default C convertToCriteria(String criteria) {
@@ -128,7 +125,6 @@ public interface ParentCrudGrpcResourceTest<
      *
      * @param dto The JSON string.
      * @return The DTO.
-     * @throws Exception If an error occurs during the conversion.
      */
     @SneakyThrows
     default DTO convertToDto(String dto) {
@@ -140,7 +136,6 @@ public interface ParentCrudGrpcResourceTest<
      *
      * @param pageable The JSON string.
      * @return The Pageable object.
-     * @throws Exception If an error occurs during the conversion.
      */
     @SneakyThrows
     default Pageable convertToPageable(String pageable) {
@@ -152,7 +147,6 @@ public interface ParentCrudGrpcResourceTest<
      *
      * @param page The JSON string.
      * @return The Page of DTOs.
-     * @throws Exception If an error occurs during the conversion.
      */
     @SneakyThrows
     default Page<DTO> convertToPage(String page) {
@@ -164,7 +158,6 @@ public interface ParentCrudGrpcResourceTest<
      *
      * @param id The JSON string.
      * @return The ID.
-     * @throws Exception If an error occurs during the conversion.
      */
     @SneakyThrows
     default ID convertToId(String id) {
@@ -176,7 +169,6 @@ public interface ParentCrudGrpcResourceTest<
      *
      * @param ids The collection of JSON strings.
      * @return The collection of IDs.
-     * @throws Exception If an error occurs during the conversion.
      */
     @SneakyThrows
     default Collection<ID> convertToIds(Collection<String> ids) {
