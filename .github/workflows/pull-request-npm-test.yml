@@ -1,0 +1,47 @@
+name: Pull Request - NPM Test
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - id: Checkout
+      name: Checkout
+      uses: actions/checkout@v4
+          
+    - id: Setup_Node_20
+      name: Set up Node 20
+      uses: actions/setup-node@v4
+      with:
+        cache-dependency-path: web/angular/
+        node-version: 20
+        cache: 'npm'
+        registry-url: ${{vars.NPM_REPOSITORY_URL}}
+
+    - id: Cache_NPM_Packages
+      name: Cache NPM Packages
+      uses: actions/cache@v3
+      with:        
+        path: '~/.npm'
+        key: ${{ runner.os }}-${{ matrix.node-version }}-9.8.0-npmcache-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - id: Install_Angular_cli
+      name: Install Angular cli
+      working-directory: web/angular/
+      run: npm install -g @angular/cli@latest
+
+    - id: NPM_Test
+      name: NPM Test
+      env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_REPOSITORY_TOKEN}}
+      working-directory: web/angular/
+      run: ./ng-test.sh
