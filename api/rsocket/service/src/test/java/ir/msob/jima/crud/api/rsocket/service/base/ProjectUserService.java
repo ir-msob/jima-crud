@@ -3,8 +3,8 @@ package ir.msob.jima.crud.api.rsocket.service.base;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.msob.jima.core.beans.properties.JimaProperties;
 import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.core.ral.mongo.it.security.BaseMongoProjectUserService;
 import ir.msob.jima.security.it.BaseSecurityProjectUserService;
+import ir.msob.jima.security.ral.keycloak.it.security.BaseKeycloakProjectUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ProjectUserService implements BaseMongoProjectUserService, BaseSecurityProjectUserService {
+public class ProjectUserService implements BaseKeycloakProjectUserService, BaseSecurityProjectUserService {
     private final JimaProperties jimaProperties;
     private final ObjectMapper objectMapper;
 

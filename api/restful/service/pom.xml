@@ -5,7 +5,7 @@
     <parent>
         <groupId>ir.msob.jima.crud</groupId>
         <artifactId>crud-api-restful</artifactId>
-        <version>1.1.8</version>
+        <version>1.1.9</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>crud-api-restful-service</artifactId>
@@ -47,6 +47,18 @@
             <groupId>ir.msob.jima.crud</groupId>
             <artifactId>crud-api-restful-test</artifactId>
             <version>${project.parent.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>ir.msob.jima.security</groupId>
+            <artifactId>security-ral-keycloak-test</artifactId>
+            <version>${security-parent.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>ir.msob.jima.security</groupId>
+            <artifactId>security-ral-keycloak-it</artifactId>
+            <version>${security-parent.version}</version>
             <scope>test</scope>
         </dependency>
 

@@ -11,6 +11,7 @@ import ir.msob.jima.crud.api.restful.service.rest.base.CrudRestResourceTest;
 import ir.msob.jima.crud.ral.mongo.it.test.TestDomainDataProvider;
 import ir.msob.jima.crud.ral.mongo.it.test.TestRepository;
 import ir.msob.jima.crud.ral.mongo.it.test.TestService;
+import ir.msob.jima.security.ral.keycloak.test.KeycloakContainerConfiguration;
 import lombok.SneakyThrows;
 import lombok.extern.apachecommons.CommonsLog;
 import org.bson.types.ObjectId;
@@ -22,7 +23,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 @AutoConfigureWebTestClient
-@SpringBootTest(classes = {TestMicroserviceApplication.class, MongoContainerConfiguration.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = {TestMicroserviceApplication.class, MongoContainerConfiguration.class, KeycloakContainerConfiguration.class}
+        , webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration
 @Testcontainers
 @CommonsLog

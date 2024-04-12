@@ -2,7 +2,10 @@ jima:
   test-container:
     mongo:
       image: "mongo:7-jammy"
-
+    keycloak:
+      image: "quay.io/keycloak/keycloak:24.0"
+      realm: "test-realm"
+      resuse: false
 spring:
 
   application:
@@ -13,7 +16,7 @@ spring:
 
   main:
     allow-bean-definition-overriding: true
-
+    web-application-type: NONE
   rsocket:
     server:
       port: 8005
@@ -30,9 +33,7 @@ spring:
       client:
         provider:
           service-client:
-            issuer-uri: http://localhost:8004
-          front-client:
-            issuer-uri: http://localhost:8004
+            issuer-uri: ${spring.security.oauth2.resource-server.jwt.issuer-uri}
         registration:
           service-client:
             client-name: service-client
@@ -42,22 +43,3 @@ spring:
             client-authentication-method: client_secret_basic
             scope:
               - openid
-          front-client:
-            client-name: front-client
-            client-id: front-client
-            client-secret: front-client-secret
-            authorization-grant-type:
-              - authorization_code
-              - refresh_token
-            client-authentication-method: client_secret_basic
-            scope:
-              - openid
-
-# Logging
-logging:
-  file:
-    path: log
-  logback:
-    rollingpolicy:
-      max-file-size: 5MB
-      max-history: 5

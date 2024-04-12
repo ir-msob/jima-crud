@@ -4,6 +4,9 @@ jima:
   test-container:
     mongo:
       image: "mongo:7-jammy"
+    keycloak:
+      image: "quay.io/keycloak/keycloak:24.0"
+      realm: "test-realm"
 
 spring:
   application:
@@ -23,25 +26,13 @@ spring:
       client:
         provider:
           service-client:
-            issuer-uri: http://localhost:8004
-          front-client:
-            issuer-uri: http://localhost:8004
+            issuer-uri: ${spring.security.oauth2.resource-server.jwt.issuer-uri}
         registration:
           service-client:
             client-name: service-client
             client-id: service-client
             client-secret: service-client-secret
             authorization-grant-type: client_credentials
-            client-authentication-method: client_secret_basic
-            scope:
-              - openid
-          front-client:
-            client-name: front-client
-            client-id: front-client
-            client-secret: front-client-secret
-            authorization-grant-type:
-              - authorization_code
-              - refresh_token
             client-authentication-method: client_secret_basic
             scope:
               - openid

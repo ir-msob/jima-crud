@@ -5,11 +5,11 @@
     <parent>
         <groupId>ir.msob.jima.parent</groupId>
         <artifactId>jima-parent</artifactId>
-        <version>1.1.7</version>
+        <version>1.1.8</version>
     </parent>
     <groupId>ir.msob.jima.crud</groupId>
     <artifactId>crud-parent</artifactId>
-    <version>1.1.8</version>
+    <version>1.1.9</version>
     <name>crud-parent</name>
     <description>crud-parent</description>
     <packaging>pom</packaging>
@@ -20,7 +20,7 @@
     </scm>
     <properties>
         <!-- MSob -->
-        <core-parent.version>1.1.17</core-parent.version>
+        <core-parent.version>1.1.18</core-parent.version>
         <security-parent.version>1.1.5</security-parent.version>
     </properties>
     <modules>
