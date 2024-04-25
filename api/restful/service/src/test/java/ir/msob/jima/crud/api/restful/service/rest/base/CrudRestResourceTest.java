@@ -1,8 +1,7 @@
 package ir.msob.jima.crud.api.restful.service.rest.base;
 
-import com.c4_soft.springaddons.security.oauth2.test.annotations.OpenIdClaims;
-import com.c4_soft.springaddons.security.oauth2.test.annotations.WithOAuth2Login;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.msob.jima.core.commons.security.BaseTokenService;
 import ir.msob.jima.core.ral.mongo.commons.query.QueryBuilder;
 import ir.msob.jima.core.ral.mongo.it.criteria.ProjectCriteria;
 import ir.msob.jima.core.ral.mongo.it.domain.ProjectDomain;
@@ -19,7 +18,6 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import java.util.Optional;
 
 
-@WithOAuth2Login(claims = @OpenIdClaims(sub = "service-client")) // FIXME : read from yaml file
 public abstract class CrudRestResourceTest<
         D extends ProjectDomain,
         DTO extends ProjectDto,
@@ -38,6 +36,8 @@ public abstract class CrudRestResourceTest<
     ObjectMapper objectMapper;
     @Autowired
     ProjectUserService projectUserService;
+    @Autowired
+    BaseTokenService tokenService;
 
     @Override
     public WebTestClient getWebTestClient() {
@@ -59,4 +59,8 @@ public abstract class CrudRestResourceTest<
         return objectMapper;
     }
 
+    @Override
+    public BaseTokenService getTokenService() {
+        return tokenService;
+    }
 }

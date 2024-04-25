@@ -8,7 +8,6 @@ import ir.msob.jima.security.ral.keycloak.it.security.BaseKeycloakProjectUserSer
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.io.Serializable;
 import java.util.Optional;
 
 @Service
@@ -28,7 +27,7 @@ public class ProjectUserService implements BaseKeycloakProjectUserService, BaseS
     }
 
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>> Optional<USER> getUser(Optional<String> optional) {
+    public <USER extends BaseUser> Optional<USER> getUser(Optional<String> optional) {
         return Optional.empty();
     }
 }

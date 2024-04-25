@@ -29,7 +29,7 @@ public interface BaseWriteClient extends BaseClient {
      * @param user     An optional user object associated with the request.
      * @return A Mono containing the ID of the deleted data item.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> Mono<ID> deleteById(Class<DTO> dtoClass, ID id, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<ID> deleteById(Class<DTO> dtoClass, ID id, Optional<USER> user);
 
 
     /**
@@ -44,7 +44,7 @@ public interface BaseWriteClient extends BaseClient {
      * @param user     An optional user object associated with the request.
      * @return A Mono containing the ID of the deleted data item.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<ID> delete(Class<DTO> dtoClass, C criteria, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<ID> delete(Class<DTO> dtoClass, C criteria, Optional<USER> user);
 
 
     /**
@@ -59,7 +59,7 @@ public interface BaseWriteClient extends BaseClient {
      * @param user     An optional user object associated with the request.
      * @return A Mono containing a collection of IDs for the deleted data items.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Collection<ID>> deleteMany(Class<DTO> dtoClass, C criteria, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Collection<ID>> deleteMany(Class<DTO> dtoClass, C criteria, Optional<USER> user);
 
     /**
      * Synchronously delete multiple data items that meet the specified criteria.
@@ -73,7 +73,7 @@ public interface BaseWriteClient extends BaseClient {
      * @param user     An optional user object associated with the request.
      * @return A Mono containing a collection of IDs for the deleted data items.
      */
-    default <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Collection<ID>> deleteMany(Class<DTO> dtoClass, Collection<ID> ids, Optional<USER> user) {
+    default <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Collection<ID>> deleteMany(Class<DTO> dtoClass, Collection<ID> ids, Optional<USER> user) {
         return this.deleteMany(dtoClass, (C) CriteriaUtil.idCriteria(ids), user);
     }
 
@@ -90,7 +90,7 @@ public interface BaseWriteClient extends BaseClient {
      * @param user     An optional user object associated with the request.
      * @return A Mono containing a collection of IDs for the deleted data items.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Collection<ID>> deleteAll(Class<DTO> dtoClass, C criteria, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Collection<ID>> deleteAll(Class<DTO> dtoClass, C criteria, Optional<USER> user);
 
     /**
      * Synchronously edit a data item using a JSON Patch.
@@ -103,7 +103,7 @@ public interface BaseWriteClient extends BaseClient {
      * @param user      An optional user object associated with the request.
      * @return A Mono containing the edited data item.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> Mono<DTO> editById(Class<DTO> dtoClass, ID id, JsonPatch jsonPatch, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<DTO> editById(Class<DTO> dtoClass, ID id, JsonPatch jsonPatch, Optional<USER> user);
 
 
     /**
@@ -119,7 +119,7 @@ public interface BaseWriteClient extends BaseClient {
      * @param user      An optional user object associated with the request.
      * @return A Mono containing the edited data item.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<DTO> edit(Class<DTO> dtoClass, JsonPatch jsonPatch, C criteria, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<DTO> edit(Class<DTO> dtoClass, JsonPatch jsonPatch, C criteria, Optional<USER> user);
 
 
     /**
@@ -135,7 +135,7 @@ public interface BaseWriteClient extends BaseClient {
      * @param user      An optional user object associated with the request.
      * @return A Mono containing a collection of edited data items.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Collection<DTO>> editMany(Class<DTO> dtoClass, JsonPatch jsonPatch, C criteria, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Collection<DTO>> editMany(Class<DTO> dtoClass, JsonPatch jsonPatch, C criteria, Optional<USER> user);
 
     /**
      * Synchronously edit multiple data items using a JSON Patch.
@@ -150,7 +150,7 @@ public interface BaseWriteClient extends BaseClient {
      * @param user      An optional user object associated with the request.
      * @return A Mono containing a collection of edited data items.
      */
-    default <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Collection<DTO>> editMany(Class<DTO> dtoClass, JsonPatch jsonPatch, Collection<ID> ids, Optional<USER> user) {
+    default <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Collection<DTO>> editMany(Class<DTO> dtoClass, JsonPatch jsonPatch, Collection<ID> ids, Optional<USER> user) {
         return this.editMany(dtoClass, jsonPatch, (C) CriteriaUtil.idCriteria(ids), user);
     }
 
@@ -165,7 +165,7 @@ public interface BaseWriteClient extends BaseClient {
      * @param user     An optional user object associated with the request.
      * @return A Mono indicating the ID of the created or saved data item.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> Mono<DTO> save(Class<DTO> dtoClass, DTO dto, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<DTO> save(Class<DTO> dtoClass, DTO dto, Optional<USER> user);
 
     /**
      * Synchronously create or save multiple data items.
@@ -178,7 +178,7 @@ public interface BaseWriteClient extends BaseClient {
      * @param user     An optional user object associated with the request.
      * @return A Mono indicating a collection of created or saved data items.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> Mono<Collection<DTO>> saveMany(Class<DTO> dtoClass, Collection<DTO> dtos, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Collection<DTO>> saveMany(Class<DTO> dtoClass, Collection<DTO> dtos, Optional<USER> user);
 
     /**
      * Synchronously update a single data item.
@@ -191,7 +191,7 @@ public interface BaseWriteClient extends BaseClient {
      * @param user     An optional user object associated with the request.
      * @return A Mono indicating the updated data item.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> Mono<DTO> updateById(Class<DTO> dtoClass, ID id, DTO dto, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<DTO> updateById(Class<DTO> dtoClass, ID id, DTO dto, Optional<USER> user);
 
 
     /**
@@ -205,7 +205,7 @@ public interface BaseWriteClient extends BaseClient {
      * @param user     An optional user object associated with the request.
      * @return A Mono indicating the updated data item.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> Mono<DTO> update(Class<DTO> dtoClass, DTO dto, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<DTO> update(Class<DTO> dtoClass, DTO dto, Optional<USER> user);
 
 
     /**
@@ -219,5 +219,5 @@ public interface BaseWriteClient extends BaseClient {
      * @param user     An optional user object associated with the request.
      * @return A Mono indicating a collection of updated data items.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> Mono<Collection<DTO>> updateMany(Class<DTO> dtoClass, Collection<DTO> dtos, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Collection<DTO>> updateMany(Class<DTO> dtoClass, Collection<DTO> dtos, Optional<USER> user);
 }

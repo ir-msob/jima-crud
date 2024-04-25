@@ -32,7 +32,7 @@ public interface BaseReadClient extends BaseClient {
      * @param user     An optional user object associated with the request.
      * @return A Mono indicating the count of items that meet the criteria.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Long> count(Class<DTO> dtoClass, C criteria, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Long> count(Class<DTO> dtoClass, C criteria, Optional<USER> user);
 
     /**
      * Synchronously count all data items of a specific type.
@@ -44,7 +44,7 @@ public interface BaseReadClient extends BaseClient {
      * @param user     An optional user object associated with the request.
      * @return A Mono indicating the count of all items of the specified type.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> Mono<Long> countAll(Class<DTO> dtoClass, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Long> countAll(Class<DTO> dtoClass, Optional<USER> user);
 
     /**
      * Synchronously retrieve a single data item that meets the specified criteria.
@@ -56,7 +56,7 @@ public interface BaseReadClient extends BaseClient {
      * @param user     An optional user object associated with the request.
      * @return A Mono containing the retrieved data item.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> Mono<DTO> getById(Class<DTO> dtoClass, ID id, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<DTO> getById(Class<DTO> dtoClass, ID id, Optional<USER> user);
 
 
     /**
@@ -71,7 +71,7 @@ public interface BaseReadClient extends BaseClient {
      * @param user     An optional user object associated with the request.
      * @return A Mono containing the retrieved data item.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<DTO> getOne(Class<DTO> dtoClass, C criteria, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<DTO> getOne(Class<DTO> dtoClass, C criteria, Optional<USER> user);
 
     /**
      * Synchronously retrieve a single data item.
@@ -85,7 +85,7 @@ public interface BaseReadClient extends BaseClient {
      * @param user     An optional user object associated with the request.
      * @return A Mono containing the retrieved data item.
      */
-    default <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<DTO> getOne(Class<DTO> dtoClass, ID id, Optional<USER> user) {
+    default <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<DTO> getOne(Class<DTO> dtoClass, ID id, Optional<USER> user) {
         return this.getOne(dtoClass, (C) CriteriaUtil.idCriteria(id), user);
     }
 
@@ -101,7 +101,7 @@ public interface BaseReadClient extends BaseClient {
      * @param user     An optional user object associated with the request.
      * @return A Mono containing a collection of retrieved data items.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Collection<DTO>> getMany(Class<DTO> dtoClass, C criteria, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Collection<DTO>> getMany(Class<DTO> dtoClass, C criteria, Optional<USER> user);
 
     /**
      * Synchronously retrieve multiple data items that meet the specified criteria.
@@ -115,7 +115,7 @@ public interface BaseReadClient extends BaseClient {
      * @param user     An optional user object associated with the request.
      * @return A Mono containing a collection of retrieved data items.
      */
-    default <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Collection<DTO>> getMany(Class<DTO> dtoClass, Collection<ID> ids, Optional<USER> user) {
+    default <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Collection<DTO>> getMany(Class<DTO> dtoClass, Collection<ID> ids, Optional<USER> user) {
         return this.getMany(dtoClass, (C) CriteriaUtil.idCriteria(ids), user);
     }
 
@@ -131,7 +131,7 @@ public interface BaseReadClient extends BaseClient {
      * @param user     An optional user object associated with the request.
      * @return A Mono containing a collection of retrieved data items.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Flux<DTO> getStream(Class<DTO> dtoClass, C criteria, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Flux<DTO> getStream(Class<DTO> dtoClass, C criteria, Optional<USER> user);
 
     /**
      * Synchronously retrieve multiple data items that meet the specified criteria.
@@ -145,7 +145,7 @@ public interface BaseReadClient extends BaseClient {
      * @param user     An optional user object associated with the request.
      * @return A Mono containing a collection of retrieved data items.
      */
-    default <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Flux<DTO> getStream(Class<DTO> dtoClass, Collection<ID> ids, Optional<USER> user) {
+    default <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Flux<DTO> getStream(Class<DTO> dtoClass, Collection<ID> ids, Optional<USER> user) {
         return this.getStream(dtoClass, (C) CriteriaUtil.idCriteria(ids), user);
     }
 
@@ -161,5 +161,5 @@ public interface BaseReadClient extends BaseClient {
      * @param user     An optional user object associated with the request.
      * @return A Mono containing a page of retrieved data items.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Page<DTO>> getPage(Class<DTO> dtoClass, C criteria, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Page<DTO>> getPage(Class<DTO> dtoClass, C criteria, Optional<USER> user);
 }

@@ -44,7 +44,7 @@ import java.util.Optional;
  */
 public interface BaseDeleteManyCrudRsocketResource<
         ID extends Comparable<ID> & Serializable,
-        USER extends BaseUser<ID>,
+        USER extends BaseUser,
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
@@ -70,7 +70,7 @@ public interface BaseDeleteManyCrudRsocketResource<
     @Scope(Operations.DELETE_MANY)
     default Mono<Collection<ID>> deleteMany(@Payload String dto, @AuthenticationPrincipal Jwt principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("RSocket request to delete many domain, dto {}", dto);
-        ChannelMessage<ID, USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());
+        ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());
 
         Optional<USER> user = getUser(message.getUser(), principal);
         return this.deleteManyResponse(this.getService().deleteMany(message.getData().getCriteria(), user), message.getData().getCriteria(), user);

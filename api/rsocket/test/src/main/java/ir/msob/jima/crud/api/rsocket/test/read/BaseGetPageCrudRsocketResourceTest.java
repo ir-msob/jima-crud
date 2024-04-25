@@ -42,7 +42,7 @@ import java.io.Serializable;
  */
 public interface BaseGetPageCrudRsocketResourceTest<
         ID extends Comparable<ID> & Serializable,
-        USER extends BaseUser<ID>,
+        USER extends BaseUser,
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
@@ -76,7 +76,7 @@ public interface BaseGetPageCrudRsocketResourceTest<
         data.setCriteria(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId()));
         data.setPageable(PageRequest.of(0, 10));
 
-        ChannelMessage<ID, USER, PageableMessage<ID, C>> message = new ChannelMessage<>();
+        ChannelMessage<USER, PageableMessage<ID, C>> message = new ChannelMessage<>();
         message.setData(data);
 
         return getRSocketRequester()

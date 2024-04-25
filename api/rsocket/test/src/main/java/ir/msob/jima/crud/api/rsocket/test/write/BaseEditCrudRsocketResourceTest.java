@@ -38,7 +38,7 @@ import java.io.Serializable;
  */
 public interface BaseEditCrudRsocketResourceTest<
         ID extends Comparable<ID> & Serializable,
-        USER extends BaseUser<ID>,
+        USER extends BaseUser,
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
@@ -71,7 +71,7 @@ public interface BaseEditCrudRsocketResourceTest<
         data.setCriteria(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId()));
         data.setJsonPatch(jsonPatch);
 
-        ChannelMessage<ID, USER, JsonPatchMessage<ID, C>> message = new ChannelMessage<>();
+        ChannelMessage<USER, JsonPatchMessage<ID, C>> message = new ChannelMessage<>();
         message.setData(data);
 
         return getRSocketRequester()

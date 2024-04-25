@@ -44,7 +44,7 @@ import java.util.Optional;
  */
 public interface BaseCountAllCrudRsocketResource<
         ID extends Comparable<ID> & Serializable,
-        USER extends BaseUser<ID>,
+        USER extends BaseUser,
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
@@ -70,7 +70,7 @@ public interface BaseCountAllCrudRsocketResource<
     @Scope(Operations.COUNT_ALL)
     default Mono<Long> countAll(@Payload String dto, @AuthenticationPrincipal Jwt principal) throws BadRequestException, DomainNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, JsonProcessingException {
         log.debug("RSocket request to count all dto {}", dto);
-        ChannelMessage<ID, USER, ModelType> message = getObjectMapper().readValue(dto, getModelTypeReferenceType());
+        ChannelMessage<USER, ModelType> message = getObjectMapper().readValue(dto, getModelTypeReferenceType());
 
         Optional<USER> user = getUser(message.getUser(), principal);
         return this.countAllResponse(this.getService().countAll(user), user);

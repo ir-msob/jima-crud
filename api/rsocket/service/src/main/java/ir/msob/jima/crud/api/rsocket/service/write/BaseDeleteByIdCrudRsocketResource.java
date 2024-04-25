@@ -43,7 +43,7 @@ import java.util.Optional;
  */
 public interface BaseDeleteByIdCrudRsocketResource<
         ID extends Comparable<ID> & Serializable,
-        USER extends BaseUser<ID>,
+        USER extends BaseUser,
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
@@ -71,7 +71,7 @@ public interface BaseDeleteByIdCrudRsocketResource<
     @Scope(Operations.DELETE_BY_ID)
     default Mono<ID> deleteById(@Payload String dto, @AuthenticationPrincipal Jwt principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("RSocket request to delete domain, dto {}", dto);
-        ChannelMessage<ID, USER, IdMessage<ID>> message = getObjectMapper().readValue(dto, getIdReferenceType());
+        ChannelMessage<USER, IdMessage<ID>> message = getObjectMapper().readValue(dto, getIdReferenceType());
 
         Optional<USER> user = getUser(message.getUser(), principal);
         return this.deleteByIdResponse(this.getService().delete(message.getData().getId(), user), message.getData().getId(), user);

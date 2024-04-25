@@ -33,7 +33,7 @@ public interface BaseReadAsyncClient extends BaseClient {
      * @param user     An optional user object associated with the request.
      * @return A Mono indicating completion of the operation.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> count(Class<DTO> dtoClass, C criteria, Map<String, Serializable> metadata, String callback, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> count(Class<DTO> dtoClass, C criteria, Map<String, Serializable> metadata, String callback, Optional<USER> user);
 
     /**
      * Asynchronously count all items of a specific type.
@@ -47,7 +47,7 @@ public interface BaseReadAsyncClient extends BaseClient {
      * @param user     An optional user object associated with the request.
      * @return A Mono indicating completion of the operation.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> Mono<Void> countAll(Class<DTO> dtoClass, Map<String, Serializable> metadata, String callback, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Void> countAll(Class<DTO> dtoClass, Map<String, Serializable> metadata, String callback, Optional<USER> user);
 
     /**
      * Asynchronously fetch a single item that meets the specified criteria.
@@ -63,7 +63,7 @@ public interface BaseReadAsyncClient extends BaseClient {
      * @param user     An optional user object associated with the request.
      * @return A Mono indicating completion of the operation.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> getOne(Class<DTO> dtoClass, C criteria, Map<String, Serializable> metadata, String callback, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> getOne(Class<DTO> dtoClass, C criteria, Map<String, Serializable> metadata, String callback, Optional<USER> user);
 
     /**
      * Asynchronously fetch a single item by id.
@@ -78,7 +78,7 @@ public interface BaseReadAsyncClient extends BaseClient {
      * @param user     An optional user object associated with the request.
      * @return A Mono indicating completion of the operation.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>> Mono<Void> getById(Class<DTO> dtoClass, ID id, Map<String, Serializable> metadata, String callback, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Void> getById(Class<DTO> dtoClass, ID id, Map<String, Serializable> metadata, String callback, Optional<USER> user);
 
     /**
      * Asynchronously fetch a single item using a channel message for more complex requests.
@@ -92,7 +92,7 @@ public interface BaseReadAsyncClient extends BaseClient {
      * @param user           An optional user object associated with the request.
      * @return A Mono indicating completion of the operation.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> getOne(Class<DTO> dtoClass, ChannelMessage<ID, USER, CriteriaMessage<ID, C>> channelMessage, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> getOne(Class<DTO> dtoClass, ChannelMessage<USER, CriteriaMessage<ID, C>> channelMessage, Optional<USER> user);
 
     /**
      * Asynchronously fetch multiple items that meet the specified criteria.
@@ -108,7 +108,7 @@ public interface BaseReadAsyncClient extends BaseClient {
      * @param user     An optional user object associated with the request.
      * @return A Mono indicating completion of the operation.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> getMany(Class<DTO> dtoClass, C criteria, Map<String, Serializable> metadata, String callback, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> getMany(Class<DTO> dtoClass, C criteria, Map<String, Serializable> metadata, String callback, Optional<USER> user);
 
     /**
      * Asynchronously fetch multiple items by ids.
@@ -124,7 +124,7 @@ public interface BaseReadAsyncClient extends BaseClient {
      * @param user     An optional user object associated with the request.
      * @return A Mono indicating completion of the operation.
      */
-    default <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> getMany(Class<DTO> dtoClass, Collection<ID> ids, Map<String, Serializable> metadata, String callback, Optional<USER> user) {
+    default <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> getMany(Class<DTO> dtoClass, Collection<ID> ids, Map<String, Serializable> metadata, String callback, Optional<USER> user) {
         return this.getMany(dtoClass, (C) CriteriaUtil.idCriteria(ids), metadata, callback, user);
     }
 
@@ -141,7 +141,7 @@ public interface BaseReadAsyncClient extends BaseClient {
      * @param user           An optional user object associated with the request.
      * @return A Mono indicating completion of the operation.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> getMany(Class<DTO> dtoClass, ChannelMessage<ID, USER, CriteriaMessage<ID, C>> channelMessage, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> getMany(Class<DTO> dtoClass, ChannelMessage<USER, CriteriaMessage<ID, C>> channelMessage, Optional<USER> user);
 
     /**
      * Asynchronously fetch a page of items that meet the specified criteria.
@@ -157,5 +157,5 @@ public interface BaseReadAsyncClient extends BaseClient {
      * @param user     An optional user object associated with the request.
      * @return A Mono indicating completion of the operation.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> getPage(Class<DTO> dtoClass, C criteria, Map<String, Serializable> metadata, String callback, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> getPage(Class<DTO> dtoClass, C criteria, Map<String, Serializable> metadata, String callback, Optional<USER> user);
 }

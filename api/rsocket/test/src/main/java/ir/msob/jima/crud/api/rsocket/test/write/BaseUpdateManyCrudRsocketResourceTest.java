@@ -33,7 +33,7 @@ import java.util.Collection;
  */
 public interface BaseUpdateManyCrudRsocketResourceTest<
         ID extends Comparable<ID> & Serializable,
-        USER extends BaseUser<ID>,
+        USER extends BaseUser,
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
@@ -57,7 +57,7 @@ public interface BaseUpdateManyCrudRsocketResourceTest<
         DtosMessage<ID, DTO> data = new DtosMessage<>();
         data.setDtos(dtos);
 
-        ChannelMessage<ID, USER, DtosMessage<ID, DTO>> message = new ChannelMessage<>();
+        ChannelMessage<USER, DtosMessage<ID, DTO>> message = new ChannelMessage<>();
         message.setData(data);
 
         return getRSocketRequester()

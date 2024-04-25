@@ -40,7 +40,7 @@ import java.util.Optional;
  */
 public interface BaseDeleteManyCrudListener<
         ID extends Comparable<ID> & Serializable,
-        USER extends BaseUser<ID>,
+        USER extends BaseUser,
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
@@ -75,7 +75,7 @@ public interface BaseDeleteManyCrudListener<
     @Scope(Operations.DELETE_MANY)
     private void serviceDeleteMany(String dto) {
         log.debug("Received message for delete many: dto {}", dto);
-        ChannelMessage<ID, USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());
+        ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());
         Optional<USER> user = Optional.ofNullable(message.getUser());
         getService().deleteMany(message.getData().getCriteria(), user)
                 .subscribe(deletedIds -> sendCallbackIds(message, deletedIds, OperationsStatus.DELETE_MANY, user));

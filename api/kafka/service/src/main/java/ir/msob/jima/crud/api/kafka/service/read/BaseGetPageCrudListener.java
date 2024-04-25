@@ -40,7 +40,7 @@ import java.util.Optional;
  */
 public interface BaseGetPageCrudListener<
         ID extends Comparable<ID> & Serializable,
-        USER extends BaseUser<ID>,
+        USER extends BaseUser,
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
@@ -75,7 +75,7 @@ public interface BaseGetPageCrudListener<
     @Scope(Operations.GET_PAGE)
     private void serviceGetPage(String dto) {
         log.debug("Received message for get page: dto {}", dto);
-        ChannelMessage<ID, USER, PageableMessage<ID, C>> message;
+        ChannelMessage<USER, PageableMessage<ID, C>> message;
         message = getObjectMapper().readValue(dto, getCriteriaPageReferenceType());
         Optional<USER> user = Optional.ofNullable(message.getUser());
         getService().getPage(message.getData().getCriteria(), message.getData().getPageable(), user)

@@ -37,7 +37,7 @@ import java.util.Optional;
  */
 public interface ParentCrudListener<
         ID extends Comparable<ID> & Serializable,
-        USER extends BaseUser<ID>,
+        USER extends BaseUser,
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
@@ -83,7 +83,7 @@ public interface ParentCrudListener<
      * @param user    The user who initiated the operation.
      */
     @SneakyThrows
-    default <DATA extends ModelType> void sendCallbackDtos(ChannelMessage<ID, USER, DATA> message, Collection<DTO> dtos, Integer status, Optional<USER> user) {
+    default <DATA extends ModelType> void sendCallbackDtos(ChannelMessage<USER, DATA> message, Collection<DTO> dtos, Integer status, Optional<USER> user) {
         if (Strings.isNotBlank(message.getCallback())) {
             DtosMessage<ID, DTO> data = new DtosMessage<>();
             data.setDtos(dtos);
@@ -100,7 +100,7 @@ public interface ParentCrudListener<
      * @param user    The user who initiated the operation.
      */
     @SneakyThrows
-    default <DATA extends ModelType> void sendCallbackDto(ChannelMessage<ID, USER, DATA> message, DTO dto, Integer status, Optional<USER> user) {
+    default <DATA extends ModelType> void sendCallbackDto(ChannelMessage<USER, DATA> message, DTO dto, Integer status, Optional<USER> user) {
         if (Strings.isNotBlank(message.getCallback())) {
             DtoMessage<ID, DTO> data = new DtoMessage<>();
             data.setDto(dto);
@@ -117,7 +117,7 @@ public interface ParentCrudListener<
      * @param user    The user who initiated the operation.
      */
     @SneakyThrows
-    default <DATA extends ModelType> void sendCallbackIds(ChannelMessage<ID, USER, DATA> message, Collection<ID> ids, Integer status, Optional<USER> user) {
+    default <DATA extends ModelType> void sendCallbackIds(ChannelMessage<USER, DATA> message, Collection<ID> ids, Integer status, Optional<USER> user) {
         if (Strings.isNotBlank(message.getCallback())) {
             IdsMessage<ID> data = new IdsMessage<>();
             data.setIds(ids);
@@ -134,7 +134,7 @@ public interface ParentCrudListener<
      * @param user    The user who initiated the operation.
      */
     @SneakyThrows
-    default <DATA extends ModelType> void sendCallbackId(ChannelMessage<ID, USER, DATA> message, ID id, Integer status, Optional<USER> user) {
+    default <DATA extends ModelType> void sendCallbackId(ChannelMessage<USER, DATA> message, ID id, Integer status, Optional<USER> user) {
         if (Strings.isNotBlank(message.getCallback())) {
             IdMessage<ID> data = new IdMessage<>();
             data.setId(id);
@@ -151,7 +151,7 @@ public interface ParentCrudListener<
      * @param user    The user who initiated the operation.
      */
     @SneakyThrows
-    default void sendCallbackCountAll(ChannelMessage<ID, USER, ModelType> message, Long count, Integer status, Optional<USER> user) {
+    default void sendCallbackCountAll(ChannelMessage<USER, ModelType> message, Long count, Integer status, Optional<USER> user) {
         if (Strings.isNotBlank(message.getCallback())) {
             LongMessage data = new LongMessage();
             data.setResult(count);
@@ -168,7 +168,7 @@ public interface ParentCrudListener<
      * @param user    The user who initiated the operation.
      */
     @SneakyThrows
-    default void sendCallbackCount(ChannelMessage<ID, USER, CriteriaMessage<ID, C>> message, Long count, Integer status, Optional<USER> user) {
+    default void sendCallbackCount(ChannelMessage<USER, CriteriaMessage<ID, C>> message, Long count, Integer status, Optional<USER> user) {
         if (Strings.isNotBlank(message.getCallback())) {
             LongMessage data = new LongMessage();
             data.setResult(count);
@@ -185,7 +185,7 @@ public interface ParentCrudListener<
      * @param user    The user who initiated the operation.
      */
     @SneakyThrows
-    default <DATA extends ModelType> void sendCallbackPage(ChannelMessage<ID, USER, DATA> message, Page<DTO> page, Integer status, Optional<USER> user) {
+    default <DATA extends ModelType> void sendCallbackPage(ChannelMessage<USER, DATA> message, Page<DTO> page, Integer status, Optional<USER> user) {
         if (Strings.isNotBlank(message.getCallback())) {
             PageMessage<ID, DTO> data = new PageMessage<>();
             data.setPage(page);

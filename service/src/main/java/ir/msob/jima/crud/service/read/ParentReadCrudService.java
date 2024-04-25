@@ -25,7 +25,7 @@ import java.util.Optional;
  * @param <Q>    The type of the query used for filtering entities. It must extend BaseQuery.
  * @param <R>    The type of the CRUD repository used for data access. It must extend BaseCrudRepository.
  */
-public interface ParentReadCrudService<ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>,
+public interface ParentReadCrudService<ID extends Comparable<ID> & Serializable, USER extends BaseUser,
         D extends BaseDomain<ID>, DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>, Q extends BaseQuery,
         R extends BaseCrudRepository<ID, USER, D, C, Q>> extends ParentCrudService<ID, USER, D, DTO, C, R> {

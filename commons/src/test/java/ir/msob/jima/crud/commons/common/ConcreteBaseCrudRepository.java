@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.Collection;
 
-public class ConcreteBaseCrudRepository implements BaseCrudRepository<String, BaseUser<String>, SampleDomain<String>, SampleCriteria<String>, BaseQuery> {
+public class ConcreteBaseCrudRepository implements BaseCrudRepository<String, BaseUser, SampleDomain<String>, SampleCriteria<String>, BaseQuery> {
     @Override
     public Mono<SampleDomain<String>> insertOne(SampleDomain<String> domain) {
         return null;

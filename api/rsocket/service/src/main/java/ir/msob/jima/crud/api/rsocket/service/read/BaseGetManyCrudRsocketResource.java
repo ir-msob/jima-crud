@@ -44,7 +44,7 @@ import java.util.Optional;
  */
 public interface BaseGetManyCrudRsocketResource<
         ID extends Comparable<ID> & Serializable,
-        USER extends BaseUser<ID>,
+        USER extends BaseUser,
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
@@ -71,7 +71,7 @@ public interface BaseGetManyCrudRsocketResource<
     @Scope(Operations.GET_MANY)
     default Mono<Collection<DTO>> getMany(@Payload String dto, @AuthenticationPrincipal Jwt principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("RSocket request to get many domain, dto {}", dto);
-        ChannelMessage<ID, USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());
+        ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());
 
         Optional<USER> user = getUser(message.getUser(), principal);
         return this.getManyResponse(this.getService().getMany(message.getData().getCriteria(), user), message.getData().getCriteria(), user);

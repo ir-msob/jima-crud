@@ -26,7 +26,7 @@ import java.util.Optional;
  * @param <Q>    The type of query.
  * @author Yaqub Abdi
  */
-public interface BaseCrudRepository<ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, D extends BaseDomain<ID>, C extends BaseCriteria<ID>, Q extends BaseQuery>
+public interface BaseCrudRepository<ID extends Comparable<ID> & Serializable, USER extends BaseUser, D extends BaseDomain<ID>, C extends BaseCriteria<ID>, Q extends BaseQuery>
         extends BaseRepository<ID, USER, D> {
 
     /**

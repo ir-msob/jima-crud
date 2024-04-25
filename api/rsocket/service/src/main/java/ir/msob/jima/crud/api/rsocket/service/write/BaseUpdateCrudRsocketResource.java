@@ -43,7 +43,7 @@ import java.util.Optional;
  */
 public interface BaseUpdateCrudRsocketResource<
         ID extends Comparable<ID> & Serializable,
-        USER extends BaseUser<ID>,
+        USER extends BaseUser,
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
@@ -70,7 +70,7 @@ public interface BaseUpdateCrudRsocketResource<
     default Mono<DTO> update(@Payload String dto, @AuthenticationPrincipal Jwt principal)
             throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("RSocket request to update new domain, dto : {}", dto);
-        ChannelMessage<ID, USER, DtoMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getDtoReferenceType());
+        ChannelMessage<USER, DtoMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getDtoReferenceType());
 
         Optional<USER> user = getUser(message.getUser(), principal);
         return this.updateResponse(message.getData().getDto(), this.getService().update(message.getData().getDto(), user), user);

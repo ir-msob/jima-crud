@@ -40,7 +40,7 @@ import java.util.Optional;
  */
 public interface BaseUpdateManyCrudListener<
         ID extends Comparable<ID> & Serializable,
-        USER extends BaseUser<ID>,
+        USER extends BaseUser,
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
@@ -79,7 +79,7 @@ public interface BaseUpdateManyCrudListener<
     private void serviceUpdateMany(String dto) {
         log.debug("Received message for update many: dto {}", dto);
         // Parse the message from the JSON string
-        ChannelMessage<ID, USER, DtosMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getDtosReferenceType());
+        ChannelMessage<USER, DtosMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getDtosReferenceType());
         // Get the user from the message
         Optional<USER> user = Optional.ofNullable(message.getUser());
         // Call the service to update the entities and send a callback with the result

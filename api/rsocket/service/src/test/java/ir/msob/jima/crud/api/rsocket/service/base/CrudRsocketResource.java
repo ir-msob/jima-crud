@@ -58,43 +58,43 @@ public abstract class CrudRsocketResource<
     }
 
     @Override
-    public TypeReference<ChannelMessage<ObjectId, ProjectUser, ModelType>> getModelTypeReferenceType() {
+    public TypeReference<ChannelMessage<ProjectUser, ModelType>> getModelTypeReferenceType() {
         return new TypeReference<>() {
         };
     }
 
     @Override
-    public TypeReference<ChannelMessage<ObjectId, ProjectUser, CriteriaMessage<ObjectId, C>>> getCriteriaReferenceType() {
+    public TypeReference<ChannelMessage<ProjectUser, CriteriaMessage<ObjectId, C>>> getCriteriaReferenceType() {
         return new TypeReference<>() {
         };
     }
 
     @Override
-    public TypeReference<ChannelMessage<ObjectId, ProjectUser, PageableMessage<ObjectId, C>>> getCriteriaPageReferenceType() {
+    public TypeReference<ChannelMessage<ProjectUser, PageableMessage<ObjectId, C>>> getCriteriaPageReferenceType() {
         return new TypeReference<>() {
         };
     }
 
     @Override
-    public TypeReference<ChannelMessage<ObjectId, ProjectUser, JsonPatchMessage<ObjectId, C>>> getEditReferenceType() {
+    public TypeReference<ChannelMessage<ProjectUser, JsonPatchMessage<ObjectId, C>>> getEditReferenceType() {
         return new TypeReference<>() {
         };
     }
 
     @Override
-    public TypeReference<ChannelMessage<ObjectId, ProjectUser, DtoMessage<ObjectId, DTO>>> getDtoReferenceType() {
+    public TypeReference<ChannelMessage<ProjectUser, DtoMessage<ObjectId, DTO>>> getDtoReferenceType() {
         return new TypeReference<>() {
         };
     }
 
     @Override
-    public TypeReference<ChannelMessage<ObjectId, ProjectUser, IdMessage<ObjectId>>> getIdReferenceType() {
+    public TypeReference<ChannelMessage<ProjectUser, IdMessage<ObjectId>>> getIdReferenceType() {
         return new TypeReference<>() {
         };
     }
 
     @Override
-    public TypeReference<ChannelMessage<ObjectId, ProjectUser, IdJsonPatchMessage<ObjectId>>> getIdJsonPatchReferenceType() {
+    public TypeReference<ChannelMessage<ProjectUser, IdJsonPatchMessage<ObjectId>>> getIdJsonPatchReferenceType() {
         return new TypeReference<>() {
         };
     }

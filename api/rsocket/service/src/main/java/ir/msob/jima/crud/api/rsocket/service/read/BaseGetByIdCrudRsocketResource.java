@@ -43,7 +43,7 @@ import java.util.Optional;
  */
 public interface BaseGetByIdCrudRsocketResource<
         ID extends Comparable<ID> & Serializable,
-        USER extends BaseUser<ID>,
+        USER extends BaseUser,
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
@@ -71,7 +71,7 @@ public interface BaseGetByIdCrudRsocketResource<
     @Scope(Operations.GET_BY_ID)
     default Mono<DTO> getById(@Payload String dto, @AuthenticationPrincipal Jwt principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("RSocket request to get by id domain, dto {}", dto);
-        ChannelMessage<ID, USER, IdMessage<ID>> message = getObjectMapper().readValue(dto, getIdReferenceType());
+        ChannelMessage<USER, IdMessage<ID>> message = getObjectMapper().readValue(dto, getIdReferenceType());
 
         Optional<USER> user = getUser(message.getUser(), principal);
         return this.getByIdResponse(this.getService().getOne(message.getData().getId(), user), message.getData().getId(), user);

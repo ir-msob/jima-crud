@@ -43,7 +43,7 @@ import java.util.Optional;
  */
 public interface BaseGetStreamCrudRsocketResource<
         ID extends Comparable<ID> & Serializable,
-        USER extends BaseUser<ID>,
+        USER extends BaseUser,
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
@@ -69,7 +69,7 @@ public interface BaseGetStreamCrudRsocketResource<
     @Scope(Operations.GET_STREAM)
     default Flux<DTO> getStream(@Payload String dto, @AuthenticationPrincipal Jwt principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("RSocket request to get stream domain, dto {} : ", dto);
-        ChannelMessage<ID, USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());
+        ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());
 
         Optional<USER> user = getUser(message.getUser(), principal);
         return this.getStreamResponse(this.getService().getStream(message.getData().getCriteria(), user), message.getData().getCriteria(), user);

@@ -39,7 +39,7 @@ import java.util.Optional;
  */
 public interface ParentWriteCrudService<
         ID extends Comparable<ID> & Serializable,
-        USER extends BaseUser<ID>,
+        USER extends BaseUser,
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
@@ -152,6 +152,7 @@ public interface ParentWriteCrudService<
      * @throws ValidationException     If the DTO is not valid.
      * @throws DomainNotFoundException If the domain is not found.
      */
+    @Override
     default Mono<DTO> update(DTO previousDto, @Valid DTO dto, Optional<USER> user) throws BadRequestException, ValidationException, DomainNotFoundException {
         return Mono.empty();
     }
@@ -215,7 +216,7 @@ public interface ParentWriteCrudService<
                 auditDomainDto.getAuditDomains().add(AuditDomain.<ID>builder()
                         .actionDate(Instant.now())
                         .actionType(actionType)
-                        .relatedPartyId(u.getId())
+                        .relatedPartyId(String.valueOf(u.getId()))
                         .build());
             }
         });

@@ -44,7 +44,7 @@ import java.util.Optional;
  */
 public interface BaseSaveManyCrudRsocketResource<
         ID extends Comparable<ID> & Serializable,
-        USER extends BaseUser<ID>,
+        USER extends BaseUser,
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
@@ -71,7 +71,7 @@ public interface BaseSaveManyCrudRsocketResource<
     default Mono<Collection<DTO>> saveMany(@Payload String dto, @AuthenticationPrincipal Jwt principal)
             throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("RSocket request to create many new domain, dtos : {}", dto);
-        ChannelMessage<ID, USER, DtosMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getDtosReferenceType());
+        ChannelMessage<USER, DtosMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getDtosReferenceType());
 
         Optional<USER> user = getUser(message.getUser(), principal);
         return this.saveManyResponse(message.getData().getDtos(), this.getService().saveMany(message.getData().getDtos(), user), user);

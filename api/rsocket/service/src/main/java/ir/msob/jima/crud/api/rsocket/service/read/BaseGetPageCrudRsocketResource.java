@@ -44,7 +44,7 @@ import java.util.Optional;
  */
 public interface BaseGetPageCrudRsocketResource<
         ID extends Comparable<ID> & Serializable,
-        USER extends BaseUser<ID>,
+        USER extends BaseUser,
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
@@ -70,7 +70,7 @@ public interface BaseGetPageCrudRsocketResource<
     @Scope(Operations.GET_PAGE)
     default Mono<Page<DTO>> getPage(@Payload String dto, @AuthenticationPrincipal Jwt principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("RSocket request to get page domain, dto {}", dto);
-        ChannelMessage<ID, USER, PageableMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaPageReferenceType());
+        ChannelMessage<USER, PageableMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaPageReferenceType());
 
         Optional<USER> user = getUser(message.getUser(), principal);
         return this.getPageResponse(this.getService().getPage(message.getData().getCriteria(), message.getData().getPageable(), user), message.getData().getCriteria(), user);

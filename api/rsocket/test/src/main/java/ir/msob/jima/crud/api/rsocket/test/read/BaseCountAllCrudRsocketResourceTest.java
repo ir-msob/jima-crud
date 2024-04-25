@@ -37,7 +37,7 @@ import java.io.Serializable;
  */
 public interface BaseCountAllCrudRsocketResourceTest<
         ID extends Comparable<ID> & Serializable,
-        USER extends BaseUser<ID>,
+        USER extends BaseUser,
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
@@ -60,7 +60,7 @@ public interface BaseCountAllCrudRsocketResourceTest<
         // Retrieve the result as a Mono of type Long
         // Convert the Mono to a Future
         // Get the result from the Future
-        ChannelMessage<ID, USER, ModelType> message = new ChannelMessage<>();
+        ChannelMessage<USER, ModelType> message = new ChannelMessage<>();
 
         return getRSocketRequester()
                 .route(getUri(Operations.COUNT_ALL))

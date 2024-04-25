@@ -32,7 +32,7 @@ import java.util.Optional;
  * The interface is generic, allowing customization for different types such as ID, USER, D, DTO, C, Q, R, and S.
  *
  * @param <ID>   The type of the resource ID, which should be comparable and serializable.
- * @param <USER> The type of the user associated with the resource, extending {@code BaseUser<ID>}.
+ * @param <USER> The type of the user associated with the resource, extending {@code BaseUser}.
  * @param <D>    The type of the resource domain, extending {@code BaseDomain<ID>}.
  * @param <DTO>  The type of the data transfer object associated with the resource, extending {@code BaseDto<ID>}.
  * @param <C>    The type of criteria associated with the resource, extending {@code BaseCriteria<ID, USER>}.
@@ -43,7 +43,7 @@ import java.util.Optional;
  */
 public interface BaseSaveManyCrudGraphQLResource<
         ID extends Comparable<ID> & Serializable,
-        USER extends BaseUser<ID>,
+        USER extends BaseUser,
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,

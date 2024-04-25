@@ -40,7 +40,7 @@ import java.util.Optional;
  */
 public interface BaseCountAllCrudListener<
         ID extends Comparable<ID> & Serializable,
-        USER extends BaseUser<ID>,
+        USER extends BaseUser,
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
@@ -75,7 +75,7 @@ public interface BaseCountAllCrudListener<
     @Scope(Operations.COUNT_ALL)
     private void serviceCountAll(String dto) {
         log.debug("Received message for count all: dto {}", dto);
-        ChannelMessage<ID, USER, ModelType> message = getObjectMapper().readValue(dto, getModelTypeReferenceType());
+        ChannelMessage<USER, ModelType> message = getObjectMapper().readValue(dto, getModelTypeReferenceType());
         Optional<USER> user = Optional.ofNullable(message.getUser());
         getService().countAll(user)
                 .subscribe(count -> sendCallbackCountAll(message, count, OperationsStatus.COUNT_ALL, user));

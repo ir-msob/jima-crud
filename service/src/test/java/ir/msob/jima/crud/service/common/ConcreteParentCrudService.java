@@ -15,27 +15,27 @@ import java.util.Optional;
 
 public class ConcreteParentCrudService implements
         ParentCrudService<String,
-                BaseUser<String>,
+                BaseUser,
                 SampleDomain<String>,
                 SampleDto<String>,
                 SampleCriteria<String>,
                 BaseRepository<String,
-                        BaseUser<String>,
+                        BaseUser,
                         SampleDomain<String>>> {
 
 
     @Override
-    public BaseRepository<String, BaseUser<String>, SampleDomain<String>> getRepository() {
+    public BaseRepository<String, BaseUser, SampleDomain<String>> getRepository() {
         return null;
     }
 
     @Override
-    public SampleDto<String> toDto(SampleDomain<String> domain, Optional<BaseUser<String>> stringBaseUser) {
+    public SampleDto<String> toDto(SampleDomain<String> domain, Optional<BaseUser> stringBaseUser) {
         return null;
     }
 
     @Override
-    public SampleDomain<String> toDomain(SampleDto<String> dto, Optional<BaseUser<String>> stringBaseUser) {
+    public SampleDomain<String> toDomain(SampleDto<String> dto, Optional<BaseUser> stringBaseUser) {
         return null;
     }
 
@@ -45,7 +45,7 @@ public class ConcreteParentCrudService implements
     }
 
     @Override
-    public Collection<BaseBeforeAfterDomainOperation<String, BaseUser<String>, SampleDto<String>, SampleCriteria<String>>> getBeforeAfterDomainOperations() {
+    public Collection<BaseBeforeAfterDomainOperation<String, BaseUser, SampleDto<String>, SampleCriteria<String>>> getBeforeAfterDomainOperations() {
         return null;
     }
 

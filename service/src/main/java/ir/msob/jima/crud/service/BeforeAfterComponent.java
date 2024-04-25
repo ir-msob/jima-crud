@@ -40,7 +40,7 @@ public class BeforeAfterComponent {
      * @throws BadRequestException     If a bad request is encountered.
      */
     public <ID extends Comparable<ID> & Serializable,
-            USER extends BaseUser<ID>,
+            USER extends BaseUser,
             DTO extends BaseDto<ID>,
             C extends BaseCriteria<ID>> void beforeCount(C criteria, Optional<USER> user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
         if (beforeAfterServices != null && !beforeAfterServices.isEmpty()) {
@@ -65,7 +65,7 @@ public class BeforeAfterComponent {
      * @throws BadRequestException     If a bad request is encountered.
      */
     public <ID extends Comparable<ID> & Serializable,
-            USER extends BaseUser<ID>,
+            USER extends BaseUser,
             DTO extends BaseDto<ID>,
             C extends BaseCriteria<ID>> void afterCount(C criteria, Optional<USER> user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
         if (beforeAfterServices != null && !beforeAfterServices.isEmpty()) {
@@ -90,7 +90,7 @@ public class BeforeAfterComponent {
      * @throws BadRequestException     If a bad request is encountered.
      */
     public <ID extends Comparable<ID> & Serializable,
-            USER extends BaseUser<ID>,
+            USER extends BaseUser,
             DTO extends BaseDto<ID>,
             C extends BaseCriteria<ID>> void beforeGet(C criteria, Optional<USER> user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
         if (beforeAfterServices != null && !beforeAfterServices.isEmpty()) {
@@ -117,7 +117,7 @@ public class BeforeAfterComponent {
      * @throws BadRequestException     If a bad request is encountered.
      */
     public <ID extends Comparable<ID> & Serializable,
-            USER extends BaseUser<ID>,
+            USER extends BaseUser,
             DTO extends BaseDto<ID>,
             C extends BaseCriteria<ID>> void afterGet(Collection<ID> ids, Collection<DTO> dtos, C criteria, Optional<USER> user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
         if (beforeAfterServices != null && !beforeAfterServices.isEmpty()) {
@@ -142,7 +142,7 @@ public class BeforeAfterComponent {
      * @throws BadRequestException     If a bad request is encountered.
      */
     public <ID extends Comparable<ID> & Serializable,
-            USER extends BaseUser<ID>,
+            USER extends BaseUser,
             DTO extends BaseDto<ID>,
             C extends BaseCriteria<ID>> void beforeSave(DTO dto, Optional<USER> user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
         if (beforeAfterServices != null && !beforeAfterServices.isEmpty()) {
@@ -168,7 +168,7 @@ public class BeforeAfterComponent {
      * @throws BadRequestException     If a bad request is encountered.
      */
     public <ID extends Comparable<ID> & Serializable,
-            USER extends BaseUser<ID>,
+            USER extends BaseUser,
             DTO extends BaseDto<ID>,
             C extends BaseCriteria<ID>> void afterSave(DTO dto, DTO savedDto, Optional<USER> user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
         if (beforeAfterServices != null && !beforeAfterServices.isEmpty()) {
@@ -194,7 +194,7 @@ public class BeforeAfterComponent {
      * @throws BadRequestException     If a bad request is encountered.
      */
     public <ID extends Comparable<ID> & Serializable,
-            USER extends BaseUser<ID>,
+            USER extends BaseUser,
             DTO extends BaseDto<ID>,
             C extends BaseCriteria<ID>> void beforeUpdate(DTO previousDto, DTO dto, Optional<USER> user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
         if (beforeAfterServices != null && !beforeAfterServices.isEmpty()) {
@@ -220,7 +220,7 @@ public class BeforeAfterComponent {
      * @throws BadRequestException     If a bad request is encountered.
      */
     public <ID extends Comparable<ID> & Serializable,
-            USER extends BaseUser<ID>,
+            USER extends BaseUser,
             DTO extends BaseDto<ID>,
             C extends BaseCriteria<ID>> void afterUpdate(DTO dto, DTO updatedDto, Optional<USER> user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
         if (beforeAfterServices != null && !beforeAfterServices.isEmpty()) {
@@ -245,7 +245,7 @@ public class BeforeAfterComponent {
      * @throws BadRequestException     If a bad request is encountered.
      */
     public <ID extends Comparable<ID> & Serializable,
-            USER extends BaseUser<ID>,
+            USER extends BaseUser,
             DTO extends BaseDto<ID>,
             C extends BaseCriteria<ID>> void beforeDelete(C criteria, Optional<USER> user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
         if (beforeAfterServices != null && !beforeAfterServices.isEmpty()) {
@@ -272,7 +272,7 @@ public class BeforeAfterComponent {
      * @throws BadRequestException     If a bad request is encountered.
      */
     public <ID extends Comparable<ID> & Serializable,
-            USER extends BaseUser<ID>,
+            USER extends BaseUser,
             DTO extends BaseDto<ID>,
             C extends BaseCriteria<ID>> void afterDelete(DTO dto, C criteria, Class<DTO> dtoClass, Optional<USER> user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
         if (beforeAfterServices != null && !beforeAfterServices.isEmpty()) {

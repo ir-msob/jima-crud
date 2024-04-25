@@ -31,7 +31,7 @@ import java.util.Optional;
  * @param <Q>    The type of query used for database operations.
  * @param <R>    The type of repository used for CRUD operations.
  */
-public interface BaseSaveCrudService<ID extends Comparable<ID> & Serializable, USER extends BaseUser<ID>, D extends BaseDomain<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>, Q extends BaseQuery, R extends BaseCrudRepository<ID, USER, D, C, Q>> extends ParentWriteCrudService<ID, USER, D, DTO, C, Q, R> {
+public interface BaseSaveCrudService<ID extends Comparable<ID> & Serializable, USER extends BaseUser, D extends BaseDomain<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>, Q extends BaseQuery, R extends BaseCrudRepository<ID, USER, D, C, Q>> extends ParentWriteCrudService<ID, USER, D, DTO, C, Q, R> {
     Logger log = LoggerFactory.getLogger(BaseSaveCrudService.class);
 
     /**
@@ -46,6 +46,7 @@ public interface BaseSaveCrudService<ID extends Comparable<ID> & Serializable, U
      */
     @Transactional
     @MethodStats
+    @Override
     default Mono<DTO> save(@Valid DTO dto, Optional<USER> user) throws BadRequestException, DomainNotFoundException {
         log.debug("Save, user {}", user.orElse(null));
 

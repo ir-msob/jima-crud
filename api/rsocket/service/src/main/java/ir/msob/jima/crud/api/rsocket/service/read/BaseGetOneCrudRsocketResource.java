@@ -43,7 +43,7 @@ import java.util.Optional;
  */
 public interface BaseGetOneCrudRsocketResource<
         ID extends Comparable<ID> & Serializable,
-        USER extends BaseUser<ID>,
+        USER extends BaseUser,
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
@@ -69,7 +69,7 @@ public interface BaseGetOneCrudRsocketResource<
     @Scope(Operations.GET_ONE)
     default Mono<DTO> getOne(@Payload String dto, @AuthenticationPrincipal Jwt principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("RSocket request to get one domain, dto {}", dto);
-        ChannelMessage<ID, USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());
+        ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());
 
         Optional<USER> user = getUser(message.getUser(), principal);
         return this.getOneResponse(this.getService().getOne(message.getData().getCriteria(), user), message.getData().getCriteria(), user);

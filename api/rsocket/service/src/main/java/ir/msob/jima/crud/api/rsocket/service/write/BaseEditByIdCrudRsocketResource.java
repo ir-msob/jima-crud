@@ -40,7 +40,7 @@ import java.util.Optional;
  */
 public interface BaseEditByIdCrudRsocketResource<
         ID extends Comparable<ID> & Serializable,
-        USER extends BaseUser<ID>,
+        USER extends BaseUser,
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
@@ -58,7 +58,7 @@ public interface BaseEditByIdCrudRsocketResource<
     default Mono<DTO> editById(@Payload String dto, @AuthenticationPrincipal Jwt principal)
             throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("RSocket request to edit domain, dto : {}", dto);
-        ChannelMessage<ID, USER, IdJsonPatchMessage<ID>> message = getObjectMapper().readValue(dto, getIdJsonPatchReferenceType());
+        ChannelMessage<USER, IdJsonPatchMessage<ID>> message = getObjectMapper().readValue(dto, getIdJsonPatchReferenceType());
 
         Optional<USER> user = getUser(message.getUser(), principal);
         return this.editByIdResponse(message.getData().getJsonPatch(), this.getService().edit(message.getData().getId(), message.getData().getJsonPatch(), user), message.getData().getId(), user);

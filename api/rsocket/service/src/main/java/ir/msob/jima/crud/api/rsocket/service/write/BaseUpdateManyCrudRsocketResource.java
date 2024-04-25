@@ -44,7 +44,7 @@ import java.util.Optional;
  */
 public interface BaseUpdateManyCrudRsocketResource<
         ID extends Comparable<ID> & Serializable,
-        USER extends BaseUser<ID>,
+        USER extends BaseUser,
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
@@ -71,7 +71,7 @@ public interface BaseUpdateManyCrudRsocketResource<
     default Mono<Collection<DTO>> updateMany(@Payload String dto, @AuthenticationPrincipal Jwt principal)
             throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("RSocket request to update many domain, dtos : {}", dto);
-        ChannelMessage<ID, USER, DtosMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getDtosReferenceType());
+        ChannelMessage<USER, DtosMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getDtosReferenceType());
 
         Optional<USER> user = getUser(message.getUser(), principal);
         return this.updateManyResponse(message.getData().getDtos(), this.getService().updateMany(message.getData().getDtos(), user), user);

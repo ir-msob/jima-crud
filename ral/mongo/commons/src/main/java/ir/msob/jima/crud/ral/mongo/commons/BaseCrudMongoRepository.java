@@ -27,7 +27,7 @@ import java.util.Collections;
  * @param <D>    The type of the domain.
  * @param <C>    The type of criteria used for querying.
  */
-public interface BaseCrudMongoRepository<USER extends BaseUser<ObjectId>, D extends BaseDomain<ObjectId>, C extends BaseCriteria<ObjectId>>
+public interface BaseCrudMongoRepository<USER extends BaseUser, D extends BaseDomain<ObjectId>, C extends BaseCriteria<ObjectId>>
         extends BaseCrudRepository<ObjectId, USER, D, C, QueryBuilder> {
 
     /**

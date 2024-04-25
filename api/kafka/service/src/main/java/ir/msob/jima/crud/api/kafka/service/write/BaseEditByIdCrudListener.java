@@ -40,7 +40,7 @@ import java.util.Optional;
  */
 public interface BaseEditByIdCrudListener<
         ID extends Comparable<ID> & Serializable,
-        USER extends BaseUser<ID>,
+        USER extends BaseUser,
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
@@ -75,7 +75,7 @@ public interface BaseEditByIdCrudListener<
     @Scope(Operations.EDIT_BY_ID)
     private void serviceEditById(String dto) {
         log.debug("Received message for edit by id: dto {}", dto);
-        ChannelMessage<ID, USER, IdJsonPatchMessage<ID>> message = getObjectMapper().readValue(dto, getIdJsonPatchReferenceType());
+        ChannelMessage<USER, IdJsonPatchMessage<ID>> message = getObjectMapper().readValue(dto, getIdJsonPatchReferenceType());
         Optional<USER> user = Optional.ofNullable(message.getUser());
         getService().edit(message.getData().getId(), message.getData().getJsonPatch(), user)
                 .subscribe(editedDto -> sendCallbackDto(message, editedDto, OperationsStatus.EDIT_BY_ID, user));

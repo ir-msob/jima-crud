@@ -40,7 +40,7 @@ import java.util.Optional;
  */
 public interface BaseSaveManyCrudListener<
         ID extends Comparable<ID> & Serializable,
-        USER extends BaseUser<ID>,
+        USER extends BaseUser,
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
@@ -75,7 +75,7 @@ public interface BaseSaveManyCrudListener<
     @Scope(Operations.SAVE_MANY)
     private void serviceSaveMany(String dto) {
         log.debug("Received message for save many: dto {}", dto);
-        ChannelMessage<ID, USER, DtosMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getDtosReferenceType());
+        ChannelMessage<USER, DtosMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getDtosReferenceType());
         Optional<USER> user = Optional.ofNullable(message.getUser());
         getService().saveMany(message.getData().getDtos(), user)
                 .subscribe(savedDtos -> sendCallbackDtos(message, savedDtos, OperationsStatus.SAVE_MANY, user));

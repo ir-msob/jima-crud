@@ -26,13 +26,13 @@ public class TestDomainDataProvider extends CrudDataProvider<TestDomain, TestDto
     private static TestDto newDto;
     private static TestDto newMandatoryDto;
 
-    public void createNewDto() {
+    public static void createNewDto() {
         newDto = new TestDto();
         newDto.setDomainField(DEFAULT_STRING);
     }
 
 
-    public void createMandatoryNewDto() {
+    public static void createMandatoryNewDto() {
         newMandatoryDto = new TestDto();
         newMandatoryDto.setDomainField(DEFAULT_STRING);
     }

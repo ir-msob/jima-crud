@@ -28,8 +28,8 @@ public class TestDomainRsocketResource extends CrudRsocketResource<TestDomain, T
     public static final String BASE_URI = "api." + Microservices.VERSION + "." + TestDomain.DOMAIN_URI;
 
     @Override
-    public TypeReference<ChannelMessage<ObjectId, ProjectUser, DtosMessage<ObjectId, TestDto>>> getDtosReferenceType() {
-        return new TypeReference<ChannelMessage<ObjectId, ProjectUser, DtosMessage<ObjectId, TestDto>>>() {
+    public TypeReference<ChannelMessage<ProjectUser, DtosMessage<ObjectId, TestDto>>> getDtosReferenceType() {
+        return new TypeReference<ChannelMessage<ProjectUser, DtosMessage<ObjectId, TestDto>>>() {
             @Override
             public Type getType() {
                 return super.getType();

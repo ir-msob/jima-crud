@@ -38,7 +38,7 @@ import java.io.Serializable;
  */
 public interface BaseDeleteByIdCrudRsocketResourceTest<
         ID extends Comparable<ID> & Serializable,
-        USER extends BaseUser<ID>,
+        USER extends BaseUser,
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
@@ -69,7 +69,7 @@ public interface BaseDeleteByIdCrudRsocketResourceTest<
         IdMessage<ID> data = new IdMessage<>();
         data.setId(savedDto.getDomainId());
 
-        ChannelMessage<ID, USER, IdMessage<ID>> message = new ChannelMessage<>();
+        ChannelMessage<USER, IdMessage<ID>> message = new ChannelMessage<>();
         message.setData(data);
 
         return getRSocketRequester()

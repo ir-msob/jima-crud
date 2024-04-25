@@ -40,7 +40,7 @@ import java.util.Optional;
  */
 public interface BaseUpdateByIdCrudListener<
         ID extends Comparable<ID> & Serializable,
-        USER extends BaseUser<ID>,
+        USER extends BaseUser,
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
@@ -75,7 +75,7 @@ public interface BaseUpdateByIdCrudListener<
     @Scope(Operations.UPDATE_BY_ID)
     private void serviceUpdateById(String dto) {
         log.debug("Received message for update by id: dto {}", dto);
-        ChannelMessage<ID, USER, DtoMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getDtoReferenceType());
+        ChannelMessage<USER, DtoMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getDtoReferenceType());
         Optional<USER> user = Optional.ofNullable(message.getUser());
         getService().update(message.getData().getId(), message.getData().getDto(), user)
                 .subscribe(updatedDto -> sendCallbackDto(message, updatedDto, OperationsStatus.UPDATE, user));

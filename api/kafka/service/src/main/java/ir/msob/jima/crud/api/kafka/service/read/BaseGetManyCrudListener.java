@@ -40,7 +40,7 @@ import java.util.Optional;
  */
 public interface BaseGetManyCrudListener<
         ID extends Comparable<ID> & Serializable,
-        USER extends BaseUser<ID>,
+        USER extends BaseUser,
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
@@ -75,7 +75,7 @@ public interface BaseGetManyCrudListener<
     @Scope(Operations.GET_MANY)
     private void serviceGetMany(String dto) {
         log.debug("Received message for get many: dto {}", dto);
-        ChannelMessage<ID, USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());
+        ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());
         Optional<USER> user = Optional.ofNullable(message.getUser());
         getService().getMany(message.getData().getCriteria(), user)
                 .subscribe(getListDto -> sendCallbackDtos(message, getListDto, OperationsStatus.GET_MANY, user));

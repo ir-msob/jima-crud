@@ -40,7 +40,7 @@ import java.util.Set;
  */
 public interface BaseDeleteManyCrudRsocketResourceTest<
         ID extends Comparable<ID> & Serializable,
-        USER extends BaseUser<ID>,
+        USER extends BaseUser,
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
@@ -72,7 +72,7 @@ public interface BaseDeleteManyCrudRsocketResourceTest<
         CriteriaMessage<ID, C> data = new CriteriaMessage<>();
         data.setCriteria(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId()));
 
-        ChannelMessage<ID, USER, CriteriaMessage<ID, C>> message = new ChannelMessage<>();
+        ChannelMessage<USER, CriteriaMessage<ID, C>> message = new ChannelMessage<>();
         message.setData(data);
 
         return getRSocketRequester()
