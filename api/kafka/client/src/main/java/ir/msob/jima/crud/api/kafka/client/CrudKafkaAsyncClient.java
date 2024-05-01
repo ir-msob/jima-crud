@@ -21,6 +21,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * This class implements asynchronous CRUD operations using Kafka messages. It extends the {@link BaseCrudAsyncClient}
+ * interface and provides methods for sending CRUD requests to a Kafka topic.
+ */
 @Component
 @RequiredArgsConstructor
 public class CrudKafkaAsyncClient implements BaseCrudAsyncClient {
@@ -31,16 +35,6 @@ public class CrudKafkaAsyncClient implements BaseCrudAsyncClient {
         return Constants.getChannel(dtoClass, operation);
     }
 
-    /**
-     * @param message
-     * @param dtoClass
-     * @param operation
-     * @param user
-     * @param <ID>
-     * @param <USER>
-     * @param <DATA>
-     * @param <DTO>
-     */
     public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DATA extends ModelType, DTO extends BaseDto<ID>> void send(ChannelMessage<USER, DATA> message, Class<DTO> dtoClass, String operation, Optional<USER> user) {
         String channel = createChannel(dtoClass, operation);
         asyncClient.send(message, channel, user);
@@ -249,7 +243,7 @@ public class CrudKafkaAsyncClient implements BaseCrudAsyncClient {
         return channelMessage;
     }
 
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser> ChannelMessage<USER, ModelType> createChannelMessage(ModelType data, Map<String, Serializable> metadata, String callback) {
+    public <USER extends BaseUser> ChannelMessage<USER, ModelType> createChannelMessage(ModelType data, Map<String, Serializable> metadata, String callback) {
         ChannelMessage<USER, ModelType> channelMessage = new ChannelMessage<>();
         channelMessage.setMetadata(metadata);
         channelMessage.setData(data);
