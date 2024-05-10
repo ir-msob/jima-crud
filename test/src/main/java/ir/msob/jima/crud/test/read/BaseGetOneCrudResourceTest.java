@@ -9,6 +9,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
 import ir.msob.jima.crud.test.BaseCrudDataProvider;
@@ -68,10 +69,11 @@ public interface BaseGetOneCrudResourceTest<
             return;
         DTO savedDto = getDataProvider().saveNew();
         Long countBefore = getDataProvider().countDb();
-        DTO dto = getOneRequest(savedDto);
+        getOneRequest(savedDto, dto -> {
+            assertAll(this.getDataProvider().getNewDto(), dto);
+            assertGet(savedDto, dto);
+        });
         assertCount(countBefore);
-        assertAll(this.getDataProvider().getNewDto(), dto);
-        assertGet(savedDto, dto);
     }
 
     /**
@@ -93,19 +95,13 @@ public interface BaseGetOneCrudResourceTest<
             return;
         DTO savedDto = getDataProvider().saveNewMandatory();
         Long countBefore = getDataProvider().countDb();
-        DTO dto = getOneRequest(savedDto);
+        getOneRequest(savedDto, dto -> {
+            assertMandatory(this.getDataProvider().getMandatoryNewDto(), dto);
+            assertGet(savedDto, dto);
+        });
         assertCount(countBefore);
-        assertMandatory(this.getDataProvider().getMandatoryNewDto(), dto);
-        assertGet(savedDto, dto);
+
     }
 
-    /**
-     * Executes the getOne operation for the CRUD resource with the specified DTO and performs assertions.
-     *
-     * @param savedDto The DTO for which the getOne operation is performed.
-     * @return The DTO representing the resource associated with the specified DTO.
-     * @throws BadRequestException     If the request is malformed or invalid.
-     * @throws DomainNotFoundException If the domain is not found.
-     */
-    DTO getOneRequest(DTO savedDto);
+    void getOneRequest(DTO savedDto, Assertable<DTO> assertable);
 }

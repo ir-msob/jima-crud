@@ -5,6 +5,7 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.CountType;
 import ir.msob.jima.crud.api.graphql.restful.test.ParentCrudGraphqlResourceTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
@@ -62,15 +63,14 @@ public interface BaseCountAllCrudGraphqlResourceTest<
     /**
      * Executes a GraphQL request to count all entities and extracts the count result from the response.
      *
-     * @return The count of all entities.
      */
     @Override
-    default Long countAllRequest() {
+    default void countAllRequest(Assertable<Long> assertable) {
         CountType res = getGraphQlTester().document(DOCUMENT)
                 .execute()
                 .path(PATH)
                 .entity(CountType.class)
                 .get();
-        return res.getCount();
+        assertable.assertThan(res.getCount());
     }
 }

@@ -5,6 +5,7 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.grpc.commons.DtosMsg;
 import ir.msob.jima.crud.api.grpc.test.ParentCrudGrpcResourceTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
@@ -52,22 +53,22 @@ public interface BaseUpdateManyCrudGrpcResourceTest<
      * Executes a gRPC request to update multiple entities and extracts the result from the response.
      *
      * @param dtos A collection of data transfer objects (DTOs) representing the entities to be updated.
-     * @return A collection of data transfer objects (DTOs) representing the updated entities.
      */
     @SneakyThrows
     @Override
-    default Collection<DTO> updateManyRequest(Collection<DTO> dtos) {
+    default void updateManyRequest(Collection<DTO> dtos, Assertable<Collection<DTO>> assertable) {
         // Create an instance of DtosMsg with the DTOs of the entities to be updated
         DtosMsg msg = DtosMsg.newBuilder()
                 .addAllDtos(convertToStrings(dtos))
                 .build();
         // Execute the gRPC request with the created DtosMsg and extract the result from the response
-        return getReactorCrudServiceStub().updateMany(Mono.just(msg))
+        Collection<DTO> res = getReactorCrudServiceStub().updateMany(Mono.just(msg))
                 .toFuture()
                 .get()
                 .getDtosList()
                 .stream()
                 .map(this::convertToDto)
                 .toList();
+        assertable.assertThan(res);
     }
 }

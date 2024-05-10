@@ -20,7 +20,6 @@ import java.util.Optional;
 public class TestService extends CrudService<TestDomain, TestDto, TestCriteria, TestRepository> {
 
     private final ModelMapper modelMapper;
-//    private final Collection<BaseBeforeAfterDomainService<ObjectId, ProjectUser, TestDto, TestCriteria>> beforeAfterDomainServices;
 
     @Override
     public TestDto toDto(TestDomain domain, Optional<ProjectUser> user) {

@@ -6,6 +6,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.grpc.commons.CriteriaMsg;
 import ir.msob.jima.crud.api.grpc.commons.DtoMsg;
 import ir.msob.jima.crud.api.grpc.test.ParentCrudGrpcResourceTest;
@@ -54,11 +55,10 @@ public interface BaseGetOneCrudGrpcResourceTest<
      * Executes a gRPC request to retrieve a single entity based on a given criteria and extracts the result from the response.
      *
      * @param savedDto The data transfer object (DTO) representing the saved entity.
-     * @return The data transfer object (DTO) representing the entity that matches the given criteria.
      */
     @SneakyThrows
     @Override
-    default DTO getOneRequest(DTO savedDto) {
+    default void getOneRequest(DTO savedDto, Assertable<DTO> assertable) {
         // Create an instance of CriteriaMsg with the ID of the saved entity
         CriteriaMsg msg = CriteriaMsg.newBuilder()
                 .setCriteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId())))
@@ -67,7 +67,7 @@ public interface BaseGetOneCrudGrpcResourceTest<
         DtoMsg res = getReactorCrudServiceStub().getOne(Mono.just(msg))
                 .toFuture()
                 .get();
-        // Convert the result to the DTO type and return it
-        return convertToDto(res.getDto());
+        // Convert the result to the DTO type
+        assertable.assertThan(convertToDto(res.getDto()));
     }
 }

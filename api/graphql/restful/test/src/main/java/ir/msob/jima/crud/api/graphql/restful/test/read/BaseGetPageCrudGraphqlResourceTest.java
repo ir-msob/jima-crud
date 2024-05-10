@@ -8,6 +8,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.CriteriaPageableInput;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.PageType;
 import ir.msob.jima.crud.api.graphql.restful.test.ParentCrudGraphqlResourceTest;
@@ -73,12 +74,11 @@ public interface BaseGetPageCrudGraphqlResourceTest<
      * and extracts the result from the response.
      *
      * @param savedDto The data transfer object (DTO) representing the saved entity.
-     * @return A page of data transfer objects (DTOs) representing the retrieved entities.
      * @throws DomainNotFoundException If the requested domain is not found.
      * @throws BadRequestException     If the request is malformed or contains invalid parameters.
      */
     @Override
-    default Page<DTO> getPageRequest(DTO savedDto) throws DomainNotFoundException, BadRequestException {
+    default void getPageRequest(DTO savedDto, Assertable<Page<DTO>> assertable) throws DomainNotFoundException, BadRequestException {
         CriteriaPageableInput input = CriteriaPageableInput.builder()
                 .criteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId())))
                 .pageable(convertToString(PageRequest.of(0, 10)))
@@ -89,6 +89,6 @@ public interface BaseGetPageCrudGraphqlResourceTest<
                 .path(PATH)
                 .entity(PageType.class)
                 .get();
-        return convertToPage(res.getPage());
+        assertable.assertThan(convertToPage(res.getPage()));
     }
 }

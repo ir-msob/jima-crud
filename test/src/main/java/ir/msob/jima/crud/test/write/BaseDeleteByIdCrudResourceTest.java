@@ -8,6 +8,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
 import ir.msob.jima.crud.test.ParentCrudResourceTest;
@@ -68,10 +69,11 @@ public interface BaseDeleteByIdCrudResourceTest<
             return;
         DTO savedDto = getDataProvider().saveNew();
         Long countBefore = getDataProvider().countDb();
-        ID id = deleteByIdRequest(savedDto);
-        assertThat(id).matches(id::equals);
-        assertCount(countBefore - 1);
-        assertDelete(savedDto);
+        deleteByIdRequest(savedDto, id -> {
+            assertThat(id).matches(id::equals);
+            assertCount(countBefore - 1);
+            assertDelete(savedDto);
+        });
     }
 
     /**
@@ -93,19 +95,12 @@ public interface BaseDeleteByIdCrudResourceTest<
             return;
         DTO savedDto = getDataProvider().saveNewMandatory();
         Long countBefore = getDataProvider().countDb();
-        ID id = deleteByIdRequest(savedDto);
-        assertThat(id).matches(id::equals);
-        assertCount(countBefore - 1);
-        assertDelete(savedDto);
+        deleteByIdRequest(savedDto, id -> {
+            assertThat(id).matches(id::equals);
+            assertCount(countBefore - 1);
+            assertDelete(savedDto);
+        });
     }
 
-    /**
-     * Executes the delete operation for the CRUD resource with the specified DTO and performs assertions.
-     *
-     * @param savedDto The DTO for which the delete operation is performed.
-     * @return The ID of the deleted resource.
-     * @throws BadRequestException     If the request is malformed or invalid.
-     * @throws DomainNotFoundException If the domain is not found.
-     */
-    ID deleteByIdRequest(DTO savedDto);
+    void deleteByIdRequest(DTO savedDto, Assertable<ID> assertable);
 }

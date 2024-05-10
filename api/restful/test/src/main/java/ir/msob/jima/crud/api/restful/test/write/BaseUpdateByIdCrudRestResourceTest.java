@@ -6,6 +6,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.restful.test.ParentCrudRestResourceTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
@@ -49,18 +50,16 @@ public interface BaseUpdateByIdCrudRestResourceTest<
      * Executes a RESTful request to update an entity by its ID and extracts the result from the response.
      *
      * @param dto The data transfer object (DTO) representing the entity to be updated.
-     * @return The data transfer object (DTO) representing the updated entity.
      */
     @Override
-    default DTO updateByIdRequest(DTO dto) {
+    default void updateByIdRequest(DTO dto, Assertable<DTO> assertable) {
         // Send a PUT request to the base URI with the ID of the entity to be updated
         // Prepare the request header
         // Set the body of the request to the DTO
         // Expect the status to be equal to the UPDATE_BY_ID operation status
         // Expect the content type to be JSON
         // Expect the body to be of the DTO class type
-        // Return the response body
-        return this.getWebTestClient()
+        this.getWebTestClient()
                 .put()
                 .uri(String.format("%s/%s", getBaseUri(), dto.getDomainId()))
                 .headers(this::prepareHeader)
@@ -69,7 +68,6 @@ public interface BaseUpdateByIdCrudRestResourceTest<
                 .expectStatus().isEqualTo(OperationsStatus.UPDATE_BY_ID)
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
                 .expectBody(this.getDataProvider().getService().getDtoClass())
-                .returnResult()
-                .getResponseBody();
+                .value(assertable::assertThan);
     }
 }

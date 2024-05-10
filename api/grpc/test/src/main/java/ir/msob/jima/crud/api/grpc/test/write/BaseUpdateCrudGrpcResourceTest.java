@@ -5,6 +5,7 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.grpc.commons.DtoMsg;
 import ir.msob.jima.crud.api.grpc.test.ParentCrudGrpcResourceTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
@@ -51,11 +52,10 @@ public interface BaseUpdateCrudGrpcResourceTest<
      * Executes a gRPC request to update an entity and extracts the result from the response.
      *
      * @param dto The data transfer object (DTO) representing the entity to be updated.
-     * @return The data transfer object (DTO) representing the updated entity.
      */
     @SneakyThrows
     @Override
-    default DTO updateRequest(DTO dto) {
+    default void updateRequest(DTO dto, Assertable<DTO> assertable) {
         // Create an instance of DtoMsg with the DTO of the entity to be updated
         DtoMsg msg = DtoMsg.newBuilder()
                 .setDto(convertToString(dto))
@@ -65,6 +65,6 @@ public interface BaseUpdateCrudGrpcResourceTest<
                 .toFuture()
                 .get();
         // Convert the result to the DTO type and return it
-        return convertToDto(res.getDto());
+        assertable.assertThan(convertToDto(res.getDto()));
     }
 }

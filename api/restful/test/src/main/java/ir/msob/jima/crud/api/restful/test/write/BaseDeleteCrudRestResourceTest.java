@@ -9,6 +9,7 @@ import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.restful.test.ParentCrudRestResourceTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
@@ -51,18 +52,16 @@ public interface BaseDeleteCrudRestResourceTest<
      * Executes a RESTful request to delete an entity and extracts the result from the response.
      *
      * @param savedDto The data transfer object (DTO) representing the entity to be deleted.
-     * @return The ID of the deleted entity.
      * @throws DomainNotFoundException If the entity is not found.
      * @throws BadRequestException     If the request is not valid.
      */
     @Override
-    default ID deleteRequest(DTO savedDto) throws DomainNotFoundException, BadRequestException {
+    default void deleteRequest(DTO savedDto, Assertable<ID> assertable) throws DomainNotFoundException, BadRequestException {
         // Send a DELETE request to the DELETE operation URI with the ID of the entity to be deleted
         // Prepare the request header
         // Expect the status to be equal to the DELETE operation status
         // Expect the body to be of the ID class type
-        // Return the response body
-        return this.getWebTestClient()
+        this.getWebTestClient()
                 .delete()
                 .uri(String.format("%s/%s?%s.eq=%s", getBaseUri(), Operations.DELETE, savedDto.getDomainIdName(), savedDto.getDomainId()))
                 .headers(this::prepareHeader)
@@ -70,7 +69,6 @@ public interface BaseDeleteCrudRestResourceTest<
                 .expectStatus()
                 .isEqualTo(OperationsStatus.DELETE)
                 .expectBody(getIdClass())
-                .returnResult()
-                .getResponseBody();
+                .value(assertable::assertThan);
     }
 }

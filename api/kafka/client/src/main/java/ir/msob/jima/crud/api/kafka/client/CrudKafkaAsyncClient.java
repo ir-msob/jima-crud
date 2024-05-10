@@ -32,7 +32,7 @@ public class CrudKafkaAsyncClient implements BaseCrudAsyncClient {
     private final KafkaAsyncClient asyncClient;
 
     public static <ID extends Comparable<ID> & Serializable, DTO extends BaseDto<ID>> String createChannel(Class<DTO> dtoClass, String operation) {
-        return Constants.getChannel(dtoClass, operation);
+        return ChannelUtil.getChannel(dtoClass, operation);
     }
 
     public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DATA extends ModelType, DTO extends BaseDto<ID>> void send(ChannelMessage<USER, DATA> message, Class<DTO> dtoClass, String operation, Optional<USER> user) {

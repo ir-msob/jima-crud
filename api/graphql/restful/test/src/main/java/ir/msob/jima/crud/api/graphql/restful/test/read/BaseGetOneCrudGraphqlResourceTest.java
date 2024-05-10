@@ -6,6 +6,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.CriteriaInput;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.DtoType;
 import ir.msob.jima.crud.api.graphql.restful.test.ParentCrudGraphqlResourceTest;
@@ -67,10 +68,9 @@ public interface BaseGetOneCrudGraphqlResourceTest<
      * Executes a GraphQL request to retrieve a single entity based on criteria and extracts the result from the response.
      *
      * @param savedDto The data transfer object (DTO) representing the saved entity.
-     * @return A data transfer object (DTO) representing the retrieved entity.
      */
     @Override
-    default DTO getOneRequest(DTO savedDto) {
+    default void getOneRequest(DTO savedDto, Assertable<DTO> assertable) {
         CriteriaInput input = CriteriaInput.builder()
                 .criteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId())))
                 .build();
@@ -80,6 +80,6 @@ public interface BaseGetOneCrudGraphqlResourceTest<
                 .path(PATH)
                 .entity(DtoType.class)
                 .get();
-        return convertToDto(res.getDto());
+        assertable.assertThan(convertToDto(res.getDto()));
     }
 }

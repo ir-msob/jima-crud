@@ -5,7 +5,7 @@
     <parent>
         <groupId>ir.msob.jima.parent</groupId>
         <artifactId>jima-parent</artifactId>
-        <version>1.1.9</version>
+        <version>1.1.10</version>
     </parent>
     <groupId>ir.msob.jima.crud</groupId>
     <artifactId>crud-parent</artifactId>
@@ -38,7 +38,7 @@
         <dependencies>
             <dependency>
                 <groupId>ir.msob.jima.parent</groupId>
-                <artifactId>jima-bom</artifactId>
+                <artifactId>jima-parent-bom</artifactId>
                 <version>${jima-parent.version}</version>
                 <type>pom</type>
                 <scope>import</scope>

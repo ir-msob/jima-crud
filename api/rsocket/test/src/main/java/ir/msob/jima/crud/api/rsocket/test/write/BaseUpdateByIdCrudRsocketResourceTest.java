@@ -8,6 +8,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.rsocket.test.ParentCrudRsocketResourceTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
@@ -48,11 +49,10 @@ public interface BaseUpdateByIdCrudRsocketResourceTest<
      * It creates a DtoMessage with the provided DTO and its ID, and sends it to the specified route.
      *
      * @param dto the DTO object that represents the resource to be updated
-     * @return the updated DTO object
      */
     @SneakyThrows
     @Override
-    default DTO updateByIdRequest(DTO dto) {
+    default void updateByIdRequest(DTO dto, Assertable<DTO> assertable) {
         DtoMessage<ID, DTO> data = new DtoMessage<>();
         data.setId(dto.getDomainId());
         data.setDto(dto);
@@ -60,11 +60,12 @@ public interface BaseUpdateByIdCrudRsocketResourceTest<
         ChannelMessage<USER, DtoMessage<ID, DTO>> message = new ChannelMessage<>();
         message.setData(data);
 
-        return getRSocketRequester()
+        getRSocketRequester()
                 .route(getUri(Operations.UPDATE_BY_ID))
                 .metadata(getRSocketRequesterMetadata()::metadata)
                 .data(getObjectMapper().writeValueAsString(message))
                 .retrieveMono(getDtoClass())
+                .doOnSuccess(assertable::assertThan)
                 .toFuture()
                 .get();
     }

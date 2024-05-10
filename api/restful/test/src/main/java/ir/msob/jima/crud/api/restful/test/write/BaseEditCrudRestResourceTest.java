@@ -8,6 +8,7 @@ import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.restful.test.ParentCrudRestResourceTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
@@ -52,18 +53,16 @@ public interface BaseEditCrudRestResourceTest<
      *
      * @param savedDto  The data transfer object (DTO) representing the entity to be edited.
      * @param jsonPatch The JSON Patch representing the changes to be applied to the entity.
-     * @return The data transfer object (DTO) representing the edited entity.
      */
     @Override
-    default DTO editRequest(DTO savedDto, JsonPatch jsonPatch) {
+    default void editRequest(DTO savedDto, JsonPatch jsonPatch, Assertable<DTO> assertable) {
         // Send a PATCH request to the EDIT operation URI with the ID of the entity to be edited
         // Prepare the request header
         // Set the body of the request to the JSON Patch
         // Expect the status to be equal to the EDIT operation status
         // Expect the content type to be JSON
         // Expect the body to be of the DTO class type
-        // Return the response body
-        return this.getWebTestClient()
+        this.getWebTestClient()
                 .patch()
                 .uri(String.format("%s/%s?%s.eq=%s", getBaseUri(), Operations.EDIT, savedDto.getDomainIdName(), savedDto.getDomainId()))
                 .headers(this::prepareHeader)
@@ -72,7 +71,6 @@ public interface BaseEditCrudRestResourceTest<
                 .expectStatus().isEqualTo(OperationsStatus.EDIT)
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
                 .expectBody(this.getDataProvider().getService().getDtoClass())
-                .returnResult()
-                .getResponseBody();
+                .value(assertable::assertThan);
     }
 }

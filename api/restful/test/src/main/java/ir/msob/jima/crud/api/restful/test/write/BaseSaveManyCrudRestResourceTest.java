@@ -7,6 +7,7 @@ import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.restful.test.ParentCrudRestResourceTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
@@ -51,18 +52,16 @@ public interface BaseSaveManyCrudRestResourceTest<
      * Executes a RESTful request to save multiple entities and extracts the result from the response.
      *
      * @param dtos The collection of data transfer objects (DTOs) representing the entities to be saved.
-     * @return A collection of data transfer objects (DTOs) representing the saved entities.
      */
     @Override
-    default Collection<DTO> saveManyRequest(Collection<DTO> dtos) {
+    default void saveManyRequest(Collection<DTO> dtos, Assertable<Collection<DTO>> assertable) {
         // Send a POST request to the SAVE_MANY operation URI
         // Prepare the request header
         // Set the body of the request to the collection of DTOs
         // Expect the status to be equal to the SAVE_MANY operation status
         // Expect the content type to be JSON
         // Expect the body to be of type Collection
-        // Return the response body
-        return this.getWebTestClient()
+        this.getWebTestClient()
                 .post()
                 .uri(String.format("%s/%s", getBaseUri(), Operations.SAVE_MANY))
                 .headers(this::prepareHeader)
@@ -71,7 +70,6 @@ public interface BaseSaveManyCrudRestResourceTest<
                 .expectStatus().isEqualTo(OperationsStatus.SAVE_MANY)
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
                 .expectBody(Collection.class)
-                .returnResult()
-                .getResponseBody();
+                .value(assertable::assertThan);
     }
 }

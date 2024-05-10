@@ -8,6 +8,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
 import ir.msob.jima.crud.test.ParentCrudResourceTest;
@@ -73,10 +74,11 @@ public interface BaseUpdateByIdCrudResourceTest<
         DTO savedDto = getDataProvider().saveNew();
         this.getDataProvider().getUpdateDto(savedDto);
         Long countBefore = getDataProvider().countDb();
-        DTO dto = updateByIdRequest(savedDto);
+        updateByIdRequest(savedDto, dto -> {
+            assertAll(savedDto, dto);
+            assertUpdate(savedDto, dto);
+        });
         assertCount(countBefore);
-        assertAll(savedDto, dto);
-        assertUpdate(savedDto, dto);
     }
 
     /**
@@ -104,10 +106,11 @@ public interface BaseUpdateByIdCrudResourceTest<
         DTO savedDto = getDataProvider().saveNewMandatory();
         this.getDataProvider().getMandatoryUpdateDto(savedDto);
         Long countBefore = getDataProvider().countDb();
-        DTO dto = updateByIdRequest(savedDto);
+        updateByIdRequest(savedDto, dto -> {
+            assertMandatory(savedDto, dto);
+            assertUpdate(savedDto, dto);
+        });
         assertCount(countBefore);
-        assertMandatory(savedDto, dto);
-        assertUpdate(savedDto, dto);
     }
 
     /**
@@ -115,9 +118,8 @@ public interface BaseUpdateByIdCrudResourceTest<
      * This method is designed to be overridden by subclasses to provide the specific implementation of the update operation.
      *
      * @param dto The DTO representing the resource to be updated.
-     * @return The updated DTO.
      * @throws BadRequestException     If the request is malformed or invalid.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    DTO updateByIdRequest(DTO dto);
+    void updateByIdRequest(DTO dto, Assertable<DTO> assertable);
 }

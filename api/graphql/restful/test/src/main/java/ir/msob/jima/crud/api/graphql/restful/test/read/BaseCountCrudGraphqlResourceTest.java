@@ -6,6 +6,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.CountType;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.CriteriaInput;
 import ir.msob.jima.crud.api.graphql.restful.test.ParentCrudGraphqlResourceTest;
@@ -66,11 +67,10 @@ public interface BaseCountCrudGraphqlResourceTest<
      * Executes a GraphQL request to count entities based on criteria and extracts the count result from the response.
      *
      * @param savedDto The data transfer object (DTO) representing the saved entity.
-     * @return The count of entities based on the specified criteria.
      */
     @SneakyThrows
     @Override
-    default Long countRequest(DTO savedDto) {
+    default void countRequest(DTO savedDto, Assertable<Long> assertable) {
         CriteriaInput input = CriteriaInput.builder()
                 .criteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId())))
                 .build();
@@ -80,6 +80,6 @@ public interface BaseCountCrudGraphqlResourceTest<
                 .path(PATH)
                 .entity(CountType.class)
                 .get();
-        return res.getCount();
+        assertable.assertThan(res.getCount());
     }
 }

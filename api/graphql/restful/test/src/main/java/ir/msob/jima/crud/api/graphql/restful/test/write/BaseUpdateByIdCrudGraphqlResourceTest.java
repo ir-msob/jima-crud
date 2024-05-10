@@ -5,6 +5,7 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.DtoInput;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.DtoType;
 import ir.msob.jima.crud.api.graphql.restful.test.ParentCrudGraphqlResourceTest;
@@ -64,10 +65,9 @@ public interface BaseUpdateByIdCrudGraphqlResourceTest<
      * Executes a GraphQL request to update an entity and extracts the result from the response.
      *
      * @param dto The data transfer object (DTO) representing the entity to be updated.
-     * @return A data transfer object (DTO) representing the updated entity.
      */
     @Override
-    default DTO updateByIdRequest(DTO dto) {
+    default void updateByIdRequest(DTO dto, Assertable<DTO> assertable) {
         // Create an instance of DtoInput with the ID and DTO of the entity to be updated
         DtoInput input = DtoInput.builder()
                 .id(convertToString(dto.getDomainId()))
@@ -81,6 +81,6 @@ public interface BaseUpdateByIdCrudGraphqlResourceTest<
                 .entity(DtoType.class)
                 .get();
         // Convert the result to the DTO type and return it
-        return convertToDto(res.getDto());
+        assertable.assertThan(convertToDto(res.getDto()));
     }
 }

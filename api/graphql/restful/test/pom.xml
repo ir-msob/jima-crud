@@ -46,9 +46,5 @@
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.c4-soft.springaddons</groupId>
-            <artifactId>spring-addons-oauth2-test</artifactId>
-        </dependency>
     </dependencies>
 </project>

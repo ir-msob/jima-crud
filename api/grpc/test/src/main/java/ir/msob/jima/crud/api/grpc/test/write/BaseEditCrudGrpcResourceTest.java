@@ -7,6 +7,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.grpc.commons.CriteriaJsonPatchMsg;
 import ir.msob.jima.crud.api.grpc.commons.DtoMsg;
 import ir.msob.jima.crud.api.grpc.test.ParentCrudGrpcResourceTest;
@@ -55,11 +56,10 @@ public interface BaseEditCrudGrpcResourceTest<
      *
      * @param savedDto  The data transfer object (DTO) representing the saved entity.
      * @param jsonPatch The JSON Patch representing the changes to be applied to the entity.
-     * @return The updated data transfer object (DTO) representing the edited entity.
      */
     @SneakyThrows
     @Override
-    default DTO editRequest(DTO savedDto, JsonPatch jsonPatch) {
+    default void editRequest(DTO savedDto, JsonPatch jsonPatch, Assertable<DTO> assertable) {
         // Create an instance of CriteriaJsonPatchMsg with the ID of the saved entity and the JSON Patch
         CriteriaJsonPatchMsg msg = CriteriaJsonPatchMsg.newBuilder()
                 .setCriteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId())))
@@ -69,7 +69,7 @@ public interface BaseEditCrudGrpcResourceTest<
         DtoMsg res = getReactorCrudServiceStub().edit(Mono.just(msg))
                 .toFuture()
                 .get();
-        // Convert the result to the DTO type and return it
-        return convertToDto(res.getDto());
+        // Convert the result to the DTO type
+        assertable.assertThan(convertToDto(res.getDto()));
     }
 }

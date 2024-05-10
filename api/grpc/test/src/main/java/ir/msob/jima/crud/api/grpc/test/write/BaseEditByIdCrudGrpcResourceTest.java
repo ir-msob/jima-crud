@@ -6,6 +6,7 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.grpc.commons.DtoMsg;
 import ir.msob.jima.crud.api.grpc.commons.IdJsonPatchMsg;
 import ir.msob.jima.crud.api.grpc.test.ParentCrudGrpcResourceTest;
@@ -55,11 +56,10 @@ public interface BaseEditByIdCrudGrpcResourceTest<
      *
      * @param savedDto  The data transfer object (DTO) representing the saved entity.
      * @param jsonPatch The JsonPatch representing the changes to be applied to the entity.
-     * @return The data transfer object (DTO) representing the edited entity.
      */
     @SneakyThrows
     @Override
-    default DTO editByIdRequest(DTO savedDto, JsonPatch jsonPatch) {
+    default void editByIdRequest(DTO savedDto, JsonPatch jsonPatch, Assertable<DTO> assertable) {
         // Create an instance of IdJsonPatchMsg with the ID of the saved entity and the JsonPatch
         IdJsonPatchMsg msg = IdJsonPatchMsg.newBuilder()
                 .setId(convertToString(savedDto.getDomainId()))
@@ -70,6 +70,6 @@ public interface BaseEditByIdCrudGrpcResourceTest<
                 .toFuture()
                 .get();
         // Convert the result to the DTO type and return it
-        return convertToDto(res.getDto());
+        assertable.assertThan(convertToDto(res.getDto()));
     }
 }

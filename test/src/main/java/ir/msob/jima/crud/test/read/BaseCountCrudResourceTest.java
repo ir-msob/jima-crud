@@ -9,6 +9,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
 import ir.msob.jima.crud.test.ParentCrudResourceTest;
@@ -68,7 +69,7 @@ public interface BaseCountCrudResourceTest<
             return;
         DTO savedDto = getDataProvider().saveNew();
         Long countBefore = getDataProvider().countDb();
-        this.countRequest(savedDto);
+        this.countRequest(savedDto, count -> Assertions.assertThat(count).isEqualTo(1));
         assertCount(countBefore);
     }
 
@@ -91,18 +92,9 @@ public interface BaseCountCrudResourceTest<
             return;
         DTO savedDto = getDataProvider().saveNewMandatory();
         Long countBefore = getDataProvider().countDb();
-        Long count = this.countRequest(savedDto);
-        Assertions.assertThat(count).isEqualTo(1);
+        this.countRequest(savedDto, count -> Assertions.assertThat(count).isEqualTo(1));
         assertCount(countBefore);
     }
 
-    /**
-     * Executes the count operation for the CRUD resource with the specified DTO and performs assertions.
-     *
-     * @param savedDto The DTO for which the count operation is performed.
-     * @return The count of resources associated with the specified DTO.
-     * @throws BadRequestException     If the request is malformed or invalid.
-     * @throws DomainNotFoundException If the domain is not found.
-     */
-    Long countRequest(DTO savedDto);
+    void countRequest(DTO savedDto, Assertable<Long> assertable);
 }

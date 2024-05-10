@@ -6,6 +6,8 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
+import ir.msob.jima.crud.api.grpc.commons.CountMsg;
 import ir.msob.jima.crud.api.grpc.test.ParentCrudGrpcResourceTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
@@ -51,15 +53,15 @@ public interface BaseCountAllCrudGrpcResourceTest<
     /**
      * Executes a gRPC request to count all entities and extracts the result from the response.
      *
-     * @return The total number of entities.
      */
     @SneakyThrows
     @Override
-    default Long countAllRequest() {
+    default void countAllRequest(Assertable<Long> assertable) {
         // Execute the gRPC request to count all entities and extract the result from the response
-        return getReactorCrudServiceStub().countAll(Mono.just(Empty.newBuilder().build()))
+        getReactorCrudServiceStub().countAll(Mono.just(Empty.newBuilder().build()))
+                .map(CountMsg::getCount)
+                .doOnSuccess(assertable::assertThan)
                 .toFuture()
-                .get()
-                .getCount();
+                .get();
     }
 }

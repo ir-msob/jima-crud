@@ -10,6 +10,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
 import ir.msob.jima.crud.test.ParentCrudResourceTest;
@@ -70,10 +71,11 @@ public interface BaseEditCrudResourceTest<
         DTO savedDto = getDataProvider().saveNew();
         this.getDataProvider().getUpdateDto(savedDto);
         Long countBefore = getDataProvider().countDb();
-        DTO dto = editRequest(savedDto, getDataProvider().getJsonPatch());
+        editRequest(savedDto, getDataProvider().getJsonPatch(), dto -> {
+            assertAll(savedDto, dto);
+            assertUpdate(savedDto, dto);
+        });
         assertCount(countBefore);
-        assertAll(savedDto, dto);
-        assertUpdate(savedDto, dto);
     }
 
     /**
@@ -97,10 +99,13 @@ public interface BaseEditCrudResourceTest<
         DTO savedDto = getDataProvider().saveNewMandatory();
         this.getDataProvider().getMandatoryUpdateDto(savedDto);
         Long countBefore = getDataProvider().countDb();
-        DTO dto = editRequest(savedDto, getDataProvider().getMandatoryJsonPatch());
+        editRequest(savedDto, getDataProvider().getMandatoryJsonPatch(),
+                dto -> {
+                    assertMandatory(savedDto, dto);
+                    assertUpdate(savedDto, dto);
+                });
         assertCount(countBefore);
-        assertMandatory(savedDto, dto);
-        assertUpdate(savedDto, dto);
+
     }
 
     /**
@@ -108,9 +113,8 @@ public interface BaseEditCrudResourceTest<
      *
      * @param savedDto  The DTO representing the existing resource to be edited.
      * @param jsonPatch The JSON Patch containing the changes to be applied to the resource.
-     * @return The edited DTO.
      * @throws BadRequestException     If the request is malformed or invalid.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    DTO editRequest(DTO savedDto, JsonPatch jsonPatch);
+    void editRequest(DTO savedDto, JsonPatch jsonPatch, Assertable<DTO> assertable);
 }

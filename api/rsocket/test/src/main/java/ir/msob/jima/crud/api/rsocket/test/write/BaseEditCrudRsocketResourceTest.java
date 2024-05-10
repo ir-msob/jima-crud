@@ -10,6 +10,7 @@ import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.rsocket.test.ParentCrudRsocketResourceTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
@@ -55,11 +56,10 @@ public interface BaseEditCrudRsocketResourceTest<
      *
      * @param savedDto  The data transfer object (DTO) representing the entity to be edited.
      * @param jsonPatch The JsonPatch representing the changes to be made to the entity.
-     * @return The data transfer object (DTO) representing the edited entity.
      */
     @SneakyThrows
     @Override
-    default DTO editRequest(DTO savedDto, JsonPatch jsonPatch) {
+    default void editRequest(DTO savedDto, JsonPatch jsonPatch, Assertable<DTO> assertable) {
         // Create a new JsonPatchMessage
         // Set the criteria of the message to the ID criteria of the DTO
         // Set the JsonPatch of the message to the provided JsonPatch
@@ -74,11 +74,12 @@ public interface BaseEditCrudRsocketResourceTest<
         ChannelMessage<USER, JsonPatchMessage<ID, C>> message = new ChannelMessage<>();
         message.setData(data);
 
-        return getRSocketRequester()
+        getRSocketRequester()
                 .route(getUri(Operations.EDIT))
                 .metadata(getRSocketRequesterMetadata()::metadata)
                 .data(getObjectMapper().writeValueAsString(message))
                 .retrieveMono(getDtoClass())
+                .doOnSuccess(assertable::assertThan)
                 .toFuture()
                 .get();
     }

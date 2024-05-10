@@ -9,6 +9,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
 import ir.msob.jima.crud.test.ParentCrudResourceTest;
@@ -72,11 +73,13 @@ public interface BaseUpdateManyCrudResourceTest<
         DTO savedDto = getDataProvider().saveNew();
         this.getDataProvider().getUpdateDto(savedDto);
         Long countBefore = getDataProvider().countDb();
-        Collection<DTO> dtos = updateManyRequest(Collections.singleton(savedDto));
+        updateManyRequest(Collections.singleton(savedDto), dtos -> {
+            DTO dto = getDataProvider().getObjectMapper().convertValue(dtos.stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());
+            assertAll(savedDto, dto);
+            assertUpdate(savedDto, dto);
+        });
+
         assertCount(countBefore);
-        DTO dto = getDataProvider().getObjectMapper().convertValue(dtos.stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());
-        assertAll(savedDto, dto);
-        assertUpdate(savedDto, dto);
     }
 
     /**
@@ -100,20 +103,20 @@ public interface BaseUpdateManyCrudResourceTest<
         DTO savedDto = getDataProvider().saveNewMandatory();
         this.getDataProvider().getMandatoryUpdateDto(savedDto);
         Long countBefore = getDataProvider().countDb();
-        Collection<DTO> dtos = updateManyRequest(Collections.singleton(savedDto));
+        updateManyRequest(Collections.singleton(savedDto), dtos -> {
+            DTO dto = getDataProvider().getObjectMapper().convertValue(dtos.stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());
+            assertMandatory(savedDto, dto);
+            assertUpdate(savedDto, dto);
+        });
         assertCount(countBefore);
-        DTO dto = getDataProvider().getObjectMapper().convertValue(dtos.stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());
-        assertMandatory(savedDto, dto);
-        assertUpdate(savedDto, dto);
     }
 
     /**
      * Executes the updateMany operation for the CRUD resource with the specified DTOs and performs assertions on the resulting DTOs.
      *
      * @param dtos The DTOs representing the resources to be updated.
-     * @return The updated DTOs.
      * @throws BadRequestException     If the request is malformed or invalid.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    Collection<DTO> updateManyRequest(Collection<DTO> dtos);
+    void updateManyRequest(Collection<DTO> dtos, Assertable<Collection<DTO>> assertable);
 }

@@ -7,6 +7,7 @@ import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.restful.test.ParentCrudRestResourceTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
@@ -51,17 +52,15 @@ public interface BaseGetOneCrudRestResourceTest<
      * Executes a RESTful request to retrieve a single entity and extracts the result from the response.
      *
      * @param savedDto The data transfer object (DTO) representing the entity to be retrieved.
-     * @return The data transfer object (DTO) representing the retrieved entity.
      */
     @Override
-    default DTO getOneRequest(DTO savedDto) {
+    default void getOneRequest(DTO savedDto, Assertable<DTO> assertable) {
         // Send a GET request to the GET_ONE operation URI with the ID of the entity to be retrieved
         // Prepare the request header
         // Expect the status to be equal to the GET_ONE operation status
         // Expect the content type to be JSON
         // Expect the body to be of the DTO class type
-        // Return the response body
-        return this.getWebTestClient()
+        this.getWebTestClient()
                 .get()
                 .uri(String.format("%s/%s?%s.eq=%s", getBaseUri(), Operations.GET_ONE, savedDto.getDomainIdName(), savedDto.getDomainId()))
                 .headers(this::prepareHeader)
@@ -69,8 +68,7 @@ public interface BaseGetOneCrudRestResourceTest<
                 .expectStatus().isEqualTo(OperationsStatus.GET_ONE)
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
                 .expectBody(this.getDataProvider().getService().getDtoClass())
-                .returnResult()
-                .getResponseBody();
+                .value(assertable::assertThan);
 
     }
 }

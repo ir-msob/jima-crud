@@ -1,8 +1,6 @@
 package ir.msob.jima.crud.test;
 
 import ir.msob.jima.core.commons.data.BaseQuery;
-import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
-import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
@@ -11,12 +9,11 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.test.BaseCoreResourceTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
+import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
-import java.util.concurrent.ExecutionException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -133,16 +130,9 @@ public interface ParentCrudResourceTest<
      * Asserts the count of entities in the database.
      *
      * @param expectedCount The expected count of entities.
-     * @throws DomainNotFoundException   If the domain is not found.
-     * @throws ExecutionException        If an execution exception occurs.
-     * @throws BadRequestException       If there is a bad request.
-     * @throws InterruptedException      If the operation is interrupted.
-     * @throws InvocationTargetException If an invocation target exception occurs.
-     * @throws NoSuchMethodException     If a specific method is not found.
-     * @throws InstantiationException    If an instance cannot be created.
-     * @throws IllegalAccessException    If there is illegal access to a method or field.
      */
-    default void assertCount(Long expectedCount) throws DomainNotFoundException, ExecutionException, BadRequestException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    @SneakyThrows
+    default void assertCount(Long expectedCount) {
         Long currentCount = getDataProvider().countDb();
         assertThat(currentCount).isEqualTo(expectedCount);
     }

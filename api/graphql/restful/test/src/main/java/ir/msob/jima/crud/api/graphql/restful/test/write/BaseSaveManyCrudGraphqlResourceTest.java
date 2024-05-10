@@ -5,6 +5,7 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.DtosInput;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.DtosType;
 import ir.msob.jima.crud.api.graphql.restful.test.ParentCrudGraphqlResourceTest;
@@ -66,10 +67,9 @@ public interface BaseSaveManyCrudGraphqlResourceTest<
      * Executes a GraphQL request to save (create or update) multiple entities and extracts the result from the response.
      *
      * @param dtos A collection of data transfer objects (DTOs) representing the entities to be saved.
-     * @return A collection of data transfer objects (DTOs) representing the saved entities.
      */
     @Override
-    default Collection<DTO> saveManyRequest(Collection<DTO> dtos) {
+    default void saveManyRequest(Collection<DTO> dtos, Assertable<Collection<DTO>> assertable) {
         DtosInput input = DtosInput.builder()
                 .dtos(convertToStrings(dtos))
                 .build();
@@ -79,6 +79,6 @@ public interface BaseSaveManyCrudGraphqlResourceTest<
                 .path(PATH)
                 .entity(DtosType.class)
                 .get();
-        return convertToDtos(res.getDtos());
+        assertable.assertThan(convertToDtos(res.getDtos()));
     }
 }

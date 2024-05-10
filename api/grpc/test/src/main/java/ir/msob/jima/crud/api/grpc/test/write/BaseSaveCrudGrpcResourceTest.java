@@ -5,6 +5,7 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.grpc.commons.DtoMsg;
 import ir.msob.jima.crud.api.grpc.test.ParentCrudGrpcResourceTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
@@ -51,11 +52,10 @@ public interface BaseSaveCrudGrpcResourceTest<
      * Executes a gRPC request to save an entity and extracts the result from the response.
      *
      * @param dto The data transfer object (DTO) representing the entity to be saved.
-     * @return The data transfer object (DTO) representing the saved entity.
      */
     @SneakyThrows
     @Override
-    default DTO saveRequest(DTO dto) {
+    default void saveRequest(DTO dto, Assertable<DTO> assertable) {
         // Create an instance of DtoMsg with the DTO of the entity to be saved
         DtoMsg msg = DtoMsg.newBuilder()
                 .setDto(convertToString(dto))
@@ -64,7 +64,7 @@ public interface BaseSaveCrudGrpcResourceTest<
         DtoMsg res = getReactorCrudServiceStub().save(Mono.just(msg))
                 .toFuture()
                 .get();
-        // Convert the result to the DTO type and return it
-        return convertToDto(res.getDto());
+        // Convert the result to the DTO type
+        assertable.assertThan(convertToDto(res.getDto()));
     }
 }

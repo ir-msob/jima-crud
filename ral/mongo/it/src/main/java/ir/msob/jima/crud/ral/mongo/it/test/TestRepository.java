@@ -13,9 +13,6 @@ import java.util.Optional;
 public class TestRepository extends MongoCrudRepository<TestDomain, TestCriteria> {
     @Override
     public QueryBuilder criteria(QueryBuilder query, TestCriteria criteria, Optional<ProjectUser> projectUser) {
-        if (criteria.getField() != null) {
-//            queryBuilder.is(Organization.FN.title,criteria.getTitle().getEq());
-        }
         return super.criteria(query, criteria, projectUser);
     }
 

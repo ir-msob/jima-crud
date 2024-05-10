@@ -7,6 +7,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.CriteriaJsonPatchInput;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.DtosType;
 import ir.msob.jima.crud.api.graphql.restful.test.ParentCrudGraphqlResourceTest;
@@ -72,10 +73,9 @@ public interface BaseEditManyCrudGraphqlResourceTest<
      *
      * @param savedDto  The data transfer object (DTO) representing one of the saved entities.
      * @param jsonPatch The JSON Patch operation to be applied for editing the entities.
-     * @return A collection of data transfer objects (DTOs) representing the edited entities.
      */
     @Override
-    default Collection<DTO> editManyRequest(DTO savedDto, JsonPatch jsonPatch) {
+    default void editManyRequest(DTO savedDto, JsonPatch jsonPatch, Assertable<Collection<DTO>> assertable) {
         CriteriaJsonPatchInput input = CriteriaJsonPatchInput.builder()
                 .criteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId())))
                 .jsonPatch(convertToString(jsonPatch))
@@ -86,6 +86,6 @@ public interface BaseEditManyCrudGraphqlResourceTest<
                 .path(PATH)
                 .entity(DtosType.class)
                 .get();
-        return convertToDtos(res.getDtos());
+        assertable.assertThan(convertToDtos(res.getDtos()));
     }
 }

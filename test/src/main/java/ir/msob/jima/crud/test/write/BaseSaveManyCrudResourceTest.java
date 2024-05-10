@@ -9,6 +9,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
 import ir.msob.jima.crud.test.ParentCrudResourceTest;
@@ -70,11 +71,13 @@ public interface BaseSaveManyCrudResourceTest<
             return;
 
         Long countBefore = getDataProvider().countDb();
-        Collection<DTO> dtos = saveManyRequest(Collections.singleton(this.getDataProvider().getNewDto()));
-        assertCount(countBefore + 1);
-        DTO dto = getDataProvider().getObjectMapper().convertValue(dtos.stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());
-        assertAll(this.getDataProvider().getNewDto(), dto);
-        assertSave(this.getDataProvider().getNewDto(), dto);
+        saveManyRequest(Collections.singleton(this.getDataProvider().getNewDto()),
+                dtos -> {
+                    DTO dto = getDataProvider().getObjectMapper().convertValue(dtos.stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());
+                    assertAll(this.getDataProvider().getNewDto(), dto);
+                    assertSave(this.getDataProvider().getNewDto(), dto);
+                    assertCount(countBefore + 1);
+                });
     }
 
     /**
@@ -96,20 +99,21 @@ public interface BaseSaveManyCrudResourceTest<
             return;
 
         Long countBefore = getDataProvider().countDb();
-        Collection<DTO> dtos = saveManyRequest(Collections.singleton(this.getDataProvider().getMandatoryNewDto()));
-        assertCount(countBefore + 1);
-        DTO dto = getDataProvider().getObjectMapper().convertValue(dtos.stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());
-        assertMandatory(this.getDataProvider().getMandatoryNewDto(), dto);
-        assertSave(this.getDataProvider().getMandatoryNewDto(), dto);
+        saveManyRequest(Collections.singleton(this.getDataProvider().getMandatoryNewDto()),
+                dtos -> {
+                    DTO dto = getDataProvider().getObjectMapper().convertValue(dtos.stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());
+                    assertMandatory(this.getDataProvider().getMandatoryNewDto(), dto);
+                    assertSave(this.getDataProvider().getMandatoryNewDto(), dto);
+                    assertCount(countBefore + 1);
+                });
     }
 
     /**
      * Executes the saveMany operation for the CRUD resource with the specified DTOs and performs assertions on the resulting DTOs.
      *
      * @param dtos The collection of DTOs representing the new resources to be saved.
-     * @return The saved DTOs.
      * @throws BadRequestException     If the request is malformed or invalid.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    Collection<DTO> saveManyRequest(Collection<DTO> dtos);
+    void saveManyRequest(Collection<DTO> dtos, Assertable<Collection<DTO>> assertable);
 }

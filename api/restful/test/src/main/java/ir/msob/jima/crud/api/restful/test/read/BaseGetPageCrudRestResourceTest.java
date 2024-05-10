@@ -8,6 +8,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.restful.test.ParentCrudRestResourceTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
@@ -53,19 +54,17 @@ public interface BaseGetPageCrudRestResourceTest<
      * Executes a RESTful request to retrieve a page of entities and extracts the result from the response.
      *
      * @param savedDto The data transfer object (DTO) representing the entities to be retrieved.
-     * @return A page of data transfer objects (DTOs) representing the retrieved entities.
      * @throws DomainNotFoundException If the entity is not found.
      * @throws BadRequestException     If the request is not valid.
      */
     @Override
-    default Page<DTO> getPageRequest(DTO savedDto) throws DomainNotFoundException, BadRequestException {
+    default void getPageRequest(DTO savedDto, Assertable<Page<DTO>> assertable) throws DomainNotFoundException, BadRequestException {
         // Send a GET request to the GET_PAGE operation URI with the ID of the entities to be retrieved
         // Prepare the request header
         // Expect the status to be equal to the GET_PAGE operation status
         // Expect the content type to be JSON
         // Expect the body to be of type Page
-        // Return the response body
-        return this.getWebTestClient()
+        this.getWebTestClient()
                 .get()
                 .uri(String.format("%s?page=0&size=10&%s.eq=%s", getBaseUri(), savedDto.getDomainIdName(), savedDto.getDomainId()))
                 .headers(this::prepareHeader)
@@ -73,8 +72,7 @@ public interface BaseGetPageCrudRestResourceTest<
                 .expectStatus().isEqualTo(OperationsStatus.GET_PAGE)
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
                 .expectBody(Page.class)
-                .returnResult()
-                .getResponseBody();
+                .value(assertable::assertThan);
 
     }
 }

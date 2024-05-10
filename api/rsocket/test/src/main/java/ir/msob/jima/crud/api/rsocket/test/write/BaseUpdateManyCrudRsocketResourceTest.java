@@ -8,6 +8,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.rsocket.test.ParentCrudRsocketResourceTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
@@ -49,22 +50,22 @@ public interface BaseUpdateManyCrudRsocketResourceTest<
      * It creates a DtosMessage with the provided DTOs and sends it to the specified route.
      *
      * @param dtos the collection of DTO objects that represent the resources to be updated
-     * @return a collection of updated DTO objects
      */
     @SneakyThrows
     @Override
-    default Collection<DTO> updateManyRequest(Collection<DTO> dtos) {
+    default void updateManyRequest(Collection<DTO> dtos, Assertable<Collection<DTO>> assertable) {
         DtosMessage<ID, DTO> data = new DtosMessage<>();
         data.setDtos(dtos);
 
         ChannelMessage<USER, DtosMessage<ID, DTO>> message = new ChannelMessage<>();
         message.setData(data);
 
-        return getRSocketRequester()
+        getRSocketRequester()
                 .route(getUri(Operations.UPDATE_MANY))
                 .metadata(getRSocketRequesterMetadata()::metadata)
                 .data(getObjectMapper().writeValueAsString(message))
                 .retrieveMono(Collection.class)
+                .doOnSuccess(assertable::assertThan)
                 .toFuture()
                 .get();
     }

@@ -14,6 +14,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>kafka</module>
+        <module>kafka-test</module>
         <module>restful</module>
         <module>restful-test</module>
         <module>rsocket</module>
@@ -23,5 +24,6 @@
         <module>graphql-restful</module>
         <module>graphql-restful-test</module>
         <module>mongo</module>
+        <module>mongo-test</module>
     </modules>
 </project>

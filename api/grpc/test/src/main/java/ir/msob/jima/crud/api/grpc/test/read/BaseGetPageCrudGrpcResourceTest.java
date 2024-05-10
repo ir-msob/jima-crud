@@ -8,6 +8,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.grpc.commons.CriteriaPageableMsg;
 import ir.msob.jima.crud.api.grpc.commons.PageMsg;
 import ir.msob.jima.crud.api.grpc.test.ParentCrudGrpcResourceTest;
@@ -58,13 +59,12 @@ public interface BaseGetPageCrudGrpcResourceTest<
      * Executes a gRPC request to retrieve a page of entities based on a given criteria and extracts the result from the response.
      *
      * @param savedDto The data transfer object (DTO) representing the saved entity.
-     * @return A page of data transfer objects (DTOs) representing the entities that match the given criteria.
      * @throws DomainNotFoundException If the domain entity is not found.
      * @throws BadRequestException     If the request is malformed or invalid.
      */
     @SneakyThrows
     @Override
-    default Page<DTO> getPageRequest(DTO savedDto) throws DomainNotFoundException, BadRequestException {
+    default void getPageRequest(DTO savedDto, Assertable<Page<DTO>> assertable) throws DomainNotFoundException, BadRequestException {
         // Create an instance of CriteriaPageableMsg with the ID of the saved entity and the page request details
         CriteriaPageableMsg msg = CriteriaPageableMsg.newBuilder()
                 .setCriteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId())))
@@ -74,7 +74,7 @@ public interface BaseGetPageCrudGrpcResourceTest<
         PageMsg res = getReactorCrudServiceStub().getPage(Mono.just(msg))
                 .toFuture()
                 .get();
-        // Convert the result to the Page type and return it
-        return convertToPage(res.getPage());
+        // Convert the result to the Page type
+        assertable.assertThan(convertToPage(res.getPage()));
     }
 }

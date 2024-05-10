@@ -6,6 +6,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.restful.test.ParentCrudRestResourceTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
@@ -50,18 +51,16 @@ public interface BaseSaveCrudRestResourceTest<
      * Executes a RESTful request to save an entity and extracts the result from the response.
      *
      * @param dto The data transfer object (DTO) representing the entity to be saved.
-     * @return The data transfer object (DTO) representing the saved entity.
      */
     @Override
-    default DTO saveRequest(DTO dto) {
+    default void saveRequest(DTO dto, Assertable<DTO> assertable) {
         // Send a POST request to the SAVE operation URI
         // Prepare the request header
         // Set the body of the request to the DTO
         // Expect the status to be equal to the SAVE operation status
         // Expect the content type to be JSON
         // Expect the body to be of the DTO class type
-        // Return the response body
-        return this.getWebTestClient()
+        this.getWebTestClient()
                 .post()
                 .uri(getBaseUri())
                 .headers(this::prepareHeader)
@@ -70,7 +69,6 @@ public interface BaseSaveCrudRestResourceTest<
                 .expectStatus().isEqualTo(OperationsStatus.SAVE)
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
                 .expectBody(this.getDataProvider().getService().getDtoClass())
-                .returnResult()
-                .getResponseBody();
+                .value(assertable::assertThan);
     }
 }

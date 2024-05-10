@@ -6,6 +6,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.CriteriaInput;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.DtosType;
 import ir.msob.jima.crud.api.graphql.restful.test.ParentCrudGraphqlResourceTest;
@@ -67,10 +68,9 @@ public interface BaseGetManyCrudGraphqlResourceTest<
      * Executes a GraphQL request to retrieve multiple entities based on criteria and extracts the result from the response.
      *
      * @param savedDto The data transfer object (DTO) representing the saved entity.
-     * @return A collection of data transfer objects (DTOs) representing the retrieved entities.
      */
     @Override
-    default Collection<DTO> getManyRequest(DTO savedDto) {
+    default void getManyRequest(DTO savedDto, Assertable<Collection<DTO>> assertable) {
         CriteriaInput input = CriteriaInput.builder()
                 .criteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId())))
                 .build();
@@ -80,7 +80,7 @@ public interface BaseGetManyCrudGraphqlResourceTest<
                 .path(PATH)
                 .entity(DtosType.class)
                 .get();
-        return convertToDtos(res.getDtos());
+        assertable.assertThan(convertToDtos(res.getDtos()));
     }
 }
 

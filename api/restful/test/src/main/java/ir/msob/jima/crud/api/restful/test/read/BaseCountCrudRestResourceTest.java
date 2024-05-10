@@ -7,6 +7,7 @@ import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.restful.test.ParentCrudRestResourceTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
@@ -49,23 +50,20 @@ public interface BaseCountCrudRestResourceTest<
      * Executes a RESTful request to count entities that match the given criteria and extracts the result from the response.
      *
      * @param savedDto The data transfer object (DTO) representing the entity to be counted.
-     * @return The total number of entities that match the given criteria.
      */
     @Override
-    default Long countRequest(DTO savedDto) {
+    default void countRequest(DTO savedDto, Assertable<Long> assertable) {
         // Send a GET request to the COUNT operation URI with the ID of the entity to be counted
         // Prepare the request header
         // Expect the status to be equal to the COUNT operation status
         // Expect the body to be of type Long
-        // Return the response body
-        return this.getWebTestClient()
+        this.getWebTestClient()
                 .get()
                 .uri(String.format("%s/%s?%s.eq=%s", getBaseUri(), Operations.COUNT, savedDto.getDomainIdName(), savedDto.getDomainId()))
                 .headers(this::prepareHeader)
                 .exchange()
                 .expectStatus().isEqualTo(OperationsStatus.COUNT)
                 .expectBody(Long.class)
-                .returnResult()
-                .getResponseBody();
+                .value(assertable::assertThan);
     }
 }

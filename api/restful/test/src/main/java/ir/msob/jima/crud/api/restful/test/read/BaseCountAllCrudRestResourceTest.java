@@ -7,6 +7,7 @@ import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.restful.test.ParentCrudRestResourceTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
@@ -49,23 +50,20 @@ public interface BaseCountAllCrudRestResourceTest<
     /**
      * Executes a RESTful request to count all entities and extracts the result from the response.
      *
-     * @return The total number of entities.
      */
     @Override
-    default Long countAllRequest() {
+    default void countAllRequest(Assertable<Long> assertable) {
         // Send a GET request to the COUNT_ALL operation URI
         // Prepare the request header
         // Expect the status to be equal to the COUNT_ALL operation status
         // Expect the body to be of type Long
-        // Return the response body
-        return this.getWebTestClient()
+        this.getWebTestClient()
                 .get()
                 .uri(String.format("%s/%s", getBaseUri(), Operations.COUNT_ALL))
                 .headers(this::prepareHeader)
                 .exchange()
                 .expectStatus().isEqualTo(OperationsStatus.COUNT_ALL)
                 .expectBody(Long.class)
-                .returnResult()
-                .getResponseBody();
+                .value(assertable::assertThan);
     }
 }

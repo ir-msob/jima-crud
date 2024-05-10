@@ -8,6 +8,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.rsocket.test.ParentCrudRsocketResourceTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
@@ -52,11 +53,10 @@ public interface BaseGetByIdCrudRsocketResourceTest<
      * Executes a RSocket request to retrieve an entity by its ID and extracts the result from the response.
      *
      * @param savedDto The data transfer object (DTO) representing the entity to be retrieved.
-     * @return The data transfer object (DTO) representing the retrieved entity.
      */
     @SneakyThrows
     @Override
-    default DTO getByIdRequest(DTO savedDto) {
+    default void getByIdRequest(DTO savedDto, Assertable<DTO> assertable) {
         // Create a new IdMessage
         // Set the ID of the message to the domain ID of the DTO
         // Send a RSocket request to the GET_BY_ID operation URI with the IdMessage as data
@@ -69,11 +69,12 @@ public interface BaseGetByIdCrudRsocketResourceTest<
         ChannelMessage<USER, IdMessage<ID>> message = new ChannelMessage<>();
         message.setData(data);
 
-        return getRSocketRequester()
+        getRSocketRequester()
                 .route(getUri(Operations.GET_BY_ID))
                 .metadata(getRSocketRequesterMetadata()::metadata)
                 .data(getObjectMapper().writeValueAsString(message))
                 .retrieveMono(getDtoClass())
+                .doOnSuccess(assertable::assertThan)
                 .toFuture()
                 .get();
     }

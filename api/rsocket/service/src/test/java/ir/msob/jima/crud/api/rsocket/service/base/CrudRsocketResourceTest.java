@@ -1,8 +1,6 @@
 package ir.msob.jima.crud.api.rsocket.service.base;
 
 
-import com.c4_soft.springaddons.security.oauth2.test.annotations.OpenIdClaims;
-import com.c4_soft.springaddons.security.oauth2.test.annotations.WithOAuth2Login;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.msob.jima.core.api.rsocket.commons.BaseRSocketRequesterMetadata;
 import ir.msob.jima.core.ral.mongo.commons.query.QueryBuilder;
@@ -20,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Optional;
 
 
-@WithOAuth2Login(claims = @OpenIdClaims(sub = "service-client")) // FIXME : read from yaml file
 public abstract class CrudRsocketResourceTest<
         D extends ProjectDomain,
         DTO extends ProjectDto,

@@ -10,6 +10,7 @@ import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.rsocket.test.ParentCrudRsocketResourceTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
@@ -52,11 +53,10 @@ public interface BaseEditManyCrudRsocketResourceTest<
      *
      * @param savedDto  the DTO object that represents the saved state of the resources to be edited
      * @param jsonPatch the JsonPatch object that represents the changes to be applied to the resources
-     * @return a collection of DTO objects that represent the edited resources
      */
     @SneakyThrows
     @Override
-    default Collection<DTO> editManyRequest(DTO savedDto, JsonPatch jsonPatch) {
+    default void editManyRequest(DTO savedDto, JsonPatch jsonPatch, Assertable<Collection<DTO>> assertable) {
         JsonPatchMessage<ID, C> data = new JsonPatchMessage<>();
         data.setCriteria(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId()));
         data.setJsonPatch(jsonPatch);
@@ -64,11 +64,12 @@ public interface BaseEditManyCrudRsocketResourceTest<
         ChannelMessage<USER, JsonPatchMessage<ID, C>> message = new ChannelMessage<>();
         message.setData(data);
 
-        return getRSocketRequester()
+        getRSocketRequester()
                 .route(getUri(Operations.EDIT_MANY))
                 .metadata(getRSocketRequesterMetadata()::metadata)
                 .data(getObjectMapper().writeValueAsString(message))
                 .retrieveMono(Collection.class)
+                .doOnSuccess(assertable::assertThan)
                 .toFuture()
                 .get();
     }

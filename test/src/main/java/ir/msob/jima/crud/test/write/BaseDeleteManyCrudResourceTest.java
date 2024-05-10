@@ -9,6 +9,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
 import ir.msob.jima.crud.test.ParentCrudResourceTest;
@@ -17,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Collection;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
@@ -72,11 +72,12 @@ public interface BaseDeleteManyCrudResourceTest<
             return;
         DTO savedDto = getDataProvider().saveNew();
         Long countBefore = getDataProvider().countDb();
-        Collection<ID> ids = deleteManyRequest(savedDto);
-        assertEquals(1, ids.size());
-        assertThat(ids.stream().map(Object::toString).toList()).contains(savedDto.getDomainId().toString());
-        assertCount(countBefore - 1);
-        assertDelete(savedDto);
+        deleteManyRequest(savedDto, ids -> {
+            assertEquals(1, ids.size());
+            assertThat(ids.stream().map(Object::toString).toList()).contains(savedDto.getDomainId().toString());
+            assertCount(countBefore - 1);
+            assertDelete(savedDto);
+        });
     }
 
     /**
@@ -98,20 +99,13 @@ public interface BaseDeleteManyCrudResourceTest<
             return;
         DTO savedDto = getDataProvider().saveNewMandatory();
         Long countBefore = getDataProvider().countDb();
-        Set<ID> ids = deleteManyRequest(savedDto);
-        assertEquals(1, ids.size());
-        assertThat(ids.stream().map(Object::toString).toList()).contains(savedDto.getDomainId().toString());
-        assertCount(countBefore - 1);
-        assertDelete(savedDto);
+        deleteManyRequest(savedDto, ids -> {
+            assertEquals(1, ids.size());
+            assertThat(ids.stream().map(Object::toString).toList()).contains(savedDto.getDomainId().toString());
+            assertCount(countBefore - 1);
+            assertDelete(savedDto);
+        });
     }
 
-    /**
-     * Executes the deleteMany operation for the CRUD resource with the specified DTO and performs assertions.
-     *
-     * @param savedDto The DTO for which the deleteMany operation is performed.
-     * @return A set of IDs representing the deleted resources.
-     * @throws BadRequestException     If the request is malformed or invalid.
-     * @throws DomainNotFoundException If the domain is not found.
-     */
-    Set<ID> deleteManyRequest(DTO savedDto);
+    void deleteManyRequest(DTO savedDto, Assertable<Set<ID>> assertable);
 }

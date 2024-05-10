@@ -7,6 +7,7 @@ import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.restful.test.ParentCrudRestResourceTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
@@ -51,17 +52,15 @@ public interface BaseGetManyCrudRestResourceTest<
      * Executes a RESTful request to retrieve multiple entities and extracts the result from the response.
      *
      * @param savedDto The data transfer object (DTO) representing the entities to be retrieved.
-     * @return A collection of data transfer objects (DTOs) representing the retrieved entities.
      */
     @Override
-    default Collection<DTO> getManyRequest(DTO savedDto) {
+    default void getManyRequest(DTO savedDto, Assertable<Collection<DTO>> assertable) {
         // Send a GET request to the GET_MANY operation URI with the ID of the entities to be retrieved
         // Prepare the request header
         // Expect the status to be equal to the GET_MANY operation status
         // Expect the content type to be JSON
         // Expect the body to be of type Collection
-        // Return the response body
-        return this.getWebTestClient()
+        this.getWebTestClient()
                 .get()
                 .uri(String.format("%s/%s?%s.eq=%s", getBaseUri(), Operations.GET_MANY, savedDto.getDomainIdName(), savedDto.getDomainId()))
                 .headers(this::prepareHeader)
@@ -69,8 +68,7 @@ public interface BaseGetManyCrudRestResourceTest<
                 .expectStatus().isEqualTo(OperationsStatus.GET_MANY)
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
                 .expectBody(Collection.class)
-                .returnResult()
-                .getResponseBody();
+                .value(assertable::assertThan);
 
     }
 }

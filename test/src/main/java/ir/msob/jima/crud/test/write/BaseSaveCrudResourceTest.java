@@ -9,6 +9,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
 import ir.msob.jima.crud.test.BaseCrudDataProvider;
@@ -69,10 +70,11 @@ public interface BaseSaveCrudResourceTest<
             return;
 
         Long countBefore = getDataProvider().countDb();
-        DTO dto = saveRequest(this.getDataProvider().getNewDto());
-        assertCount(countBefore + 1);
-        assertAll(this.getDataProvider().getNewDto(), dto);
-        assertSave(this.getDataProvider().getNewDto(), dto);
+        saveRequest(this.getDataProvider().getNewDto(), dto -> {
+            assertAll(this.getDataProvider().getNewDto(), dto);
+            assertSave(this.getDataProvider().getNewDto(), dto);
+            assertCount(countBefore + 1);
+        });
     }
 
     /**
@@ -94,19 +96,20 @@ public interface BaseSaveCrudResourceTest<
             return;
 
         Long countBefore = getDataProvider().countDb();
-        DTO dto = saveRequest(this.getDataProvider().getMandatoryNewDto());
-        assertCount(countBefore + 1);
-        assertMandatory(this.getDataProvider().getMandatoryNewDto(), dto);
-        assertSave(this.getDataProvider().getMandatoryNewDto(), dto);
+        saveRequest(this.getDataProvider().getMandatoryNewDto(),
+                dto -> {
+                    assertMandatory(this.getDataProvider().getMandatoryNewDto(), dto);
+                    assertSave(this.getDataProvider().getMandatoryNewDto(), dto);
+                    assertCount(countBefore + 1);
+                });
     }
 
     /**
      * Executes the save operation for the CRUD resource with the specified DTO and performs assertions on the resulting DTO.
      *
      * @param dto The DTO representing the new resource to be saved.
-     * @return The saved DTO.
      * @throws BadRequestException     If the request is malformed or invalid.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    DTO saveRequest(DTO dto);
+    void saveRequest(DTO dto, Assertable<DTO> assertable);
 }

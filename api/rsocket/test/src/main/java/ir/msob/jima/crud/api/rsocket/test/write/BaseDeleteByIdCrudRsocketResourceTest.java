@@ -10,6 +10,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.rsocket.test.ParentCrudRsocketResourceTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
@@ -53,13 +54,12 @@ public interface BaseDeleteByIdCrudRsocketResourceTest<
      * Executes a RSocket request to delete an entity by its ID and extracts the result from the response.
      *
      * @param savedDto The data transfer object (DTO) representing the entity to be deleted.
-     * @return The ID of the deleted entity.
      * @throws DomainNotFoundException if the domain is not found.
      * @throws BadRequestException     if the request is bad.
      */
     @SneakyThrows
     @Override
-    default ID deleteByIdRequest(DTO savedDto) throws DomainNotFoundException, BadRequestException {
+    default void deleteByIdRequest(DTO savedDto, Assertable<ID> assertable) throws DomainNotFoundException, BadRequestException {
         // Create a new IdMessage
         // Set the ID of the message to the domain ID of the DTO
         // Send a RSocket request to the DELETE_BY_ID operation URI with the IdMessage as data
@@ -72,11 +72,12 @@ public interface BaseDeleteByIdCrudRsocketResourceTest<
         ChannelMessage<USER, IdMessage<ID>> message = new ChannelMessage<>();
         message.setData(data);
 
-        return getRSocketRequester()
+        getRSocketRequester()
                 .route(getUri(Operations.DELETE_BY_ID))
                 .metadata(getRSocketRequesterMetadata()::metadata)
                 .data(getObjectMapper().writeValueAsString(message))
                 .retrieveMono(getIdClass())
+                .doOnSuccess(assertable::assertThan)
                 .toFuture()
                 .get();
     }

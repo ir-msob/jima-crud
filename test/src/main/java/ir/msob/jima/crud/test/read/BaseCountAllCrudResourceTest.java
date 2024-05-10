@@ -9,6 +9,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
 import ir.msob.jima.crud.test.BaseCrudDataProvider;
@@ -70,8 +71,7 @@ public interface BaseCountAllCrudResourceTest<
             return;
         getDataProvider().saveNew();
         Long countBefore = getDataProvider().countDb();
-        Long count = this.countAllRequest();
-        assertEquals(1, count);
+        this.countAllRequest(count -> assertEquals(1, count));
         assertCount(countBefore);
 
     }
@@ -95,17 +95,10 @@ public interface BaseCountAllCrudResourceTest<
             return;
         getDataProvider().saveNewMandatory();
         Long countBefore = getDataProvider().countDb();
-        Long count = this.countAllRequest();
-        assertEquals(1, count);
+        this.countAllRequest(count -> assertEquals(1, count));
         assertCount(countBefore);
     }
 
-    /**
-     * Executes the countAll operation for the CRUD resource and returns the count.
-     *
-     * @return The count of all resources.
-     * @throws BadRequestException     If the request is malformed or invalid.
-     * @throws DomainNotFoundException If the domain is not found.
-     */
-    Long countAllRequest();
+
+    void countAllRequest(Assertable<Long> assertable);
 }

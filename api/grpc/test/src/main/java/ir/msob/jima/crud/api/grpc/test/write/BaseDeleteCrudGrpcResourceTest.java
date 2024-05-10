@@ -8,6 +8,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.grpc.commons.CriteriaMsg;
 import ir.msob.jima.crud.api.grpc.commons.IdMsg;
 import ir.msob.jima.crud.api.grpc.test.ParentCrudGrpcResourceTest;
@@ -55,13 +56,12 @@ public interface BaseDeleteCrudGrpcResourceTest<
      * Executes a gRPC request to delete an entity based on a given criteria and extracts the result from the response.
      *
      * @param savedDto The data transfer object (DTO) representing the saved entity.
-     * @return The ID of the deleted entity.
      * @throws DomainNotFoundException If the domain entity is not found.
      * @throws BadRequestException     If the request is malformed or invalid.
      */
     @SneakyThrows
     @Override
-    default ID deleteRequest(DTO savedDto) throws DomainNotFoundException, BadRequestException {
+    default void deleteRequest(DTO savedDto, Assertable<ID> assertable) throws DomainNotFoundException, BadRequestException {
         // Create an instance of CriteriaMsg with the ID of the saved entity
         CriteriaMsg msg = CriteriaMsg.newBuilder()
                 .setCriteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId())))
@@ -70,7 +70,7 @@ public interface BaseDeleteCrudGrpcResourceTest<
         IdMsg res = getReactorCrudServiceStub().delete(Mono.just(msg))
                 .toFuture()
                 .get();
-        // Convert the result to the ID type and return it
-        return convertToId(res.getId());
+        // Convert the result to the ID type
+        assertable.assertThan(convertToId(res.getId()));
     }
 }

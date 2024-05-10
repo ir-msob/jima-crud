@@ -8,6 +8,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.CriteriaInput;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.IdsType;
 import ir.msob.jima.crud.api.graphql.restful.test.ParentCrudGraphqlResourceTest;
@@ -71,12 +72,11 @@ public interface BaseDeleteManyCrudGraphqlResourceTest<
      * Executes a GraphQL request to delete multiple entities based on criteria and extracts the result from the response.
      *
      * @param savedDto The data transfer object (DTO) representing the saved entity.
-     * @return A set of IDs representing the deleted entities.
      * @throws DomainNotFoundException If the requested domain is not found.
      * @throws BadRequestException     If the request is malformed or contains invalid parameters.
      */
     @Override
-    default Set<ID> deleteManyRequest(DTO savedDto) throws DomainNotFoundException, BadRequestException {
+    default void deleteManyRequest(DTO savedDto, Assertable<Set<ID>> assertable) throws DomainNotFoundException, BadRequestException {
         CriteriaInput input = CriteriaInput.builder()
                 .criteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId())))
                 .build();
@@ -86,6 +86,6 @@ public interface BaseDeleteManyCrudGraphqlResourceTest<
                 .path(PATH)
                 .entity(IdsType.class)
                 .get();
-        return res.getIds().stream().map(this.getIdService()::<ID>of).collect(Collectors.toSet());
+        assertable.assertThan(res.getIds().stream().map(this.getIdService()::<ID>of).collect(Collectors.toSet()));
     }
 }

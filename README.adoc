@@ -41,6 +41,8 @@ You can also add the following dependency to the `pom.xml` file of your project:
 </dependencies>
 ----
 
+There are sample codes for using this module in the sample directory inside the project directory.
+
 == Features
 
 Jima CRUD offers a wide range of features:

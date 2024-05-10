@@ -9,6 +9,7 @@ import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.restful.test.ParentCrudRestResourceTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
@@ -52,18 +53,16 @@ public interface BaseDeleteManyCrudRestResourceTest<
      * Executes a RESTful request to delete multiple entities and extracts the result from the response.
      *
      * @param savedDto The data transfer object (DTO) representing the entities to be deleted.
-     * @return A set of IDs of the deleted entities.
      * @throws DomainNotFoundException If the entity is not found.
      * @throws BadRequestException     If the request is not valid.
      */
     @Override
-    default Set<ID> deleteManyRequest(DTO savedDto) throws DomainNotFoundException, BadRequestException {
+    default void deleteManyRequest(DTO savedDto, Assertable<Set<ID>> assertable) throws DomainNotFoundException, BadRequestException {
         // Send a DELETE request to the DELETE_MANY operation URI with the ID of the entities to be deleted
         // Prepare the request header
         // Expect the status to be equal to the DELETE_MANY operation status
         // Expect the body to be of type Set
-        // Return the response body
-        return this.getWebTestClient()
+        this.getWebTestClient()
                 .delete()
                 .uri(String.format("%s/%s?%s.eq=%s", getBaseUri(), Operations.DELETE_MANY, savedDto.getDomainIdName(), savedDto.getDomainId()))
                 .headers(this::prepareHeader)
@@ -71,8 +70,7 @@ public interface BaseDeleteManyCrudRestResourceTest<
                 .expectStatus()
                 .isEqualTo(OperationsStatus.DELETE_MANY)
                 .expectBody(Set.class)
-                .returnResult()
-                .getResponseBody();
+                .value(assertable::assertThan);
 
     }
 }

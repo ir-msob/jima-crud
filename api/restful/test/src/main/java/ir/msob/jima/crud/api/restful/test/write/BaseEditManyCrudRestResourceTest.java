@@ -8,6 +8,7 @@ import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.restful.test.ParentCrudRestResourceTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
@@ -53,18 +54,16 @@ public interface BaseEditManyCrudRestResourceTest<
      *
      * @param savedDto  The data transfer object (DTO) representing the entities to be edited.
      * @param jsonPatch The JSON Patch representing the changes to be applied to the entities.
-     * @return A collection of data transfer objects (DTOs) representing the edited entities.
      */
     @Override
-    default Collection<DTO> editManyRequest(DTO savedDto, JsonPatch jsonPatch) {
+    default void editManyRequest(DTO savedDto, JsonPatch jsonPatch, Assertable<Collection<DTO>> assertable) {
         // Send a PATCH request to the EDIT_MANY operation URI with the ID of the entities to be edited
         // Prepare the request header
         // Set the body of the request to the JSON Patch
         // Expect the status to be equal to the EDIT_MANY operation status
         // Expect the content type to be JSON
         // Expect the body to be of type Collection
-        // Return the response body
-        return this.getWebTestClient()
+        this.getWebTestClient()
                 .patch()
                 .uri(String.format("%s/%s?%s.eq=%s", getBaseUri(), Operations.EDIT_MANY, savedDto.getDomainIdName(), savedDto.getDomainId()))
                 .headers(this::prepareHeader)
@@ -73,7 +72,6 @@ public interface BaseEditManyCrudRestResourceTest<
                 .expectStatus().isEqualTo(OperationsStatus.EDIT_MANY)
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
                 .expectBody(Collection.class)
-                .returnResult()
-                .getResponseBody();
+                .value(assertable::assertThan);
     }
 }

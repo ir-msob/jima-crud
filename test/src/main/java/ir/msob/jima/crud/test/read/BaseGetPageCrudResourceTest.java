@@ -9,6 +9,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
 import ir.msob.jima.crud.test.ParentCrudResourceTest;
@@ -68,12 +69,13 @@ public interface BaseGetPageCrudResourceTest<
             return;
         DTO savedDto = getDataProvider().saveNew();
         Long countBefore = getDataProvider().countDb();
-        Page<DTO> dtos = getPageRequest(savedDto);
+        getPageRequest(savedDto, dtos -> {
+            if (dtos == null) throw new DomainNotFoundException();
+            DTO dto = getDataProvider().getObjectMapper().convertValue(dtos.getContent().stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());
+            assertAll(this.getDataProvider().getNewDto(), dto);
+            assertGet(savedDto, dto);
+        });
         assertCount(countBefore);
-        if (dtos == null) throw new DomainNotFoundException();
-        DTO dto = getDataProvider().getObjectMapper().convertValue(dtos.getContent().stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());
-        assertAll(this.getDataProvider().getNewDto(), dto);
-        assertGet(savedDto, dto);
     }
 
     /**
@@ -95,21 +97,15 @@ public interface BaseGetPageCrudResourceTest<
             return;
         DTO savedDto = getDataProvider().saveNewMandatory();
         Long countBefore = getDataProvider().countDb();
-        Page<DTO> dtos = getPageRequest(savedDto);
+        getPageRequest(savedDto, dtos -> {
+            if (dtos == null) throw new DomainNotFoundException();
+            DTO dto = getDataProvider().getObjectMapper().convertValue(dtos.getContent().stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());
+            assertMandatory(this.getDataProvider().getMandatoryNewDto(), dto);
+            assertGet(savedDto, dto);
+        });
         assertCount(countBefore);
-        if (dtos == null) throw new DomainNotFoundException();
-        DTO dto = getDataProvider().getObjectMapper().convertValue(dtos.getContent().stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());
-        assertMandatory(this.getDataProvider().getMandatoryNewDto(), dto);
-        assertGet(savedDto, dto);
     }
 
-    /**
-     * Executes the getPage operation for the CRUD resource with the specified DTO and performs assertions.
-     *
-     * @param savedDto The DTO for which the getPage operation is performed.
-     * @return A Page of DTOs representing the resources associated with the specified DTO.
-     * @throws BadRequestException     If the request is malformed or invalid.
-     * @throws DomainNotFoundException If the domain is not found.
-     */
-    Page<DTO> getPageRequest(DTO savedDto);
+
+    void getPageRequest(DTO savedDto, Assertable<Page<DTO>> assertable);
 }

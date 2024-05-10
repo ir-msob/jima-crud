@@ -5,6 +5,7 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.DtoType;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.IdInput;
 import ir.msob.jima.crud.api.graphql.restful.test.ParentCrudGraphqlResourceTest;
@@ -69,10 +70,9 @@ public interface BaseGetByIdCrudGraphqlResourceTest<
      * It uses the GraphQL tester to execute the request and then extracts the entity from the response using the specified path.
      *
      * @param savedDto The data transfer object (DTO) representing the saved entity. This DTO is used to create the criteria for the GraphQL request.
-     * @return A data transfer object (DTO) representing the retrieved entity. The DTO is extracted from the response and converted to the appropriate type.
      */
     @Override
-    default DTO getByIdRequest(DTO savedDto) {
+    default void getByIdRequest(DTO savedDto, Assertable<DTO> assertable) {
         IdInput input = IdInput.builder()
                 .id(convertToString(savedDto.getDomainId()))
                 .build();
@@ -82,6 +82,6 @@ public interface BaseGetByIdCrudGraphqlResourceTest<
                 .path(PATH)
                 .entity(DtoType.class)
                 .get();
-        return convertToDto(res.getDto());
+        assertable.assertThan(convertToDto(res.getDto()));
     }
 }

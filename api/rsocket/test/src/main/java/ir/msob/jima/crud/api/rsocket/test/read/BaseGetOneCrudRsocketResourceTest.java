@@ -9,6 +9,7 @@ import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.rsocket.test.ParentCrudRsocketResourceTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
@@ -54,11 +55,10 @@ public interface BaseGetOneCrudRsocketResourceTest<
      * The entity to be retrieved is determined by the criteria provided in the DTO.
      *
      * @param savedDto The data transfer object (DTO) representing the entity to be retrieved.
-     * @return The data transfer object (DTO) representing the retrieved entity.
      */
     @SneakyThrows
     @Override
-    default DTO getOneRequest(DTO savedDto) {
+    default void getOneRequest(DTO savedDto, Assertable<DTO> assertable) {
         // Create a new CriteriaMessage
         // Set the criteria of the message to the ID criteria of the DTO
         // Send a RSocket request to the GET_ONE operation URI with the CriteriaMessage as data
@@ -71,11 +71,12 @@ public interface BaseGetOneCrudRsocketResourceTest<
         ChannelMessage<USER, CriteriaMessage<ID, C>> message = new ChannelMessage<>();
         message.setData(data);
 
-        return getRSocketRequester()
+        getRSocketRequester()
                 .route(getUri(Operations.GET_ONE))
                 .metadata(getRSocketRequesterMetadata()::metadata)
                 .data(getObjectMapper().writeValueAsString(message))
                 .retrieveMono(getDtoClass())
+                .doOnSuccess(assertable::assertThan)
                 .toFuture()
                 .get();
     }

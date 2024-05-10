@@ -6,6 +6,8 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
+import ir.msob.jima.core.test.Assertable;
+import ir.msob.jima.crud.api.grpc.commons.CountMsg;
 import ir.msob.jima.crud.api.grpc.commons.CriteriaMsg;
 import ir.msob.jima.crud.api.grpc.test.ParentCrudGrpcResourceTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
@@ -53,19 +55,19 @@ public interface BaseCountCrudGrpcResourceTest<
      * Executes a gRPC request to count entities based on a given criteria and extracts the result from the response.
      *
      * @param savedDto The data transfer object (DTO) representing the saved entity.
-     * @return The total number of entities that match the given criteria.
      */
     @SneakyThrows
     @Override
-    default Long countRequest(DTO savedDto) {
+    default void countRequest(DTO savedDto, Assertable<Long> assertable) {
         // Create an instance of CriteriaMsg with the ID of the saved entity
         CriteriaMsg msg = CriteriaMsg.newBuilder()
                 .setCriteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId())))
                 .build();
         // Execute the gRPC request with the created CriteriaMsg and extract the result from the response
-        return getReactorCrudServiceStub().count(Mono.just(msg))
+        getReactorCrudServiceStub().count(Mono.just(msg))
+                .map(CountMsg::getCount)
+                .doOnSuccess(assertable::assertThan)
                 .toFuture()
-                .get()
-                .getCount();
+                .get();
     }
 }

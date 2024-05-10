@@ -7,6 +7,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.grpc.commons.CriteriaJsonPatchMsg;
 import ir.msob.jima.crud.api.grpc.test.ParentCrudGrpcResourceTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
@@ -55,23 +56,24 @@ public interface BaseEditManyCrudGrpcResourceTest<
      *
      * @param savedDto  The data transfer object (DTO) representing the saved entity.
      * @param jsonPatch The JSON Patch representing the changes to be applied to the entity.
-     * @return A collection of updated data transfer objects (DTOs) representing the edited entities.
      */
     @SneakyThrows
     @Override
-    default Collection<DTO> editManyRequest(DTO savedDto, JsonPatch jsonPatch) {
+    default void editManyRequest(DTO savedDto, JsonPatch jsonPatch, Assertable<Collection<DTO>> assertable) {
         // Create an instance of CriteriaJsonPatchMsg with the ID of the saved entity and the JSON Patch
         CriteriaJsonPatchMsg msg = CriteriaJsonPatchMsg.newBuilder()
                 .setCriteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId())))
                 .setJsonPatch(convertToString(jsonPatch))
                 .build();
         // Execute the gRPC request with the created CriteriaJsonPatchMsg and extract the result from the response
-        return getReactorCrudServiceStub().editMany(Mono.just(msg))
+        Collection<DTO> dtos = getReactorCrudServiceStub().editMany(Mono.just(msg))
                 .toFuture()
                 .get()
                 .getDtosList()
                 .stream()
                 .map(this::convertToDto)
                 .toList();
+        assertable.assertThan(dtos);
+
     }
 }

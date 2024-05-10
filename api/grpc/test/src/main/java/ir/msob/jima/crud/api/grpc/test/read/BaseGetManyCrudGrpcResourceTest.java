@@ -6,6 +6,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
+import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.grpc.commons.CriteriaMsg;
 import ir.msob.jima.crud.api.grpc.test.ParentCrudGrpcResourceTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
@@ -54,22 +55,22 @@ public interface BaseGetManyCrudGrpcResourceTest<
      * Executes a gRPC request to retrieve multiple entities based on a given criteria and extracts the result from the response.
      *
      * @param savedDto The data transfer object (DTO) representing the saved entity.
-     * @return A collection of data transfer objects (DTOs) representing the entities that match the given criteria.
      */
     @SneakyThrows
     @Override
-    default Collection<DTO> getManyRequest(DTO savedDto) {
+    default void getManyRequest(DTO savedDto, Assertable<Collection<DTO>> assertable) {
         // Create an instance of CriteriaMsg with the ID of the saved entity
         CriteriaMsg msg = CriteriaMsg.newBuilder()
                 .setCriteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId())))
                 .build();
         // Execute the gRPC request with the created CriteriaMsg and extract the result from the response
-        return getReactorCrudServiceStub().getMany(Mono.just(msg))
+        Collection<DTO> dtos = getReactorCrudServiceStub().getMany(Mono.just(msg))
                 .toFuture()
                 .get()
                 .getDtosList()
                 .stream()
                 .map(this::convertToDto)
                 .toList();
+        assertable.assertThan(dtos);
     }
 }
