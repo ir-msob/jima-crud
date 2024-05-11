@@ -16,7 +16,7 @@
         <!-- MSob -->
         <dependency>
             <groupId>ir.msob.jima.crud</groupId>
-            <artifactId>crud-api-graphql-restful-service</artifactId>
+            <artifactId>crud-api-graphql-restful-commons</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>

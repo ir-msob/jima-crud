@@ -9,8 +9,10 @@ import java.util.List;
 @Setter
 @Getter
 @Builder
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class DtosType implements BaseType {
+    @Builder.Default
     private List<String> dtos = new ArrayList<>();
 }

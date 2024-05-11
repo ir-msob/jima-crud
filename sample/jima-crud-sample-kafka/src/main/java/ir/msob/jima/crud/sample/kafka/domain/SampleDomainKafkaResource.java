@@ -9,7 +9,7 @@ import ir.msob.jima.crud.sample.kafka.base.resource.CrudKafkaResource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import static ir.msob.jima.crud.sample.kafka.base.resource.ResourceType.KAFKA_RESOURCE_TYPE;
+import static ir.msob.jima.core.commons.resource.ResourceType.KAFKA_RESOURCE_TYPE;
 
 @ConditionalOnOperation({Operations.SAVE, Operations.UPDATE_BY_ID, Operations.DELETE_BY_ID})
 @Component

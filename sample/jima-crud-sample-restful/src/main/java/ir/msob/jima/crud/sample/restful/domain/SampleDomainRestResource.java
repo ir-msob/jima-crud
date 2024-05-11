@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static ir.msob.jima.crud.sample.restful.base.resource.ResourceType.RESTFUL_RESOURCE_TYPE;
+import static ir.msob.jima.core.commons.resource.ResourceType.RESTFUL_RESOURCE_TYPE;
 
 @RestController
 @RequestMapping(SampleDomainRestResource.BASE_URI)

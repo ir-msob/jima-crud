@@ -23,7 +23,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 @AutoConfigureWebTestClient
-@SpringBootTest(classes = {TestMicroserviceApplication.class, MongoContainerConfiguration.class, KeycloakContainerConfiguration.class}
+@SpringBootTest(classes = {JimaApplication.class, MongoContainerConfiguration.class, KeycloakContainerConfiguration.class}
         , webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration
 @Testcontainers

@@ -17,8 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static ir.msob.jima.crud.sample.rsocket.base.resource.ResourceType.RESTFUL_RESOURCE_TYPE;
-import static ir.msob.jima.crud.sample.rsocket.base.resource.ResourceType.RSOCKET_RESOURCE_TYPE;
+import static ir.msob.jima.core.commons.resource.ResourceType.RSOCKET_RESOURCE_TYPE;
 
 @Controller
 @MessageMapping(SampleDomainRsocketResource.BASE_URI)

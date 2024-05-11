@@ -13,10 +13,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static ir.msob.jima.core.commons.resource.ResourceType.RESTFUL_RESOURCE_TYPE;
+
 @RestController
 @RequestMapping(TestDomainRestResource.BASE_URI)
 @RequiredArgsConstructor
-@Resource(value = TestDomain.DOMAIN_URI, type = "restful") // FIXME : configurable
+@Resource(value = TestDomain.DOMAIN_URI, type = RESTFUL_RESOURCE_TYPE)
 public class TestDomainRestResource extends CrudRestResource<TestDomain, TestDto, TestCriteria, TestRepository, TestService> {
     public static final String BASE_URI = "/api/" + Microservices.VERSION + "/" + TestDomain.DOMAIN_URI;
 }

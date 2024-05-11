@@ -9,6 +9,7 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
+import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,7 +46,7 @@ public interface BaseCountAllCrudService<ID extends Comparable<ID> & Serializabl
      */
     @Transactional(readOnly = true)
     @MethodStats
-    default Mono<Long> countAll(Optional<USER> user) {
+    default Mono<Long> countAll(@NotNull Optional<USER> user) {
         log.debug("CountAll, user: {}", user.orElse(null));
 
         C criteria = newCriteriaClass();
