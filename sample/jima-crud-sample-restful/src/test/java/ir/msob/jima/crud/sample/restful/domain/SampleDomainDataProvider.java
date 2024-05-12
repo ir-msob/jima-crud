@@ -53,7 +53,6 @@ public class SampleDomainDataProvider extends CrudDataProvider<SampleDomain, Sam
 
     /**
      * @throws JsonPointerException if there is an error creating the JSON patch.
-     * @inheritDoc
      */
     @Override
     @SneakyThrows
@@ -65,7 +64,6 @@ public class SampleDomainDataProvider extends CrudDataProvider<SampleDomain, Sam
 
     /**
      * @throws JsonPointerException if there is an error creating the JSON patch.
-     * @inheritDoc
      */
     @Override
     @SneakyThrows
@@ -74,7 +72,6 @@ public class SampleDomainDataProvider extends CrudDataProvider<SampleDomain, Sam
     }
 
     /**
-     * @inheritDoc
      */
     @Override
     public SampleDto getNewDto() {
@@ -92,7 +89,6 @@ public class SampleDomainDataProvider extends CrudDataProvider<SampleDomain, Sam
     }
 
     /**
-     * @inheritDoc
      */
     @Override
     public SampleDto getMandatoryNewDto() {

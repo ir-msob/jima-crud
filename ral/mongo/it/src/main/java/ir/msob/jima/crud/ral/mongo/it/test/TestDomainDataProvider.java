@@ -45,10 +45,7 @@ public class TestDomainDataProvider extends CrudDataProvider<TestDomain, TestDto
         newMandatoryDto.setDomainField(DEFAULT_STRING);
     }
 
-    /**
-     * @throws JsonPointerException if there is an error creating the JSON patch.
-     * @inheritDoc
-     */
+
     @Override
     @SneakyThrows
     public JsonPatch getJsonPatch() {
@@ -57,19 +54,12 @@ public class TestDomainDataProvider extends CrudDataProvider<TestDomain, TestDto
         return new JsonPatch(operations);
     }
 
-    /**
-     * @throws JsonPointerException if there is an error creating the JSON patch.
-     * @inheritDoc
-     */
     @Override
     @SneakyThrows
     public JsonPatch getMandatoryJsonPatch() {
         return new JsonPatch(getMandatoryJsonPatchOperation());
     }
 
-    /**
-     * @inheritDoc
-     */
     @Override
     public TestDto getNewDto() {
         return newDto;
@@ -86,7 +76,6 @@ public class TestDomainDataProvider extends CrudDataProvider<TestDomain, TestDto
     }
 
     /**
-     * @inheritDoc
      */
     @Override
     public TestDto getMandatoryNewDto() {
