@@ -21,14 +21,14 @@ Before you begin, ensure you have the following software and tools installed:
 
 == Getting Started
 
-Follow these steps to get started with the Jima CRUD project:
+* Follow these steps to get started with the Jima CRUD project:
 
 1. Clone the repository.
 2. Install all the software and tools listed in the Prerequisites section.
 3. Install the npm dependencies.
 4. Install the project with the `mvn install` command.
 
-You can also add the following dependency to the `pom.xml` file of your project:
+* You can also add the following dependency to the `pom.xml` file of your project:
 
 [source,xml]
 ----
@@ -41,7 +41,7 @@ You can also add the following dependency to the `pom.xml` file of your project:
 </dependencies>
 ----
 
-There are sample codes for using this module in the sample directory inside the project directory.
+* There are sample codes for using this module in the '/sample' directory inside the project directory.
 
 == Features
 
@@ -51,8 +51,6 @@ Jima CRUD offers a wide range of features:
 
 * API Exposure: APIs for CRUD services are exposed using Restful, gRPC, RSocket, and GraphQL.
 These technologies ensure efficient, contract-first remote procedure calls, reactive stream communication, real-time data streaming, and flexible data querying.
-
-* Exception Handling: Custom exceptions such as `DomainNotFoundException` and `BadRequestException` are included to handle specific scenarios.
 
 * Reactive Programming: Project Reactor is used for handling asynchronous data streams.
 
