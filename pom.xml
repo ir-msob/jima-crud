@@ -9,7 +9,7 @@
     </parent>
     <groupId>ir.msob.jima.crud</groupId>
     <artifactId>crud-parent</artifactId>
-    <version>1.1.9</version>
+    <version>1.1.10</version>
     <name>crud-parent</name>
     <description>crud-parent</description>
     <packaging>pom</packaging>

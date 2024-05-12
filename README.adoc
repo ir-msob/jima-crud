@@ -36,7 +36,7 @@ Before you begin, ensure you have the following software and tools installed:
     <dependency>
         <groupId>ir.msob.jima.crud</groupId>
         <artifactId>crud-starter-*</artifactId>
-        <version>1.1.9</version>
+        <version>1.1.10</version>
     </dependency>
 </dependencies>
 ----
