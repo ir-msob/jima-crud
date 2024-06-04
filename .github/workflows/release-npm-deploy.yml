@@ -47,4 +47,4 @@ jobs:
       env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_REPOSITORY_TOKEN}}
       working-directory: web/angular/
-      run: ./ng-publish.sh
+      run: npm run publish
