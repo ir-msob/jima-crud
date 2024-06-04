@@ -5,7 +5,7 @@
     <parent>
         <groupId>ir.msob.jima.crud</groupId>
         <artifactId>crud-api-grpc</artifactId>
-        <version>1.1.10</version>
+        <version>${jima-crud.version}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>crud-api-grpc-service</artifactId>
@@ -23,19 +23,19 @@
         <dependency>
             <groupId>ir.msob.jima.core</groupId>
             <artifactId>core-ral-mongo-test</artifactId>
-            <version>${core-parent.version}</version>
+            <version>${jima-commons.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>ir.msob.jima.security</groupId>
             <artifactId>security-ral-keycloak-test</artifactId>
-            <version>${security-parent.version}</version>
+            <version>${jima-security.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>ir.msob.jima.security</groupId>
             <artifactId>security-ral-keycloak-it</artifactId>
-            <version>${security-parent.version}</version>
+            <version>${jima-security.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -47,7 +47,7 @@
         <dependency>
             <groupId>ir.msob.jima.security</groupId>
             <artifactId>security-api-grpc-it</artifactId>
-            <version>${security-parent.version}</version>
+            <version>${jima-security.version}</version>
             <scope>test</scope>
         </dependency>
 

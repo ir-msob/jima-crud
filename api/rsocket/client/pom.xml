@@ -5,7 +5,7 @@
     <parent>
         <groupId>ir.msob.jima.crud</groupId>
         <artifactId>crud-api-rsocket</artifactId>
-        <version>1.1.10</version>
+        <version>${jima-crud.version}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>crud-api-rsocket-client</artifactId>
@@ -22,7 +22,7 @@
         <dependency>
             <groupId>ir.msob.jima.core</groupId>
             <artifactId>core-api-rsocket-commons</artifactId>
-            <version>${core-parent.version}</version>
+            <version>${jima-commons.version}</version>
         </dependency>
 
         <dependency>

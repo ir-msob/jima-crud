@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Read version from external file
+version=$(grep 'jima-commons.version' ../../config.properties | cut -d '=' -f2)
+echo "Read jima-commons.version $version"
+
 # Install root dependencies
 echo "Installing root dependencies..."
 npm install
@@ -36,7 +40,10 @@ build_and_publish_project() {
   cd ../..
 }
 
-# Build and publish CRUD Restful
-build_and_publish_project "crud-restful"
+# Build and publish Core Commons
+build_and_publish_project "core-commons"
+
+# Build and publish Core Restful
+build_and_publish_project "core-restful" "@ir-msob/jima-core-commons@$version"
 
 echo "All projects built and published successfully."

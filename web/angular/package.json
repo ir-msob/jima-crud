@@ -1,13 +1,15 @@
 {
   "name": "@ir-msob/jima-crud",
-  "version": "1.1.10",
+  "version": "$jima-crud.version",
   "scripts": {
+    "update-version": "node update-version.js",
+    "restore-backup": "node restore-backup.js",
     "ng": "ng",
     "start": "ng serve",
-    "build": "./ng-build.sh",
-    "publish": "./ng-publish.sh",
+    "build": "npm run update-version && ./ng-build.sh && npm run restore-backup",
+    "publish": "npm run update-version && ./ng-publish.sh && npm run restore-backup",
     "watch": "ng build --watch --configuration development",
-    "test": "./ng-test.sh"
+    "test": "npm run update-version && ./ng-test.sh && npm run restore-backup"
   },
   "private": true,
   "dependencies": {
