@@ -9,6 +9,7 @@ import ir.msob.jima.crud.sample.kafka.base.security.ProjectUser;
 import ir.msob.jima.security.ral.keycloak.test.KeycloakContainerConfiguration;
 import lombok.SneakyThrows;
 import lombok.extern.apachecommons.CommonsLog;
+import org.assertj.core.api.Assertions;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,5 +49,15 @@ public class SampleDomainKafkaResourceIT extends CrudKafkaResourceTest<SampleDom
     @Override
     public Class<? extends BaseResource<ObjectId, ProjectUser>> getResourceClass() {
         return SampleDomainKafkaResource.class;
+    }
+    @Override
+    public void assertMandatory(SampleDto before, SampleDto after) {
+        Assertions.assertThat(after.getDomainMandatoryField()).isEqualTo(before.getDomainMandatoryField());
+    }
+
+    @Override
+    public void assertAll(SampleDto before, SampleDto after) {
+        assertMandatory(before,after);
+        Assertions.assertThat(after.getDomainField()).isEqualTo(before.getDomainField());
     }
 }

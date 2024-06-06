@@ -140,4 +140,34 @@ public abstract class CrudRsocketResource<
             }
         };
     }
+
+    @Override
+    public TypeReference<ChannelMessage<ProjectUser, PageMessage<ObjectId, DTO>>> getPageReferenceType() {
+        return new TypeReference<ChannelMessage<ProjectUser, PageMessage<ObjectId, DTO>>>() {
+            @Override
+            public Type getType() {
+                return super.getType();
+            }
+        };
+    }
+
+    @Override
+    public TypeReference<ChannelMessage<ProjectUser, IdsMessage<ObjectId>>> getIdsReferenceType() {
+        return new TypeReference<ChannelMessage<ProjectUser, IdsMessage<ObjectId>>>() {
+            @Override
+            public Type getType() {
+                return super.getType();
+            }
+        };
+    }
+
+    @Override
+    public TypeReference<ChannelMessage<ProjectUser, LongMessage>> getLongReferenceType() {
+        return new TypeReference<ChannelMessage<ProjectUser, LongMessage>>() {
+            @Override
+            public Type getType() {
+                return super.getType();
+            }
+        };
+    }
 }

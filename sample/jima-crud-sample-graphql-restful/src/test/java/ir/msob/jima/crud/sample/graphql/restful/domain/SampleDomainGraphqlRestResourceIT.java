@@ -9,6 +9,7 @@ import ir.msob.jima.crud.sample.graphql.restful.base.security.ProjectUser;
 import ir.msob.jima.security.ral.keycloak.test.KeycloakContainerConfiguration;
 import lombok.SneakyThrows;
 import lombok.extern.apachecommons.CommonsLog;
+import org.assertj.core.api.Assertions;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,4 +46,14 @@ public class SampleDomainGraphqlRestResourceIT extends CrudGraphqlRestResourceTe
         return SampleDomainGraphqlRestResource.class;
     }
 
+    @Override
+    public void assertMandatory(SampleDto before, SampleDto after) {
+        Assertions.assertThat(after.getDomainMandatoryField()).isEqualTo(before.getDomainMandatoryField());
+    }
+
+    @Override
+    public void assertAll(SampleDto before, SampleDto after) {
+        assertMandatory(before,after);
+        Assertions.assertThat(after.getDomainField()).isEqualTo(before.getDomainField());
+    }
 }

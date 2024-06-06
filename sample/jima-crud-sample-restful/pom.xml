@@ -16,7 +16,7 @@
     <properties>
         <java.version>21</java.version>
         <lombok-maven-plugin.version>1.18.20.0</lombok-maven-plugin.version> <!---->
-        <jima-bom.version>1.1.2</jima-bom.version>
+        <jima-bom.version>1.2.1</jima-bom.version>
     </properties>
     <dependencyManagement>
         <dependencies>
