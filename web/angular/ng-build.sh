@@ -36,6 +36,6 @@ build_project() {
 }
 
 # Build CRUD Restful
-build_project "crud-restful"
+build_project "crud-restful" "@ir-msob/jima-core-restful@$version"
 
 echo "All projects built successfully."

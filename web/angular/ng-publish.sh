@@ -41,6 +41,6 @@ build_and_publish_project() {
 }
 
 # Build and publish CRUD Restful
-build_and_publish_project "crud-restful"
+build_and_publish_project "crud-restful" "@ir-msob/jima-core-restful@$version"
 
 echo "All projects built and published successfully."
