@@ -13,10 +13,13 @@ fs.readFile(configPath, 'utf8', (err, data) => {
   }
 
   // Parse project.properties data to find keys and values
-  const keyValuePairs = data.trim().split('\n').map(line => {
-    const [key, value] = line.split('=');
-    return [key.trim(), value.trim()];
-  });
+  const keyValuePairs = data.trim().split('\n')
+    .map(line => line.trim())
+    .filter(line => line !== null && line !== '' && !line.startsWith('#'))
+    .map(line => {
+      const [key, value] = line.split('=');
+      return [key.trim(), value.trim()];
+    });
 
   // Prepare replacement map
   const replacements = new Map(keyValuePairs);
@@ -86,7 +89,7 @@ fs.readFile(configPath, 'utf8', (err, data) => {
           // Replace placeholders with actual values
           let updatedProjectPackageJson = data;
           replacements.forEach((value, key) => {
-            console.log('key value',key,value);
+            console.log('key value', key, value);
             updatedProjectPackageJson = updatedProjectPackageJson.replace(new RegExp(`\\$${key}`, 'g'), value);
           });
 
