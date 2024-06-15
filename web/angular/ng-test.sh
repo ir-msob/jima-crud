@@ -35,10 +35,7 @@ build_project() {
   cd ../..
 }
 
-# Build Core Commons
-build_project "core-commons"
-
-# Build Core Restful
-build_project "core-restful" "@ir-msob/jima-core-commons@$version"
+# Build CRUD Restful
+build_project "crud-restful"
 
 echo "All projects tested successfully."

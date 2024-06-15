@@ -40,10 +40,7 @@ build_and_publish_project() {
   cd ../..
 }
 
-# Build and publish Core Commons
-build_and_publish_project "core-commons"
-
-# Build and publish Core Restful
-build_and_publish_project "core-restful" "@ir-msob/jima-core-commons@$version"
+# Build and publish CRUD Restful
+build_and_publish_project "crud-restful"
 
 echo "All projects built and published successfully."
