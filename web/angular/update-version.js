@@ -3,7 +3,7 @@ const path = require('path');
 
 const packageJsonPath = path.join(__dirname, 'package.json');
 const backupPackageJsonPath = path.join(__dirname, 'package.backup.json');
-const configPath = path.join(__dirname, '../../config.properties');
+const configPath = path.join(__dirname, '../../project.properties');
 const projectsPath = path.join(__dirname, 'projects');
 
 fs.readFile(configPath, 'utf8', (err, data) => {
@@ -12,7 +12,7 @@ fs.readFile(configPath, 'utf8', (err, data) => {
     return restoreBackup();
   }
 
-  // Parse config.properties data to find keys and values
+  // Parse project.properties data to find keys and values
   const keyValuePairs = data.trim().split('\n').map(line => {
     const [key, value] = line.split('=');
     return [key.trim(), value.trim()];

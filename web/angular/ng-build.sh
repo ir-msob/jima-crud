@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Read version from external file
-version=$(grep 'jima-commons.version' ../../config.properties | cut -d '=' -f2)
+version=$(grep 'jima-commons.version' ../../project.properties | cut -d '=' -f2)
 echo "Read jima-commons.version $version"
 
 # Install root dependencies
