@@ -3,10 +3,12 @@ server:
 jima:
   test-container:
     mongo:
-      image: "mongo:7-jammy"
+      image: "mongo:8.0.0-rc11"
+      reuse: true
     keycloak:
-      image: "quay.io/keycloak/keycloak:24.0"
+      image: "quay.io/keycloak/keycloak:25.0"
       realm: "test-realm"
+      reuse: true
 
 spring:
   application:
@@ -36,3 +38,11 @@ spring:
             client-authentication-method: client_secret_basic
             scope:
               - openid
+# Logging
+logging:
+  file:
+    path: log
+  logback:
+    rolling-policy:
+      max-file-size: 5MB
+      max-history: 5

@@ -9,7 +9,6 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.model.scope.Scope;
-import ir.msob.jima.core.commons.model.scope.ScopeInitializer;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.security.BaseUser;
@@ -54,7 +53,7 @@ public interface BaseGetByIdCrudKafkaListener<
     /**
      * Initializes the listener for the GET_BY_ID operation.
      */
-    @ScopeInitializer(Operations.GET_BY_ID)
+    @Scope(Operations.GET_BY_ID)
     @PostConstruct
     default void getById() {
         String operation = Operations.GET_BY_ID;

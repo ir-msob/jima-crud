@@ -9,7 +9,6 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.model.scope.Scope;
-import ir.msob.jima.core.commons.model.scope.ScopeInitializer;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.security.BaseUser;
@@ -54,7 +53,7 @@ public interface BaseUpdateCrudKafkaListener<
     /**
      * Initializes the listener for the UPDATE operation.
      */
-    @ScopeInitializer(Operations.UPDATE)
+    @Scope(Operations.UPDATE)
     @PostConstruct
     default void update() {
         String operation = Operations.UPDATE;

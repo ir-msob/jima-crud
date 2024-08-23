@@ -9,7 +9,6 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.model.scope.Scope;
-import ir.msob.jima.core.commons.model.scope.ScopeInitializer;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.security.BaseUser;
@@ -54,7 +53,7 @@ public interface BaseEditManyCrudKafkaListener<
     /**
      * Initializes the listener for the EDIT_MANY operation.
      */
-    @ScopeInitializer(Operations.EDIT_MANY)
+    @Scope(Operations.EDIT_MANY)
     @PostConstruct
     default void editMany() {
         String operation = Operations.EDIT_MANY;

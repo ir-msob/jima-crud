@@ -22,7 +22,7 @@
     <module>ral</module>
     <module>web</module>
     <module>starter</module>
-    <module>reports</module>
+<!--    <module>reports</module>-->
   </modules>
   <scm>
     <connection>scm:git:https://github.com/ir-msob/jima-crud.git</connection>

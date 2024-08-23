@@ -9,7 +9,6 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.model.scope.Scope;
-import ir.msob.jima.core.commons.model.scope.ScopeInitializer;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.security.BaseUser;
@@ -54,7 +53,7 @@ public interface BaseDeleteManyCrudKafkaListener<
     /**
      * Initializes the listener for the DELETE_MANY operation.
      */
-    @ScopeInitializer(Operations.DELETE_MANY)
+    @Scope(Operations.DELETE_MANY)
     @PostConstruct
     default void deleteMany() {
         String operation = Operations.DELETE_MANY;

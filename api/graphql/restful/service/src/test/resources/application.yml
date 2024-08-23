@@ -3,9 +3,9 @@ server:
 jima:
   test-container:
     mongo:
-      image: "mongo:7-jammy"
+      image: "mongo:8.0.0-rc11"
     keycloak:
-      image: "quay.io/keycloak/keycloak:24.0"
+      image: "quay.io/keycloak/keycloak:25.0"
       realm: "test-realm"
 
 spring:

@@ -9,7 +9,6 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.model.dto.ModelType;
 import ir.msob.jima.core.commons.model.scope.Scope;
-import ir.msob.jima.core.commons.model.scope.ScopeInitializer;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.security.BaseUser;
@@ -54,7 +53,7 @@ public interface BaseCountAllCrudKafkaListener<
     /**
      * Initializes the listener for the COUNT_ALL operation.
      */
-    @ScopeInitializer(Operations.COUNT_ALL)
+    @Scope(Operations.COUNT_ALL)
     @PostConstruct
     default void countAll() {
         String operation = Operations.COUNT_ALL;

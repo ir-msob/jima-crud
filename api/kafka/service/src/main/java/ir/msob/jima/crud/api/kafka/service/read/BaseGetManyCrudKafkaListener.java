@@ -9,7 +9,6 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.model.scope.Scope;
-import ir.msob.jima.core.commons.model.scope.ScopeInitializer;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.security.BaseUser;
@@ -54,7 +53,7 @@ public interface BaseGetManyCrudKafkaListener<
     /**
      * Initializes the listener for the GET_MANY operation.
      */
-    @ScopeInitializer(Operations.GET_MANY)
+    @Scope(Operations.GET_MANY)
     @PostConstruct
     default void getMany() {
         String operation = Operations.GET_MANY;

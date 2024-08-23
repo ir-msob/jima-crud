@@ -9,7 +9,6 @@ import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.model.scope.Scope;
-import ir.msob.jima.core.commons.model.scope.ScopeInitializer;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.security.BaseUser;
@@ -54,7 +53,7 @@ public interface BaseGetPageCrudKafkaListener<
     /**
      * Initializes the listener for the GET_PAGE operation.
      */
-    @ScopeInitializer(Operations.GET_PAGE)
+    @Scope(Operations.GET_PAGE)
     @PostConstruct
     default void getPage() {
         String operation = Operations.GET_PAGE;
