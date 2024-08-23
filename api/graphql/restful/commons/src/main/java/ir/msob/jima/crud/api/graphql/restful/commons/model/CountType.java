@@ -11,4 +11,5 @@ import lombok.*;
 @NoArgsConstructor
 public class CountType implements BaseType {
     private Long count;
+
 }
