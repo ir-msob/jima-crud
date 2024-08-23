@@ -36,12 +36,13 @@ public class TestDomainRestResourceIT extends CrudRestResourceTest<TestDomain, T
         CoreTestData.init(new ObjectId(), new ObjectId());
     }
 
+
     @SneakyThrows
     @BeforeEach
     public void beforeEach() {
         getDataProvider().cleanups();
-        getDataProvider().createNewDto();
-        getDataProvider().createMandatoryNewDto();
+        TestDomainDataProvider.createNewDto();
+        TestDomainDataProvider.createMandatoryNewDto();
     }
 
 

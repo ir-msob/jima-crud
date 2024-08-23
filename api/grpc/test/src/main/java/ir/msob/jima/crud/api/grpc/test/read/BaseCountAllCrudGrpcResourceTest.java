@@ -52,7 +52,6 @@ public interface BaseCountAllCrudGrpcResourceTest<
 
     /**
      * Executes a gRPC request to count all entities and extracts the result from the response.
-     *
      */
     @SneakyThrows
     @Override

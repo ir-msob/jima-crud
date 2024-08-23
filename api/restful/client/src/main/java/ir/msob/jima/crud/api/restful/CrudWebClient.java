@@ -50,6 +50,15 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
     private final WebClient webClient;
     private final JimaProperties jimaProperties;
 
+    private static String getUri(String suffix, DomainService domainService) {
+        String uri;
+        if (Strings.isNotBlank(suffix))
+            uri = String.format("%s/%s", RestUtil.uri(domainService), suffix);
+        else
+            uri = RestUtil.uri(domainService);
+        return uri;
+    }
+
     /**
      * This method is used to convert an object to a JSON string.
      *
@@ -468,7 +477,6 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
         return getUriWithCriteria(builder, dtoClass, "", criteria, null);
     }
 
-
     /**
      * This method is used to get the URI for a given suffix object.
      *
@@ -508,15 +516,6 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
                 .queryParams(objectToParam.convert(criteria, pageable))
                 .build();
 
-    }
-
-    private static String getUri(String suffix, DomainService domainService) {
-        String uri;
-        if (Strings.isNotBlank(suffix))
-            uri = String.format("%s/%s", RestUtil.uri(domainService), suffix);
-        else
-            uri = RestUtil.uri(domainService);
-        return uri;
     }
 
     /**

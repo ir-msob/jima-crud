@@ -62,7 +62,6 @@ public interface BaseCountAllCrudGraphqlRestResourceTest<
 
     /**
      * Executes a GraphQL request to count all entities and extracts the count result from the response.
-     *
      */
     @Override
     default void countAllRequest(Assertable<Long> assertable) {

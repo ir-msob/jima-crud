@@ -76,6 +76,7 @@ public class TestDomainDataProvider extends CrudDataProvider<TestDomain, TestDto
     }
 
     /**
+     *
      */
     @Override
     public TestDto getMandatoryNewDto() {

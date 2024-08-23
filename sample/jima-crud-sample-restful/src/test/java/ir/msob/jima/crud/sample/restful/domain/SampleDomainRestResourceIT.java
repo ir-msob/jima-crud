@@ -58,7 +58,7 @@ public class SampleDomainRestResourceIT extends CrudRestResourceTest<SampleDomai
 
     @Override
     public void assertAll(SampleDto before, SampleDto after) {
-        assertMandatory(before,after);
+        assertMandatory(before, after);
         Assertions.assertThat(after.getDomainField()).isEqualTo(before.getDomainField());
     }
 }

@@ -72,6 +72,7 @@ public class SampleDomainDataProvider extends CrudDataProvider<SampleDomain, Sam
     }
 
     /**
+     *
      */
     @Override
     public SampleDto getNewDto() {
@@ -90,6 +91,7 @@ public class SampleDomainDataProvider extends CrudDataProvider<SampleDomain, Sam
     }
 
     /**
+     *
      */
     @Override
     public SampleDto getMandatoryNewDto() {

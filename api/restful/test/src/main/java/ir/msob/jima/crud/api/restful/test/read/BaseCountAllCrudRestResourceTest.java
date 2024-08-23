@@ -49,7 +49,6 @@ public interface BaseCountAllCrudRestResourceTest<
 
     /**
      * Executes a RESTful request to count all entities and extracts the result from the response.
-     *
      */
     @Override
     default void countAllRequest(Assertable<Long> assertable) {

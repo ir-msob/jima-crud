@@ -1,7 +1,6 @@
 package ir.msob.jima.crud.sample.rsocket.base.repository;
 
 
-
 import ir.msob.jima.core.ral.mongo.commons.BaseMongoRepository;
 import ir.msob.jima.crud.ral.mongo.commons.BaseCrudMongoRepository;
 import ir.msob.jima.crud.sample.rsocket.base.criteria.ProjectCriteria;

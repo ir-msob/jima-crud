@@ -12,10 +12,10 @@ import java.util.Optional;
 
 /**
  * This class provides a base implementation for user-related services within Jima projects.
- *
+ * <p>
  * It implements interfaces for both Keycloak and a generic security project user service.
  * This allows for potential customization based on the chosen security provider.
- *
+ * <p>
  * However, the current implementation of `getUser` method simply returns an empty `Optional`.
  */
 @Service
@@ -54,7 +54,7 @@ public class ProjectUserService implements BaseKeycloakProjectUserService, BaseS
 
     /**
      * This method attempts to retrieve a user object based on the provided optional user identifier.
-     *
+     * <p>
      * **Current implementation always returns an empty Optional.**
      * This behavior needs to be customized based on the chosen security provider
      * (e.g., Keycloak integration) to fetch user information.

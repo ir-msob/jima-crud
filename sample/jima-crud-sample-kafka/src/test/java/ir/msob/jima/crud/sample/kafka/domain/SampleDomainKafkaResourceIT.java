@@ -50,6 +50,7 @@ public class SampleDomainKafkaResourceIT extends CrudKafkaResourceTest<SampleDom
     public Class<? extends BaseResource<ObjectId, ProjectUser>> getResourceClass() {
         return SampleDomainKafkaResource.class;
     }
+
     @Override
     public void assertMandatory(SampleDto before, SampleDto after) {
         Assertions.assertThat(after.getDomainMandatoryField()).isEqualTo(before.getDomainMandatoryField());
@@ -57,7 +58,7 @@ public class SampleDomainKafkaResourceIT extends CrudKafkaResourceTest<SampleDom
 
     @Override
     public void assertAll(SampleDto before, SampleDto after) {
-        assertMandatory(before,after);
+        assertMandatory(before, after);
         Assertions.assertThat(after.getDomainField()).isEqualTo(before.getDomainField());
     }
 }

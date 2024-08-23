@@ -45,10 +45,10 @@ public abstract class CrudKafkaResourceTest<
     ProjectUserService projectUserService;
     @Autowired
     KafkaTemplate<String, String> kafkaTemplate;
-    @Value("${spring.kafka.consumer.group-id}")
-    private String groupId;
     @Autowired
     ConsumerFactory<String, String> consumerFactory;
+    @Value("${spring.kafka.consumer.group-id}")
+    private String groupId;
 
     @Override
     public Optional<ProjectUser> getSampleUser() {

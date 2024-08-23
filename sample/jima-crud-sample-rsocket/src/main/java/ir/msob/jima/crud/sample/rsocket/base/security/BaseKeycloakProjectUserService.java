@@ -26,7 +26,7 @@ public interface BaseKeycloakProjectUserService extends BaseUserService {
 
     @Override
     default <USER extends BaseUser> Optional<USER> getUser(Map<String, Object> claims) {
-        SortedSet<String> roles = new TreeSet<> ( (List<String>) ((Map<String,Map<String,List<String>>>) claims.get(ProjectClaimKey.REALM_ACCESS)).get(ProjectClaimKey.KEYCLOAK_ROLES));
+        SortedSet<String> roles = new TreeSet<>((List<String>) ((Map<String, Map<String, List<String>>>) claims.get(ProjectClaimKey.REALM_ACCESS)).get(ProjectClaimKey.KEYCLOAK_ROLES));
         return Optional.of((USER) ProjectUser.builder()
                 .id(String.valueOf(claims.get(ClaimKey.ID)))
                 .sessionId(String.valueOf(claims.get(ClaimKey.SESSION_ID)))
