@@ -47,8 +47,8 @@ public interface BaseGetStreamCrudService<ID extends Comparable<ID> & Serializab
      * @param ids  A collection of entity IDs.
      * @param user An optional user associated with the operation.
      * @return A Flux emitting a collection of DTO entities.
-     * @throws DomainNotFoundException   If the requested domain is not found.
-     * @throws BadRequestException       If the request is not well-formed or violates business rules.
+     * @throws DomainNotFoundException If the requested domain is not found.
+     * @throws BadRequestException     If the request is not well-formed or violates business rules.
      */
     @Transactional(readOnly = true)
     @MethodStats
@@ -84,6 +84,7 @@ public interface BaseGetStreamCrudService<ID extends Comparable<ID> & Serializab
                             .thenReturn(dto);
                 });
     }
+
     /**
      * Execute the retrieval of multiple domain entities based on specific criteria.
      *

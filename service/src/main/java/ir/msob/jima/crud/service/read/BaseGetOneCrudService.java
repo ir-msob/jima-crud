@@ -44,8 +44,8 @@ public interface BaseGetOneCrudService<ID extends Comparable<ID> & Serializable,
      * @param id   The ID of the entity to retrieve.
      * @param user An optional user associated with the operation.
      * @return A Mono emitting a single DTO entity.
-     * @throws DomainNotFoundException   If the requested domain is not found.
-     * @throws BadRequestException       If the request is not well-formed or violates business rules.
+     * @throws DomainNotFoundException If the requested domain is not found.
+     * @throws BadRequestException     If the request is not well-formed or violates business rules.
      */
     @Transactional(readOnly = true)
     @MethodStats

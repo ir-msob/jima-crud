@@ -45,8 +45,8 @@ public interface BaseEditManyCrudService<ID extends Comparable<ID> & Serializabl
      * @param ids       The collection of entity IDs to identify the entities to be updated.
      * @param user      An optional user associated with the operation.
      * @return A collection of DTOs representing the updated entities.
-     * @throws BadRequestException       if the operation encounters a bad request scenario.
-     * @throws DomainNotFoundException   if the entities to be updated are not found.
+     * @throws BadRequestException     if the operation encounters a bad request scenario.
+     * @throws DomainNotFoundException if the entities to be updated are not found.
      */
     @Transactional
     @MethodStats

@@ -119,7 +119,7 @@ public interface ParentWriteCrudService<
     /**
      * Performs actions after saving entities.
      *
-     * @param dto        The DTO that was saved.
+     * @param dto         The DTO that was saved.
      * @param savedDomain The saved domain.
      * @param user        An optional user object.
      * @return A Mono that emits void.
@@ -171,9 +171,9 @@ public interface ParentWriteCrudService<
     /**
      * Performs actions after updating entities.
      *
-     * @param dto          The DTO that was updated.
+     * @param dto           The DTO that was updated.
      * @param updatedDomain The updated domain.
-     * @param user         An optional user object.
+     * @param user          An optional user object.
      * @return A Mono that emits void.
      */
     default Mono<Void> postUpdate(DTO dto, D updatedDomain, Optional<USER> user) {
@@ -194,7 +194,7 @@ public interface ParentWriteCrudService<
     /**
      * Performs actions after deleting entities based on criteria.
      *
-     * @param dto       The DTO of the entity that was deleted.
+     * @param dto      The DTO of the entity that was deleted.
      * @param criteria The criteria used for deleting entities.
      * @param user     An optional user object.
      * @return A Mono that emits void.
@@ -206,9 +206,9 @@ public interface ParentWriteCrudService<
     /**
      * Adds audit information to a DTO.
      *
-     * @param dto                  The DTO to be audited.
-     * @param actionType           The type of audit action to record.
-     * @param user                 An optional user object.
+     * @param dto        The DTO to be audited.
+     * @param actionType The type of audit action to record.
+     * @param user       An optional user object.
      */
     default void addAudit(DTO dto, AuditDomainActionType actionType, Optional<USER> user) {
         user.ifPresent(u -> {

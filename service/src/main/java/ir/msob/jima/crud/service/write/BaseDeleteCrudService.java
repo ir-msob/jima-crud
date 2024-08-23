@@ -74,11 +74,12 @@ public interface BaseDeleteCrudService<ID extends Comparable<ID> & Serializable,
                 .doOnNext(dto -> this.getBeforeAfterComponent().afterDelete(dto, criteria, getDtoClass(), user, getBeforeAfterDomainOperations()))
                 .map(BaseDomain::getDomainId);
     }
+
     /**
      * Executes the actual removal of a single entity based on the specified criteria.
      * This method is called by the delete method after the preDelete method.
      *
-     * @param dto The DTO to be deleted.
+     * @param dto  The DTO to be deleted.
      * @param user An optional user associated with the operation.
      * @return A Mono of the entity (domain) to be removed.
      * @throws DomainNotFoundException if the entity to be deleted is not found.

@@ -42,8 +42,8 @@ public interface BaseDeleteManyCrudService<ID extends Comparable<ID> & Serializa
      * @param ids  A collection of entity IDs to be deleted.
      * @param user An optional user associated with the operation.
      * @return A Mono of a collection of entity IDs that were deleted.
-     * @throws DomainNotFoundException   if the entities to be deleted are not found.
-     * @throws BadRequestException       if the operation encounters a bad request scenario.
+     * @throws DomainNotFoundException if the entities to be deleted are not found.
+     * @throws BadRequestException     if the operation encounters a bad request scenario.
      */
     @Transactional
     @MethodStats
@@ -78,12 +78,13 @@ public interface BaseDeleteManyCrudService<ID extends Comparable<ID> & Serializa
                 .collectList()
                 .map(ArrayList::new);
     }
+
     /**
      * Executes the actual removal of multiple entities based on the specified criteria.
      * This method is called by the deleteMany method after the preDelete method.
      *
-     * @param dto The DTO to be deleted.
-     * @param user     An optional user associated with the operation.
+     * @param dto  The DTO to be deleted.
+     * @param user An optional user associated with the operation.
      * @return A Flux of entities (domains) to be removed.
      * @throws DomainNotFoundException if the entities to be deleted are not found.
      */

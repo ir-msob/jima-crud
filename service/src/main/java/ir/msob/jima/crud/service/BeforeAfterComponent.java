@@ -263,7 +263,7 @@ public class BeforeAfterComponent {
     /**
      * Executes after deleting records based on the provided criteria.
      *
-     * @param dto                        The DTO of the deleted records.
+     * @param dto                       The DTO of the deleted records.
      * @param criteria                  The criteria used for deleting records.
      * @param dtoClass                  The class of DTO used.
      * @param user                      An optional user associated with the operation.
