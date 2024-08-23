@@ -22,7 +22,7 @@ import static ir.msob.jima.core.commons.resource.ResourceType.RSOCKET_RESOURCE_T
 @Controller
 @MessageMapping(SampleDomainRsocketResource.BASE_URI)
 @RequiredArgsConstructor
-@Resource(value = SampleDomain.DOMAIN_URI, type = RSOCKET_RESOURCE_TYPE)
+@Resource(value = TestDomain.DOMAIN_URI, type = ResourceType.RESTFUL)
 public class SampleDomainRsocketResource extends CrudRsocketResource<SampleDomain, SampleDto, SampleCriteria, SampleRepository, SampleService> {
     public static final String BASE_URI = "api." + Microservices.VERSION + "." + SampleDomain.DOMAIN_URI;
 }

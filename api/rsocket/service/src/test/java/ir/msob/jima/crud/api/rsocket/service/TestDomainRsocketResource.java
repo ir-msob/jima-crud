@@ -1,6 +1,8 @@
 package ir.msob.jima.crud.api.rsocket.service;
 
 
+import ir.msob.jima.core.commons.model.ResourceType;
+import ir.msob.jima.core.commons.model.scope.Resource;
 import ir.msob.jima.core.ral.mongo.it.Microservices;
 import ir.msob.jima.core.ral.mongo.it.test.TestCriteria;
 import ir.msob.jima.core.ral.mongo.it.test.TestDomain;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 @MessageMapping(TestDomainRsocketResource.BASE_URI)
 @RequiredArgsConstructor
+@Resource(value = TestDomain.DOMAIN_URI, type = ResourceType.RSOCKET)
 public class TestDomainRsocketResource extends CrudRsocketResource<TestDomain, TestDto, TestCriteria, TestRepository, TestService> {
 
     public static final String BASE_URI = "api." + Microservices.VERSION + "." + TestDomain.DOMAIN_URI;
