@@ -9,7 +9,8 @@ import org.bson.types.ObjectId;
 import java.io.Serial;
 
 /**
- * @author Yaqub Abdi
+ * Abstract class representing the domain model for a project.
+ * It provides common properties and methods for project domain objects.
  */
 @Setter
 @Getter

@@ -4,7 +4,8 @@ import ir.msob.jima.core.commons.model.domain.BaseDomain;
 import org.bson.types.ObjectId;
 
 /**
- * @author Yaqub Abdi
+ * Interface for project domain objects.
+ * It extends a base domain interface with ObjectId as the identifier type.
  */
 public interface ProjectDomain extends BaseDomain<ObjectId> {
 

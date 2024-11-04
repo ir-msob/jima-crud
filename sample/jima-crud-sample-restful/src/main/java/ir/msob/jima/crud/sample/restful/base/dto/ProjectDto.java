@@ -7,7 +7,8 @@ import ir.msob.jima.crud.sample.restful.base.domain.ProjectDomain;
 import org.bson.types.ObjectId;
 
 /**
- * @author Yaqub Abdi
+ * Interface for project-related Data Transfer Objects (DTO).
+ * It extends both the domain model and a base DTO interface.
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = Constants.TYPE_PROPERTY_NAME)
 public interface ProjectDto extends ProjectDomain, BaseDto<ObjectId> {
