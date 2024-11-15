@@ -19,7 +19,6 @@ import reactor.core.publisher.Mono;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * This class implements asynchronous CRUD operations using Kafka messages. It extends the {@link BaseCrudAsyncClient}
@@ -35,7 +34,7 @@ public class CrudKafkaAsyncClient implements BaseCrudAsyncClient {
         return ChannelUtil.getChannel(dtoClass, operation);
     }
 
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DATA extends ModelType, DTO extends BaseDto<ID>> void send(ChannelMessage<USER, DATA> message, Class<DTO> dtoClass, String operation, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DATA extends ModelType, DTO extends BaseDto<ID>> void send(ChannelMessage<USER, DATA> message, Class<DTO> dtoClass, String operation, USER user) {
         String channel = createChannel(dtoClass, operation);
         asyncClient.send(message, channel, user);
     }
@@ -43,7 +42,7 @@ public class CrudKafkaAsyncClient implements BaseCrudAsyncClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Void> deleteById(Class<DTO> dtoClass, ID id, Map<String, Serializable> metadata, String callback, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Void> deleteById(Class<DTO> dtoClass, ID id, Map<String, Serializable> metadata, String callback, USER user) {
         IdMessage<ID> data = createData(id);
         ChannelMessage<USER, IdMessage<ID>> channelMessage = createChannelMessage(data, metadata, callback);
         send(channelMessage, dtoClass, Operations.DELETE_BY_ID, user);
@@ -53,7 +52,7 @@ public class CrudKafkaAsyncClient implements BaseCrudAsyncClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> delete(Class<DTO> dtoClass, C criteria, Map<String, Serializable> metadata, String callback, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> delete(Class<DTO> dtoClass, C criteria, Map<String, Serializable> metadata, String callback, USER user) {
         CriteriaMessage<ID, C> data = createData(criteria);
         ChannelMessage<USER, CriteriaMessage<ID, C>> channelMessage = createChannelMessage(data, metadata, callback);
         send(channelMessage, dtoClass, Operations.DELETE, user);
@@ -63,7 +62,7 @@ public class CrudKafkaAsyncClient implements BaseCrudAsyncClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> deleteMany(Class<DTO> dtoClass, C criteria, Map<String, Serializable> metadata, String callback, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> deleteMany(Class<DTO> dtoClass, C criteria, Map<String, Serializable> metadata, String callback, USER user) {
         CriteriaMessage<ID, C> data = createData(criteria);
         ChannelMessage<USER, CriteriaMessage<ID, C>> channelMessage = createChannelMessage(data, metadata, callback);
         send(channelMessage, dtoClass, Operations.DELETE_MANY, user);
@@ -73,7 +72,7 @@ public class CrudKafkaAsyncClient implements BaseCrudAsyncClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> deleteAll(Class<DTO> dtoClass, C criteria, Map<String, Serializable> metadata, String callback, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> deleteAll(Class<DTO> dtoClass, C criteria, Map<String, Serializable> metadata, String callback, USER user) {
         CriteriaMessage<ID, C> data = createData(criteria);
         ChannelMessage<USER, CriteriaMessage<ID, C>> channelMessage = createChannelMessage(data, metadata, callback);
         send(channelMessage, dtoClass, Operations.DELETE_ALL, user);
@@ -83,7 +82,7 @@ public class CrudKafkaAsyncClient implements BaseCrudAsyncClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Void> editById(Class<DTO> dtoClass, ID id, JsonPatch jsonPatch, Map<String, Serializable> metadata, String callback, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Void> editById(Class<DTO> dtoClass, ID id, JsonPatch jsonPatch, Map<String, Serializable> metadata, String callback, USER user) {
         IdJsonPatchMessage<ID> data = createMessage(jsonPatch, id);
         ChannelMessage<USER, IdJsonPatchMessage<ID>> channelMessage = createChannelMessage(data, metadata, callback);
         send(channelMessage, dtoClass, Operations.EDIT_BY_ID, user);
@@ -93,7 +92,7 @@ public class CrudKafkaAsyncClient implements BaseCrudAsyncClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> edit(Class<DTO> dtoClass, JsonPatch jsonPatch, C criteria, Map<String, Serializable> metadata, String callback, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> edit(Class<DTO> dtoClass, JsonPatch jsonPatch, C criteria, Map<String, Serializable> metadata, String callback, USER user) {
         JsonPatchMessage<ID, C> data = createMessage(jsonPatch, criteria);
         ChannelMessage<USER, JsonPatchMessage<ID, C>> channelMessage = createChannelMessage(data, metadata, callback);
         send(channelMessage, dtoClass, Operations.EDIT, user);
@@ -103,7 +102,7 @@ public class CrudKafkaAsyncClient implements BaseCrudAsyncClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> editMany(Class<DTO> dtoClass, JsonPatch jsonPatch, C criteria, Map<String, Serializable> metadata, String callback, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> editMany(Class<DTO> dtoClass, JsonPatch jsonPatch, C criteria, Map<String, Serializable> metadata, String callback, USER user) {
         JsonPatchMessage<ID, C> data = createMessage(jsonPatch, criteria);
         ChannelMessage<USER, JsonPatchMessage<ID, C>> channelMessage = createChannelMessage(data, metadata, callback);
         send(channelMessage, dtoClass, Operations.EDIT_MANY, user);
@@ -113,7 +112,7 @@ public class CrudKafkaAsyncClient implements BaseCrudAsyncClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Void> save(Class<DTO> dtoClass, DTO dto, Map<String, Serializable> metadata, String callback, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Void> save(Class<DTO> dtoClass, DTO dto, Map<String, Serializable> metadata, String callback, USER user) {
         DtoMessage<ID, DTO> data = createMessage(dto);
         ChannelMessage<USER, DtoMessage<ID, DTO>> channelMessage = createChannelMessage(data, metadata, callback);
         send(channelMessage, dtoClass, Operations.SAVE, user);
@@ -123,7 +122,7 @@ public class CrudKafkaAsyncClient implements BaseCrudAsyncClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Void> saveMany(Class<DTO> dtoClass, List<DTO> dtos, Map<String, Serializable> metadata, String callback, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Void> saveMany(Class<DTO> dtoClass, List<DTO> dtos, Map<String, Serializable> metadata, String callback, USER user) {
         DtosMessage<ID, DTO> data = createMessage(dtos);
         ChannelMessage<USER, DtosMessage<ID, DTO>> channelMessage = createChannelMessage(data, metadata, callback);
         send(channelMessage, dtoClass, Operations.SAVE_MANY, user);
@@ -133,7 +132,7 @@ public class CrudKafkaAsyncClient implements BaseCrudAsyncClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Void> updateById(Class<DTO> dtoClass, ID id, DTO dto, Map<String, Serializable> metadata, String callback, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Void> updateById(Class<DTO> dtoClass, ID id, DTO dto, Map<String, Serializable> metadata, String callback, USER user) {
         DtoMessage<ID, DTO> data = createMessage(id, dto);
         ChannelMessage<USER, DtoMessage<ID, DTO>> channelMessage = createChannelMessage(data, metadata, callback);
         send(channelMessage, dtoClass, Operations.UPDATE_BY_ID, user);
@@ -143,7 +142,7 @@ public class CrudKafkaAsyncClient implements BaseCrudAsyncClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Void> update(Class<DTO> dtoClass, DTO dto, Map<String, Serializable> metadata, String callback, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Void> update(Class<DTO> dtoClass, DTO dto, Map<String, Serializable> metadata, String callback, USER user) {
         DtoMessage<ID, DTO> data = createMessage(dto);
         ChannelMessage<USER, DtoMessage<ID, DTO>> channelMessage = createChannelMessage(data, metadata, callback);
         send(channelMessage, dtoClass, Operations.UPDATE, user);
@@ -153,7 +152,7 @@ public class CrudKafkaAsyncClient implements BaseCrudAsyncClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Void> updateMany(Class<DTO> dtoClass, List<DTO> dtos, Map<String, Serializable> metadata, String callback, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Void> updateMany(Class<DTO> dtoClass, List<DTO> dtos, Map<String, Serializable> metadata, String callback, USER user) {
         DtosMessage<ID, DTO> data = createMessage(dtos);
         ChannelMessage<USER, DtosMessage<ID, DTO>> channelMessage = createChannelMessage(data, metadata, callback);
         send(channelMessage, dtoClass, Operations.UPDATE_MANY, user);
@@ -163,7 +162,7 @@ public class CrudKafkaAsyncClient implements BaseCrudAsyncClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> count(Class<DTO> dtoClass, C criteria, Map<String, Serializable> metadata, String callback, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> count(Class<DTO> dtoClass, C criteria, Map<String, Serializable> metadata, String callback, USER user) {
         CriteriaMessage<ID, C> data = createData(criteria);
         ChannelMessage<USER, CriteriaMessage<ID, C>> channelMessage = createChannelMessage(data, metadata, callback);
         send(channelMessage, dtoClass, Operations.COUNT, user);
@@ -173,7 +172,7 @@ public class CrudKafkaAsyncClient implements BaseCrudAsyncClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Void> countAll(Class<DTO> dtoClass, Map<String, Serializable> metadata, String callback, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Void> countAll(Class<DTO> dtoClass, Map<String, Serializable> metadata, String callback, USER user) {
         ChannelMessage<USER, ModelType> channelMessage = createChannelMessage(new ModelType(), metadata, callback);
         send(channelMessage, dtoClass, Operations.COUNT_ALL, user);
         return Mono.empty();
@@ -182,7 +181,7 @@ public class CrudKafkaAsyncClient implements BaseCrudAsyncClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Void> getById(Class<DTO> dtoClass, ID id, Map<String, Serializable> metadata, String callback, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Void> getById(Class<DTO> dtoClass, ID id, Map<String, Serializable> metadata, String callback, USER user) {
         IdMessage<ID> data = createData(id);
         ChannelMessage<USER, IdMessage<ID>> channelMessage = createChannelMessage(data, metadata, callback);
         send(channelMessage, dtoClass, Operations.GET_BY_ID, user);
@@ -192,7 +191,7 @@ public class CrudKafkaAsyncClient implements BaseCrudAsyncClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> getOne(Class<DTO> dtoClass, C criteria, Map<String, Serializable> metadata, String callback, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> getOne(Class<DTO> dtoClass, C criteria, Map<String, Serializable> metadata, String callback, USER user) {
         CriteriaMessage<ID, C> data = createData(criteria);
         ChannelMessage<USER, CriteriaMessage<ID, C>> channelMessage = createChannelMessage(data, metadata, callback);
         send(channelMessage, dtoClass, Operations.GET_ONE, user);
@@ -202,7 +201,7 @@ public class CrudKafkaAsyncClient implements BaseCrudAsyncClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> getMany(Class<DTO> dtoClass, C criteria, Map<String, Serializable> metadata, String callback, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> getMany(Class<DTO> dtoClass, C criteria, Map<String, Serializable> metadata, String callback, USER user) {
         CriteriaMessage<ID, C> data = createData(criteria);
         ChannelMessage<USER, CriteriaMessage<ID, C>> channelMessage = createChannelMessage(data, metadata, callback);
         send(channelMessage, dtoClass, Operations.GET_MANY, user);
@@ -212,7 +211,7 @@ public class CrudKafkaAsyncClient implements BaseCrudAsyncClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> getPage(Class<DTO> dtoClass, C criteria, Map<String, Serializable> metadata, String callback, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> getPage(Class<DTO> dtoClass, C criteria, Map<String, Serializable> metadata, String callback, USER user) {
         CriteriaMessage<ID, C> data = createData(criteria);
         ChannelMessage<USER, CriteriaMessage<ID, C>> channelMessage = createChannelMessage(data, metadata, callback);
         send(channelMessage, dtoClass, Operations.GET_PAGE, user);
@@ -222,7 +221,7 @@ public class CrudKafkaAsyncClient implements BaseCrudAsyncClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> getOne(Class<DTO> dtoClass, ChannelMessage<USER, CriteriaMessage<ID, C>> channelMessage, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> getOne(Class<DTO> dtoClass, ChannelMessage<USER, CriteriaMessage<ID, C>> channelMessage, USER user) {
         send(channelMessage, dtoClass, Operations.GET_ONE, user);
         return Mono.empty();
     }
@@ -230,7 +229,7 @@ public class CrudKafkaAsyncClient implements BaseCrudAsyncClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> getMany(Class<DTO> dtoClass, ChannelMessage<USER, CriteriaMessage<ID, C>> channelMessage, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> getMany(Class<DTO> dtoClass, ChannelMessage<USER, CriteriaMessage<ID, C>> channelMessage, USER user) {
         send(channelMessage, dtoClass, Operations.GET_MANY, user);
         return Mono.empty();
     }

@@ -24,7 +24,6 @@ import org.springframework.http.HttpHeaders;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * The {@code BaseGetManyCrudGraphqlRestResource} interface defines GraphQL queries for retrieving multiple entities
@@ -69,7 +68,7 @@ public interface BaseGetManyCrudGraphqlRestResource<
     default Mono<DtosType> getMany(@Argument("input") CriteriaInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
         log.debug("Request to get many: dto {}", input);
 
-        Optional<USER> user = getUser(token);
+        USER user = getUser(token);
 
         return getService().getMany(convertToCriteria(input.getCriteria()), user)
                 .map(dtos -> DtosType.builder().dtos(convertToStrings(dtos)).build());

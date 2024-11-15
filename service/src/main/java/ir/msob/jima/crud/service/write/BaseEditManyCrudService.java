@@ -20,7 +20,6 @@ import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Optional;
 
 /**
  * This service interface defines the contract for executing batch update operations on multiple entities based on JSON patch documents.
@@ -43,14 +42,14 @@ public interface BaseEditManyCrudService<ID extends Comparable<ID> & Serializabl
      *
      * @param jsonPatch The JSON patch document to apply to entities.
      * @param ids       The collection of entity IDs to identify the entities to be updated.
-     * @param user      An optional user associated with the operation.
+     * @param user      A user associated with the operation.
      * @return A collection of DTOs representing the updated entities.
      * @throws BadRequestException     if the operation encounters a bad request scenario.
      * @throws DomainNotFoundException if the entities to be updated are not found.
      */
     @Transactional
     @MethodStats
-    default Mono<Collection<DTO>> editMany(Collection<ID> ids, JsonPatch jsonPatch, Optional<USER> user) throws BadRequestException, DomainNotFoundException {
+    default Mono<Collection<DTO>> editMany(Collection<ID> ids, JsonPatch jsonPatch, USER user) throws BadRequestException, DomainNotFoundException {
         return this.editMany(CriteriaUtil.idCriteria(getCriteriaClass(), ids), jsonPatch, user);
     }
 
@@ -60,15 +59,15 @@ public interface BaseEditManyCrudService<ID extends Comparable<ID> & Serializabl
      *
      * @param jsonPatch The JSON patch document to apply to entities.
      * @param criteria  The criteria used for filtering entities to be updated.
-     * @param user      An optional user associated with the operation.
+     * @param user      A user associated with the operation.
      * @return A collection of DTOs representing the updated entities.
      * @throws BadRequestException     if the operation encounters a bad request scenario.
      * @throws DomainNotFoundException if the entities to be updated are not found.
      */
     @Transactional
     @MethodStats
-    default Mono<Collection<DTO>> editMany(C criteria, JsonPatch jsonPatch, Optional<USER> user) throws BadRequestException, DomainNotFoundException {
-        log.debug("EditMany, jsonPatch: {}, criteria: {}, user {}", jsonPatch, criteria, user.orElse(null));
+    default Mono<Collection<DTO>> editMany(C criteria, JsonPatch jsonPatch, USER user) throws BadRequestException, DomainNotFoundException {
+        log.debug("EditMany, jsonPatch: {}, criteria: {}, user {}", jsonPatch, criteria, user);
 
         return getMany(criteria, user).flatMap(dtos -> {
             Collection<DTO> previousDtos = dtos.stream()

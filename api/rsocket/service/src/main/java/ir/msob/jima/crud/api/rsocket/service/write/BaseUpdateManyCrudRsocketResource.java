@@ -26,7 +26,6 @@ import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Optional;
 
 /**
  * This interface provides a RSocket API for updating multiple domains.
@@ -73,7 +72,7 @@ public interface BaseUpdateManyCrudRsocketResource<
         log.debug("RSocket request to update many domain, dtos : {}", dto);
         ChannelMessage<USER, DtosMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getDtosReferenceType());
 
-        Optional<USER> user = getUser(message.getUser(), principal);
+        USER user = getUser(message.getUser(), principal);
         return this.updateManyResponse(message.getData().getDtos(), this.getService().updateMany(message.getData().getDtos(), user), user);
     }
 
@@ -83,10 +82,10 @@ public interface BaseUpdateManyCrudRsocketResource<
      *
      * @param dtos        the DTOs to update the domains
      * @param updatedDtos the Mono with the updated DTOs
-     * @param user        the Optional object containing the user
+     * @param user        the user
      * @return a Mono with the updated DTOs
      */
-    default Mono<Collection<DTO>> updateManyResponse(Collection<DTO> dtos, Mono<Collection<DTO>> updatedDtos, Optional<USER> user) {
+    default Mono<Collection<DTO>> updateManyResponse(Collection<DTO> dtos, Mono<Collection<DTO>> updatedDtos, USER user) {
         return updatedDtos;
     }
 }

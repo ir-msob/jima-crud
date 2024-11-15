@@ -24,7 +24,6 @@ import org.springframework.http.HttpHeaders;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * Interface for a GraphQL resource that provides a method to retrieve an entity by its ID.
@@ -65,7 +64,7 @@ public interface BaseGetByIdCrudGraphqlRestResource<
     default Mono<DtoType> getById(@Argument("input") IdInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
         log.debug("Request to get by id: dto {}", input);
 
-        Optional<USER> user = getUser(token);
+        USER user = getUser(token);
 
         return getService().getOne(convertToId(input.getId()), user)
                 .map(dto -> DtoType.builder().dto(convertToString(dto)).build());

@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * This service interface defines the contract for executing update operations for a single entity (DTO).
@@ -41,7 +40,7 @@ public interface BaseUpdateCrudService<ID extends Comparable<ID> & Serializable,
      *
      * @param id   The id of entity.
      * @param dto  The DTO representing the entity to be updated.
-     * @param user An optional user associated with the operation.
+     * @param user A user associated with the operation.
      * @return The DTO representing the updated entity.
      * @throws BadRequestException     if the operation encounters a bad request scenario.
      * @throws DomainNotFoundException if the entity to be updated is not found.
@@ -49,7 +48,7 @@ public interface BaseUpdateCrudService<ID extends Comparable<ID> & Serializable,
     @Override
     @Transactional
     @MethodStats
-    default Mono<DTO> update(ID id, @Valid DTO dto, Optional<USER> user) {
+    default Mono<DTO> update(ID id, @Valid DTO dto, USER user) {
         dto.setDomainId(id);
         return update(dto, user);
     }
@@ -59,7 +58,7 @@ public interface BaseUpdateCrudService<ID extends Comparable<ID> & Serializable,
      * This method is transactional and is also annotated with @MethodStats for performance monitoring.
      *
      * @param dto  The DTO representing the entity to be updated.
-     * @param user An optional user associated with the operation.
+     * @param user A user associated with the operation.
      * @return The DTO representing the updated entity.
      * @throws BadRequestException     if the operation encounters a bad request scenario.
      * @throws DomainNotFoundException if the entity to be updated is not found.
@@ -67,7 +66,7 @@ public interface BaseUpdateCrudService<ID extends Comparable<ID> & Serializable,
     @Override
     @Transactional
     @MethodStats
-    default Mono<DTO> update(@Valid DTO dto, Optional<USER> user) {
+    default Mono<DTO> update(@Valid DTO dto, USER user) {
         return getOneByID(dto.getDomainId(), user)
                 .flatMap(previousDto -> this.update(previousDto, dto, user));
     }
@@ -78,7 +77,7 @@ public interface BaseUpdateCrudService<ID extends Comparable<ID> & Serializable,
      *
      * @param previousDto The DTO representing the entity before the update.
      * @param dto         The new DTO representing the entity after the update.
-     * @param user        An optional user associated with the operation.
+     * @param user        A user associated with the operation.
      * @return The DTO representing the updated entity.
      * @throws BadRequestException     if the operation encounters a bad request scenario.
      * @throws ValidationException     if validation fails during the update.
@@ -87,8 +86,8 @@ public interface BaseUpdateCrudService<ID extends Comparable<ID> & Serializable,
     @Override
     @Transactional
     @MethodStats
-    default Mono<DTO> update(DTO previousDto, @Valid DTO dto, Optional<USER> user) throws BadRequestException, ValidationException, DomainNotFoundException {
-        log.debug("Update, user {}", user.orElse(null));
+    default Mono<DTO> update(DTO previousDto, @Valid DTO dto, USER user) throws BadRequestException, ValidationException, DomainNotFoundException {
+        log.debug("Update, user {}", user);
 
         D domain = toDomain(dto, user);
 
@@ -109,11 +108,11 @@ public interface BaseUpdateCrudService<ID extends Comparable<ID> & Serializable,
      *
      * @param dto    The DTO representing the entity after the update.
      * @param domain The domain entity to be updated.
-     * @param user   An optional user associated with the operation.
+     * @param user   A user associated with the operation.
      * @return A Mono representing the updated domain entity.
      * @throws DomainNotFoundException if the entity to be updated is not found.
      */
-    default Mono<D> updateExecute(DTO dto, D domain, Optional<USER> user) throws DomainNotFoundException {
+    default Mono<D> updateExecute(DTO dto, D domain, USER user) throws DomainNotFoundException {
         return this.getRepository().updateOne(domain);
     }
 }

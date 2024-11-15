@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * This interface defines a service for counting all domain entities, potentially based on certain criteria.
@@ -39,15 +38,15 @@ public interface BaseCountAllCrudService<ID extends Comparable<ID> & Serializabl
     /**
      * Count all domain entities, potentially based on certain criteria.
      *
-     * @param user An optional user associated with the operation.
+     * @param user A user associated with the operation.
      * @return A Mono emitting the count of domain entities.
      * @throws DomainNotFoundException If the requested domain is not found.
      * @throws BadRequestException     If the request is not well-formed or violates business rules.
      */
     @Transactional(readOnly = true)
     @MethodStats
-    default Mono<Long> countAll(@NotNull Optional<USER> user) {
-        log.debug("CountAll, user: {}", user.orElse(null));
+    default Mono<Long> countAll(@NotNull USER user) {
+        log.debug("CountAll, user: {}", user);
 
         C criteria = newCriteriaClass();
         getBeforeAfterComponent().beforeCount(criteria, user, getBeforeAfterDomainOperations());
@@ -59,11 +58,11 @@ public interface BaseCountAllCrudService<ID extends Comparable<ID> & Serializabl
     /**
      * Execute the counting of all domain entities.
      *
-     * @param user An optional user associated with the operation.
+     * @param user A user associated with the operation.
      * @return A Mono emitting the count of domain entities.
      * @throws DomainNotFoundException If the requested domain is not found.
      */
-    default Mono<Long> countAllExecute(Optional<USER> user) throws DomainNotFoundException {
+    default Mono<Long> countAllExecute(USER user) throws DomainNotFoundException {
         return this.getRepository().countAll();
     }
 }

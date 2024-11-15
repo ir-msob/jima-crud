@@ -19,12 +19,12 @@ public class SampleService extends CrudService<SampleDomain, SampleDto, SampleCr
     private final ModelMapper modelMapper;
 
     @Override
-    public SampleDto toDto(SampleDomain domain, Optional<ProjectUser> user) {
+    public SampleDto toDto(SampleDomain domain, ProjectUser user) {
         return modelMapper.map(domain, SampleDto.class);
     }
 
     @Override
-    public SampleDomain toDomain(SampleDto dto, Optional<ProjectUser> user) {
+    public SampleDomain toDomain(SampleDto dto, ProjectUser user) {
         return dto;
     }
 

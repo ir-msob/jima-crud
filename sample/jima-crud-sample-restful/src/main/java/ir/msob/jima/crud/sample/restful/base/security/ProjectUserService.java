@@ -25,7 +25,7 @@ public class ProjectUserService implements BaseKeycloakProjectUserService, BaseS
     }
 
     @Override
-    public <USER extends BaseUser> Optional<USER> getUser(Optional<String> optional) {
+    public <USER extends BaseUser> USER getUser(String token) {
         return Optional.empty();
     }
 }

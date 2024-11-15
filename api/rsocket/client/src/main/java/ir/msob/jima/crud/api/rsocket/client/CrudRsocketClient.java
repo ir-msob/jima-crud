@@ -23,7 +23,6 @@ import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Optional;
 
 /**
  * The `CrudRsocketClient` class provides a client for performing CRUD (Create, Read, Update, Delete) operations over a RESTful API.
@@ -69,15 +68,15 @@ public class CrudRsocketClient implements BaseCrudClient {
      *
      * @param dtoClass the DTO class
      * @param id       the ID of the domain to be deleted
-     * @param user     the user performing the operation
+     * @param user     the user
      * @return a Mono with the ID of the deleted domain
      */
     @MethodStats
     @SneakyThrows
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<ID> deleteById(Class<DTO> dtoClass, ID id, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<ID> deleteById(Class<DTO> dtoClass, ID id, USER user) {
         IdMessage<ID> data = createData(id);
         ChannelMessage<USER, IdMessage<ID>> channelMessage = createChannelMessage(data);
-        channelMessage.setUser(user.orElse(null));
+        channelMessage.setUser(user);
         String route = prepareRoute(dtoClass, Operations.DELETE_BY_ID);
         String applicationName = prepareApplicationName(dtoClass);
 
@@ -100,10 +99,10 @@ public class CrudRsocketClient implements BaseCrudClient {
      */
     @MethodStats
     @SneakyThrows
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<ID> delete(Class<DTO> dtoClass, C criteria, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<ID> delete(Class<DTO> dtoClass, C criteria, USER user) {
         CriteriaMessage<ID, C> data = createData(criteria);
         ChannelMessage<USER, CriteriaMessage<ID, C>> channelMessage = createChannelMessage(data);
-        channelMessage.setUser(user.orElse(null));
+        channelMessage.setUser(user);
         String route = prepareRoute(dtoClass, Operations.DELETE);
         String applicationName = prepareApplicationName(dtoClass);
 
@@ -125,7 +124,7 @@ public class CrudRsocketClient implements BaseCrudClient {
      * @return a Mono with the IDs of the deleted domains
      */
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Collection<ID>> deleteMany(Class<DTO> dtoClass, C criteria, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Collection<ID>> deleteMany(Class<DTO> dtoClass, C criteria, USER user) {
         CriteriaMessage<ID, C> data = createData(criteria);
         ChannelMessage<USER, CriteriaMessage<ID, C>> channelMessage = createChannelMessage(data);
         String route = prepareRoute(dtoClass, Operations.DELETE_MANY);
@@ -151,7 +150,7 @@ public class CrudRsocketClient implements BaseCrudClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Collection<ID>> deleteAll(Class<DTO> dtoClass, C criteria, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Collection<ID>> deleteAll(Class<DTO> dtoClass, C criteria, USER user) {
         CriteriaMessage<ID, C> data = createData(criteria);
         ChannelMessage<USER, CriteriaMessage<ID, C>> channelMessage = createChannelMessage(data);
         String route = prepareRoute(dtoClass, Operations.DELETE_ALL);
@@ -178,7 +177,7 @@ public class CrudRsocketClient implements BaseCrudClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<DTO> editById(Class<DTO> dtoClass, ID id, JsonPatch jsonPatch, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<DTO> editById(Class<DTO> dtoClass, ID id, JsonPatch jsonPatch, USER user) {
         IdJsonPatchMessage<ID> data = createMessage(jsonPatch, id);
         ChannelMessage<USER, IdJsonPatchMessage<ID>> channelMessage = createChannelMessage(data);
         String route = prepareRoute(dtoClass, Operations.EDIT_BY_ID);
@@ -205,7 +204,7 @@ public class CrudRsocketClient implements BaseCrudClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<DTO> edit(Class<DTO> dtoClass, JsonPatch jsonPatch, C criteria, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<DTO> edit(Class<DTO> dtoClass, JsonPatch jsonPatch, C criteria, USER user) {
         JsonPatchMessage<ID, C> data = createMessage(jsonPatch, criteria);
         ChannelMessage<USER, JsonPatchMessage<ID, C>> channelMessage = createChannelMessage(data);
         String route = prepareRoute(dtoClass, Operations.EDIT);
@@ -232,7 +231,7 @@ public class CrudRsocketClient implements BaseCrudClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Collection<DTO>> editMany(Class<DTO> dtoClass, JsonPatch jsonPatch, C criteria, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Collection<DTO>> editMany(Class<DTO> dtoClass, JsonPatch jsonPatch, C criteria, USER user) {
         JsonPatchMessage<ID, C> data = createMessage(jsonPatch, criteria);
         ChannelMessage<USER, JsonPatchMessage<ID, C>> channelMessage = createChannelMessage(data);
         String route = prepareRoute(dtoClass, Operations.EDIT_MANY);
@@ -258,7 +257,7 @@ public class CrudRsocketClient implements BaseCrudClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<DTO> save(Class<DTO> dtoClass, DTO dto, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<DTO> save(Class<DTO> dtoClass, DTO dto, USER user) {
         DtoMessage<ID, DTO> data = createMessage(dto);
         ChannelMessage<USER, DtoMessage<ID, DTO>> channelMessage = createChannelMessage(data);
         String route = prepareRoute(dtoClass, Operations.SAVE);
@@ -284,7 +283,7 @@ public class CrudRsocketClient implements BaseCrudClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Collection<DTO>> saveMany(Class<DTO> dtoClass, Collection<DTO> dtos, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Collection<DTO>> saveMany(Class<DTO> dtoClass, Collection<DTO> dtos, USER user) {
         DtosMessage<ID, DTO> data = createMessage(dtos);
         ChannelMessage<USER, DtosMessage<ID, DTO>> channelMessage = createChannelMessage(data);
         String route = prepareRoute(dtoClass, Operations.SAVE_MANY);
@@ -311,7 +310,7 @@ public class CrudRsocketClient implements BaseCrudClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<DTO> updateById(Class<DTO> dtoClass, ID id, DTO dto, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<DTO> updateById(Class<DTO> dtoClass, ID id, DTO dto, USER user) {
         DtoMessage<ID, DTO> data = createMessage(id, dto);
         ChannelMessage<USER, DtoMessage<ID, DTO>> channelMessage = createChannelMessage(data);
         String route = prepareRoute(dtoClass, Operations.UPDATE_BY_ID);
@@ -337,7 +336,7 @@ public class CrudRsocketClient implements BaseCrudClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<DTO> update(Class<DTO> dtoClass, DTO dto, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<DTO> update(Class<DTO> dtoClass, DTO dto, USER user) {
         DtoMessage<ID, DTO> data = createMessage(dto);
         ChannelMessage<USER, DtoMessage<ID, DTO>> channelMessage = createChannelMessage(data);
         String route = prepareRoute(dtoClass, Operations.UPDATE);
@@ -363,7 +362,7 @@ public class CrudRsocketClient implements BaseCrudClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Collection<DTO>> updateMany(Class<DTO> dtoClass, Collection<DTO> dtos, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Collection<DTO>> updateMany(Class<DTO> dtoClass, Collection<DTO> dtos, USER user) {
         DtosMessage<ID, DTO> data = createMessage(dtos);
         ChannelMessage<USER, DtosMessage<ID, DTO>> channelMessage = createChannelMessage(data);
         String route = prepareRoute(dtoClass, Operations.UPDATE_MANY);
@@ -389,7 +388,7 @@ public class CrudRsocketClient implements BaseCrudClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Long> count(Class<DTO> dtoClass, C criteria, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Long> count(Class<DTO> dtoClass, C criteria, USER user) {
         CriteriaMessage<ID, C> data = createData(criteria);
         ChannelMessage<USER, CriteriaMessage<ID, C>> channelMessage = createChannelMessage(data);
         String route = prepareRoute(dtoClass, Operations.COUNT);
@@ -413,7 +412,7 @@ public class CrudRsocketClient implements BaseCrudClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Long> countAll(Class<DTO> dtoClass, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Long> countAll(Class<DTO> dtoClass, USER user) {
         ModelType data = new ModelType();
         ChannelMessage<USER, ModelType> channelMessage = createChannelMessage(data);
         String route = prepareRoute(dtoClass, Operations.COUNT_ALL);
@@ -438,7 +437,7 @@ public class CrudRsocketClient implements BaseCrudClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<DTO> getById(Class<DTO> dtoClass, ID id, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<DTO> getById(Class<DTO> dtoClass, ID id, USER user) {
         IdMessage<ID> data = createData(id);
         ChannelMessage<USER, IdMessage<ID>> channelMessage = createChannelMessage(data);
         String route = prepareRoute(dtoClass, Operations.GET_BY_ID);
@@ -464,7 +463,7 @@ public class CrudRsocketClient implements BaseCrudClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<DTO> getOne(Class<DTO> dtoClass, C criteria, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<DTO> getOne(Class<DTO> dtoClass, C criteria, USER user) {
         CriteriaMessage<ID, C> data = createData(criteria);
         ChannelMessage<USER, CriteriaMessage<ID, C>> channelMessage = createChannelMessage(data);
         String route = prepareRoute(dtoClass, Operations.GET_ONE);
@@ -490,7 +489,7 @@ public class CrudRsocketClient implements BaseCrudClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Collection<DTO>> getMany(Class<DTO> dtoClass, C criteria, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Collection<DTO>> getMany(Class<DTO> dtoClass, C criteria, USER user) {
         CriteriaMessage<ID, C> data = createData(criteria);
         ChannelMessage<USER, CriteriaMessage<ID, C>> channelMessage = createChannelMessage(data);
         String route = prepareRoute(dtoClass, Operations.GET_MANY);
@@ -514,10 +513,10 @@ public class CrudRsocketClient implements BaseCrudClient {
      */
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Flux<DTO> getStream(Class<DTO> dtoClass, C criteria, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Flux<DTO> getStream(Class<DTO> dtoClass, C criteria, USER user) {
         CriteriaMessage<ID, C> data = createData(criteria);
         ChannelMessage<USER, CriteriaMessage<ID, C>> channelMessage = createChannelMessage(data);
-        channelMessage.setUser(user.orElse(null));
+        channelMessage.setUser(user);
         String route = prepareRoute(dtoClass, Operations.GET_STREAM);
         String applicationName = prepareApplicationName(dtoClass);
 
@@ -540,7 +539,7 @@ public class CrudRsocketClient implements BaseCrudClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Page<DTO>> getPage(Class<DTO> dtoClass, C criteria, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Page<DTO>> getPage(Class<DTO> dtoClass, C criteria, USER user) {
         CriteriaMessage<ID, C> data = createData(criteria);
         ChannelMessage<USER, CriteriaMessage<ID, C>> channelMessage = createChannelMessage(data);
         String route = prepareRoute(dtoClass, Operations.GET_PAGE);

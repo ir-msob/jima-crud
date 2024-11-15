@@ -26,7 +26,6 @@ import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Optional;
 
 /**
  * This interface provides a RSocket API for deleting multiple domains based on a specific criteria.
@@ -72,7 +71,7 @@ public interface BaseDeleteManyCrudRsocketResource<
         log.debug("RSocket request to delete many domain, dto {}", dto);
         ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());
 
-        Optional<USER> user = getUser(message.getUser(), principal);
+        USER user = getUser(message.getUser(), principal);
         return this.deleteManyResponse(this.getService().deleteMany(message.getData().getCriteria(), user), message.getData().getCriteria(), user);
     }
 
@@ -82,10 +81,10 @@ public interface BaseDeleteManyCrudRsocketResource<
      *
      * @param ids      the Mono with the IDs of the deleted domains
      * @param criteria the criteria used to filter the domains
-     * @param user     the Optional object containing the user
+     * @param user     the user
      * @return a Mono with the IDs of the deleted domains
      */
-    default Mono<Collection<ID>> deleteManyResponse(Mono<Collection<ID>> ids, C criteria, Optional<USER> user) {
+    default Mono<Collection<ID>> deleteManyResponse(Mono<Collection<ID>> ids, C criteria, USER user) {
         return ids;
     }
 

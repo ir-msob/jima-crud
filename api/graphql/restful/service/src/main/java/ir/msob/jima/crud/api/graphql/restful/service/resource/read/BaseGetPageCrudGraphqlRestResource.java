@@ -24,7 +24,6 @@ import org.springframework.http.HttpHeaders;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * The {@code BaseGetPageCrudGraphqlRestResource} interface defines a GraphQL query for retrieving a paginated list
@@ -70,7 +69,7 @@ public interface BaseGetPageCrudGraphqlRestResource<
     default Mono<PageType> getPage(@Argument("input") CriteriaPageableInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
         log.debug("Request to get page: dto {}", input);
 
-        Optional<USER> user = getUser(token);
+        USER user = getUser(token);
 
         return getService().getPage(convertToCriteria(input.getCriteria()), convertToPageable(input.getPageable()), user)
                 .map(page -> PageType.builder().page(convertToString(page)).build());

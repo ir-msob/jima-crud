@@ -23,7 +23,6 @@ import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.listener.MessageListener;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * Interface for a listener that handles CRUD operations for saving multiple entities.
@@ -75,8 +74,7 @@ public interface BaseSaveManyCrudKafkaListener<
     private void serviceSaveMany(String dto) {
         log.debug("Received message for save many: dto {}", dto);
         ChannelMessage<USER, DtosMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getDtosReferenceType());
-        Optional<USER> user = Optional.ofNullable(message.getUser());
-        getService().saveMany(message.getData().getDtos(), user)
-                .subscribe(savedDtos -> sendCallbackDtos(message, savedDtos, OperationsStatus.SAVE_MANY, user));
+        getService().saveMany(message.getData().getDtos(), message.getUser())
+                .subscribe(savedDtos -> sendCallbackDtos(message, savedDtos, OperationsStatus.SAVE_MANY, message.getUser()));
     }
 }

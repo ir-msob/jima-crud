@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * This interface defines a service for counting domain entities based on specific criteria.
@@ -38,15 +37,15 @@ public interface BaseCountCrudService<ID extends Comparable<ID> & Serializable, 
      * Count domain entities based on specific criteria.
      *
      * @param criteria The criteria used for counting entities.
-     * @param user     An optional user associated with the operation.
+     * @param user     A user associated with the operation.
      * @return A Mono emitting the count of domain entities.
      * @throws DomainNotFoundException If the requested domain is not found.
      * @throws BadRequestException     If the request is not well-formed or violates business rules.
      */
     @Transactional(readOnly = true)
     @MethodStats
-    default Mono<Long> count(C criteria, Optional<USER> user) throws DomainNotFoundException, BadRequestException {
-        log.debug("Count, criteria: {}, user: {}", criteria, user.orElse(null));
+    default Mono<Long> count(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
+        log.debug("Count, criteria: {}, user: {}", criteria, user);
         getBeforeAfterComponent().beforeCount(criteria, user, getBeforeAfterDomainOperations());
 
         return this.countExecute(criteria, user)
@@ -57,11 +56,11 @@ public interface BaseCountCrudService<ID extends Comparable<ID> & Serializable, 
      * Execute the counting of domain entities based on specific criteria.
      *
      * @param criteria The criteria used for counting entities.
-     * @param user     An optional user associated with the operation.
+     * @param user     A user associated with the operation.
      * @return A Mono emitting the count of domain entities.
      * @throws DomainNotFoundException If the requested domain is not found.
      */
-    default Mono<Long> countExecute(C criteria, Optional<USER> user) throws DomainNotFoundException {
+    default Mono<Long> countExecute(C criteria, USER user) throws DomainNotFoundException {
         Q baseQuery = this.getRepository().generateQuery(criteria);
         baseQuery = this.getRepository().criteria(baseQuery, criteria, user);
         return this.getRepository().count(baseQuery);

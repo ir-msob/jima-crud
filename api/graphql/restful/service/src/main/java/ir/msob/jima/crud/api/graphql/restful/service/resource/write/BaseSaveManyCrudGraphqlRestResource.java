@@ -24,7 +24,6 @@ import org.springframework.http.HttpHeaders;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * The {@code BaseSaveManyCrudGraphqlRestResource} interface defines a GraphQL mutation for saving multiple entities.
@@ -68,7 +67,7 @@ public interface BaseSaveManyCrudGraphqlRestResource<
     default Mono<DtosType> saveMany(@Argument("input") DtosInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
         log.debug("Request to save many: dto {}", input);
 
-        Optional<USER> user = getUser(token);
+        USER user = getUser(token);
 
         return getService().saveMany(convertToDtos(input.getDtos()), user)
                 .map(dtos -> DtosType.builder().dtos(convertToStrings(dtos)).build());

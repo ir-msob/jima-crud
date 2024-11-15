@@ -23,7 +23,6 @@ import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.listener.MessageListener;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * Interface for a listener that handles CRUD operations for retrieving a page of entities based on a given criteria.
@@ -76,8 +75,7 @@ public interface BaseGetPageCrudKafkaListener<
         log.debug("Received message for get page: dto {}", dto);
         ChannelMessage<USER, PageableMessage<ID, C>> message;
         message = getObjectMapper().readValue(dto, getCriteriaPageReferenceType());
-        Optional<USER> user = Optional.ofNullable(message.getUser());
-        getService().getPage(message.getData().getCriteria(), message.getData().getPageable(), user)
-                .subscribe(page -> sendCallbackPage(message, page, OperationsStatus.GET_PAGE, user));
+        getService().getPage(message.getData().getCriteria(), message.getData().getPageable(), message.getUser())
+                .subscribe(page -> sendCallbackPage(message, page, OperationsStatus.GET_PAGE, message.getUser()));
     }
 }

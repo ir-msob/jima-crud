@@ -20,7 +20,6 @@ import reactor.core.publisher.Mono;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
-import java.util.Optional;
 
 /**
  * This interface defines common CRUD operations for a domain entity.
@@ -80,12 +79,12 @@ public interface ParentCrudService<
      * Get one DTO entity based on criteria.
      *
      * @param criteria The criteria for finding the DTO entity.
-     * @param user     An optional user context.
+     * @param user     A user context.
      * @return A Mono that emits the found DTO entity.
      * @throws BadRequestException     If the request is invalid.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    default Mono<DTO> getOne(C criteria, Optional<USER> user) throws BadRequestException, DomainNotFoundException {
+    default Mono<DTO> getOne(C criteria, USER user) throws BadRequestException, DomainNotFoundException {
         return Mono.empty();
     }
 
@@ -93,12 +92,12 @@ public interface ParentCrudService<
      * Get a collection of DTO entities based on criteria.
      *
      * @param criteria The criteria for finding the DTO entities.
-     * @param user     An optional user context.
+     * @param user     A user context.
      * @return A Mono that emits a collection of DTO entities.
      * @throws BadRequestException     If the request is invalid.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    default Mono<Collection<DTO>> getMany(C criteria, Optional<USER> user) throws BadRequestException, DomainNotFoundException {
+    default Mono<Collection<DTO>> getMany(C criteria, USER user) throws BadRequestException, DomainNotFoundException {
         return Mono.empty();
     }
 
@@ -106,12 +105,12 @@ public interface ParentCrudService<
      * Get a stream of DTO entities based oncriteria.
      *
      * @param criteria The criteria for finding the DTO entities.
-     * @param user     An optional user context.
+     * @param user     A user context.
      * @return A Mono that emits a collection of DTO entities.
      * @throws BadRequestException     If the request is invalid.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    default Flux<DTO> getStream(C criteria, Optional<USER> user) throws DomainNotFoundException, BadRequestException {
+    default Flux<DTO> getStream(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
         return Flux.empty();
     }
 
@@ -119,7 +118,7 @@ public interface ParentCrudService<
      * Update a DTO entity.
      *
      * @param dto  The DTO entity to be updated.
-     * @param user An optional user context.
+     * @param user A user context.
      * @return A Mono that emits the updated DTO entity.
      * @throws BadRequestException       If the request is invalid.
      * @throws ValidationException       If the DTO fails validation.
@@ -129,7 +128,7 @@ public interface ParentCrudService<
      * @throws IllegalAccessException    If access to a method is denied.
      * @throws InvocationTargetException If a method call results in an exception.
      */
-    default Mono<DTO> update(@Valid DTO dto, Optional<USER> user) throws BadRequestException, ValidationException, DomainNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+    default Mono<DTO> update(@Valid DTO dto, USER user) throws BadRequestException, ValidationException, DomainNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
         return Mono.empty();
     }
 
@@ -138,7 +137,7 @@ public interface ParentCrudService<
      *
      * @param id   The id of entity.
      * @param dto  The DTO entity to be updated.
-     * @param user An optional user context.
+     * @param user A user context.
      * @return A Mono that emits the updated DTO entity.
      * @throws BadRequestException       If the request is invalid.
      * @throws ValidationException       If the DTO fails validation.
@@ -148,7 +147,7 @@ public interface ParentCrudService<
      * @throws IllegalAccessException    If access to a method is denied.
      * @throws InvocationTargetException If a method call results in an exception.
      */
-    default Mono<DTO> update(ID id, @Valid DTO dto, Optional<USER> user) throws BadRequestException, ValidationException, DomainNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+    default Mono<DTO> update(ID id, @Valid DTO dto, USER user) throws BadRequestException, ValidationException, DomainNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
         return Mono.empty();
     }
 
@@ -157,13 +156,13 @@ public interface ParentCrudService<
      *
      * @param oldDto The old DTO entity.
      * @param dto    The new DTO entity to be updated.
-     * @param user   An optional user context.
+     * @param user   A user context.
      * @return A Mono that emits the updated DTO entity.
      * @throws BadRequestException     If the request is invalid.
      * @throws ValidationException     If the DTO fails validation.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    default Mono<DTO> update(DTO oldDto, @Valid DTO dto, Optional<USER> user) throws BadRequestException, ValidationException, DomainNotFoundException {
+    default Mono<DTO> update(DTO oldDto, @Valid DTO dto, USER user) throws BadRequestException, ValidationException, DomainNotFoundException {
         return Mono.empty();
     }
 
@@ -171,7 +170,7 @@ public interface ParentCrudService<
      * Update multiple DTO entities.
      *
      * @param dtos The collection of DTO entities to be updated.
-     * @param user An optional user context.
+     * @param user A user context.
      * @return A Mono that emits a collection of updated DTO entities.
      * @throws BadRequestException       If the request is invalid.
      * @throws DomainNotFoundException   If the domain is not found.
@@ -180,7 +179,7 @@ public interface ParentCrudService<
      * @throws IllegalAccessException    If access to a method is denied.
      * @throws InvocationTargetException If a method call results in an exception.
      */
-    default Mono<Collection<DTO>> updateMany(Collection<@Valid DTO> dtos, Optional<USER> user) throws BadRequestException, DomainNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+    default Mono<Collection<DTO>> updateMany(Collection<@Valid DTO> dtos, USER user) throws BadRequestException, DomainNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
         return Mono.empty();
     }
 
@@ -189,13 +188,13 @@ public interface ParentCrudService<
      *
      * @param oldDtos The collection of old DTO entities.
      * @param dtos    The collection of new DTO entities to be updated.
-     * @param user    An optional user context.
+     * @param user    A user context.
      * @return A Mono that emits a collection of updated DTO entities.
      * @throws BadRequestException     If the request is invalid.
      * @throws ValidationException     If the DTOs fail validation.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    default Mono<Collection<DTO>> updateMany(Collection<DTO> oldDtos, Collection<@Valid DTO> dtos, Optional<USER> user) throws BadRequestException, ValidationException, DomainNotFoundException {
+    default Mono<Collection<DTO>> updateMany(Collection<DTO> oldDtos, Collection<@Valid DTO> dtos, USER user) throws BadRequestException, ValidationException, DomainNotFoundException {
         return Mono.empty();
     }
 
@@ -203,19 +202,19 @@ public interface ParentCrudService<
      * Convert a domain entity to a DTO entity.
      *
      * @param domain The domain entity to convert.
-     * @param user   An optional user context.
+     * @param user   A user context.
      * @return The converted DTO entity.
      */
-    DTO toDto(D domain, Optional<USER> user);
+    DTO toDto(D domain, USER user);
 
     /**
      * Convert a DTO entity to a domain entity.
      *
      * @param dto  The DTO entity to convert.
-     * @param user An optional user context.
+     * @param user A user context.
      * @return The converted domain entity.
      */
-    D toDomain(DTO dto, Optional<USER> user);
+    D toDomain(DTO dto, USER user);
 
     /**
      * Get the before/after component for the service.

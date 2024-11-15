@@ -11,7 +11,6 @@ import ir.msob.jima.crud.service.BeforeAfterComponent;
 import ir.msob.jima.crud.service.ParentCrudService;
 
 import java.util.Collection;
-import java.util.Optional;
 
 public class ConcreteParentCrudService implements
         ParentCrudService<String,
@@ -30,12 +29,12 @@ public class ConcreteParentCrudService implements
     }
 
     @Override
-    public SampleDto<String> toDto(SampleDomain<String> domain, Optional<BaseUser> stringBaseUser) {
+    public SampleDto<String> toDto(SampleDomain<String> domain, BaseUser user) {
         return null;
     }
 
     @Override
-    public SampleDomain<String> toDomain(SampleDto<String> dto, Optional<BaseUser> stringBaseUser) {
+    public SampleDomain<String> toDomain(SampleDto<String> dto, BaseUser user) {
         return null;
     }
 

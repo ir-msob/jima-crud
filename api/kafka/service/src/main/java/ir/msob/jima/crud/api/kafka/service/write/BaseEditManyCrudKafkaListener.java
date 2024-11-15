@@ -23,7 +23,6 @@ import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.listener.MessageListener;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * Interface for a listener that handles CRUD operations for editing multiple entities based on a given criteria.
@@ -75,8 +74,7 @@ public interface BaseEditManyCrudKafkaListener<
     private void serviceEditMany(String dto) {
         log.debug("Received message for edit many: dto {}", dto);
         ChannelMessage<USER, JsonPatchMessage<ID, C>> message = getObjectMapper().readValue(dto, getEditReferenceType());
-        Optional<USER> user = Optional.ofNullable(message.getUser());
-        getService().editMany(message.getData().getCriteria(), message.getData().getJsonPatch(), user)
-                .subscribe(editedDtos -> sendCallbackDtos(message, editedDtos, OperationsStatus.EDIT_MANY, user));
+        getService().editMany(message.getData().getCriteria(), message.getData().getJsonPatch(), message.getUser())
+                .subscribe(editedDtos -> sendCallbackDtos(message, editedDtos, OperationsStatus.EDIT_MANY, message.getUser()));
     }
 }

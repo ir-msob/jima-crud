@@ -18,7 +18,6 @@ import reactor.core.publisher.Flux;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Optional;
 
 /**
  * This interface defines a service for retrieving multiple domain entities based on specific criteria or IDs.
@@ -45,14 +44,14 @@ public interface BaseGetStreamCrudService<ID extends Comparable<ID> & Serializab
      * Retrieve multiple DTO entities based on a collection of entity IDs.
      *
      * @param ids  A collection of entity IDs.
-     * @param user An optional user associated with the operation.
+     * @param user A user associated with the operation.
      * @return A Flux emitting a collection of DTO entities.
      * @throws DomainNotFoundException If the requested domain is not found.
      * @throws BadRequestException     If the request is not well-formed or violates business rules.
      */
     @Transactional(readOnly = true)
     @MethodStats
-    default Flux<DTO> getStream(Collection<ID> ids, Optional<USER> user) throws DomainNotFoundException, BadRequestException {
+    default Flux<DTO> getStream(Collection<ID> ids, USER user) throws DomainNotFoundException, BadRequestException {
         return this.getStream(CriteriaUtil.idCriteria(getCriteriaClass(), ids), user);
     }
 
@@ -60,7 +59,7 @@ public interface BaseGetStreamCrudService<ID extends Comparable<ID> & Serializab
      * Retrieve multiple DTO entities based on specific criteria.
      *
      * @param criteria The criteria used for filtering entities.
-     * @param user     An optional user associated with the operation.
+     * @param user     A user associated with the operation.
      * @return A Flux emitting a collection of DTO entities.
      * @throws DomainNotFoundException If the requested domain is not found.
      * @throws BadRequestException     If the request is not well-formed or violates business rules.
@@ -68,8 +67,8 @@ public interface BaseGetStreamCrudService<ID extends Comparable<ID> & Serializab
     @Transactional(readOnly = true)
     @MethodStats
     @Override
-    default Flux<DTO> getStream(C criteria, Optional<USER> user) throws DomainNotFoundException, BadRequestException {
-        log.debug("GetStream, criteria: {}, user: {}", criteria, user.orElse(null));
+    default Flux<DTO> getStream(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
+        log.debug("GetStream, criteria: {}, user: {}", criteria, user);
 
         getBeforeAfterComponent().beforeGet(criteria, user, getBeforeAfterDomainOperations());
 
@@ -89,11 +88,11 @@ public interface BaseGetStreamCrudService<ID extends Comparable<ID> & Serializab
      * Execute the retrieval of multiple domain entities based on specific criteria.
      *
      * @param criteria The criteria used for filtering entities.
-     * @param user     An optional user associated with the operation.
+     * @param user     A user associated with the operation.
      * @return A Flux emitting a collection of domain entities.
      * @throws DomainNotFoundException If the requested domain is not found.
      */
-    default Flux<D> getStreamExecute(C criteria, Optional<USER> user) throws DomainNotFoundException {
+    default Flux<D> getStreamExecute(C criteria, USER user) throws DomainNotFoundException {
         Q baseQuery = this.getRepository().generateQuery(criteria);
         baseQuery = this.getRepository().criteria(baseQuery, criteria, user);
         return this.getRepository().getMany(baseQuery);

@@ -23,7 +23,6 @@ import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.listener.MessageListener;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * Interface for a listener that handles CRUD operations for saving entities.
@@ -75,8 +74,7 @@ public interface BaseSaveCrudKafkaListener<
     private void serviceSave(String dto) {
         log.debug("Received message for save: dto {}", dto);
         ChannelMessage<USER, DtoMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getDtoReferenceType());
-        Optional<USER> user = Optional.ofNullable(message.getUser());
-        getService().save(message.getData().getDto(), user)
-                .subscribe(savedDto -> sendCallbackDto(message, savedDto, OperationsStatus.SAVE, user));
+        getService().save(message.getData().getDto(), message.getUser())
+                .subscribe(savedDto -> sendCallbackDto(message, savedDto, OperationsStatus.SAVE, message.getUser()));
     }
 }

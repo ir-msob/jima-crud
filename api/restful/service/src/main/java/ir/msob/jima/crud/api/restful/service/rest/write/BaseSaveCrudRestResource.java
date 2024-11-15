@@ -28,7 +28,6 @@ import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 import java.security.Principal;
-import java.util.Optional;
 
 /**
  * This interface provides a RESTful API for saving a domain based on a given DTO.
@@ -79,7 +78,7 @@ public interface BaseSaveCrudRestResource<
             throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to create new domain, dto : {}", dto);
 
-        Optional<USER> user = getUser(serverWebExchange, principal);
+        USER user = getUser(serverWebExchange, principal);
         return this.saveResponse(dto, this.getService().save(dto, user), user);
     }
 
@@ -89,10 +88,10 @@ public interface BaseSaveCrudRestResource<
      *
      * @param dto      the DTO to save the domain
      * @param savedDto the Mono object containing the saved DTO
-     * @param user     the Optional object containing the user
+     * @param user     the user
      * @return a ResponseEntity with the saved DTO
      */
-    default ResponseEntity<Mono<DTO>> saveResponse(DTO dto, Mono<DTO> savedDto, Optional<USER> user) {
+    default ResponseEntity<Mono<DTO>> saveResponse(DTO dto, Mono<DTO> savedDto, USER user) {
         return ResponseEntity.status(OperationsStatus.SAVE).body(savedDto);
     }
 }

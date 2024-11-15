@@ -26,7 +26,6 @@ import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Optional;
 
 /**
  * This interface provides a RSocket API for counting all domains of a specific type.
@@ -72,7 +71,7 @@ public interface BaseCountAllCrudRsocketResource<
         log.debug("RSocket request to count all dto {}", dto);
         ChannelMessage<USER, ModelType> message = getObjectMapper().readValue(dto, getModelTypeReferenceType());
 
-        Optional<USER> user = getUser(message.getUser(), principal);
+        USER user = getUser(message.getUser(), principal);
         return this.countAllResponse(this.getService().countAll(user), user);
     }
 
@@ -81,10 +80,10 @@ public interface BaseCountAllCrudRsocketResource<
      * It is called by the countAll method.
      *
      * @param result the Mono with the count of all domains of the specified type
-     * @param user   the Optional object containing the user
+     * @param user   the user
      * @return a Mono with the count of all domains of the specified type
      */
-    default Mono<Long> countAllResponse(Mono<Long> result, Optional<USER> user) {
+    default Mono<Long> countAllResponse(Mono<Long> result, USER user) {
         return result;
     }
 

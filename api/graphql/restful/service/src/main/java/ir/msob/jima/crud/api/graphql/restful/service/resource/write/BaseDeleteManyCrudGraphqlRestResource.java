@@ -24,7 +24,6 @@ import org.springframework.http.HttpHeaders;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * The {@code BaseDeleteManyCrudGraphqlRestResource} interface defines a GraphQL mutation for deleting multiple entities
@@ -69,7 +68,7 @@ public interface BaseDeleteManyCrudGraphqlRestResource<
     default Mono<IdsType> deleteMany(@Argument("input") CriteriaInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
         log.debug("Request to delete many: dto {}", input);
 
-        Optional<USER> user = getUser(token);
+        USER user = getUser(token);
 
         return getService().deleteMany(convertToCriteria(input.getCriteria()), user)
                 .map(ids -> IdsType.builder().ids(ids.stream().map(String::valueOf).toList()).build());

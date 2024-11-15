@@ -63,7 +63,7 @@ public interface BaseCountAllCrudKafkaListenerTest<
 
         String topic = prepareTopic(Operations.COUNT_ALL);
         ChannelMessage<USER, ModelType> channelMessage = new ChannelMessage<>();
-        channelMessage.setUser(getSampleUser().orElse(null));
+        channelMessage.setUser(getSampleUser());
         channelMessage.setCallback(prepareCallbackTopic());
         channelMessage.setData(new ModelType());
 

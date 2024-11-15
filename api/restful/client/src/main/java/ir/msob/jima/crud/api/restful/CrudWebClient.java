@@ -32,7 +32,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -81,7 +80,7 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
      */
     @MethodStats
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Collection<ID>> deleteAll(Class<DTO> dtoClass, C criteria, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Collection<ID>> deleteAll(Class<DTO> dtoClass, C criteria, USER user) {
         throw new CommonRuntimeException("This rest client has not been implemented!");
     }
 
@@ -95,7 +94,7 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
      */
     @MethodStats
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<ID> deleteById(Class<DTO> dtoClass, ID id, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<ID> deleteById(Class<DTO> dtoClass, ID id, USER user) {
         return webClient
                 .delete()
                 .uri(builder -> getUriWithId(builder, dtoClass, id.toString()))
@@ -115,7 +114,7 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
      */
     @MethodStats
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<ID> delete(Class<DTO> dtoClass, C criteria, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<ID> delete(Class<DTO> dtoClass, C criteria, USER user) {
         return webClient
                 .delete()
                 .uri(builder -> getUriWithCriteria(builder, dtoClass, Operations.DELETE, criteria))
@@ -135,7 +134,7 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
      */
     @MethodStats
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Collection<ID>> deleteMany(Class<DTO> dtoClass, C criteria, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Collection<ID>> deleteMany(Class<DTO> dtoClass, C criteria, USER user) {
         return webClient
                 .delete()
                 .uri(builder -> getUriWithCriteria(builder, dtoClass, Operations.DELETE_MANY, criteria))
@@ -158,7 +157,7 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
      */
     @MethodStats
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<DTO> editById(Class<DTO> dtoClass, ID id, JsonPatch jsonPatch, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<DTO> editById(Class<DTO> dtoClass, ID id, JsonPatch jsonPatch, USER user) {
         return webClient
                 .patch()
                 .uri(builder -> getUriWithId(builder, dtoClass, id.toString()))
@@ -179,7 +178,7 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
      */
     @MethodStats
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<DTO> edit(Class<DTO> dtoClass, JsonPatch jsonPatch, C criteria, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<DTO> edit(Class<DTO> dtoClass, JsonPatch jsonPatch, C criteria, USER user) {
         return webClient
                 .patch()
                 .uri(builder -> getUriWithCriteria(builder, dtoClass, Operations.EDIT, criteria))
@@ -200,7 +199,7 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
      */
     @MethodStats
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Collection<DTO>> editMany(Class<DTO> dtoClass, JsonPatch jsonPatch, C criteria, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Collection<DTO>> editMany(Class<DTO> dtoClass, JsonPatch jsonPatch, C criteria, USER user) {
         return webClient
                 .patch()
                 .uri(builder -> getUriWithCriteria(builder, dtoClass, Operations.EDIT_MANY, criteria))
@@ -221,7 +220,7 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
      */
     @MethodStats
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<DTO> save(Class<DTO> dtoClass, DTO dto, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<DTO> save(Class<DTO> dtoClass, DTO dto, USER user) {
         return webClient
                 .post()
                 .uri(builder -> getUriWithCriteria(builder, dtoClass))
@@ -241,7 +240,7 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
      */
     @MethodStats
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Collection<DTO>> saveMany(Class<DTO> dtoClass, Collection<DTO> dtos, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Collection<DTO>> saveMany(Class<DTO> dtoClass, Collection<DTO> dtos, USER user) {
         return webClient
                 .post()
                 .uri(builder -> getUriWithCriteria(builder, dtoClass, Operations.SAVE_MANY))
@@ -263,7 +262,7 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
      */
     @MethodStats
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<DTO> updateById(Class<DTO> dtoClass, ID id, DTO dto, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<DTO> updateById(Class<DTO> dtoClass, ID id, DTO dto, USER user) {
         return webClient
                 .put()
                 .uri(builder -> getUriWithId(builder, dtoClass, id.toString()))
@@ -283,7 +282,7 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
      */
     @MethodStats
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<DTO> update(Class<DTO> dtoClass, DTO dto, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<DTO> update(Class<DTO> dtoClass, DTO dto, USER user) {
         return webClient
                 .put()
                 .uri(builder -> getUriWithCriteria(builder, dtoClass, Operations.UPDATE))
@@ -303,7 +302,7 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
      */
     @MethodStats
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Collection<DTO>> updateMany(Class<DTO> dtoClass, Collection<DTO> dtos, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Collection<DTO>> updateMany(Class<DTO> dtoClass, Collection<DTO> dtos, USER user) {
         return webClient
                 .put()
                 .uri(builder -> getUriWithCriteria(builder, dtoClass, Operations.UPDATE_MANY))
@@ -324,7 +323,7 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
      */
     @MethodStats
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Long> count(Class<DTO> dtoClass, C criteria, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Long> count(Class<DTO> dtoClass, C criteria, USER user) {
         return webClient
                 .get()
                 .uri(builder -> getUriWithCriteria(builder, dtoClass, Operations.COUNT, criteria))
@@ -343,7 +342,7 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
      */
     @MethodStats
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Long> countAll(Class<DTO> dtoClass, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Long> countAll(Class<DTO> dtoClass, USER user) {
         return webClient
                 .get()
                 .uri(builder -> getUriWithCriteria(builder, dtoClass, Operations.COUNT_ALL, null))
@@ -363,7 +362,7 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
      */
     @MethodStats
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<DTO> getById(Class<DTO> dtoClass, ID id, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<DTO> getById(Class<DTO> dtoClass, ID id, USER user) {
         return webClient
                 .get()
                 .uri(builder -> getUriWithId(builder, dtoClass, id.toString()))
@@ -383,7 +382,7 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
      */
     @MethodStats
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<DTO> getOne(Class<DTO> dtoClass, C criteria, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<DTO> getOne(Class<DTO> dtoClass, C criteria, USER user) {
         return webClient
                 .get()
                 .uri(builder -> getUriWithCriteria(builder, dtoClass, Operations.GET_ONE, criteria))
@@ -403,7 +402,7 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
      */
     @MethodStats
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Collection<DTO>> getMany(Class<DTO> dtoClass, C criteria, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Collection<DTO>> getMany(Class<DTO> dtoClass, C criteria, USER user) {
         return webClient
                 .get()
                 .uri(builder -> getUriWithCriteria(builder, dtoClass, Operations.GET_MANY, criteria))
@@ -423,7 +422,7 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
      */
     @MethodStats
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Flux<DTO> getStream(Class<DTO> dtoClass, C criteria, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Flux<DTO> getStream(Class<DTO> dtoClass, C criteria, USER user) {
         return webClient
                 .get()
                 .uri(builder -> getUriWithCriteria(builder, dtoClass, Operations.GET_STREAM, criteria))
@@ -443,7 +442,7 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
      */
     @MethodStats
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Page<DTO>> getPage(Class<DTO> dtoClass, C criteria, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Page<DTO>> getPage(Class<DTO> dtoClass, C criteria, USER user) {
         return webClient
                 .get()
                 .uri(builder -> getUriWithCriteria(builder, dtoClass, criteria))
@@ -549,7 +548,7 @@ public class CrudWebClient implements BaseCrudClient, BaseWebClient {
      * @param user    The user performing the operation.
      */
     @SneakyThrows
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser> void setDefaultHeaders(HttpHeaders builder, Optional<USER> user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser> void setDefaultHeaders(HttpHeaders builder, USER user) {
         builder.setContentType(MediaType.APPLICATION_JSON);
         setUserInfo(builder, user);
     }

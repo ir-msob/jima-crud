@@ -14,8 +14,6 @@ import ir.msob.jima.crud.ral.mongo.it.base.MongoCrudRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Optional;
-
 
 public abstract class CrudGrpcResourceTest<
         D extends ProjectDomain,
@@ -34,7 +32,7 @@ public abstract class CrudGrpcResourceTest<
     ProjectUserService projectUserService;
 
     @Override
-    public Optional<ProjectUser> getSampleUser() {
+    public ProjectUser getSampleUser() {
         return getDataProvider().getSampleUser();
     }
 

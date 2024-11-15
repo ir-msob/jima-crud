@@ -14,7 +14,6 @@ import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Optional;
 
 /**
  * This interface defines CRUD repository methods for domain entities.
@@ -156,10 +155,10 @@ public interface BaseCrudRepository<ID extends Comparable<ID> & Serializable, US
      *
      * @param query    The query to be extended with criteria.
      * @param criteria The criteria object used for extending the query.
-     * @param user     An optional user context.
+     * @param user     A user context.
      * @return The extended query with criteria.
      */
-    default Q criteria(Q query, C criteria, Optional<USER> user) {
+    default Q criteria(Q query, C criteria, USER user) {
         return query;
     }
 

@@ -26,7 +26,6 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * This interface provides a RSocket API for editing a domain based on a specific criteria.
@@ -73,7 +72,7 @@ public interface BaseEditCrudRsocketResource<
         log.debug("RSocket request to edit new domain, dto : {}", dto);
         ChannelMessage<USER, JsonPatchMessage<ID, C>> message = getObjectMapper().readValue(dto, getEditReferenceType());
 
-        Optional<USER> user = getUser(message.getUser(), principal);
+        USER user = getUser(message.getUser(), principal);
         return this.editResponse(message.getData().getJsonPatch(), this.getService().edit(message.getData().getCriteria(), message.getData().getJsonPatch(), user), message.getData().getCriteria(), user);
     }
 
@@ -84,10 +83,10 @@ public interface BaseEditCrudRsocketResource<
      * @param dto       the JsonPatch with the changes to apply to the domain
      * @param editedDto the Mono with the edited DTO
      * @param criteria  the criteria used to filter the domain
-     * @param user      the Optional object containing the user
+     * @param user      the user
      * @return a Mono with the edited DTO
      */
-    default Mono<DTO> editResponse(JsonPatch dto, Mono<DTO> editedDto, C criteria, Optional<USER> user) {
+    default Mono<DTO> editResponse(JsonPatch dto, Mono<DTO> editedDto, C criteria, USER user) {
         return editedDto;
     }
 }

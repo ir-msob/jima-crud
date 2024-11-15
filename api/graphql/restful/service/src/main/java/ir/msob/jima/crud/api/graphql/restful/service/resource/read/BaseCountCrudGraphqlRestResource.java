@@ -24,7 +24,6 @@ import org.springframework.http.HttpHeaders;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * The {@code BaseCountCrudGraphqlRestResource} interface defines GraphQL queries for counting entities based on specified criteria.
@@ -68,7 +67,7 @@ public interface BaseCountCrudGraphqlRestResource<
     default Mono<CountType> count(@Argument("input") CriteriaInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
         log.debug("Request to count: dto {}", input);
 
-        Optional<USER> user = getUser(token);
+        USER user = getUser(token);
 
         return getService().count(convertToCriteria(input.getCriteria()), user)
                 .map(res -> CountType.builder().count(res).build());

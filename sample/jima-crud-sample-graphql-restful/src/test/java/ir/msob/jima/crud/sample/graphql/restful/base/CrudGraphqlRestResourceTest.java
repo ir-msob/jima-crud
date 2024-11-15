@@ -36,7 +36,7 @@ public abstract class CrudGraphqlRestResourceTest<
     BaseIdService idService;
 
     @Override
-    public Optional<ProjectUser> getSampleUser() {
+    public ProjectUser getSampleUser() {
         return getDataProvider().getSampleUser();
     }
 

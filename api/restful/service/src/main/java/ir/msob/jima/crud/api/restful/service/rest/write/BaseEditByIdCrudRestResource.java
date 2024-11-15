@@ -30,7 +30,6 @@ import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 import java.security.Principal;
-import java.util.Optional;
 
 /**
  * This interface provides a RESTful API for editing a domain by its ID.
@@ -82,7 +81,7 @@ public interface BaseEditByIdCrudRestResource<
             throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to edit domain, id {}, dto {} ", id, dto);
 
-        Optional<USER> user = getUser(serverWebExchange, principal);
+        USER user = getUser(serverWebExchange, principal);
         return this.editByIdResponse(id, dto, this.getService().edit(id, dto, user), user);
     }
 
@@ -93,10 +92,10 @@ public interface BaseEditByIdCrudRestResource<
      * @param id        the ID of the domain to be edited
      * @param dto       the JsonPatch object containing the changes to be applied to the domain
      * @param editedDto the Mono object containing the edited DTO
-     * @param user      the Optional object containing the user
+     * @param user      the object containing the user
      * @return a ResponseEntity with the edited DTO
      */
-    default ResponseEntity<Mono<DTO>> editByIdResponse(ID id, JsonPatch dto, Mono<DTO> editedDto, Optional<USER> user) {
+    default ResponseEntity<Mono<DTO>> editByIdResponse(ID id, JsonPatch dto, Mono<DTO> editedDto, USER user) {
         return ResponseEntity.status(OperationsStatus.EDIT_BY_ID).body(editedDto);
     }
 }

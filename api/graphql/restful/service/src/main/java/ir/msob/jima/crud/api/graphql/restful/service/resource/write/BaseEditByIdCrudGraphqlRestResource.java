@@ -24,7 +24,6 @@ import org.springframework.http.HttpHeaders;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * The {@code BaseEditCrudGraphqlRestResource} interface defines a GraphQL mutation for editing an entity based on JSON Patch
@@ -68,7 +67,7 @@ public interface BaseEditByIdCrudGraphqlRestResource<
     default Mono<DtoType> editById(@Argument("input") IdJsonPatchInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
         log.debug("Request to edit by id: dto {}", input);
 
-        Optional<USER> user = getUser(token);
+        USER user = getUser(token);
 
         return getService().edit(convertToId(input.getId()), convertToJsonPatch(input.getJsonPatch()), user)
                 .map(d -> DtoType.builder().dto(convertToString(d)).build());

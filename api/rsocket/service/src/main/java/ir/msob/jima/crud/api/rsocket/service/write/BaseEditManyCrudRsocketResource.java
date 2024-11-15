@@ -27,7 +27,6 @@ import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Optional;
 
 /**
  * This interface provides a RSocket API for editing multiple domains based on a specific criteria.
@@ -74,7 +73,7 @@ public interface BaseEditManyCrudRsocketResource<
         log.debug("RSocket request to edit many, dto : {}", dto);
         ChannelMessage<USER, JsonPatchMessage<ID, C>> message = getObjectMapper().readValue(dto, getEditReferenceType());
 
-        Optional<USER> user = getUser(message.getUser(), principal);
+        USER user = getUser(message.getUser(), principal);
         return this.editManyResponse(message.getData().getJsonPatch(), this.getService().editMany(message.getData().getCriteria(), message.getData().getJsonPatch(), user), message.getData().getCriteria(), user);
     }
 
@@ -85,10 +84,10 @@ public interface BaseEditManyCrudRsocketResource<
      * @param dto        the JsonPatch with the changes to apply to the domains
      * @param editedDtos the Mono with the edited DTOs
      * @param criteria   the criteria used to filter the domains
-     * @param user       the Optional object containing the user
+     * @param user       the user
      * @return a Mono with the edited DTOs
      */
-    default Mono<Collection<DTO>> editManyResponse(JsonPatch dto, Mono<Collection<DTO>> editedDtos, C criteria, Optional<USER> user) {
+    default Mono<Collection<DTO>> editManyResponse(JsonPatch dto, Mono<Collection<DTO>> editedDtos, C criteria, USER user) {
         return editedDtos;
     }
 }

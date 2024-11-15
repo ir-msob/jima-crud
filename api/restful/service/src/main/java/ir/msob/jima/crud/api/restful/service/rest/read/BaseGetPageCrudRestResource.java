@@ -30,7 +30,6 @@ import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 import java.security.Principal;
-import java.util.Optional;
 
 /**
  * This interface provides a RESTful API for retrieving a page of domains based on a given criteria.
@@ -80,7 +79,7 @@ public interface BaseGetPageCrudRestResource<
     default ResponseEntity<Mono<Page<DTO>>> getPage(C criteria, @RequestParam("page") int page, @RequestParam("size") int size, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("REST request to get page domain, criteria {} : ", criteria);
 
-        Optional<USER> user = getUser(serverWebExchange, principal);
+        USER user = getUser(serverWebExchange, principal);
         return this.getPageResponse(this.getService().getPage(criteria, PageRequest.of(page, size), user), criteria, user);
     }
 
@@ -90,10 +89,10 @@ public interface BaseGetPageCrudRestResource<
      *
      * @param dtoPage  the Mono object containing the page of DTOs
      * @param criteria the criteria to get the page of domains
-     * @param user     the Optional object containing the user
+     * @param user     the user
      * @return a ResponseEntity with the page of DTOs
      */
-    default ResponseEntity<Mono<Page<DTO>>> getPageResponse(Mono<Page<DTO>> dtoPage, C criteria, Optional<USER> user) {
+    default ResponseEntity<Mono<Page<DTO>>> getPageResponse(Mono<Page<DTO>> dtoPage, C criteria, USER user) {
         return ResponseEntity.status(OperationsStatus.GET_PAGE).body(dtoPage);
     }
 }

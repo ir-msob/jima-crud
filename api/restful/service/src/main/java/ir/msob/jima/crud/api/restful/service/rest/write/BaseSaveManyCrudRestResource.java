@@ -30,7 +30,6 @@ import reactor.core.publisher.Mono;
 import java.io.Serializable;
 import java.security.Principal;
 import java.util.Collection;
-import java.util.Optional;
 
 /**
  * This interface provides a RESTful API for saving multiple domains based on a given DTO.
@@ -81,7 +80,7 @@ public interface BaseSaveManyCrudRestResource<
             throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("REST request to create many new domain, dtos : {}", dtos);
 
-        Optional<USER> user = getUser(serverWebExchange, principal);
+        USER user = getUser(serverWebExchange, principal);
         return this.saveManyResponse(dtos, this.getService().saveMany(dtos, user), user);
     }
 
@@ -91,10 +90,10 @@ public interface BaseSaveManyCrudRestResource<
      *
      * @param dtos      the DTOs to save the domains
      * @param savedDtos the Mono object containing the saved DTOs
-     * @param user      the Optional object containing the user
+     * @param user      the user
      * @return a ResponseEntity with the saved DTOs
      */
-    default ResponseEntity<Mono<Collection<DTO>>> saveManyResponse(Collection<DTO> dtos, Mono<Collection<DTO>> savedDtos, Optional<USER> user) {
+    default ResponseEntity<Mono<Collection<DTO>>> saveManyResponse(Collection<DTO> dtos, Mono<Collection<DTO>> savedDtos, USER user) {
         return ResponseEntity.status(OperationsStatus.SAVE_MANY).body(savedDtos);
     }
 }

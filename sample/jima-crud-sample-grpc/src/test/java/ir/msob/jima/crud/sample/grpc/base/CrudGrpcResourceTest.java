@@ -33,7 +33,7 @@ public abstract class CrudGrpcResourceTest<
     ProjectUserService projectUserService;
 
     @Override
-    public Optional<ProjectUser> getSampleUser() {
+    public ProjectUser getSampleUser() {
         return getDataProvider().getSampleUser();
     }
 

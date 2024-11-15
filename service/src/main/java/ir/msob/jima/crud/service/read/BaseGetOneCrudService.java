@@ -18,7 +18,6 @@ import reactor.core.publisher.Mono;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Optional;
 
 /**
  * This interface defines a service for retrieving a single DTO entity based on specific criteria or an entity ID.
@@ -42,14 +41,14 @@ public interface BaseGetOneCrudService<ID extends Comparable<ID> & Serializable,
      * Retrieve a single DTO entity based on an entity ID.
      *
      * @param id   The ID of the entity to retrieve.
-     * @param user An optional user associated with the operation.
+     * @param user A user associated with the operation.
      * @return A Mono emitting a single DTO entity.
      * @throws DomainNotFoundException If the requested domain is not found.
      * @throws BadRequestException     If the request is not well-formed or violates business rules.
      */
     @Transactional(readOnly = true)
     @MethodStats
-    default Mono<DTO> getOne(ID id, Optional<USER> user) throws DomainNotFoundException, BadRequestException {
+    default Mono<DTO> getOne(ID id, USER user) throws DomainNotFoundException, BadRequestException {
         return this.getOne(CriteriaUtil.idCriteria(getCriteriaClass(), id), user);
     }
 
@@ -57,7 +56,7 @@ public interface BaseGetOneCrudService<ID extends Comparable<ID> & Serializable,
      * Retrieve a single DTO entity based on specific criteria.
      *
      * @param criteria The criteria used for filtering entities.
-     * @param user     An optional user associated with the operation.
+     * @param user     A user associated with the operation.
      * @return A Mono emitting a single DTO entity.
      * @throws DomainNotFoundException If the requested domain is not found.
      * @throws BadRequestException     If the request is not well-formed or violates business rules.
@@ -65,8 +64,8 @@ public interface BaseGetOneCrudService<ID extends Comparable<ID> & Serializable,
     @Transactional(readOnly = true)
     @MethodStats
     @Override
-    default Mono<DTO> getOne(C criteria, Optional<USER> user) throws DomainNotFoundException, BadRequestException {
-        log.debug("GetOne, criteria: {}, user: {}", criteria, user.orElse(null));
+    default Mono<DTO> getOne(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
+        log.debug("GetOne, criteria: {}, user: {}", criteria, user);
 
         getBeforeAfterComponent().beforeGet(criteria, user, getBeforeAfterDomainOperations());
 
@@ -87,11 +86,11 @@ public interface BaseGetOneCrudService<ID extends Comparable<ID> & Serializable,
      * Execute the retrieval of a single domain entity based on specific criteria.
      *
      * @param criteria The criteria used for filtering entities.
-     * @param user     An optional user associated with the operation.
+     * @param user     A user associated with the operation.
      * @return A Mono emitting a single domain entity.
      * @throws DomainNotFoundException If the requested domain is not found.
      */
-    default Mono<D> getOneExecute(C criteria, Optional<USER> user) throws DomainNotFoundException {
+    default Mono<D> getOneExecute(C criteria, USER user) throws DomainNotFoundException {
         Q baseQuery = this.getRepository().generateQuery(criteria);
         baseQuery = this.getRepository().criteria(baseQuery, criteria, user);
         return this.getRepository().getOne(baseQuery);

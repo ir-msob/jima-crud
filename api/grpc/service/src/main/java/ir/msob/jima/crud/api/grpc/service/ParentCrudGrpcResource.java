@@ -81,7 +81,7 @@ public interface ParentCrudGrpcResource<
      * @return An {@link Optional} containing the authenticated user, or an empty {@link Optional} if no user is authenticated.
      */
     @SneakyThrows
-    default Optional<USER> getUser() {
+    default USER getUser() {
         return getUserService().getUser(getAuthentication());
     }
 

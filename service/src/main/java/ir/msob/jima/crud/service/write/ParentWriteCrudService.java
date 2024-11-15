@@ -24,7 +24,6 @@ import reactor.core.publisher.Mono;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Collection;
-import java.util.Optional;
 
 /**
  * This interface represents a service for performing write operations on entities in a CRUD application.
@@ -51,12 +50,12 @@ public interface ParentWriteCrudService<
      * Fetches a single DTO by its ID.
      *
      * @param id   The ID of the DTO to fetch.
-     * @param user An optional user object.
+     * @param user A user object.
      * @return A Mono that emits the DTO.
      * @throws BadRequestException     If the request is malformed.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    default Mono<DTO> getOneByID(ID id, Optional<USER> user) {
+    default Mono<DTO> getOneByID(ID id, USER user) {
         return getOne(CriteriaUtil.idCriteria(getCriteriaClass(), id), user);
     }
 
@@ -64,12 +63,12 @@ public interface ParentWriteCrudService<
      * Fetches multiple DTOs by a collection of DTO objects.
      *
      * @param dtos A collection of DTO objects to fetch.
-     * @param user An optional user object.
+     * @param user A user object.
      * @return A Mono that emits a collection of DTOs.
      * @throws BadRequestException     If the request is malformed.
      * @throws DomainNotFoundException If a domain is not found.
      */
-    default Mono<Collection<DTO>> getManyByDto(Collection<DTO> dtos, Optional<USER> user) {
+    default Mono<Collection<DTO>> getManyByDto(Collection<DTO> dtos, USER user) {
         Collection<ID> ids = dtos
                 .stream()
                 .map(BaseDomain::getDomainId)
@@ -109,10 +108,10 @@ public interface ParentWriteCrudService<
      * Performs actions before saving entities.
      *
      * @param dto  The DTO to be saved.
-     * @param user An optional user object.
+     * @param user A user object.
      * @return A Mono that emits void.
      */
-    default Mono<Void> preSave(DTO dto, Optional<USER> user) {
+    default Mono<Void> preSave(DTO dto, USER user) {
         return Mono.empty();
     }
 
@@ -121,10 +120,10 @@ public interface ParentWriteCrudService<
      *
      * @param dto         The DTO that was saved.
      * @param savedDomain The saved domain.
-     * @param user        An optional user object.
+     * @param user        A user object.
      * @return A Mono that emits void.
      */
-    default Mono<Void> postSave(DTO dto, D savedDomain, Optional<USER> user) {
+    default Mono<Void> postSave(DTO dto, D savedDomain, USER user) {
         return Mono.empty();
     }
 
@@ -132,12 +131,12 @@ public interface ParentWriteCrudService<
      * Saves a DTO.
      *
      * @param dto  The DTO to be saved.
-     * @param user An optional user object.
+     * @param user A user object.
      * @return A Mono that emits the saved DTO.
      * @throws BadRequestException     If the request is malformed.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    default Mono<DTO> save(@Valid DTO dto, Optional<USER> user) throws BadRequestException, DomainNotFoundException {
+    default Mono<DTO> save(@Valid DTO dto, USER user) throws BadRequestException, DomainNotFoundException {
         return Mono.empty();
     }
 
@@ -146,14 +145,14 @@ public interface ParentWriteCrudService<
      *
      * @param previousDto The previous DTO before update.
      * @param dto         The DTO to be updated.
-     * @param user        An optional user object.
+     * @param user        A user object.
      * @return A Mono that emits the updated DTO.
      * @throws BadRequestException     If the request is malformed.
      * @throws ValidationException     If the DTO is not valid.
      * @throws DomainNotFoundException If the domain is not found.
      */
     @Override
-    default Mono<DTO> update(DTO previousDto, @Valid DTO dto, Optional<USER> user) throws BadRequestException, ValidationException, DomainNotFoundException {
+    default Mono<DTO> update(DTO previousDto, @Valid DTO dto, USER user) throws BadRequestException, ValidationException, DomainNotFoundException {
         return Mono.empty();
     }
 
@@ -161,10 +160,10 @@ public interface ParentWriteCrudService<
      * Performs actions before updating entities.
      *
      * @param dto  The DTO to be updated.
-     * @param user An optional user object.
+     * @param user A user object.
      * @return A Mono that emits void.
      */
-    default Mono<Void> preUpdate(DTO dto, Optional<USER> user) {
+    default Mono<Void> preUpdate(DTO dto, USER user) {
         return Mono.empty();
     }
 
@@ -173,10 +172,10 @@ public interface ParentWriteCrudService<
      *
      * @param dto           The DTO that was updated.
      * @param updatedDomain The updated domain.
-     * @param user          An optional user object.
+     * @param user          A user object.
      * @return A Mono that emits void.
      */
-    default Mono<Void> postUpdate(DTO dto, D updatedDomain, Optional<USER> user) {
+    default Mono<Void> postUpdate(DTO dto, D updatedDomain, USER user) {
         return Mono.empty();
     }
 
@@ -184,10 +183,10 @@ public interface ParentWriteCrudService<
      * Performs actions before deleting entities based on criteria.
      *
      * @param criteria The criteria used for deleting entities.
-     * @param user     An optional user object.
+     * @param user     A user object.
      * @return A Mono that emits void.
      */
-    default Mono<Void> preDelete(C criteria, Optional<USER> user) {
+    default Mono<Void> preDelete(C criteria, USER user) {
         return Mono.empty();
     }
 
@@ -196,10 +195,10 @@ public interface ParentWriteCrudService<
      *
      * @param dto      The DTO of the entity that was deleted.
      * @param criteria The criteria used for deleting entities.
-     * @param user     An optional user object.
+     * @param user     A user object.
      * @return A Mono that emits void.
      */
-    default Mono<Void> postDelete(DTO dto, C criteria, Optional<USER> user) {
+    default Mono<Void> postDelete(DTO dto, C criteria, USER user) {
         return Mono.empty();
     }
 
@@ -208,18 +207,16 @@ public interface ParentWriteCrudService<
      *
      * @param dto        The DTO to be audited.
      * @param actionType The type of audit action to record.
-     * @param user       An optional user object.
+     * @param user       A user object.
      */
-    default void addAudit(DTO dto, AuditDomainActionType actionType, Optional<USER> user) {
-        user.ifPresent(u -> {
-            if (dto instanceof BaseAuditDomain auditDomainDto) {
-                auditDomainDto.getAuditDomains().add(AuditDomain.<ID>builder()
-                        .actionDate(Instant.now())
-                        .actionType(actionType)
-                        .relatedPartyId(String.valueOf(u.getId()))
-                        .build());
-            }
-        });
+    default void addAudit(DTO dto, AuditDomainActionType actionType, USER user) {
+        if (dto instanceof BaseAuditDomain auditDomainDto) {
+            auditDomainDto.getAuditDomains().add(AuditDomain.builder()
+                    .actionDate(Instant.now())
+                    .actionType(actionType)
+                    .relatedPartyId(String.valueOf(user.getId()))
+                    .build());
+        }
     }
 
 }

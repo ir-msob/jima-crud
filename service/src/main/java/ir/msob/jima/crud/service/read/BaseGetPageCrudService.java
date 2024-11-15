@@ -20,7 +20,6 @@ import reactor.core.publisher.Mono;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * This interface defines a service for retrieving a page of DTO entities based on specific criteria and pagination.
@@ -47,14 +46,14 @@ public interface BaseGetPageCrudService<ID extends Comparable<ID> & Serializable
      * Retrieve a page of DTO entities based on specific criteria and pagination.
      *
      * @param pageable The page information, including page number, size, and sorting.
-     * @param user     An optional user associated with the operation.
+     * @param user     A user associated with the operation.
      * @return A Mono emitting a Page of DTO entities.
      * @throws DomainNotFoundException If the requested domain is not found.
      * @throws BadRequestException     If the request is not well-formed or violates business rules.
      */
     @Transactional(readOnly = true)
     @MethodStats
-    default Mono<Page<DTO>> getPage(Pageable pageable, Optional<USER> user) throws DomainNotFoundException, BadRequestException {
+    default Mono<Page<DTO>> getPage(Pageable pageable, USER user) throws DomainNotFoundException, BadRequestException {
         return this.getPage(newCriteriaClass(), pageable, user);
     }
 
@@ -63,15 +62,15 @@ public interface BaseGetPageCrudService<ID extends Comparable<ID> & Serializable
      *
      * @param criteria The criteria used for filtering entities.
      * @param pageable The page information, including page number, size, and sorting.
-     * @param user     An optional user associated with the operation.
+     * @param user     A user associated with the operation.
      * @return A Mono emitting a Page of DTO entities.
      * @throws DomainNotFoundException If the requested domain is not found.
      * @throws BadRequestException     If the request is not well-formed or violates business rules.
      */
     @Transactional(readOnly = true)
     @MethodStats
-    default Mono<Page<DTO>> getPage(C criteria, Pageable pageable, Optional<USER> user) throws DomainNotFoundException, BadRequestException {
-        log.debug("GetPage, criteria: {}, user: {}", criteria, user.orElse(null));
+    default Mono<Page<DTO>> getPage(C criteria, Pageable pageable, USER user) throws DomainNotFoundException, BadRequestException {
+        log.debug("GetPage, criteria: {}, user: {}", criteria, user);
 
         getBeforeAfterComponent().beforeGet(criteria, user, getBeforeAfterDomainOperations());
 
@@ -87,13 +86,13 @@ public interface BaseGetPageCrudService<ID extends Comparable<ID> & Serializable
     }
 
     /**
-     * Prepare a Page of DTO entities from a Page of domain entities and an optional user.
+     * Prepare a Page of DTO entities from a Page of domain entities and a user.
      *
      * @param domainPage A Page of domain entities.
-     * @param user       An optional user associated with the operation.
+     * @param user       A user associated with the operation.
      * @return A Page of DTO entities.
      */
-    private PageImpl<DTO> preparePage(Page<D> domainPage, Optional<USER> user) {
+    private PageImpl<DTO> preparePage(Page<D> domainPage, USER user) {
         List<DTO> dtos = domainPage
                 .stream()
                 .map(domain -> toDto(domain, user))
@@ -107,11 +106,11 @@ public interface BaseGetPageCrudService<ID extends Comparable<ID> & Serializable
      *
      * @param criteria The criteria used for filtering entities.
      * @param pageable The page information, including page number, size, and sorting.
-     * @param user     An optional user associated with the operation.
+     * @param user     A user associated with the operation.
      * @return A Mono emitting a Page of domain entities.
      * @throws DomainNotFoundException If the requested domain is not found.
      */
-    default Mono<Page<D>> getPageExecute(C criteria, Pageable pageable, Optional<USER> user) throws DomainNotFoundException {
+    default Mono<Page<D>> getPageExecute(C criteria, Pageable pageable, USER user) throws DomainNotFoundException {
         Q baseQuery = this.getRepository().generateQuery(criteria, pageable);
         baseQuery = this.getRepository().criteria(baseQuery, criteria, user);
         return this.getRepository().getPage(baseQuery, pageable);

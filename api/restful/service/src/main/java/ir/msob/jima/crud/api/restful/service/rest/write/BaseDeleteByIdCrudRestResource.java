@@ -27,7 +27,6 @@ import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 import java.security.Principal;
-import java.util.Optional;
 
 /**
  * This interface provides a REST resource for deleting a domain by its ID.
@@ -75,7 +74,7 @@ public interface BaseDeleteByIdCrudRestResource<
     default ResponseEntity<Mono<ID>> deleteById(@PathVariable("id") ID id, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to delete domain by id, id {}", id);
 
-        Optional<USER> user = getUser(serverWebExchange, principal);
+        USER user = getUser(serverWebExchange, principal);
         return this.deleteByIdResponse(this.getService().delete(id, user), id, user);
     }
 
@@ -87,7 +86,7 @@ public interface BaseDeleteByIdCrudRestResource<
      * @param user      the user
      * @return a ResponseEntity containing a Mono of the ID of the deleted domain
      */
-    default ResponseEntity<Mono<ID>> deleteByIdResponse(Mono<ID> id, ID requestId, Optional<USER> user) {
+    default ResponseEntity<Mono<ID>> deleteByIdResponse(Mono<ID> id, ID requestId, USER user) {
         return ResponseEntity.status(OperationsStatus.DELETE_BY_ID).body(id);
     }
 

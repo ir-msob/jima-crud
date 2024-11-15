@@ -71,7 +71,7 @@ public interface BaseUpdateCrudKafkaListenerTest<
         ChannelMessage<USER, DtoMessage<ID, DTO>> channelMessage = new ChannelMessage<>();
         channelMessage.setData(data);
         channelMessage.setCallback(prepareCallbackTopic());
-        channelMessage.setUser(getSampleUser().orElse(null));
+        channelMessage.setUser(getSampleUser());
 
         String message = getObjectMapper().writeValueAsString(channelMessage);
         getKafkaTemplate().send(topic, message);

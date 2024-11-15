@@ -23,7 +23,6 @@ import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.listener.MessageListener;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * Interface for a listener that handles CRUD operations for counting all entities.
@@ -75,9 +74,8 @@ public interface BaseCountAllCrudKafkaListener<
     private void serviceCountAll(String dto) {
         log.debug("Received message for count all: dto {}", dto);
         ChannelMessage<USER, ModelType> message = getObjectMapper().readValue(dto, getModelTypeReferenceType());
-        Optional<USER> user = Optional.ofNullable(message.getUser());
-        getService().countAll(user)
-                .subscribe(count -> sendCallbackCountAll(message, count, OperationsStatus.COUNT_ALL, user));
+        getService().countAll(message.getUser())
+                .subscribe(count -> sendCallbackCountAll(message, count, OperationsStatus.COUNT_ALL, message.getUser()));
     }
 
 }

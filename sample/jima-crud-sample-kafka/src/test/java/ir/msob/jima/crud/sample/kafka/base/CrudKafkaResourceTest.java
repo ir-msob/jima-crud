@@ -51,7 +51,7 @@ public abstract class CrudKafkaResourceTest<
     private String groupId;
 
     @Override
-    public Optional<ProjectUser> getSampleUser() {
+    public ProjectUser getSampleUser() {
         return getDataProvider().getSampleUser();
     }
 

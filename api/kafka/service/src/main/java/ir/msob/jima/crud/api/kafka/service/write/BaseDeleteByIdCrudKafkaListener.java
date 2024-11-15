@@ -23,7 +23,6 @@ import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.listener.MessageListener;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * Interface for a listener that handles CRUD operations for deleting an entity by its ID.
@@ -75,8 +74,7 @@ public interface BaseDeleteByIdCrudKafkaListener<
     private void serviceDeleteById(String dto) {
         log.debug("Received message for delete by id: dto {}", dto);
         ChannelMessage<USER, IdMessage<ID>> message = getObjectMapper().readValue(dto, getIdReferenceType());
-        Optional<USER> user = Optional.ofNullable(message.getUser());
-        getService().delete(message.getData().getId(), user)
-                .subscribe(deletedId -> sendCallbackId(message, deletedId, OperationsStatus.DELETE_BY_ID, user));
+        getService().delete(message.getData().getId(), message.getUser())
+                .subscribe(deletedId -> sendCallbackId(message, deletedId, OperationsStatus.DELETE_BY_ID, message.getUser()));
     }
 }

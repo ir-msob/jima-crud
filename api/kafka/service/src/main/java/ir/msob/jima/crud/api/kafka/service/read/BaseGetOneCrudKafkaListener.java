@@ -23,7 +23,6 @@ import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.listener.MessageListener;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * Interface for a listener that handles CRUD operations for retrieving a single entity based on a given criteria.
@@ -75,8 +74,7 @@ public interface BaseGetOneCrudKafkaListener<
     private void serviceGetOne(String dto) {
         log.debug("Received message for get one: dto {}", dto);
         ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());
-        Optional<USER> user = Optional.ofNullable(message.getUser());
-        getService().getOne(message.getData().getCriteria(), user)
-                .subscribe(getOneDto -> sendCallbackDto(message, getOneDto, OperationsStatus.GET_ONE, user));
+        getService().getOne(message.getData().getCriteria(), message.getUser())
+                .subscribe(getOneDto -> sendCallbackDto(message, getOneDto, OperationsStatus.GET_ONE, message.getUser()));
     }
 }

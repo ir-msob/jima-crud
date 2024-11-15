@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * This service interface defines the contract for executing save operations for a single entity (DTO).
@@ -39,7 +38,7 @@ public interface BaseSaveCrudService<ID extends Comparable<ID> & Serializable, U
      * This method is transactional and is also annotated with @MethodStats for performance monitoring.
      *
      * @param dto  The DTO to be saved.
-     * @param user An optional user associated with the operation.
+     * @param user A user associated with the operation.
      * @return A DTO representing the saved entity.
      * @throws BadRequestException     if the operation encounters a bad request scenario.
      * @throws DomainNotFoundException if the entity to be saved is not found.
@@ -47,8 +46,8 @@ public interface BaseSaveCrudService<ID extends Comparable<ID> & Serializable, U
     @Transactional
     @MethodStats
     @Override
-    default Mono<DTO> save(@Valid DTO dto, Optional<USER> user) throws BadRequestException, DomainNotFoundException {
-        log.debug("Save, user {}", user.orElse(null));
+    default Mono<DTO> save(@Valid DTO dto, USER user) throws BadRequestException, DomainNotFoundException {
+        log.debug("Save, user {}", user);
 
         D domain = toDomain(dto, user);
         getBeforeAfterComponent().beforeSave(dto, user, getBeforeAfterDomainOperations());
@@ -66,10 +65,10 @@ public interface BaseSaveCrudService<ID extends Comparable<ID> & Serializable, U
      *
      * @param dto    The DTO to be saved.
      * @param domain The domain entity to be saved.
-     * @param user   An optional user associated with the operation.
+     * @param user   A user associated with the operation.
      * @return A Mono containing the saved domain entity.
      */
-    default Mono<D> saveExecute(DTO dto, D domain, Optional<USER> user) {
+    default Mono<D> saveExecute(DTO dto, D domain, USER user) {
         return this.getRepository().insertOne(domain);
     }
 }

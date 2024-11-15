@@ -27,7 +27,6 @@ import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 import java.security.Principal;
-import java.util.Optional;
 
 /**
  * This interface provides a RESTful API for counting domains based on a given criteria.
@@ -77,7 +76,7 @@ public interface BaseCountCrudRestResource<
     default ResponseEntity<Mono<Long>> count(C criteria, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("REST request to count, criteria {} : ", criteria);
 
-        Optional<USER> user = getUser(serverWebExchange, principal);
+        USER user = getUser(serverWebExchange, principal);
         return this.countResponse(this.getService().count(criteria, user), criteria, user);
     }
 
@@ -87,10 +86,10 @@ public interface BaseCountCrudRestResource<
      *
      * @param result   the Mono object containing the count of domains
      * @param criteria the criteria to count the domains
-     * @param user     the Optional object containing the user
+     * @param user     the object containing the user
      * @return a ResponseEntity with the count of domains
      */
-    default ResponseEntity<Mono<Long>> countResponse(Mono<Long> result, C criteria, Optional<USER> user) {
+    default ResponseEntity<Mono<Long>> countResponse(Mono<Long> result, C criteria, USER user) {
         return ResponseEntity.status(OperationsStatus.COUNT).body(result);
     }
 

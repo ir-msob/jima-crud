@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * This service interface defines the contract for executing delete operations on a single entity or based on specific criteria.
@@ -38,14 +37,14 @@ public interface BaseDeleteCrudService<ID extends Comparable<ID> & Serializable,
      * This method is transactional and is also annotated with @MethodStats for performance monitoring.
      *
      * @param id   The ID of the entity to be deleted.
-     * @param user An optional user associated with the operation.
+     * @param user A user associated with the operation.
      * @return A Mono of the ID of the entity that was deleted.
      * @throws DomainNotFoundException if the entity to be deleted is not found.
      * @throws BadRequestException     if the operation encounters a bad request scenario.
      */
     @Transactional
     @MethodStats
-    default Mono<ID> delete(ID id, Optional<USER> user) throws DomainNotFoundException, BadRequestException {
+    default Mono<ID> delete(ID id, USER user) throws DomainNotFoundException, BadRequestException {
         return this.delete(CriteriaUtil.idCriteria(getCriteriaClass(), id), user);
     }
 
@@ -54,15 +53,15 @@ public interface BaseDeleteCrudService<ID extends Comparable<ID> & Serializable,
      * This method is transactional and is also annotated with @MethodStats for performance monitoring.
      *
      * @param criteria The criteria used for filtering the entity to be deleted.
-     * @param user     An optional user associated with the operation.
+     * @param user     A user associated with the operation.
      * @return A Mono of the ID of the entity that was deleted.
      * @throws DomainNotFoundException if the entity to be deleted is not found.
      * @throws BadRequestException     if the operation encounters a bad request scenario.
      */
     @Transactional
     @MethodStats
-    default Mono<ID> delete(C criteria, Optional<USER> user) throws DomainNotFoundException, BadRequestException {
-        log.debug("Delete, criteria: {}, user: {}", criteria, user.orElse(null));
+    default Mono<ID> delete(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
+        log.debug("Delete, criteria: {}, user: {}", criteria, user);
 
         getBeforeAfterComponent().beforeDelete(criteria, user, getBeforeAfterDomainOperations());
 
@@ -80,11 +79,11 @@ public interface BaseDeleteCrudService<ID extends Comparable<ID> & Serializable,
      * This method is called by the delete method after the preDelete method.
      *
      * @param dto  The DTO to be deleted.
-     * @param user An optional user associated with the operation.
+     * @param user A user associated with the operation.
      * @return A Mono of the entity (domain) to be removed.
      * @throws DomainNotFoundException if the entity to be deleted is not found.
      */
-    default Mono<DTO> deleteExecute(DTO dto, Optional<USER> user) throws DomainNotFoundException {
+    default Mono<DTO> deleteExecute(DTO dto, USER user) throws DomainNotFoundException {
         C criteria = CriteriaUtil.idCriteria(getCriteriaClass(), dto.getDomainId());
         Q baseQuery = this.getRepository().generateQuery(criteria);
         baseQuery = this.getRepository().criteria(baseQuery, criteria, user);

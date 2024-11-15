@@ -11,7 +11,6 @@ import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Optional;
 
 /**
  * This interface defines a parent service for reading entities based on specific criteria.
@@ -35,10 +34,10 @@ public interface ParentReadCrudService<ID extends Comparable<ID> & Serializable,
      * By default, it does nothing and returns an empty Mono.
      *
      * @param criteria The criteria used for filtering entities.
-     * @param user     An optional user associated with the operation.
+     * @param user     A user associated with the operation.
      * @return A Mono indicating the completion of the pre-get operation.
      */
-    default Mono<Void> preGet(C criteria, Optional<USER> user) {
+    default Mono<Void> preGet(C criteria, USER user) {
         return Mono.empty();
     }
 
@@ -49,10 +48,10 @@ public interface ParentReadCrudService<ID extends Comparable<ID> & Serializable,
      * @param ids      A collection of entity IDs that were retrieved.
      * @param dtos     A collection of DTO entities corresponding to the retrieved domains.
      * @param criteria The criteria used for filtering entities.
-     * @param user     An optional user associated with the operation.
+     * @param user     A user associated with the operation.
      * @return A Mono indicating the completion of the post-get operation.
      */
-    default Mono<Void> postGet(Collection<ID> ids, Collection<DTO> dtos, C criteria, Optional<USER> user) {
+    default Mono<Void> postGet(Collection<ID> ids, Collection<DTO> dtos, C criteria, USER user) {
         return Mono.empty();
     }
 

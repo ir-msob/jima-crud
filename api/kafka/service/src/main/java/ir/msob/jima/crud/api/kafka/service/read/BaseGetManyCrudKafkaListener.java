@@ -23,7 +23,6 @@ import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.listener.MessageListener;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * Interface for a listener that handles CRUD operations for retrieving multiple entities based on a given criteria.
@@ -75,8 +74,7 @@ public interface BaseGetManyCrudKafkaListener<
     private void serviceGetMany(String dto) {
         log.debug("Received message for get many: dto {}", dto);
         ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());
-        Optional<USER> user = Optional.ofNullable(message.getUser());
-        getService().getMany(message.getData().getCriteria(), user)
-                .subscribe(getListDto -> sendCallbackDtos(message, getListDto, OperationsStatus.GET_MANY, user));
+        getService().getMany(message.getData().getCriteria(), message.getUser())
+                .subscribe(getListDto -> sendCallbackDtos(message, getListDto, OperationsStatus.GET_MANY, message.getUser()));
     }
 }

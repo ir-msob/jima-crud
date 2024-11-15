@@ -25,7 +25,6 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * This interface provides a RSocket API for deleting a single domain by its ID.
@@ -73,7 +72,7 @@ public interface BaseDeleteByIdCrudRsocketResource<
         log.debug("RSocket request to delete domain, dto {}", dto);
         ChannelMessage<USER, IdMessage<ID>> message = getObjectMapper().readValue(dto, getIdReferenceType());
 
-        Optional<USER> user = getUser(message.getUser(), principal);
+        USER user = getUser(message.getUser(), principal);
         return this.deleteByIdResponse(this.getService().delete(message.getData().getId(), user), message.getData().getId(), user);
     }
 
@@ -83,10 +82,10 @@ public interface BaseDeleteByIdCrudRsocketResource<
      *
      * @param id        the ID of the deleted domain
      * @param requestId the ID of the request
-     * @param user      the Optional object containing the user
+     * @param user      the user
      * @return a Mono with the ID of the deleted domain
      */
-    default Mono<ID> deleteByIdResponse(Mono<ID> id, ID requestId, Optional<USER> user) {
+    default Mono<ID> deleteByIdResponse(Mono<ID> id, ID requestId, USER user) {
         return id;
     }
 

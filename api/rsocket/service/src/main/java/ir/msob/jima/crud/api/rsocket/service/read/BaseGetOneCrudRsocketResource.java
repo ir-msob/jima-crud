@@ -25,7 +25,6 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * This interface provides a RSocket API for retrieving a single domain based on a specific criteria.
@@ -71,7 +70,7 @@ public interface BaseGetOneCrudRsocketResource<
         log.debug("RSocket request to get one domain, dto {}", dto);
         ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());
 
-        Optional<USER> user = getUser(message.getUser(), principal);
+        USER user = getUser(message.getUser(), principal);
         return this.getOneResponse(this.getService().getOne(message.getData().getCriteria(), user), message.getData().getCriteria(), user);
     }
 
@@ -81,10 +80,10 @@ public interface BaseGetOneCrudRsocketResource<
      *
      * @param dto      the Mono with the DTO that meets the criteria
      * @param criteria the criteria used to filter the domain
-     * @param user     the Optional object containing the user
+     * @param user     the user
      * @return a Mono with the DTO that meets the criteria
      */
-    default Mono<DTO> getOneResponse(Mono<DTO> dto, C criteria, Optional<USER> user) {
+    default Mono<DTO> getOneResponse(Mono<DTO> dto, C criteria, USER user) {
         return dto;
     }
 }

@@ -23,7 +23,6 @@ import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.listener.MessageListener;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * Interface for a listener that handles CRUD operations for updating entities.
@@ -75,8 +74,7 @@ public interface BaseUpdateCrudKafkaListener<
     private void serviceUpdate(String dto) {
         log.debug("Received message for update: dto {}", dto);
         ChannelMessage<USER, DtoMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getDtoReferenceType());
-        Optional<USER> user = Optional.ofNullable(message.getUser());
-        getService().update(message.getData().getDto(), user)
-                .subscribe(updatedDto -> sendCallbackDto(message, updatedDto, OperationsStatus.UPDATE, user));
+        getService().update(message.getData().getDto(), message.getUser())
+                .subscribe(updatedDto -> sendCallbackDto(message, updatedDto, OperationsStatus.UPDATE, message.getUser()));
     }
 }

@@ -28,7 +28,6 @@ import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 import java.security.Principal;
-import java.util.Optional;
 
 /**
  * This interface provides a RESTful API for deleting a domain based on a given criteria.
@@ -78,7 +77,7 @@ public interface BaseDeleteCrudRestResource<
     default ResponseEntity<Mono<ID>> delete(C criteria, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("REST request to delete domain, criteria {} : ", criteria);
 
-        Optional<USER> user = getUser(serverWebExchange, principal);
+        USER user = getUser(serverWebExchange, principal);
         return this.deleteResponse(this.getService().delete(criteria, user), criteria, user);
     }
 
@@ -88,10 +87,10 @@ public interface BaseDeleteCrudRestResource<
      *
      * @param id       the Mono object containing the ID of the deleted domain
      * @param criteria the criteria to delete the domain
-     * @param user     the Optional object containing the user
+     * @param user     the user
      * @return a ResponseEntity with the ID of the deleted domain
      */
-    default ResponseEntity<Mono<ID>> deleteResponse(Mono<ID> id, C criteria, Optional<USER> user) {
+    default ResponseEntity<Mono<ID>> deleteResponse(Mono<ID> id, C criteria, USER user) {
         return ResponseEntity.status(OperationsStatus.DELETE).body(id);
     }
 

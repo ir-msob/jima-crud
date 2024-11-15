@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * This service interface defines the contract for executing update operations on a single entity using JSON patches.
@@ -41,14 +40,14 @@ public interface BaseEditCrudService<ID extends Comparable<ID> & Serializable, U
      *
      * @param jsonPatch The JSON patch document to apply to the entity.
      * @param id        The entity ID to identify the entity to be updated.
-     * @param user      An optional user associated with the operation.
+     * @param user      A user associated with the operation.
      * @return A Mono of a DTO representing the updated entity.
      * @throws BadRequestException     if the operation encounters a bad request scenario.
      * @throws DomainNotFoundException if the entity to be updated is not found.
      */
     @Transactional
     @MethodStats
-    default Mono<DTO> edit(ID id, JsonPatch jsonPatch, Optional<USER> user) throws BadRequestException, DomainNotFoundException {
+    default Mono<DTO> edit(ID id, JsonPatch jsonPatch, USER user) throws BadRequestException, DomainNotFoundException {
         return this.edit(CriteriaUtil.idCriteria(getCriteriaClass(), id), jsonPatch, user);
     }
 
@@ -58,15 +57,15 @@ public interface BaseEditCrudService<ID extends Comparable<ID> & Serializable, U
      *
      * @param jsonPatch The JSON patch document to apply to the entity.
      * @param criteria  The criteria used for filtering the entity to be updated.
-     * @param user      An optional user associated with the operation.
+     * @param user      A user associated with the operation.
      * @return A Mono of a DTO representing the updated entity.
      * @throws BadRequestException     if the operation encounters a bad request scenario.
      * @throws DomainNotFoundException if the entity to be updated is not found.
      */
     @Transactional
     @MethodStats
-    default Mono<DTO> edit(C criteria, JsonPatch jsonPatch, Optional<USER> user) throws BadRequestException, DomainNotFoundException {
-        log.debug("Edit, jsonPatch: {}, criteria: {}, user {}", jsonPatch, criteria, user.orElse(null));
+    default Mono<DTO> edit(C criteria, JsonPatch jsonPatch, USER user) throws BadRequestException, DomainNotFoundException {
+        log.debug("Edit, jsonPatch: {}, criteria: {}, user {}", jsonPatch, criteria, user);
 
         return getOne(criteria, user).flatMap(dto -> {
             DTO previousDto = SerializationUtils.clone(dto);

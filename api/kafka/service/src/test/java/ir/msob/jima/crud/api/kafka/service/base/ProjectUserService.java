@@ -3,12 +3,11 @@ package ir.msob.jima.crud.api.kafka.service.base;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.msob.jima.core.beans.properties.JimaProperties;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.ral.mongo.it.security.ProjectUser;
 import ir.msob.jima.security.it.BaseSecurityProjectUserService;
 import ir.msob.jima.security.ral.keycloak.it.security.BaseKeycloakProjectUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +26,7 @@ public class ProjectUserService implements BaseKeycloakProjectUserService, BaseS
     }
 
     @Override
-    public <USER extends BaseUser> Optional<USER> getUser(Optional<String> optional) {
-        return Optional.empty();
+    public <USER extends BaseUser> USER getUser(String token) {
+        return (USER) new ProjectUser();
     }
 }

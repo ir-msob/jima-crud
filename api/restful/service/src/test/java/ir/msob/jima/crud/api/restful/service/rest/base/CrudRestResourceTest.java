@@ -15,8 +15,6 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import java.util.Optional;
-
 
 public abstract class CrudRestResourceTest<
         D extends ProjectDomain,
@@ -45,7 +43,7 @@ public abstract class CrudRestResourceTest<
     }
 
     @Override
-    public Optional<ProjectUser> getSampleUser() {
+    public ProjectUser getSampleUser() {
         return getDataProvider().getSampleUser();
     }
 

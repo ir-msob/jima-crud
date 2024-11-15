@@ -26,7 +26,6 @@ import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Optional;
 
 /**
  * This interface provides a RSocket API for saving multiple domains.
@@ -73,7 +72,7 @@ public interface BaseSaveManyCrudRsocketResource<
         log.debug("RSocket request to create many new domain, dtos : {}", dto);
         ChannelMessage<USER, DtosMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getDtosReferenceType());
 
-        Optional<USER> user = getUser(message.getUser(), principal);
+        USER user = getUser(message.getUser(), principal);
         return this.saveManyResponse(message.getData().getDtos(), this.getService().saveMany(message.getData().getDtos(), user), user);
     }
 
@@ -83,10 +82,10 @@ public interface BaseSaveManyCrudRsocketResource<
      *
      * @param messages  the DTOs to save the domains
      * @param savedDtos the Mono with the saved DTOs
-     * @param user      the Optional object containing the user
+     * @param user      the user
      * @return a Mono with the saved DTOs
      */
-    default Mono<Collection<DTO>> saveManyResponse(Collection<DTO> messages, Mono<Collection<DTO>> savedDtos, Optional<USER> user) {
+    default Mono<Collection<DTO>> saveManyResponse(Collection<DTO> messages, Mono<Collection<DTO>> savedDtos, USER user) {
         return savedDtos;
     }
 }

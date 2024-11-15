@@ -29,7 +29,7 @@ public abstract class CrudDataProvider<
     S service;
 
     @Override
-    public Optional<ProjectUser> getSampleUser() {
+    public ProjectUser getSampleUser() {
         return ProjectUserService.SYSTEM_USER_OPTIONAL;
     }
 

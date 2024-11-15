@@ -26,7 +26,6 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * This interface provides a RSocket API for retrieving a page of domains based on a specific criteria.
@@ -72,7 +71,7 @@ public interface BaseGetPageCrudRsocketResource<
         log.debug("RSocket request to get page domain, dto {}", dto);
         ChannelMessage<USER, PageableMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaPageReferenceType());
 
-        Optional<USER> user = getUser(message.getUser(), principal);
+        USER user = getUser(message.getUser(), principal);
         return this.getPageResponse(this.getService().getPage(message.getData().getCriteria(), message.getData().getPageable(), user), message.getData().getCriteria(), user);
     }
 
@@ -82,10 +81,10 @@ public interface BaseGetPageCrudRsocketResource<
      *
      * @param dtoPage  the Mono with a page of DTOs that meet the criteria
      * @param criteria the criteria used to filter the domains
-     * @param user     the Optional object containing the user
+     * @param user     the user
      * @return a Mono with a page of DTOs that meet the criteria
      */
-    default Mono<Page<DTO>> getPageResponse(Mono<Page<DTO>> dtoPage, C criteria, Optional<USER> user) {
+    default Mono<Page<DTO>> getPageResponse(Mono<Page<DTO>> dtoPage, C criteria, USER user) {
         return dtoPage;
     }
 }

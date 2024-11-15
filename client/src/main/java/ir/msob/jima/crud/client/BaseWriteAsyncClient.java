@@ -11,7 +11,6 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * This interface is intended for clients that interact with a service to perform asynchronous write operations.
@@ -29,10 +28,10 @@ public interface BaseWriteAsyncClient extends BaseClient {
      * @param id       The id item to be deleted.
      * @param metadata Additional metadata for the request.
      * @param callback The callback for handling the response.
-     * @param user     An optional user object associated with the request.
+     * @param user     A user object associated with the request.
      * @return A Mono indicating completion of the operation.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Void> deleteById(Class<DTO> dtoClass, ID id, Map<String, Serializable> metadata, String callback, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Void> deleteById(Class<DTO> dtoClass, ID id, Map<String, Serializable> metadata, String callback, USER user);
 
 
     /**
@@ -46,10 +45,10 @@ public interface BaseWriteAsyncClient extends BaseClient {
      * @param criteria The criteria for filtering items to be deleted.
      * @param metadata Additional metadata for the request.
      * @param callback The callback for handling the response.
-     * @param user     An optional user object associated with the request.
+     * @param user     A user object associated with the request.
      * @return A Mono indicating completion of the operation.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> delete(Class<DTO> dtoClass, C criteria, Map<String, Serializable> metadata, String callback, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> delete(Class<DTO> dtoClass, C criteria, Map<String, Serializable> metadata, String callback, USER user);
 
 
     /**
@@ -63,10 +62,10 @@ public interface BaseWriteAsyncClient extends BaseClient {
      * @param criteria The criteria for filtering items to be deleted.
      * @param metadata Additional metadata for the request.
      * @param callback The callback for handling the response.
-     * @param user     An optional user object associated with the request.
+     * @param user     A user object associated with the request.
      * @return A Mono indicating completion of the operation.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> deleteMany(Class<DTO> dtoClass, C criteria, Map<String, Serializable> metadata, String callback, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> deleteMany(Class<DTO> dtoClass, C criteria, Map<String, Serializable> metadata, String callback, USER user);
 
     /**
      * Asynchronously delete multiple items by ids.
@@ -79,10 +78,10 @@ public interface BaseWriteAsyncClient extends BaseClient {
      * @param ids      The ids of items to be deleted.
      * @param metadata Additional metadata for the request.
      * @param callback The callback for handling the response.
-     * @param user     An optional user object associated with the request.
+     * @param user     A user object associated with the request.
      * @return A Mono indicating completion of the operation.
      */
-    default <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> deleteMany(Class<DTO> dtoClass, Collection<ID> ids, Map<String, Serializable> metadata, String callback, Optional<USER> user) {
+    default <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> deleteMany(Class<DTO> dtoClass, Collection<ID> ids, Map<String, Serializable> metadata, String callback, USER user) {
         return this.deleteMany(dtoClass, (C) CriteriaUtil.idCriteria(ids), metadata, callback, user);
     }
 
@@ -98,10 +97,10 @@ public interface BaseWriteAsyncClient extends BaseClient {
      * @param criteria The criteria for filtering items to be deleted.
      * @param metadata Additional metadata for the request.
      * @param callback The callback for handling the response.
-     * @param user     An optional user object associated with the request.
+     * @param user     A user object associated with the request.
      * @return A Mono indicating completion of the operation.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> deleteAll(Class<DTO> dtoClass, C criteria, Map<String, Serializable> metadata, String callback, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> deleteAll(Class<DTO> dtoClass, C criteria, Map<String, Serializable> metadata, String callback, USER user);
 
 
     /**
@@ -116,10 +115,10 @@ public interface BaseWriteAsyncClient extends BaseClient {
      * @param criteria  The criteria for filtering items to be updated.
      * @param metadata  Additional metadata for the request.
      * @param callback  The callback for handling the response.
-     * @param user      An optional user object associated with the request.
+     * @param user      A user object associated with the request.
      * @return A Mono indicating completion of the operation.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> edit(Class<DTO> dtoClass, JsonPatch jsonPatch, C criteria, Map<String, Serializable> metadata, String callback, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> edit(Class<DTO> dtoClass, JsonPatch jsonPatch, C criteria, Map<String, Serializable> metadata, String callback, USER user);
 
 
     /**
@@ -133,10 +132,10 @@ public interface BaseWriteAsyncClient extends BaseClient {
      * @param jsonPatch The JSON patch representing the changes to be applied.
      * @param metadata  Additional metadata for the request.
      * @param callback  The callback for handling the response.
-     * @param user      An optional user object associated with the request.
+     * @param user      A user object associated with the request.
      * @return A Mono indicating completion of the operation.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Void> editById(Class<DTO> dtoClass, ID id, JsonPatch jsonPatch, Map<String, Serializable> metadata, String callback, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Void> editById(Class<DTO> dtoClass, ID id, JsonPatch jsonPatch, Map<String, Serializable> metadata, String callback, USER user);
 
     /**
      * Asynchronously update multiple data items based on a JSON patch and specified criteria.
@@ -150,10 +149,10 @@ public interface BaseWriteAsyncClient extends BaseClient {
      * @param criteria  The criteria for filtering items to be updated.
      * @param metadata  Additional metadata for the request.
      * @param callback  The callback for handling the response.
-     * @param user      An optional user object associated with the request.
+     * @param user      A user object associated with the request.
      * @return A Mono indicating completion of the operation.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> editMany(Class<DTO> dtoClass, JsonPatch jsonPatch, C criteria, Map<String, Serializable> metadata, String callback, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> editMany(Class<DTO> dtoClass, JsonPatch jsonPatch, C criteria, Map<String, Serializable> metadata, String callback, USER user);
 
     /**
      * Asynchronously update multiple data items based on a JSON patch and ids.
@@ -167,10 +166,10 @@ public interface BaseWriteAsyncClient extends BaseClient {
      * @param ids       The ids of items to be updated.
      * @param metadata  Additional metadata for the request.
      * @param callback  The callback for handling the response.
-     * @param user      An optional user object associated with the request.
+     * @param user      A user object associated with the request.
      * @return A Mono indicating completion of the operation.
      */
-    default <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> editMany(Class<DTO> dtoClass, JsonPatch jsonPatch, Collection<ID> ids, Map<String, Serializable> metadata, String callback, Optional<USER> user) {
+    default <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Void> editMany(Class<DTO> dtoClass, JsonPatch jsonPatch, Collection<ID> ids, Map<String, Serializable> metadata, String callback, USER user) {
         return this.editMany(dtoClass, jsonPatch, (C) CriteriaUtil.idCriteria(ids), metadata, callback, user);
     }
 
@@ -184,10 +183,10 @@ public interface BaseWriteAsyncClient extends BaseClient {
      * @param dto      The data transfer object to be created or saved.
      * @param metadata Additional metadata for the request.
      * @param callback The callback for handling the response.
-     * @param user     An optional user object associated with the request.
+     * @param user     A user object associated with the request.
      * @return A Mono indicating completion of the operation.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Void> save(Class<DTO> dtoClass, DTO dto, Map<String, Serializable> metadata, String callback, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Void> save(Class<DTO> dtoClass, DTO dto, Map<String, Serializable> metadata, String callback, USER user);
 
     /**
      * Asynchronously create or save multiple data items.
@@ -199,10 +198,10 @@ public interface BaseWriteAsyncClient extends BaseClient {
      * @param dtos     A collection of data transfer objects to be created or saved.
      * @param metadata Additional metadata for the request.
      * @param callback The callback for handling the response.
-     * @param user     An optional user object associated with the request.
+     * @param user     A user object associated with the request.
      * @return A Mono indicating completion of the operation.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Void> saveMany(Class<DTO> dtoClass, List<DTO> dtos, Map<String, Serializable> metadata, String callback, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Void> saveMany(Class<DTO> dtoClass, List<DTO> dtos, Map<String, Serializable> metadata, String callback, USER user);
 
     /**
      * Asynchronously update a single data item by id.
@@ -215,10 +214,10 @@ public interface BaseWriteAsyncClient extends BaseClient {
      * @param dto      The data transfer object to be updated.
      * @param metadata Additional metadata for the request.
      * @param callback The callback for handling the response.
-     * @param user     An optional user object associated with the request.
+     * @param user     A user object associated with the request.
      * @return A Mono indicating completion of the operation.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Void> updateById(Class<DTO> dtoClass, ID id, DTO dto, Map<String, Serializable> metadata, String callback, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Void> updateById(Class<DTO> dtoClass, ID id, DTO dto, Map<String, Serializable> metadata, String callback, USER user);
 
 
     /**
@@ -231,10 +230,10 @@ public interface BaseWriteAsyncClient extends BaseClient {
      * @param dto      The data transfer object to be updated.
      * @param metadata Additional metadata for the request.
      * @param callback The callback for handling the response.
-     * @param user     An optional user object associated with the request.
+     * @param user     A user object associated with the request.
      * @return A Mono indicating completion of the operation.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Void> update(Class<DTO> dtoClass, DTO dto, Map<String, Serializable> metadata, String callback, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Void> update(Class<DTO> dtoClass, DTO dto, Map<String, Serializable> metadata, String callback, USER user);
 
 
     /**
@@ -247,8 +246,8 @@ public interface BaseWriteAsyncClient extends BaseClient {
      * @param dtos     A collection of data transfer objects to be updated.
      * @param metadata Additional metadata for the request.
      * @param callback The callback for handling the response.
-     * @param user     An optional user object associated with the request.
+     * @param user     A user object associated with the request.
      * @return A Mono indicating completion of the operation.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Void> updateMany(Class<DTO> dtoClass, List<DTO> dtos, Map<String, Serializable> metadata, String callback, Optional<USER> user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> Mono<Void> updateMany(Class<DTO> dtoClass, List<DTO> dtos, Map<String, Serializable> metadata, String callback, USER user);
 }

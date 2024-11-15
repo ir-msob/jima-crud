@@ -29,7 +29,6 @@ import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 import java.security.Principal;
-import java.util.Optional;
 
 /**
  * This interface provides a RESTful API for editing a domain based on a given criteria.
@@ -81,7 +80,7 @@ public interface BaseEditCrudRestResource<
             throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to edit new domain, dto : {}, criteria : {}", dto, criteria);
 
-        Optional<USER> user = getUser(serverWebExchange, principal);
+        USER user = getUser(serverWebExchange, principal);
         return this.editResponse(dto, this.getService().edit(criteria, dto, user), criteria, user);
     }
 
@@ -92,10 +91,10 @@ public interface BaseEditCrudRestResource<
      * @param dto       the JsonPatch object containing the changes to apply to the domain
      * @param editedDto the Mono object containing the edited DTO
      * @param criteria  the criteria to edit the domain
-     * @param user      the Optional object containing the user
+     * @param user      the user
      * @return a ResponseEntity with the edited DTO
      */
-    default ResponseEntity<Mono<DTO>> editResponse(JsonPatch dto, Mono<DTO> editedDto, C criteria, Optional<USER> user) {
+    default ResponseEntity<Mono<DTO>> editResponse(JsonPatch dto, Mono<DTO> editedDto, C criteria, USER user) {
         return ResponseEntity.status(OperationsStatus.EDIT).body(editedDto);
     }
 }

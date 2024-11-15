@@ -18,7 +18,6 @@ import reactor.core.publisher.Mono;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
 
 /**
  * This service interface defines the contract for executing delete operations, specifically deleting all entities that match a set of criteria.
@@ -39,15 +38,15 @@ public interface BaseDeleteAllCrudService<ID extends Comparable<ID> & Serializab
      * Executes the delete operation to remove all entities that match the specified criteria.
      * This method is transactional and is also annotated with @MethodStats for performance monitoring.
      *
-     * @param user An optional user associated with the operation.
+     * @param user A user associated with the operation.
      * @return A Mono of a collection of entity IDs that were deleted.
      * @throws DomainNotFoundException if the entities to be deleted are not found.
      * @throws BadRequestException     if the operation encounters a bad request scenario.
      */
     @Transactional
     @MethodStats
-    default Mono<Collection<ID>> deleteAll(Optional<USER> user) throws DomainNotFoundException, BadRequestException {
-        log.debug("Delete, user: {}", user.orElse(null));
+    default Mono<Collection<ID>> deleteAll(USER user) throws DomainNotFoundException, BadRequestException {
+        log.debug("Delete, user: {}", user);
 
         C criteria = newCriteriaClass();
 
@@ -67,11 +66,11 @@ public interface BaseDeleteAllCrudService<ID extends Comparable<ID> & Serializab
      * This method is called by the deleteAll method after the preDelete method.
      *
      * @param dto  The DTO to be deleted.
-     * @param user An optional user associated with the operation.
+     * @param user A user associated with the operation.
      * @return A Flux of entities (domains) to be removed.
      * @throws DomainNotFoundException if the entities to be deleted are not found.
      */
-    default Mono<DTO> deleteAllExecute(DTO dto, Optional<USER> user) throws DomainNotFoundException {
+    default Mono<DTO> deleteAllExecute(DTO dto, USER user) throws DomainNotFoundException {
         C criteria = CriteriaUtil.idCriteria(getCriteriaClass(), dto.getDomainId());
         Q baseQuery = this.getRepository().generateQuery(criteria);
         baseQuery = this.getRepository().criteria(baseQuery, criteria, user);

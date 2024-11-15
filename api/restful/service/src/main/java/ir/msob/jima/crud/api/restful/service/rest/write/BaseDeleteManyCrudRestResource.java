@@ -29,7 +29,6 @@ import reactor.core.publisher.Mono;
 import java.io.Serializable;
 import java.security.Principal;
 import java.util.Collection;
-import java.util.Optional;
 
 /**
  * This interface provides a RESTful API for deleting multiple domains based on a given criteria.
@@ -79,7 +78,7 @@ public interface BaseDeleteManyCrudRestResource<
     default ResponseEntity<Mono<Collection<ID>>> deleteMany(C criteria, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("REST request to delete many domain, criteria {} : ", criteria);
 
-        Optional<USER> user = getUser(serverWebExchange, principal);
+        USER user = getUser(serverWebExchange, principal);
         return this.deleteManyResponse(this.getService().deleteMany(criteria, user), criteria, user);
     }
 
@@ -89,10 +88,10 @@ public interface BaseDeleteManyCrudRestResource<
      *
      * @param ids      the Mono object containing the IDs of the deleted domains
      * @param criteria the criteria to delete the domains
-     * @param user     the Optional object containing the user
+     * @param user     the user
      * @return a ResponseEntity with the IDs of the deleted domains
      */
-    default ResponseEntity<Mono<Collection<ID>>> deleteManyResponse(Mono<Collection<ID>> ids, C criteria, Optional<USER> user) {
+    default ResponseEntity<Mono<Collection<ID>>> deleteManyResponse(Mono<Collection<ID>> ids, C criteria, USER user) {
         return ResponseEntity.status(OperationsStatus.DELETE_MANY).body(ids);
     }
 

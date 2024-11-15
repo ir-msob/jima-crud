@@ -7,12 +7,10 @@ import ir.msob.jima.core.ral.mongo.it.test.TestDomain;
 import ir.msob.jima.crud.ral.mongo.it.base.MongoCrudRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
 @Repository
 public class TestRepository extends MongoCrudRepository<TestDomain, TestCriteria> {
     @Override
-    public QueryBuilder criteria(QueryBuilder query, TestCriteria criteria, Optional<ProjectUser> projectUser) {
+    public QueryBuilder criteria(QueryBuilder query, TestCriteria criteria, ProjectUser projectUser) {
         return super.criteria(query, criteria, projectUser);
     }
 

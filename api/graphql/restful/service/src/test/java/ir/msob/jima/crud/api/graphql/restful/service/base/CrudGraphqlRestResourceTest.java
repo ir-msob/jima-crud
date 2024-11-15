@@ -15,8 +15,6 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.test.tester.GraphQlTester;
 
-import java.util.Optional;
-
 
 public abstract class CrudGraphqlRestResourceTest<
         D extends ProjectDomain,
@@ -37,7 +35,7 @@ public abstract class CrudGraphqlRestResourceTest<
     BaseIdService idService;
 
     @Override
-    public Optional<ProjectUser> getSampleUser() {
+    public ProjectUser getSampleUser() {
         return getDataProvider().getSampleUser();
     }
 

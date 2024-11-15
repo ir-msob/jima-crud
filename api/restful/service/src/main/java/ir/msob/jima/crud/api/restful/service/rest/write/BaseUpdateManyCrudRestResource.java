@@ -31,7 +31,6 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.security.Principal;
 import java.util.Collection;
-import java.util.Optional;
 
 /**
  * This interface provides a RESTful API for updating multiple domains based on a given DTO.
@@ -82,7 +81,7 @@ public interface BaseUpdateManyCrudRestResource<
             throws BadRequestException, DomainNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, JsonProcessingException {
         log.debug("REST request to update many domain, dtos : {}", dtos);
 
-        Optional<USER> user = getUser(serverWebExchange, principal);
+        USER user = getUser(serverWebExchange, principal);
         return this.updateManyResponse(dtos, this.getService().updateMany(dtos, user), user);
     }
 
@@ -92,10 +91,10 @@ public interface BaseUpdateManyCrudRestResource<
      *
      * @param dtos        the DTOs to update the domains
      * @param updatedDtos the Mono object containing the updated DTOs
-     * @param user        the Optional object containing the user
+     * @param user        the user
      * @return a ResponseEntity with the updated DTOs
      */
-    default ResponseEntity<Mono<Collection<DTO>>> updateManyResponse(Collection<DTO> dtos, Mono<Collection<DTO>> updatedDtos, Optional<USER> user) {
+    default ResponseEntity<Mono<Collection<DTO>>> updateManyResponse(Collection<DTO> dtos, Mono<Collection<DTO>> updatedDtos, USER user) {
         return ResponseEntity.status(OperationsStatus.UPDATE_MANY).body(updatedDtos);
     }
 }

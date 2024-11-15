@@ -21,7 +21,6 @@ import org.springframework.kafka.listener.ContainerProperties;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Optional;
 
 /**
  * Interface for a listener that handles CRUD operations.
@@ -83,7 +82,7 @@ public interface ParentCrudKafkaListener<
      * @param user    The user who initiated the operation.
      */
     @SneakyThrows
-    default <DATA extends ModelType> void sendCallbackDtos(ChannelMessage<USER, DATA> message, Collection<DTO> dtos, Integer status, Optional<USER> user) {
+    default <DATA extends ModelType> void sendCallbackDtos(ChannelMessage<USER, DATA> message, Collection<DTO> dtos, Integer status, USER user) {
         if (Strings.isNotBlank(message.getCallback())) {
             DtosMessage<ID, DTO> data = new DtosMessage<>();
             data.setDtos(dtos);
@@ -100,7 +99,7 @@ public interface ParentCrudKafkaListener<
      * @param user    The user who initiated the operation.
      */
     @SneakyThrows
-    default <DATA extends ModelType> void sendCallbackDto(ChannelMessage<USER, DATA> message, DTO dto, Integer status, Optional<USER> user) {
+    default <DATA extends ModelType> void sendCallbackDto(ChannelMessage<USER, DATA> message, DTO dto, Integer status, USER user) {
         if (Strings.isNotBlank(message.getCallback())) {
             DtoMessage<ID, DTO> data = new DtoMessage<>();
             data.setDto(dto);
@@ -117,7 +116,7 @@ public interface ParentCrudKafkaListener<
      * @param user    The user who initiated the operation.
      */
     @SneakyThrows
-    default <DATA extends ModelType> void sendCallbackIds(ChannelMessage<USER, DATA> message, Collection<ID> ids, Integer status, Optional<USER> user) {
+    default <DATA extends ModelType> void sendCallbackIds(ChannelMessage<USER, DATA> message, Collection<ID> ids, Integer status, USER user) {
         if (Strings.isNotBlank(message.getCallback())) {
             IdsMessage<ID> data = new IdsMessage<>();
             data.setIds(ids);
@@ -134,7 +133,7 @@ public interface ParentCrudKafkaListener<
      * @param user    The user who initiated the operation.
      */
     @SneakyThrows
-    default <DATA extends ModelType> void sendCallbackId(ChannelMessage<USER, DATA> message, ID id, Integer status, Optional<USER> user) {
+    default <DATA extends ModelType> void sendCallbackId(ChannelMessage<USER, DATA> message, ID id, Integer status, USER user) {
         if (Strings.isNotBlank(message.getCallback())) {
             IdMessage<ID> data = new IdMessage<>();
             data.setId(id);
@@ -151,7 +150,7 @@ public interface ParentCrudKafkaListener<
      * @param user    The user who initiated the operation.
      */
     @SneakyThrows
-    default void sendCallbackCountAll(ChannelMessage<USER, ModelType> message, Long count, Integer status, Optional<USER> user) {
+    default void sendCallbackCountAll(ChannelMessage<USER, ModelType> message, Long count, Integer status, USER user) {
         if (Strings.isNotBlank(message.getCallback())) {
             LongMessage data = new LongMessage();
             data.setResult(count);
@@ -168,7 +167,7 @@ public interface ParentCrudKafkaListener<
      * @param user    The user who initiated the operation.
      */
     @SneakyThrows
-    default void sendCallbackCount(ChannelMessage<USER, CriteriaMessage<ID, C>> message, Long count, Integer status, Optional<USER> user) {
+    default void sendCallbackCount(ChannelMessage<USER, CriteriaMessage<ID, C>> message, Long count, Integer status, USER user) {
         if (Strings.isNotBlank(message.getCallback())) {
             LongMessage data = new LongMessage();
             data.setResult(count);
@@ -185,7 +184,7 @@ public interface ParentCrudKafkaListener<
      * @param user    The user who initiated the operation.
      */
     @SneakyThrows
-    default <DATA extends ModelType> void sendCallbackPage(ChannelMessage<USER, DATA> message, Page<DTO> page, Integer status, Optional<USER> user) {
+    default <DATA extends ModelType> void sendCallbackPage(ChannelMessage<USER, DATA> message, Page<DTO> page, Integer status, USER user) {
         if (Strings.isNotBlank(message.getCallback())) {
             PageMessage<ID, DTO> data = new PageMessage<>();
             data.setPage(page);

@@ -25,7 +25,6 @@ import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Optional;
 
 /**
  * The {@code BaseUpdateManyCrudGraphqlRestResource} interface defines a GraphQL mutation for updating multiple entities.
@@ -73,7 +72,7 @@ public interface BaseUpdateManyCrudGraphqlRestResource<
     default Mono<DtosType> updateMany(@Argument("input") DtosInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         log.debug("Request to update many: dto {}", input);
 
-        Optional<USER> user = getUser(token);
+        USER user = getUser(token);
 
         return getService().updateMany(convertToDtos(input.getDtos()), user)
                 .map(dtos -> DtosType.builder().dtos(convertToStrings(dtos)).build());

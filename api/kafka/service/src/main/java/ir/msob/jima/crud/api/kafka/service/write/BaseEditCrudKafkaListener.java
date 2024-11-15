@@ -23,7 +23,6 @@ import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.listener.MessageListener;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * Interface for a listener that handles CRUD operations for editing entities based on a given criteria.
@@ -75,8 +74,7 @@ public interface BaseEditCrudKafkaListener<
     private void serviceEdit(String dto) {
         log.debug("Received message for edit: dto {}", dto);
         ChannelMessage<USER, JsonPatchMessage<ID, C>> message = getObjectMapper().readValue(dto, getEditReferenceType());
-        Optional<USER> user = Optional.ofNullable(message.getUser());
-        getService().edit(message.getData().getCriteria(), message.getData().getJsonPatch(), user)
-                .subscribe(editedDto -> sendCallbackDto(message, editedDto, OperationsStatus.EDIT, user));
+        getService().edit(message.getData().getCriteria(), message.getData().getJsonPatch(), message.getUser())
+                .subscribe(editedDto -> sendCallbackDto(message, editedDto, OperationsStatus.EDIT, message.getUser()));
     }
 }

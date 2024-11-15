@@ -24,7 +24,6 @@ import org.springframework.http.HttpHeaders;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * The {@code BaseGetOneCrudGraphqlRestResource} interface defines a GraphQL query for retrieving a single entity
@@ -69,7 +68,7 @@ public interface BaseGetOneCrudGraphqlRestResource<
     default Mono<DtoType> getOne(@Argument("input") CriteriaInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
         log.debug("Request to get one: dto {}", input);
 
-        Optional<USER> user = getUser(token);
+        USER user = getUser(token);
 
         return getService().getOne(convertToCriteria(input.getCriteria()), user)
                 .map(dto -> DtoType.builder().dto(convertToString(dto)).build());

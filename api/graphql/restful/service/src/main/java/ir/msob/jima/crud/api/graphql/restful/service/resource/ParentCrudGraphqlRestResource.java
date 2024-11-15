@@ -18,7 +18,6 @@ import org.springframework.data.domain.Pageable;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * The {@code ParentCrudGraphqlRestResource} interface defines a set of common methods for GraphQL-based CRUD operations.
@@ -71,10 +70,10 @@ public interface ParentCrudGraphqlRestResource<ID extends Comparable<ID> & Seria
      * Retrieves the user associated with the provided authentication token.
      *
      * @param token The authentication token (optional).
-     * @return An optional containing the user associated with the token, or an empty optional if not authenticated.
+     * @return the user associated with the token, or an empty optional if not authenticated.
      */
-    default Optional<USER> getUser(String token) {
-        return getUserService().getUser(Optional.ofNullable(token));
+    default USER getUser(String token) {
+        return getUserService().getUser(token);
     }
 
     /**

@@ -22,10 +22,10 @@ public interface BaseKeycloakProjectUserService extends BaseUserService {
             .audience(ClaimKeyValue.AUDIENCE_WEB)
             .build();
 
-    Optional<ProjectUser> SYSTEM_USER_OPTIONAL = Optional.of(SYSTEM_USER);
+    ProjectUser SYSTEM_USER_OPTIONAL = Optional.of(SYSTEM_USER);
 
     @Override
-    default <USER extends BaseUser> Optional<USER> getUser(Map<String, Object> claims) {
+    default <USER extends BaseUser> USER getUser(Map<String, Object> claims) {
         SortedSet<String> roles = new TreeSet<>((List<String>) ((Map<String, Map<String, List<String>>>) claims.get(ProjectClaimKey.REALM_ACCESS)).get(ProjectClaimKey.KEYCLOAK_ROLES));
         return Optional.of((USER) ProjectUser.builder()
                 .id(String.valueOf(claims.get(ClaimKey.ID)))
@@ -38,7 +38,7 @@ public interface BaseKeycloakProjectUserService extends BaseUserService {
 
 
     @Override
-    default <USER extends BaseUser> Optional<USER> getSystemUser() {
-        return (Optional<USER>) Optional.of(SYSTEM_USER);
+    default <USER extends BaseUser> USER getSystemUser() {
+        return (USER) Optional.of(SYSTEM_USER);
     }
 }

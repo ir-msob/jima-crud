@@ -25,7 +25,6 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * This interface provides a RSocket API for counting domains that meet a specific criteria.
@@ -71,7 +70,7 @@ public interface BaseCountCrudRsocketResource<
         log.debug("RSocket request to count, dto {} : ", dto);
         ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());
 
-        Optional<USER> user = getUser(message.getUser(), principal);
+        USER user = getUser(message.getUser(), principal);
         return this.countResponse(this.getService().count(message.getData().getCriteria(), user), message.getData().getCriteria(), user);
     }
 
@@ -81,10 +80,10 @@ public interface BaseCountCrudRsocketResource<
      *
      * @param result   the Mono with the count of domains that meet the criteria
      * @param criteria the criteria used to filter the domains
-     * @param user     the Optional object containing the user
+     * @param user     the user
      * @return a Mono with the count of domains that meet the criteria
      */
-    default Mono<Long> countResponse(Mono<Long> result, C criteria, Optional<USER> user) {
+    default Mono<Long> countResponse(Mono<Long> result, C criteria, USER user) {
         return result;
     }
 

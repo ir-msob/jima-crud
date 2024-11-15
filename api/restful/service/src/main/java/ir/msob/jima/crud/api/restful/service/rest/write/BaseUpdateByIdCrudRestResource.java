@@ -29,7 +29,6 @@ import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 import java.security.Principal;
-import java.util.Optional;
 
 /**
  * This interface provides a RESTful API for updating a domain by its ID.
@@ -81,7 +80,7 @@ public interface BaseUpdateByIdCrudRestResource<
             throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to update new domain, id {}, dto : {}", id, dto);
 
-        Optional<USER> user = getUser(serverWebExchange, principal);
+        USER user = getUser(serverWebExchange, principal);
         return this.updateByIdResponse(id, dto, this.getService().update(id, dto, user), user);
     }
 
@@ -92,10 +91,10 @@ public interface BaseUpdateByIdCrudRestResource<
      * @param id         the ID of the domain to be updated
      * @param dto        the DTO object containing the new data for the domain
      * @param updatedDto the Mono object containing the updated DTO
-     * @param user       the Optional object containing the user
+     * @param user       the user
      * @return a ResponseEntity with the updated DTO
      */
-    default ResponseEntity<Mono<DTO>> updateByIdResponse(ID id, DTO dto, Mono<DTO> updatedDto, Optional<USER> user) {
+    default ResponseEntity<Mono<DTO>> updateByIdResponse(ID id, DTO dto, Mono<DTO> updatedDto, USER user) {
         return ResponseEntity.status(OperationsStatus.UPDATE_BY_ID).body(updatedDto);
     }
 }

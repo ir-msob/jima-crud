@@ -28,7 +28,6 @@ import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 import java.security.Principal;
-import java.util.Optional;
 
 /**
  * This interface provides a REST resource for getting a domain by its ID.
@@ -78,7 +77,7 @@ public interface BaseGetByIdCrudRestResource<
     default ResponseEntity<Mono<DTO>> getById(@PathVariable("id") ID id, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("REST request to get by id domain, id {}", id);
 
-        Optional<USER> user = getUser(serverWebExchange, principal);
+        USER user = getUser(serverWebExchange, principal);
         return this.getByIdResponse(this.getService().getOne(id, user), id, user);
     }
 
@@ -90,7 +89,7 @@ public interface BaseGetByIdCrudRestResource<
      * @param user the user
      * @return a ResponseEntity containing a Mono of the DTO of the domain
      */
-    default ResponseEntity<Mono<DTO>> getByIdResponse(Mono<DTO> dto, ID id, Optional<USER> user) {
+    default ResponseEntity<Mono<DTO>> getByIdResponse(Mono<DTO> dto, ID id, USER user) {
         return ResponseEntity.status(OperationsStatus.GET_BY_ID).body(dto);
     }
 }

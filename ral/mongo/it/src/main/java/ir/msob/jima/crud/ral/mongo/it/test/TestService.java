@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,12 +21,12 @@ public class TestService extends CrudService<TestDomain, TestDto, TestCriteria, 
     private final ModelMapper modelMapper;
 
     @Override
-    public TestDto toDto(TestDomain domain, Optional<ProjectUser> user) {
+    public TestDto toDto(TestDomain domain, ProjectUser user) {
         return modelMapper.map(domain, TestDto.class);
     }
 
     @Override
-    public TestDomain toDomain(TestDto dto, Optional<ProjectUser> user) {
+    public TestDomain toDomain(TestDto dto, ProjectUser user) {
         return dto;
     }
 

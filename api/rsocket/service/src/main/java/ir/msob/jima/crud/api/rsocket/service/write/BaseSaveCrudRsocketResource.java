@@ -25,7 +25,6 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * This interface provides a RSocket API for saving a domain.
@@ -72,7 +71,7 @@ public interface BaseSaveCrudRsocketResource<
         log.debug("RSocket request to create new domain, dto : {}", dto);
         ChannelMessage<USER, DtoMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getDtoReferenceType());
 
-        Optional<USER> user = getUser(message.getUser(), principal);
+        USER user = getUser(message.getUser(), principal);
         return this.saveResponse(message.getData().getDto(), this.getService().save(message.getData().getDto(), user), user);
     }
 
@@ -82,10 +81,10 @@ public interface BaseSaveCrudRsocketResource<
      *
      * @param dto      the DTO to save the domain
      * @param savedDto the Mono with the saved DTO
-     * @param user     the Optional object containing the user
+     * @param user     the user
      * @return a Mono with the saved DTO
      */
-    default Mono<DTO> saveResponse(DTO dto, Mono<DTO> savedDto, Optional<USER> user) {
+    default Mono<DTO> saveResponse(DTO dto, Mono<DTO> savedDto, USER user) {
         return savedDto;
     }
 }

@@ -27,7 +27,6 @@ import reactor.core.publisher.Flux;
 
 import java.io.Serializable;
 import java.security.Principal;
-import java.util.Optional;
 
 /**
  * This interface provides a RESTful API for retrieving a stream of domains based on a given criteria.
@@ -75,7 +74,7 @@ public interface BaseGetStreamCrudRestResource<
     default ResponseEntity<Flux<DTO>> getStream(C criteria, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("REST request to get stream domain, criteria {} : ", criteria);
 
-        Optional<USER> user = getUser(serverWebExchange, principal);
+        USER user = getUser(serverWebExchange, principal);
         return this.getStreamResponse(this.getService().getStream(criteria, user), criteria, user);
     }
 
@@ -85,10 +84,10 @@ public interface BaseGetStreamCrudRestResource<
      *
      * @param dtoFlux  the Flux object containing the DTOs
      * @param criteria the criteria to get the stream of domains
-     * @param user     the Optional object containing the user
+     * @param user     the user
      * @return a ResponseEntity with the Flux of DTOs
      */
-    default ResponseEntity<Flux<DTO>> getStreamResponse(Flux<DTO> dtoFlux, C criteria, Optional<USER> user) {
+    default ResponseEntity<Flux<DTO>> getStreamResponse(Flux<DTO> dtoFlux, C criteria, USER user) {
         return ResponseEntity.status(OperationsStatus.GET_STREAM).body(dtoFlux);
     }
 }

@@ -24,7 +24,6 @@ import org.springframework.kafka.core.KafkaTemplate;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
-import java.util.Optional;
 import java.util.UUID;
 
 
@@ -51,7 +50,7 @@ public abstract class CrudKafkaResourceTest<
     private String groupId;
 
     @Override
-    public Optional<ProjectUser> getSampleUser() {
+    public ProjectUser getSampleUser() {
         return getDataProvider().getSampleUser();
     }
 

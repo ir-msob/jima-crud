@@ -24,7 +24,6 @@ import org.springframework.http.HttpHeaders;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * The {@code BaseDeleteCrudGraphqlRestResource} interface defines a GraphQL mutation for deleting entities
@@ -69,7 +68,7 @@ public interface BaseDeleteCrudGraphqlRestResource<
     default Mono<IdType> delete(@Argument("input") CriteriaInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
         log.debug("Request to delete: dto {}", input);
 
-        Optional<USER> user = getUser(token);
+        USER user = getUser(token);
 
         return getService().delete(convertToCriteria(input.getCriteria()), user)
                 .map(id -> IdType.builder().id(String.valueOf(id)).build());

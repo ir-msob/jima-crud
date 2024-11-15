@@ -28,7 +28,6 @@ import reactor.core.publisher.Mono;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.security.Principal;
-import java.util.Optional;
 
 /**
  * This interface provides a RESTful API for counting all domains.
@@ -77,7 +76,7 @@ public interface BaseCountAllCrudRestResource<
     default ResponseEntity<Mono<Long>> countAll(ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, JsonProcessingException {
         log.debug("REST request to count all");
 
-        Optional<USER> user = getUser(serverWebExchange, principal);
+        USER user = getUser(serverWebExchange, principal);
         return this.countAllResponse(this.getService().countAll(user), user);
     }
 
@@ -86,10 +85,10 @@ public interface BaseCountAllCrudRestResource<
      * It is called by the countAll method.
      *
      * @param result the Mono object containing the count of all domains
-     * @param user   the Optional object containing the user
+     * @param user   the object containing the user
      * @return a ResponseEntity with the count of all domains
      */
-    default ResponseEntity<Mono<Long>> countAllResponse(Mono<Long> result, Optional<USER> user) {
+    default ResponseEntity<Mono<Long>> countAllResponse(Mono<Long> result, USER user) {
         return ResponseEntity.status(OperationsStatus.COUNT_ALL).body(result);
     }
 

@@ -26,7 +26,6 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * @param <ID>
@@ -60,11 +59,11 @@ public interface BaseEditByIdCrudRsocketResource<
         log.debug("RSocket request to edit domain, dto : {}", dto);
         ChannelMessage<USER, IdJsonPatchMessage<ID>> message = getObjectMapper().readValue(dto, getIdJsonPatchReferenceType());
 
-        Optional<USER> user = getUser(message.getUser(), principal);
+        USER user = getUser(message.getUser(), principal);
         return this.editByIdResponse(message.getData().getJsonPatch(), this.getService().edit(message.getData().getId(), message.getData().getJsonPatch(), user), message.getData().getId(), user);
     }
 
-    default Mono<DTO> editByIdResponse(JsonPatch dto, Mono<DTO> editedDto, ID id, Optional<USER> user) {
+    default Mono<DTO> editByIdResponse(JsonPatch dto, Mono<DTO> editedDto, ID id, USER user) {
         return editedDto;
     }
 }

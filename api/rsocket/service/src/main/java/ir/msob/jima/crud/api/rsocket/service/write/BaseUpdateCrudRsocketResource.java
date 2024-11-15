@@ -25,7 +25,6 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * This interface provides a RSocket API for updating a domain.
@@ -72,7 +71,7 @@ public interface BaseUpdateCrudRsocketResource<
         log.debug("RSocket request to update new domain, dto : {}", dto);
         ChannelMessage<USER, DtoMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getDtoReferenceType());
 
-        Optional<USER> user = getUser(message.getUser(), principal);
+        USER user = getUser(message.getUser(), principal);
         return this.updateResponse(message.getData().getDto(), this.getService().update(message.getData().getDto(), user), user);
     }
 
@@ -82,10 +81,10 @@ public interface BaseUpdateCrudRsocketResource<
      *
      * @param dto        the DTO to update the domain
      * @param updatedDto the Mono with the updated DTO
-     * @param user       the Optional object containing the user
+     * @param user       the user
      * @return a Mono with the updated DTO
      */
-    default Mono<DTO> updateResponse(DTO dto, Mono<DTO> updatedDto, Optional<USER> user) {
+    default Mono<DTO> updateResponse(DTO dto, Mono<DTO> updatedDto, USER user) {
         return updatedDto;
     }
 }

@@ -20,7 +20,6 @@ import reactor.core.publisher.Mono;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
 
 /**
  * This service interface defines the contract for executing batch update operations on multiple entities (DTOs).
@@ -42,7 +41,7 @@ public interface BaseUpdateManyCrudService<ID extends Comparable<ID> & Serializa
      * This method is transactional and is also annotated with @MethodStats for performance monitoring.
      *
      * @param dtos The collection of DTOs to be updated.
-     * @param user An optional user associated with the operation.
+     * @param user A user associated with the operation.
      * @return A Mono of a collection of DTOs representing the updated entities.
      * @throws BadRequestException     if the operation encounters a bad request scenario.
      * @throws DomainNotFoundException if an entity to be updated is not found.
@@ -50,7 +49,7 @@ public interface BaseUpdateManyCrudService<ID extends Comparable<ID> & Serializa
     @Override
     @Transactional
     @MethodStats
-    default Mono<Collection<DTO>> updateMany(Collection<@Valid DTO> dtos, Optional<USER> user) {
+    default Mono<Collection<DTO>> updateMany(Collection<@Valid DTO> dtos, USER user) {
         return getManyByDto(dtos, user)
                 .flatMap(previousDtos -> this.updateMany(previousDtos, dtos, user));
     }
@@ -61,7 +60,7 @@ public interface BaseUpdateManyCrudService<ID extends Comparable<ID> & Serializa
      *
      * @param previousDtos The collection of previous DTOs representing existing entities.
      * @param dtos         The collection of new DTOs to be used for updates.
-     * @param user         An optional user associated with the operation.
+     * @param user         A user associated with the operation.
      * @return A Mono of a collection of DTOs representing the updated entities.
      * @throws BadRequestException     if the operation encounters a bad request scenario.
      * @throws ValidationException     if validation fails during the update.
@@ -70,8 +69,8 @@ public interface BaseUpdateManyCrudService<ID extends Comparable<ID> & Serializa
     @Override
     @Transactional
     @MethodStats
-    default Mono<Collection<DTO>> updateMany(Collection<DTO> previousDtos, Collection<@Valid DTO> dtos, Optional<USER> user) {
-        log.debug("UpdateMany, dto.size {}, user {}", dtos.size(), user.orElse(null));
+    default Mono<Collection<DTO>> updateMany(Collection<DTO> previousDtos, Collection<@Valid DTO> dtos, USER user) {
+        log.debug("UpdateMany, dto.size {}, user {}", dtos.size(), user);
 
         return Flux.fromIterable(dtos)
                 .flatMap(dto -> {

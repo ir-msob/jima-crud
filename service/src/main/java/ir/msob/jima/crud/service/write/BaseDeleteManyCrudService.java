@@ -18,7 +18,6 @@ import reactor.core.publisher.Mono;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
 
 /**
  * This service interface defines the contract for executing delete operations, specifically for deleting multiple entities that match a set of criteria or a list of IDs.
@@ -40,14 +39,14 @@ public interface BaseDeleteManyCrudService<ID extends Comparable<ID> & Serializa
      * This method is transactional and is also annotated with @MethodStats for performance monitoring.
      *
      * @param ids  A collection of entity IDs to be deleted.
-     * @param user An optional user associated with the operation.
+     * @param user A user associated with the operation.
      * @return A Mono of a collection of entity IDs that were deleted.
      * @throws DomainNotFoundException if the entities to be deleted are not found.
      * @throws BadRequestException     if the operation encounters a bad request scenario.
      */
     @Transactional
     @MethodStats
-    default Mono<Collection<ID>> deleteMany(Collection<ID> ids, Optional<USER> user) throws DomainNotFoundException, BadRequestException {
+    default Mono<Collection<ID>> deleteMany(Collection<ID> ids, USER user) throws DomainNotFoundException, BadRequestException {
         return this.deleteMany(CriteriaUtil.idCriteria(getCriteriaClass(), ids), user);
     }
 
@@ -56,15 +55,15 @@ public interface BaseDeleteManyCrudService<ID extends Comparable<ID> & Serializa
      * This method is transactional and is also annotated with @MethodStats for performance monitoring.
      *
      * @param criteria The criteria used for filtering entities to be deleted.
-     * @param user     An optional user associated with the operation.
+     * @param user     A user associated with the operation.
      * @return A Mono of a collection of entity IDs that were deleted.
      * @throws DomainNotFoundException if the entities to be deleted are not found.
      * @throws BadRequestException     if the operation encounters a bad request scenario.
      */
     @Transactional
     @MethodStats
-    default Mono<Collection<ID>> deleteMany(C criteria, Optional<USER> user) throws DomainNotFoundException, BadRequestException {
-        log.debug("DeleteMany, criteria: {}, user: {}", criteria, user.orElse(null));
+    default Mono<Collection<ID>> deleteMany(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
+        log.debug("DeleteMany, criteria: {}, user: {}", criteria, user);
 
         getBeforeAfterComponent().beforeDelete(criteria, user, getBeforeAfterDomainOperations());
 
@@ -84,11 +83,11 @@ public interface BaseDeleteManyCrudService<ID extends Comparable<ID> & Serializa
      * This method is called by the deleteMany method after the preDelete method.
      *
      * @param dto  The DTO to be deleted.
-     * @param user An optional user associated with the operation.
+     * @param user A user associated with the operation.
      * @return A Flux of entities (domains) to be removed.
      * @throws DomainNotFoundException if the entities to be deleted are not found.
      */
-    default Mono<DTO> deleteManyExecute(DTO dto, Optional<USER> user) throws DomainNotFoundException {
+    default Mono<DTO> deleteManyExecute(DTO dto, USER user) throws DomainNotFoundException {
         C criteria = CriteriaUtil.idCriteria(getCriteriaClass(), dto.getDomainId());
         Q baseQuery = this.getRepository().generateQuery(criteria);
         baseQuery = this.getRepository().criteria(baseQuery, criteria, user);

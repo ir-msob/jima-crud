@@ -31,7 +31,6 @@ import reactor.core.publisher.Mono;
 import java.io.Serializable;
 import java.security.Principal;
 import java.util.Collection;
-import java.util.Optional;
 
 /**
  * This interface provides a RESTful API for editing multiple domains based on a given criteria.
@@ -83,7 +82,7 @@ public interface BaseEditManyCrudRestResource<
             throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("REST request to edit many, dto : {}, criteria : {}", dto, criteria);
 
-        Optional<USER> user = getUser(serverWebExchange, principal);
+        USER user = getUser(serverWebExchange, principal);
         return this.editManyResponse(dto, this.getService().editMany(criteria, dto, user), criteria, user);
     }
 
@@ -94,10 +93,10 @@ public interface BaseEditManyCrudRestResource<
      * @param dto        the JsonPatch object containing the changes to apply to the domains
      * @param editedDtos the Mono object containing the edited DTOs
      * @param criteria   the criteria to edit the domains
-     * @param user       the Optional object containing the user
+     * @param user       the user
      * @return a ResponseEntity with the edited DTOs
      */
-    default ResponseEntity<Mono<Collection<DTO>>> editManyResponse(JsonPatch dto, Mono<Collection<DTO>> editedDtos, C criteria, Optional<USER> user) {
+    default ResponseEntity<Mono<Collection<DTO>>> editManyResponse(JsonPatch dto, Mono<Collection<DTO>> editedDtos, C criteria, USER user) {
         return ResponseEntity.status(OperationsStatus.EDIT_MANY).body(editedDtos);
     }
 }

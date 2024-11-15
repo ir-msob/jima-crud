@@ -24,7 +24,6 @@ import org.springframework.http.HttpHeaders;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * The {@code BaseEditManyCrudGraphqlRestResource} interface defines a GraphQL mutation for editing multiple entities based on
@@ -68,7 +67,7 @@ public interface BaseEditManyCrudGraphqlRestResource<
     default Mono<DtosType> editMany(@Argument("input") CriteriaJsonPatchInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
         log.debug("Request to edit many: dto {}", input);
 
-        Optional<USER> user = getUser(token);
+        USER user = getUser(token);
 
         return getService().editMany(convertToCriteria(input.getCriteria()), convertToJsonPatch(input.getJsonPatch()), user)
                 .map(dtos -> DtosType.builder().dtos(convertToStrings(dtos)).build());

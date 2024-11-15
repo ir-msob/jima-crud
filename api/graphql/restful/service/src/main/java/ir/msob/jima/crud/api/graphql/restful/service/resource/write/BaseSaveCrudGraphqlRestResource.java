@@ -24,7 +24,6 @@ import org.springframework.http.HttpHeaders;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * The {@code BaseSaveCrudGraphqlRestResource} interface defines a GraphQL mutation for saving a single entity.
@@ -68,7 +67,7 @@ public interface BaseSaveCrudGraphqlRestResource<
     default Mono<DtoType> save(@Argument("input") DtoInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
         log.debug("Request to save: dto {}", input);
 
-        Optional<USER> user = getUser(token);
+        USER user = getUser(token);
 
         return getService().save(convertToDto(input.getDto()), user)
                 .map(dto -> DtoType.builder().dto(convertToString(dto)).build());

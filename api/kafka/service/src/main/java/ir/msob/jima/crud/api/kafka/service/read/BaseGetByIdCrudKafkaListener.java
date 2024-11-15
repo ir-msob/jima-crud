@@ -23,7 +23,6 @@ import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.listener.MessageListener;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * Interface for a listener that handles CRUD operations for getting an entity by its ID.
@@ -75,8 +74,7 @@ public interface BaseGetByIdCrudKafkaListener<
     private void serviceGetById(String dto) {
         log.debug("Received message for get by id: dto {}", dto);
         ChannelMessage<USER, IdMessage<ID>> message = getObjectMapper().readValue(dto, getIdReferenceType());
-        Optional<USER> user = Optional.ofNullable(message.getUser());
-        getService().getOne(message.getData().getId(), user)
-                .subscribe(getOneDto -> sendCallbackDto(message, getOneDto, OperationsStatus.GET_BY_ID, user));
+        getService().getOne(message.getData().getId(), message.getUser())
+                .subscribe(getOneDto -> sendCallbackDto(message, getOneDto, OperationsStatus.GET_BY_ID, message.getUser()));
     }
 }

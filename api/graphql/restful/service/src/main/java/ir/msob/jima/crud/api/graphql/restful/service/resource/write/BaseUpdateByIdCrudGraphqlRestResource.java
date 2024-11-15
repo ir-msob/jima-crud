@@ -25,7 +25,6 @@ import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Optional;
 
 /**
  * The {@code BaseUpdateCrudGraphqlRestResource} interface defines a GraphQL mutation for updating an entity.
@@ -73,7 +72,7 @@ public interface BaseUpdateByIdCrudGraphqlRestResource<
     default Mono<DtoType> updateById(@Argument("input") DtoInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         log.debug("Request to update by id: dto {}", input);
 
-        Optional<USER> user = getUser(token);
+        USER user = getUser(token);
 
         return getService().update(convertToId(input.getId()), convertToDto(input.getDto()), user)
                 .map(d -> DtoType.builder().dto(convertToString(d)).build());

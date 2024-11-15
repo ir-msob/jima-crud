@@ -19,7 +19,6 @@ import reactor.core.publisher.Mono;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
 
 /**
  * This service interface defines the contract for executing batch save operations for a collection of entities (DTOs).
@@ -41,15 +40,15 @@ public interface BaseSaveManyCrudService<ID extends Comparable<ID> & Serializabl
      * This method is transactional and is also annotated with @MethodStats for performance monitoring.
      *
      * @param dtos The collection of DTOs to be saved.
-     * @param user An optional user associated with the operation.
+     * @param user A user associated with the operation.
      * @return A Mono of a collection of DTOs representing the saved entities.
      * @throws BadRequestException     if the operation encounters a bad request scenario.
      * @throws DomainNotFoundException if the entities to be saved are not found.
      */
     @Transactional
     @MethodStats
-    default Mono<Collection<DTO>> saveMany(Collection<@Valid DTO> dtos, Optional<USER> user) throws BadRequestException, DomainNotFoundException {
-        log.debug("SaveMany, dtos.size: {}, user {}", dtos.size(), user.orElse(null));
+    default Mono<Collection<DTO>> saveMany(Collection<@Valid DTO> dtos, USER user) throws BadRequestException, DomainNotFoundException {
+        log.debug("SaveMany, dtos.size: {}, user {}", dtos.size(), user);
 
         // Convert the collection of DTOs into a Flux stream
         // For each DTO in the stream, call the save method

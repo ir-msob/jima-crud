@@ -25,7 +25,6 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * This interface provides a RSocket API for updating a single domain by its ID.
@@ -73,7 +72,7 @@ public interface BaseUpdateByIdCrudRsocketResource<
         log.debug("RSocket request to update domain, dto : {}", dto);
         ChannelMessage<USER, DtoMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getDtoReferenceType());
 
-        Optional<USER> user = getUser(message.getUser(), principal);
+        USER user = getUser(message.getUser(), principal);
         return this.updateByIdResponse(message.getData().getId(), message.getData().getDto(), this.getService().update(message.getData().getId(), message.getData().getDto(), user), user);
     }
 
@@ -84,10 +83,10 @@ public interface BaseUpdateByIdCrudRsocketResource<
      * @param id         the ID of the updated domain
      * @param dto        the DTO of the updated domain
      * @param updatedDto the Mono of the updated DTO
-     * @param user       the Optional object containing the user
+     * @param user       the user
      * @return a Mono with the updated DTO
      */
-    default Mono<DTO> updateByIdResponse(ID id, DTO dto, Mono<DTO> updatedDto, Optional<USER> user) {
+    default Mono<DTO> updateByIdResponse(ID id, DTO dto, Mono<DTO> updatedDto, USER user) {
         return updatedDto;
     }
 }

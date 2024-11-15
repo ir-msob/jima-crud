@@ -27,7 +27,6 @@ import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 import java.security.Principal;
-import java.util.Optional;
 
 /**
  * This interface provides a RESTful API for retrieving a single domain based on a given criteria.
@@ -75,7 +74,7 @@ public interface BaseGetOneCrudRestResource<
     default ResponseEntity<Mono<DTO>> getOne(C criteria, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("REST request to get one domain, criteria {} : ", criteria);
 
-        Optional<USER> user = getUser(serverWebExchange, principal);
+        USER user = getUser(serverWebExchange, principal);
         return this.getOneResponse(this.getService().getOne(criteria, user), criteria, user);
     }
 
@@ -88,7 +87,7 @@ public interface BaseGetOneCrudRestResource<
      * @param user     the Optional object containing the user
      * @return a ResponseEntity with the DTO
      */
-    default ResponseEntity<Mono<DTO>> getOneResponse(Mono<DTO> dto, C criteria, Optional<USER> user) {
+    default ResponseEntity<Mono<DTO>> getOneResponse(Mono<DTO> dto, C criteria, USER user) {
         return ResponseEntity.status(OperationsStatus.GET_ONE).body(dto);
     }
 }

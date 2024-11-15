@@ -35,7 +35,7 @@ public abstract class CrudRsocketResourceTest<
     BaseRSocketRequesterMetadata socketRequesterMetadata;
 
     @Override
-    public Optional<ProjectUser> getSampleUser() {
+    public ProjectUser getSampleUser() {
         return getDataProvider().getSampleUser();
     }
 

@@ -12,7 +12,6 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collections;
-import java.util.Optional;
 import java.util.TreeSet;
 
 public abstract class CrudDataProvider<
@@ -23,21 +22,20 @@ public abstract class CrudDataProvider<
         S extends CrudService<D, DTO, C, R>>
         implements BaseCrudDataProvider<ObjectId, ProjectUser, D, DTO, C, QueryBuilder, R, S> {
 
-    public static final Optional<ProjectUser> SAMPLE_USER = Optional.of(
-            ProjectUser.builder()
-                    .id(new ObjectId())
-                    .sessionId(new ObjectId())
-                    .username("user")
-                    .audience("web")
-                    .roles(new TreeSet<>(Collections.singleton(Roles.USER)))
-                    .build());
+    public static final ProjectUser SAMPLE_USER = ProjectUser.builder()
+            .id(new ObjectId().toString())
+            .sessionId(new ObjectId().toString())
+            .username("user")
+            .audience("web")
+            .roles(new TreeSet<>(Collections.singleton(Roles.USER)))
+            .build();
     @Autowired
     ObjectMapper objectMapper;
     @Autowired
     S service;
 
     @Override
-    public Optional<ProjectUser> getSampleUser() {
+    public ProjectUser getSampleUser() {
         return SAMPLE_USER;
     }
 

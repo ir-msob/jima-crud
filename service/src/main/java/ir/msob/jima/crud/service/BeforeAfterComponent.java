@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Optional;
 
 /**
  * This class provides before and after operations for various CRUD operations.
@@ -34,7 +33,7 @@ public class BeforeAfterComponent {
      * Executes before counting records based on the provided criteria.
      *
      * @param criteria                  The criteria used for counting records.
-     * @param user                      An optional user associated with the operation.
+     * @param user                      A user associated with the operation.
      * @param beforeAfterDomainServices A collection of BaseBeforeAfterDomainOperation instances.
      * @throws DomainNotFoundException If the domain is not found.
      * @throws BadRequestException     If a bad request is encountered.
@@ -42,7 +41,7 @@ public class BeforeAfterComponent {
     public <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser,
             DTO extends BaseDto<ID>,
-            C extends BaseCriteria<ID>> void beforeCount(C criteria, Optional<USER> user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
+            C extends BaseCriteria<ID>> void beforeCount(C criteria, USER user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
         if (beforeAfterServices != null && !beforeAfterServices.isEmpty()) {
             for (BaseBeforeAfterOperation beforeAfterService : beforeAfterServices) {
                 beforeAfterService.beforeCount(criteria, user);
@@ -59,7 +58,7 @@ public class BeforeAfterComponent {
      * Executes after counting records based on the provided criteria.
      *
      * @param criteria                  The criteria used for counting records.
-     * @param user                      An optional user associated with the operation.
+     * @param user                      A user associated with the operation.
      * @param beforeAfterDomainServices A collection of BaseBeforeAfterDomainOperation instances.
      * @throws DomainNotFoundException If the domain is not found.
      * @throws BadRequestException     If a bad request is encountered.
@@ -67,7 +66,7 @@ public class BeforeAfterComponent {
     public <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser,
             DTO extends BaseDto<ID>,
-            C extends BaseCriteria<ID>> void afterCount(C criteria, Optional<USER> user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
+            C extends BaseCriteria<ID>> void afterCount(C criteria, USER user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
         if (beforeAfterServices != null && !beforeAfterServices.isEmpty()) {
             for (BaseBeforeAfterOperation beforeAfterService : beforeAfterServices) {
                 beforeAfterService.afterCount(criteria, user);
@@ -84,7 +83,7 @@ public class BeforeAfterComponent {
      * Executes before getting records based on the provided criteria.
      *
      * @param criteria                  The criteria used for getting records.
-     * @param user                      An optional user associated with the operation.
+     * @param user                      A user associated with the operation.
      * @param beforeAfterDomainServices A collection of BaseBeforeAfterDomainOperation instances.
      * @throws DomainNotFoundException If the domain is not found.
      * @throws BadRequestException     If a bad request is encountered.
@@ -92,7 +91,7 @@ public class BeforeAfterComponent {
     public <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser,
             DTO extends BaseDto<ID>,
-            C extends BaseCriteria<ID>> void beforeGet(C criteria, Optional<USER> user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
+            C extends BaseCriteria<ID>> void beforeGet(C criteria, USER user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
         if (beforeAfterServices != null && !beforeAfterServices.isEmpty()) {
             for (BaseBeforeAfterOperation beforeAfterService : beforeAfterServices) {
                 beforeAfterService.beforeGet(criteria, user);
@@ -111,7 +110,7 @@ public class BeforeAfterComponent {
      * @param ids                       The IDs of the retrieved records.
      * @param dtos                      The retrieved DTO objects.
      * @param criteria                  The criteria used for getting records.
-     * @param user                      An optional user associated with the operation.
+     * @param user                      A user associated with the operation.
      * @param beforeAfterDomainServices A collection of BaseBeforeAfterDomainOperation instances.
      * @throws DomainNotFoundException If the domain is not found.
      * @throws BadRequestException     If a bad request is encountered.
@@ -119,7 +118,7 @@ public class BeforeAfterComponent {
     public <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser,
             DTO extends BaseDto<ID>,
-            C extends BaseCriteria<ID>> void afterGet(Collection<ID> ids, Collection<DTO> dtos, C criteria, Optional<USER> user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
+            C extends BaseCriteria<ID>> void afterGet(Collection<ID> ids, Collection<DTO> dtos, C criteria, USER user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
         if (beforeAfterServices != null && !beforeAfterServices.isEmpty()) {
             for (BaseBeforeAfterOperation beforeAfterService : beforeAfterServices) {
                 beforeAfterService.afterGet(ids, dtos, criteria, user);
@@ -136,7 +135,7 @@ public class BeforeAfterComponent {
      * Executes before saving records based on the provided DTO.
      *
      * @param dto                       The DTO to be saved.
-     * @param user                      An optional user associated with the operation.
+     * @param user                      A user associated with the operation.
      * @param beforeAfterDomainServices A collection of BaseBeforeAfterDomainOperation instances.
      * @throws DomainNotFoundException If the domain is not found.
      * @throws BadRequestException     If a bad request is encountered.
@@ -144,7 +143,7 @@ public class BeforeAfterComponent {
     public <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser,
             DTO extends BaseDto<ID>,
-            C extends BaseCriteria<ID>> void beforeSave(DTO dto, Optional<USER> user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
+            C extends BaseCriteria<ID>> void beforeSave(DTO dto, USER user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
         if (beforeAfterServices != null && !beforeAfterServices.isEmpty()) {
             for (BaseBeforeAfterOperation beforeAfterService : beforeAfterServices) {
                 beforeAfterService.beforeSave(dto, user);
@@ -162,7 +161,7 @@ public class BeforeAfterComponent {
      *
      * @param dto                       The DTO that were saved.
      * @param savedDto                  The saved DTO.
-     * @param user                      An optional user associated with the operation.
+     * @param user                      A user associated with the operation.
      * @param beforeAfterDomainServices A collection of BaseBeforeAfterDomainOperation instances.
      * @throws DomainNotFoundException If the domain is not found.
      * @throws BadRequestException     If a bad request is encountered.
@@ -170,7 +169,7 @@ public class BeforeAfterComponent {
     public <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser,
             DTO extends BaseDto<ID>,
-            C extends BaseCriteria<ID>> void afterSave(DTO dto, DTO savedDto, Optional<USER> user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
+            C extends BaseCriteria<ID>> void afterSave(DTO dto, DTO savedDto, USER user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
         if (beforeAfterServices != null && !beforeAfterServices.isEmpty()) {
             for (BaseBeforeAfterOperation beforeAfterService : beforeAfterServices) {
                 beforeAfterService.afterSave(dto, savedDto, user);
@@ -188,7 +187,7 @@ public class BeforeAfterComponent {
      *
      * @param previousDto               The previous DTO.
      * @param dto                       The updated DTO.
-     * @param user                      An optional user associated with the operation.
+     * @param user                      A user associated with the operation.
      * @param beforeAfterDomainServices A collection of BaseBeforeAfterDomainOperation instances.
      * @throws DomainNotFoundException If the domain is not found.
      * @throws BadRequestException     If a bad request is encountered.
@@ -196,7 +195,7 @@ public class BeforeAfterComponent {
     public <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser,
             DTO extends BaseDto<ID>,
-            C extends BaseCriteria<ID>> void beforeUpdate(DTO previousDto, DTO dto, Optional<USER> user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
+            C extends BaseCriteria<ID>> void beforeUpdate(DTO previousDto, DTO dto, USER user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
         if (beforeAfterServices != null && !beforeAfterServices.isEmpty()) {
             for (BaseBeforeAfterOperation beforeAfterService : beforeAfterServices) {
                 beforeAfterService.beforeUpdate(previousDto, dto, user);
@@ -214,7 +213,7 @@ public class BeforeAfterComponent {
      *
      * @param dto                       The updated DTO.
      * @param updatedDto                The updated DTO after the update.
-     * @param user                      An optional user associated with the operation.
+     * @param user                      A user associated with the operation.
      * @param beforeAfterDomainServices A collection of BaseBeforeAfterDomainOperation instances.
      * @throws DomainNotFoundException If the domain is not found.
      * @throws BadRequestException     If a bad request is encountered.
@@ -222,7 +221,7 @@ public class BeforeAfterComponent {
     public <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser,
             DTO extends BaseDto<ID>,
-            C extends BaseCriteria<ID>> void afterUpdate(DTO dto, DTO updatedDto, Optional<USER> user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
+            C extends BaseCriteria<ID>> void afterUpdate(DTO dto, DTO updatedDto, USER user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
         if (beforeAfterServices != null && !beforeAfterServices.isEmpty()) {
             for (BaseBeforeAfterOperation beforeAfterService : beforeAfterServices) {
                 beforeAfterService.afterUpdate(dto, updatedDto, user);
@@ -239,7 +238,7 @@ public class BeforeAfterComponent {
      * Executes before deleting records based on the provided criteria.
      *
      * @param criteria                  The criteria used for deleting records.
-     * @param user                      An optional user associated with the operation.
+     * @param user                      A user associated with the operation.
      * @param beforeAfterDomainServices A collection of BaseBeforeAfterDomainOperation instances.
      * @throws DomainNotFoundException If the domain is not found.
      * @throws BadRequestException     If a bad request is encountered.
@@ -247,7 +246,7 @@ public class BeforeAfterComponent {
     public <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser,
             DTO extends BaseDto<ID>,
-            C extends BaseCriteria<ID>> void beforeDelete(C criteria, Optional<USER> user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
+            C extends BaseCriteria<ID>> void beforeDelete(C criteria, USER user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
         if (beforeAfterServices != null && !beforeAfterServices.isEmpty()) {
             for (BaseBeforeAfterOperation beforeAfterService : beforeAfterServices) {
                 beforeAfterService.beforeDelete(criteria, user);
@@ -266,7 +265,7 @@ public class BeforeAfterComponent {
      * @param dto                       The DTO of the deleted records.
      * @param criteria                  The criteria used for deleting records.
      * @param dtoClass                  The class of DTO used.
-     * @param user                      An optional user associated with the operation.
+     * @param user                      A user associated with the operation.
      * @param beforeAfterDomainServices A collection of BaseBeforeAfterDomainOperation instances.
      * @throws DomainNotFoundException If the domain is not found.
      * @throws BadRequestException     If a bad request is encountered.
@@ -274,7 +273,7 @@ public class BeforeAfterComponent {
     public <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser,
             DTO extends BaseDto<ID>,
-            C extends BaseCriteria<ID>> void afterDelete(DTO dto, C criteria, Class<DTO> dtoClass, Optional<USER> user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
+            C extends BaseCriteria<ID>> void afterDelete(DTO dto, C criteria, Class<DTO> dtoClass, USER user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainServices) throws DomainNotFoundException, BadRequestException {
         if (beforeAfterServices != null && !beforeAfterServices.isEmpty()) {
             for (BaseBeforeAfterOperation beforeAfterService : beforeAfterServices) {
                 beforeAfterService.afterDelete(dto, criteria, dtoClass, user);

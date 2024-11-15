@@ -15,8 +15,6 @@ import ir.msob.jima.crud.ral.mongo.it.base.MongoCrudRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Optional;
-
 
 public abstract class CrudRsocketResourceTest<
         D extends ProjectDomain,
@@ -37,7 +35,7 @@ public abstract class CrudRsocketResourceTest<
     BaseRSocketRequesterMetadata socketRequesterMetadata;
 
     @Override
-    public Optional<ProjectUser> getSampleUser() {
+    public ProjectUser getSampleUser() {
         return getDataProvider().getSampleUser();
     }
 

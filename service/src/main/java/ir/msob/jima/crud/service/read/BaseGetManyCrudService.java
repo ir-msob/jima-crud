@@ -19,7 +19,6 @@ import reactor.core.publisher.Mono;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
-import java.util.Optional;
 
 /**
  * This interface defines a service for retrieving multiple domain entities based on specific criteria or IDs.
@@ -46,7 +45,7 @@ public interface BaseGetManyCrudService<ID extends Comparable<ID> & Serializable
      * Retrieve multiple DTO entities based on a collection of entity IDs.
      *
      * @param ids  A collection of entity IDs.
-     * @param user An optional user associated with the operation.
+     * @param user A user associated with the operation.
      * @return A Mono emitting a collection of DTO entities.
      * @throws DomainNotFoundException   If the requested domain is not found.
      * @throws BadRequestException       If the request is not well-formed or violates business rules.
@@ -57,7 +56,7 @@ public interface BaseGetManyCrudService<ID extends Comparable<ID> & Serializable
      */
     @Transactional(readOnly = true)
     @MethodStats
-    default Mono<Collection<DTO>> getMany(Collection<ID> ids, Optional<USER> user) throws DomainNotFoundException, BadRequestException, InvocationTargetException, NoSuchMethodException, IllegalAccessException, InstantiationException {
+    default Mono<Collection<DTO>> getMany(Collection<ID> ids, USER user) throws DomainNotFoundException, BadRequestException, InvocationTargetException, NoSuchMethodException, IllegalAccessException, InstantiationException {
         return this.getMany(CriteriaUtil.idCriteria(getCriteriaClass(), ids), user);
     }
 
@@ -65,7 +64,7 @@ public interface BaseGetManyCrudService<ID extends Comparable<ID> & Serializable
      * Retrieve multiple DTO entities based on specific criteria.
      *
      * @param criteria The criteria used for filtering entities.
-     * @param user     An optional user associated with the operation.
+     * @param user     A user associated with the operation.
      * @return A Mono emitting a collection of DTO entities.
      * @throws DomainNotFoundException If the requested domain is not found.
      * @throws BadRequestException     If the request is not well-formed or violates business rules.
@@ -73,8 +72,8 @@ public interface BaseGetManyCrudService<ID extends Comparable<ID> & Serializable
     @Transactional(readOnly = true)
     @MethodStats
     @Override
-    default Mono<Collection<DTO>> getMany(C criteria, Optional<USER> user) throws DomainNotFoundException, BadRequestException {
-        log.debug("GetMany, criteria: {}, user: {}", criteria, user.orElse(null));
+    default Mono<Collection<DTO>> getMany(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
+        log.debug("GetMany, criteria: {}, user: {}", criteria, user);
 
         getBeforeAfterComponent().beforeGet(criteria, user, getBeforeAfterDomainOperations());
 
@@ -94,10 +93,10 @@ public interface BaseGetManyCrudService<ID extends Comparable<ID> & Serializable
      * Prepare a collection of DTO entities from a collection of domain entities.
      *
      * @param domains A collection of domain entities.
-     * @param user    An optional user associated with the operation.
+     * @param user    A user associated with the operation.
      * @return A collection of DTO entities.
      */
-    private Collection<DTO> prepareDtos(Collection<D> domains, Optional<USER> user) {
+    private Collection<DTO> prepareDtos(Collection<D> domains, USER user) {
         return domains
                 .stream()
                 .map(domain -> toDto(domain, user))
@@ -108,11 +107,11 @@ public interface BaseGetManyCrudService<ID extends Comparable<ID> & Serializable
      * Execute the retrieval of multiple domain entities based on specific criteria.
      *
      * @param criteria The criteria used for filtering entities.
-     * @param user     An optional user associated with the operation.
+     * @param user     A user associated with the operation.
      * @return A Flux emitting a collection of domain entities.
      * @throws DomainNotFoundException If the requested domain is not found.
      */
-    default Flux<D> getManyExecute(C criteria, Optional<USER> user) throws DomainNotFoundException {
+    default Flux<D> getManyExecute(C criteria, USER user) throws DomainNotFoundException {
         Q baseQuery = this.getRepository().generateQuery(criteria);
         baseQuery = this.getRepository().criteria(baseQuery, criteria, user);
         return this.getRepository().getMany(baseQuery);

@@ -25,7 +25,6 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * This interface provides a RSocket API for retrieving a single domain by its ID.
@@ -73,7 +72,7 @@ public interface BaseGetByIdCrudRsocketResource<
         log.debug("RSocket request to get by id domain, dto {}", dto);
         ChannelMessage<USER, IdMessage<ID>> message = getObjectMapper().readValue(dto, getIdReferenceType());
 
-        Optional<USER> user = getUser(message.getUser(), principal);
+        USER user = getUser(message.getUser(), principal);
         return this.getByIdResponse(this.getService().getOne(message.getData().getId(), user), message.getData().getId(), user);
     }
 
@@ -83,10 +82,10 @@ public interface BaseGetByIdCrudRsocketResource<
      *
      * @param dto  the DTO to get the domain
      * @param id   the ID of the domain
-     * @param user the Optional object containing the user
+     * @param user the user
      * @return a Mono with the retrieved DTO
      */
-    default Mono<DTO> getByIdResponse(Mono<DTO> dto, ID id, Optional<USER> user) {
+    default Mono<DTO> getByIdResponse(Mono<DTO> dto, ID id, USER user) {
         return dto;
     }
 }

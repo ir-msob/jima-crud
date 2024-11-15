@@ -23,7 +23,6 @@ import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Optional;
 
 /**
  * The {@code BaseCountAllCrudGraphqlRestResource} interface defines GraphQL queries for counting all entities of a CRUD resource.
@@ -70,7 +69,7 @@ public interface BaseCountAllCrudGraphqlRestResource<
     default Mono<CountType> countAll(@ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         log.debug("Request to count all");
 
-        Optional<USER> user = getUser(token);
+        USER user = getUser(token);
         return getService().countAll(user)
                 .map(res -> CountType.builder().count(res).build());
     }

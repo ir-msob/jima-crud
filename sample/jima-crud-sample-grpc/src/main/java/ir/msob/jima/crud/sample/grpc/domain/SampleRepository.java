@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public class SampleRepository extends MongoCrudRepository<SampleDomain, SampleCriteria> {
     @Override
-    public QueryBuilder criteria(QueryBuilder query, SampleCriteria criteria, Optional<ProjectUser> projectUser) {
+    public QueryBuilder criteria(QueryBuilder query, SampleCriteria criteria, ProjectUser projectUser) {
         return super.criteria(query, criteria, projectUser);
     }
 
