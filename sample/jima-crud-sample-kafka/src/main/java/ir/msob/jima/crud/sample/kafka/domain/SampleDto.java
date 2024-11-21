@@ -1,7 +1,7 @@
 package ir.msob.jima.crud.sample.kafka.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import ir.msob.jima.core.commons.annotation.domain.DomainService;
+import ir.msob.jima.core.commons.domain.DomainService;
 import ir.msob.jima.crud.sample.kafka.base.dto.ProjectDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

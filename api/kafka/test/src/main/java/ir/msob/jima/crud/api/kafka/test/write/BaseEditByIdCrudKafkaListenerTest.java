@@ -1,15 +1,15 @@
 package ir.msob.jima.crud.api.kafka.test.write;
 
 import com.github.fge.jsonpatch.JsonPatch;
-import ir.msob.jima.core.commons.data.BaseQuery;
-import ir.msob.jima.core.commons.model.channel.ChannelMessage;
-import ir.msob.jima.core.commons.model.channel.message.IdJsonPatchMessage;
-import ir.msob.jima.core.commons.model.channel.message.IdMessage;
-import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
-import ir.msob.jima.core.commons.model.domain.BaseDomain;
-import ir.msob.jima.core.commons.model.dto.BaseDto;
+import ir.msob.jima.core.commons.channel.ChannelMessage;
+import ir.msob.jima.core.commons.channel.message.IdJsonPatchMessage;
+import ir.msob.jima.core.commons.domain.BaseDomain;
+import ir.msob.jima.core.commons.dto.BaseDto;
+import ir.msob.jima.core.commons.dto.ModelType;
 import ir.msob.jima.core.commons.operation.Operations;
+import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.commons.shared.criteria.BaseCriteria;
 import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.kafka.test.ParentCrudKafkaListenerTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
@@ -67,18 +67,23 @@ public interface BaseEditByIdCrudKafkaListenerTest<
         // Expect the body to be of the DTO class type
         // Return the response body
         String topic = prepareTopic(Operations.EDIT_BY_ID);
-        IdJsonPatchMessage<ID> data = new IdJsonPatchMessage<>();
-        data.setId(savedDto.getDomainId());
-        data.setJsonPatch(jsonPatch);
+        IdJsonPatchMessage<ID> data = IdJsonPatchMessage.<ID>builder()
+                .id(savedDto.getDomainId())
+                .jsonPatch(jsonPatch)
+                .build();
 
-        ChannelMessage<USER, IdMessage<ID>> channelMessage = new ChannelMessage<>();
-        channelMessage.setData(data);
-        channelMessage.setCallback(prepareCallbackTopic());
-        channelMessage.setUser(getSampleUser());
+
+        ChannelMessage<USER, IdJsonPatchMessage<ID>> channelMessage = ChannelMessage.<USER, IdJsonPatchMessage<ID>>builder()
+                .user(getSampleUser())
+                .data(data)
+                .callback(ChannelMessage.<USER, ModelType>builder()
+                        .channel(prepareCallbackTopic())
+                        .build())
+                .build();
 
         String message = getObjectMapper().writeValueAsString(channelMessage);
         getKafkaTemplate().send(topic, message);
 
-        startListener(channelMessage.getCallback(), s -> assertable.assertThan(cast(s, getDtoReferenceType()).getData().getDto()));
+        startListener(channelMessage.getCallbacks().getFirst().getChannel(), s -> assertable.assertThan(cast(s, getDtoReferenceType()).getData().getDto()));
     }
 }

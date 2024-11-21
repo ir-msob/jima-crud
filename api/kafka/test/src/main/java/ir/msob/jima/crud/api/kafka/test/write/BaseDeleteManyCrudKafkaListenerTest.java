@@ -1,15 +1,16 @@
 package ir.msob.jima.crud.api.kafka.test.write;
 
-import ir.msob.jima.core.commons.data.BaseQuery;
+import ir.msob.jima.core.commons.channel.ChannelMessage;
+import ir.msob.jima.core.commons.channel.message.CriteriaMessage;
+import ir.msob.jima.core.commons.domain.BaseDomain;
+import ir.msob.jima.core.commons.dto.BaseDto;
+import ir.msob.jima.core.commons.dto.ModelType;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
-import ir.msob.jima.core.commons.model.channel.ChannelMessage;
-import ir.msob.jima.core.commons.model.channel.message.CriteriaMessage;
-import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
-import ir.msob.jima.core.commons.model.domain.BaseDomain;
-import ir.msob.jima.core.commons.model.dto.BaseDto;
 import ir.msob.jima.core.commons.operation.Operations;
+import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.commons.shared.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.kafka.test.ParentCrudKafkaListenerTest;
@@ -72,15 +73,19 @@ public interface BaseDeleteManyCrudKafkaListenerTest<
         CriteriaMessage<ID, C> data = new CriteriaMessage<>();
         data.setCriteria(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId()));
 
-        ChannelMessage<USER, CriteriaMessage<ID, C>> channelMessage = new ChannelMessage<>();
-        channelMessage.setData(data);
-        channelMessage.setCallback(prepareCallbackTopic());
-        channelMessage.setUser(getSampleUser());
+
+        ChannelMessage<USER, CriteriaMessage<ID, C>> channelMessage = ChannelMessage.<USER, CriteriaMessage<ID, C>>builder()
+                .user(getSampleUser())
+                .data(data)
+                .callback(ChannelMessage.<USER, ModelType>builder()
+                        .channel(prepareCallbackTopic())
+                        .build())
+                .build();
 
         String message = getObjectMapper().writeValueAsString(channelMessage);
         getKafkaTemplate().send(topic, message);
 
-        startListener(channelMessage.getCallback(), s -> assertable.assertThan(new HashSet<>(cast(s, getIdsReferenceType()).getData().getIds())));
+        startListener(channelMessage.getCallbacks().getFirst().getChannel(), s -> assertable.assertThan(new HashSet<>(cast(s, getIdsReferenceType()).getData().getIds())));
 
     }
 }

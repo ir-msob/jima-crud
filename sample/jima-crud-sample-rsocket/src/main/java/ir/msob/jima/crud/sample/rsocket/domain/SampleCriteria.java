@@ -1,6 +1,6 @@
 package ir.msob.jima.crud.sample.rsocket.domain;
 
-import ir.msob.jima.core.commons.model.criteria.filter.Filter;
+import ir.msob.jima.core.commons.shared.criteria.filter.Filter;
 import ir.msob.jima.crud.sample.rsocket.base.criteria.ProjectCriteriaAbstract;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

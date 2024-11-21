@@ -1,6 +1,6 @@
 package ir.msob.jima.crud.sample.kafka.base.domain;
 
-import ir.msob.jima.core.commons.model.domain.BaseDomainAbstract;
+import ir.msob.jima.core.commons.domain.BaseDomainAbstract;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

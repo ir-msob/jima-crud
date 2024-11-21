@@ -1,10 +1,10 @@
 package ir.msob.jima.crud.sample.grpc.base;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ir.msob.jima.core.commons.annotation.methodstats.MethodStats;
-import ir.msob.jima.core.commons.model.dto.BaseDto;
-import ir.msob.jima.core.commons.model.dto.BaseType;
-import ir.msob.jima.core.commons.model.dto.ModelType;
+import ir.msob.jima.core.commons.methodstats.MethodStats;
+import ir.msob.jima.core.commons.dto.BaseDto;
+import ir.msob.jima.core.commons.dto.BaseType;
+import ir.msob.jima.core.commons.dto.ModelType;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.reflections.Reflections;

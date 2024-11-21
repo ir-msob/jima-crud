@@ -1,13 +1,14 @@
 package ir.msob.jima.crud.api.kafka.test.write;
 
-import ir.msob.jima.core.commons.data.BaseQuery;
-import ir.msob.jima.core.commons.model.channel.ChannelMessage;
-import ir.msob.jima.core.commons.model.channel.message.DtosMessage;
-import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
-import ir.msob.jima.core.commons.model.domain.BaseDomain;
-import ir.msob.jima.core.commons.model.dto.BaseDto;
+import ir.msob.jima.core.commons.channel.ChannelMessage;
+import ir.msob.jima.core.commons.channel.message.DtosMessage;
+import ir.msob.jima.core.commons.domain.BaseDomain;
+import ir.msob.jima.core.commons.dto.BaseDto;
+import ir.msob.jima.core.commons.dto.ModelType;
 import ir.msob.jima.core.commons.operation.Operations;
+import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.commons.shared.criteria.BaseCriteria;
 import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.kafka.test.ParentCrudKafkaListenerTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
@@ -68,14 +69,18 @@ public interface BaseUpdateManyCrudKafkaListenerTest<
         DtosMessage<ID, DTO> data = new DtosMessage<>();
         data.setDtos(dtos);
 
-        ChannelMessage<USER, DtosMessage<ID, DTO>> channelMessage = new ChannelMessage<>();
-        channelMessage.setData(data);
-        channelMessage.setCallback(prepareCallbackTopic());
-        channelMessage.setUser(getSampleUser());
+
+        ChannelMessage<USER, DtosMessage<ID, DTO>> channelMessage = ChannelMessage.<USER, DtosMessage<ID, DTO>>builder()
+                .data(data)
+                .callback(ChannelMessage.<USER, ModelType>builder()
+                        .channel(prepareCallbackTopic())
+                        .build())
+                .user(getSampleUser())
+                .build();
 
         String message = getObjectMapper().writeValueAsString(channelMessage);
         getKafkaTemplate().send(topic, message);
 
-        startListener(channelMessage.getCallback(), s -> assertable.assertThan(cast(s, getDtosReferenceType()).getData().getDtos()));
+        startListener(channelMessage.getCallbacks().getFirst().getChannel(), s -> assertable.assertThan(cast(s, getDtosReferenceType()).getData().getDtos()));
     }
 }

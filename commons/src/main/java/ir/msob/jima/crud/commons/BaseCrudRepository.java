@@ -1,11 +1,11 @@
 package ir.msob.jima.crud.commons;
 
-import ir.msob.jima.core.commons.data.BaseQuery;
-import ir.msob.jima.core.commons.data.BaseRepository;
+import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
-import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
-import ir.msob.jima.core.commons.model.domain.BaseDomain;
+import ir.msob.jima.core.commons.repository.BaseQuery;
+import ir.msob.jima.core.commons.repository.BaseRepository;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.commons.shared.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.util.GenericTypeUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

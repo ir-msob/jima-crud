@@ -1,7 +1,7 @@
 package ir.msob.jima.crud.sample.rsocket.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import ir.msob.jima.core.commons.annotation.domain.DomainService;
+import ir.msob.jima.core.commons.domain.DomainService;
 import ir.msob.jima.crud.sample.rsocket.base.Microservices;
 import ir.msob.jima.crud.sample.rsocket.base.domain.ProjectDomainAbstract;
 import jakarta.validation.constraints.NotBlank;

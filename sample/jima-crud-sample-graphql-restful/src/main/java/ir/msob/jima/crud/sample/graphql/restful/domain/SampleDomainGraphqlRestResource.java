@@ -1,7 +1,7 @@
 package ir.msob.jima.crud.sample.graphql.restful.domain;
 
 
-import ir.msob.jima.core.commons.model.scope.Resource;
+import ir.msob.jima.core.commons.scope.Resource;
 import ir.msob.jima.crud.sample.graphql.restful.base.resource.CrudGraphqlRestResource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

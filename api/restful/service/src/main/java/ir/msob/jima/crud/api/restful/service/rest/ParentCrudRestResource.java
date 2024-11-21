@@ -1,11 +1,11 @@
 package ir.msob.jima.crud.api.restful.service.rest;
 
 import ir.msob.jima.core.api.restful.commons.rest.BaseRestResource;
-import ir.msob.jima.core.commons.data.BaseQuery;
-import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
-import ir.msob.jima.core.commons.model.domain.BaseDomain;
-import ir.msob.jima.core.commons.model.dto.BaseDto;
+import ir.msob.jima.core.commons.domain.BaseDomain;
+import ir.msob.jima.core.commons.dto.BaseDto;
+import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.commons.shared.criteria.BaseCriteria;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.commons.BaseCrudResource;
 import ir.msob.jima.crud.service.ParentCrudService;

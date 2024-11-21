@@ -1,6 +1,6 @@
 package ir.msob.jima.crud.api.restful;
 
-import ir.msob.jima.core.commons.annotation.domain.DomainService;
+import ir.msob.jima.core.commons.domain.DomainService;
 
 /**
  * The RestUtil class provides utility methods for generating RESTful URIs based on a DomainService.

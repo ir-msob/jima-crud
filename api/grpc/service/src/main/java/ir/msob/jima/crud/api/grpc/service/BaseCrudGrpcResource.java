@@ -1,11 +1,11 @@
 package ir.msob.jima.crud.api.grpc.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ir.msob.jima.core.commons.data.BaseQuery;
-import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
-import ir.msob.jima.core.commons.model.domain.BaseDomain;
-import ir.msob.jima.core.commons.model.dto.BaseDto;
+import ir.msob.jima.core.commons.domain.BaseDomain;
+import ir.msob.jima.core.commons.dto.BaseDto;
+import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.commons.shared.criteria.BaseCriteria;
 import ir.msob.jima.crud.api.grpc.service.read.*;
 import ir.msob.jima.crud.api.grpc.service.write.*;
 import ir.msob.jima.crud.commons.BaseCrudRepository;

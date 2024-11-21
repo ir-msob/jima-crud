@@ -2,7 +2,7 @@ package ir.msob.jima.crud.sample.graphql.restful.base.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import ir.msob.jima.core.commons.Constants;
-import ir.msob.jima.core.commons.model.dto.BaseDto;
+import ir.msob.jima.core.commons.dto.BaseDto;
 import ir.msob.jima.crud.sample.graphql.restful.base.domain.ProjectDomain;
 import org.bson.types.ObjectId;
 

@@ -1,13 +1,13 @@
 package ir.msob.jima.crud.api.rsocket.test.read;
 
-import ir.msob.jima.core.commons.data.BaseQuery;
-import ir.msob.jima.core.commons.model.channel.ChannelMessage;
-import ir.msob.jima.core.commons.model.channel.message.IdMessage;
-import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
-import ir.msob.jima.core.commons.model.domain.BaseDomain;
-import ir.msob.jima.core.commons.model.dto.BaseDto;
+import ir.msob.jima.core.commons.channel.ChannelMessage;
+import ir.msob.jima.core.commons.channel.message.IdMessage;
+import ir.msob.jima.core.commons.domain.BaseDomain;
+import ir.msob.jima.core.commons.dto.BaseDto;
 import ir.msob.jima.core.commons.operation.Operations;
+import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.commons.shared.criteria.BaseCriteria;
 import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.rsocket.test.ParentCrudRsocketResourceTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
@@ -66,8 +66,9 @@ public interface BaseGetByIdCrudRsocketResourceTest<
         IdMessage<ID> data = new IdMessage<>();
         data.setId(savedDto.getDomainId());
 
-        ChannelMessage<USER, IdMessage<ID>> message = new ChannelMessage<>();
-        message.setData(data);
+        ChannelMessage<USER, IdMessage<ID>> message = ChannelMessage.<USER, IdMessage<ID>>builder()
+                .data(data)
+                .build();
 
         getRSocketRequester()
                 .route(getUri(Operations.GET_BY_ID))

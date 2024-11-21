@@ -1,10 +1,10 @@
 package ir.msob.jima.crud.client;
 
-import ir.msob.jima.core.commons.model.channel.ChannelMessage;
-import ir.msob.jima.core.commons.model.channel.message.CriteriaMessage;
-import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
-import ir.msob.jima.core.commons.model.dto.BaseDto;
+import ir.msob.jima.core.commons.channel.ChannelMessage;
+import ir.msob.jima.core.commons.channel.message.CriteriaMessage;
+import ir.msob.jima.core.commons.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.commons.shared.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
 import reactor.core.publisher.Mono;
 

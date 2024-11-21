@@ -1,7 +1,7 @@
 package ir.msob.jima.crud.sample.grpc.domain;
 
 
-import ir.msob.jima.core.commons.model.scope.Resource;
+import ir.msob.jima.core.commons.scope.Resource;
 import ir.msob.jima.crud.sample.grpc.base.resource.CrudGrpcResource;
 import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.server.service.GrpcService;

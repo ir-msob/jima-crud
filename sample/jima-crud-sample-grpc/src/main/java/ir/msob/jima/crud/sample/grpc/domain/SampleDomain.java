@@ -1,7 +1,7 @@
 package ir.msob.jima.crud.sample.grpc.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import ir.msob.jima.core.commons.annotation.domain.DomainService;
+import ir.msob.jima.core.commons.domain.DomainService;
 import ir.msob.jima.crud.sample.grpc.base.Microservices;
 import ir.msob.jima.crud.sample.grpc.base.domain.ProjectDomainAbstract;
 import jakarta.validation.constraints.NotBlank;

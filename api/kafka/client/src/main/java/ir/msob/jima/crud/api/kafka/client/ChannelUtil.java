@@ -1,6 +1,6 @@
 package ir.msob.jima.crud.api.kafka.client;
 
-import ir.msob.jima.core.commons.annotation.domain.DomainService;
+import ir.msob.jima.core.commons.domain.DomainService;
 
 public class ChannelUtil {
     private ChannelUtil() {

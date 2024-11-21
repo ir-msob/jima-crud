@@ -1,14 +1,14 @@
 package ir.msob.jima.crud.api.rsocket.test.write;
 
 import com.github.fge.jsonpatch.JsonPatch;
-import ir.msob.jima.core.commons.data.BaseQuery;
-import ir.msob.jima.core.commons.model.channel.ChannelMessage;
-import ir.msob.jima.core.commons.model.channel.message.IdJsonPatchMessage;
-import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
-import ir.msob.jima.core.commons.model.domain.BaseDomain;
-import ir.msob.jima.core.commons.model.dto.BaseDto;
+import ir.msob.jima.core.commons.channel.ChannelMessage;
+import ir.msob.jima.core.commons.channel.message.IdJsonPatchMessage;
+import ir.msob.jima.core.commons.domain.BaseDomain;
+import ir.msob.jima.core.commons.dto.BaseDto;
 import ir.msob.jima.core.commons.operation.Operations;
+import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.commons.shared.criteria.BaseCriteria;
 import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.rsocket.test.ParentCrudRsocketResourceTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
@@ -70,8 +70,9 @@ public interface BaseEditByIdCrudRsocketResourceTest<
         data.setId(savedDto.getDomainId());
         data.setJsonPatch(jsonPatch);
 
-        ChannelMessage<USER, IdJsonPatchMessage<ID>> message = new ChannelMessage<>();
-        message.setData(data);
+        ChannelMessage<USER, IdJsonPatchMessage<ID>> message = ChannelMessage.<USER, IdJsonPatchMessage<ID>>builder()
+                .data(data)
+                .build();
 
         getRSocketRequester()
                 .route(getUri(Operations.EDIT_BY_ID))

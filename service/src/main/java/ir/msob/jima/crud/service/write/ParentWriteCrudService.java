@@ -3,17 +3,18 @@ package ir.msob.jima.crud.service.write;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
-import ir.msob.jima.core.commons.data.BaseQuery;
+import ir.msob.jima.core.commons.audit.AuditDomain;
+import ir.msob.jima.core.commons.audit.AuditDomainActionType;
+import ir.msob.jima.core.commons.audit.BaseAuditDomain;
+import ir.msob.jima.core.commons.domain.BaseDomain;
+import ir.msob.jima.core.commons.dto.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.exception.validation.ValidationException;
-import ir.msob.jima.core.commons.model.audit.AuditDomain;
-import ir.msob.jima.core.commons.model.audit.AuditDomainActionType;
-import ir.msob.jima.core.commons.model.audit.BaseAuditDomain;
-import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
-import ir.msob.jima.core.commons.model.domain.BaseDomain;
-import ir.msob.jima.core.commons.model.dto.BaseDto;
+import ir.msob.jima.core.commons.relatedobject.relatedparty.RelatedParty;
+import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.commons.shared.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.ParentCrudService;
@@ -214,7 +215,10 @@ public interface ParentWriteCrudService<
             auditDomainDto.getAuditDomains().add(AuditDomain.builder()
                     .actionDate(Instant.now())
                     .actionType(actionType)
-                    .relatedPartyId(String.valueOf(user.getId()))
+                    .relatedParty(RelatedParty.builder()
+                            .relatedId(user.getId())
+                            .name(user.getName())
+                            .build())
                     .build());
         }
     }

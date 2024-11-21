@@ -1,13 +1,13 @@
 package ir.msob.jima.crud.api.kafka.test.read;
 
-import ir.msob.jima.core.commons.data.BaseQuery;
-import ir.msob.jima.core.commons.model.channel.ChannelMessage;
-import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
-import ir.msob.jima.core.commons.model.domain.BaseDomain;
-import ir.msob.jima.core.commons.model.dto.BaseDto;
-import ir.msob.jima.core.commons.model.dto.ModelType;
+import ir.msob.jima.core.commons.channel.ChannelMessage;
+import ir.msob.jima.core.commons.domain.BaseDomain;
+import ir.msob.jima.core.commons.dto.BaseDto;
+import ir.msob.jima.core.commons.dto.ModelType;
 import ir.msob.jima.core.commons.operation.Operations;
+import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.commons.shared.criteria.BaseCriteria;
 import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.kafka.test.ParentCrudKafkaListenerTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
@@ -62,15 +62,19 @@ public interface BaseCountAllCrudKafkaListenerTest<
         // Return the response body
 
         String topic = prepareTopic(Operations.COUNT_ALL);
-        ChannelMessage<USER, ModelType> channelMessage = new ChannelMessage<>();
-        channelMessage.setUser(getSampleUser());
-        channelMessage.setCallback(prepareCallbackTopic());
-        channelMessage.setData(new ModelType());
+
+        ChannelMessage<USER, ModelType> channelMessage = ChannelMessage.<USER, ModelType>builder()
+                .user(getSampleUser())
+                .data(new ModelType())
+                .callback(ChannelMessage.<USER, ModelType>builder()
+                        .channel(prepareCallbackTopic())
+                        .build())
+                .build();
 
         String message = getObjectMapper().writeValueAsString(channelMessage);
         getKafkaTemplate().send(topic, message);
 
-        startListener(channelMessage.getCallback(), s -> assertable.assertThan(cast(s, getLongReferenceType()).getData().getResult()));
+        startListener(channelMessage.getCallbacks().getFirst().getChannel(), s -> assertable.assertThan(cast(s, getLongReferenceType()).getData().getResult()));
     }
 
 

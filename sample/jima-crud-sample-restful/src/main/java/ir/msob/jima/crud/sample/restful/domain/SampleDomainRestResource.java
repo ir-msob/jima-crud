@@ -1,8 +1,8 @@
 package ir.msob.jima.crud.sample.restful.domain;
 
 
-import ir.msob.jima.core.commons.model.ResourceType;
-import ir.msob.jima.core.commons.model.scope.Resource;
+import ir.msob.jima.core.commons.shared.ResourceType;
+import ir.msob.jima.core.commons.scope.Resource;
 import ir.msob.jima.crud.sample.restful.base.Microservices;
 import ir.msob.jima.crud.sample.restful.base.resource.CrudRestResource;
 import lombok.RequiredArgsConstructor;

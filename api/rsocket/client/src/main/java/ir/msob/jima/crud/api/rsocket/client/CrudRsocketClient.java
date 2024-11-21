@@ -4,15 +4,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
 import ir.msob.jima.core.api.rsocket.commons.BaseRSocketRequesterLoadBalancer;
 import ir.msob.jima.core.api.rsocket.commons.BaseRSocketRequesterMetadata;
-import ir.msob.jima.core.commons.annotation.domain.DomainService;
-import ir.msob.jima.core.commons.annotation.methodstats.MethodStats;
-import ir.msob.jima.core.commons.model.channel.ChannelMessage;
-import ir.msob.jima.core.commons.model.channel.message.*;
-import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
-import ir.msob.jima.core.commons.model.dto.BaseDto;
-import ir.msob.jima.core.commons.model.dto.ModelType;
+import ir.msob.jima.core.commons.channel.ChannelMessage;
+import ir.msob.jima.core.commons.channel.message.*;
+import ir.msob.jima.core.commons.domain.DomainService;
+import ir.msob.jima.core.commons.dto.BaseDto;
+import ir.msob.jima.core.commons.dto.ModelType;
+import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.commons.shared.criteria.BaseCriteria;
 import ir.msob.jima.crud.client.BaseCrudClient;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -562,9 +562,9 @@ public class CrudRsocketClient implements BaseCrudClient {
      * @return A ChannelMessage containing the provided IdJsonPatchMessage data.
      */
     public <ID extends Comparable<ID> & Serializable, USER extends BaseUser> ChannelMessage<USER, IdJsonPatchMessage<ID>> createChannelMessage(IdJsonPatchMessage<ID> data) {
-        ChannelMessage<USER, IdJsonPatchMessage<ID>> channelMessage = new ChannelMessage<>();
-        channelMessage.setData(data);
-        return channelMessage;
+        return ChannelMessage.<USER, IdJsonPatchMessage<ID>>builder()
+                .data(data)
+                .build();
     }
 
     /**
@@ -576,23 +576,22 @@ public class CrudRsocketClient implements BaseCrudClient {
      * @return A ChannelMessage containing the provided IdMessage data.
      */
     public <ID extends Comparable<ID> & Serializable, USER extends BaseUser> ChannelMessage<USER, IdMessage<ID>> createChannelMessage(IdMessage<ID> data) {
-        ChannelMessage<USER, IdMessage<ID>> channelMessage = new ChannelMessage<>();
-        channelMessage.setData(data);
-        return channelMessage;
+        return ChannelMessage.<USER, IdMessage<ID>>builder()
+                .data(data)
+                .build();
     }
 
     /**
      * Creates a ChannelMessage with the provided ModelType data.
      *
      * @param data   The ModelType data to be included in the ChannelMessage.
-     * @param <ID>   The type of the ID, which must be Comparable and Serializable.
      * @param <USER> The type of the User, which must extend BaseUser.
      * @return A ChannelMessage containing the provided ModelType data.
      */
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser> ChannelMessage<USER, ModelType> createChannelMessage(ModelType data) {
-        ChannelMessage<USER, ModelType> channelMessage = new ChannelMessage<>();
-        channelMessage.setData(data);
-        return channelMessage;
+    public <USER extends BaseUser> ChannelMessage<USER, ModelType> createChannelMessage(ModelType data) {
+        return ChannelMessage.<USER, ModelType>builder()
+                .data(data)
+                .build();
     }
 
     /**
@@ -605,9 +604,9 @@ public class CrudRsocketClient implements BaseCrudClient {
      * @return A ChannelMessage containing the provided CriteriaMessage data.
      */
     public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, C extends BaseCriteria<ID>> ChannelMessage<USER, CriteriaMessage<ID, C>> createChannelMessage(CriteriaMessage<ID, C> data) {
-        ChannelMessage<USER, CriteriaMessage<ID, C>> channelMessage = new ChannelMessage<>();
-        channelMessage.setData(data);
-        return channelMessage;
+        return ChannelMessage.<USER, CriteriaMessage<ID, C>>builder()
+                .data(data)
+                .build();
     }
 
     /**
@@ -620,9 +619,9 @@ public class CrudRsocketClient implements BaseCrudClient {
      * @return A ChannelMessage containing the provided JsonPatchMessage data.
      */
     public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, C extends BaseCriteria<ID>> ChannelMessage<USER, JsonPatchMessage<ID, C>> createChannelMessage(JsonPatchMessage<ID, C> data) {
-        ChannelMessage<USER, JsonPatchMessage<ID, C>> channelMessage = new ChannelMessage<>();
-        channelMessage.setData(data);
-        return channelMessage;
+        return ChannelMessage.<USER, JsonPatchMessage<ID, C>>builder()
+                .data(data)
+                .build();
     }
 
     /**
@@ -635,9 +634,9 @@ public class CrudRsocketClient implements BaseCrudClient {
      * @return A ChannelMessage containing the provided DtoMessage data.
      */
     public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> ChannelMessage<USER, DtoMessage<ID, DTO>> createChannelMessage(DtoMessage<ID, DTO> data) {
-        ChannelMessage<USER, DtoMessage<ID, DTO>> channelMessage = new ChannelMessage<>();
-        channelMessage.setData(data);
-        return channelMessage;
+        return ChannelMessage.<USER, DtoMessage<ID, DTO>>builder()
+                .data(data)
+                .build();
     }
 
     /**
@@ -650,9 +649,9 @@ public class CrudRsocketClient implements BaseCrudClient {
      * @return A ChannelMessage containing the provided DtosMessage data.
      */
     public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> ChannelMessage<USER, DtosMessage<ID, DTO>> createChannelMessage(DtosMessage<ID, DTO> data) {
-        ChannelMessage<USER, DtosMessage<ID, DTO>> channelMessage = new ChannelMessage<>();
-        channelMessage.setData(data);
-        return channelMessage;
+        return ChannelMessage.<USER, DtosMessage<ID, DTO>>builder()
+                .data(data)
+                .build();
     }
 
     /**

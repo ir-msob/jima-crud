@@ -1,21 +1,20 @@
 package ir.msob.jima.crud.api.kafka.service;
 
 import ir.msob.jima.core.api.kafka.commons.BaseKafkaListener;
-import ir.msob.jima.core.commons.data.BaseQuery;
-import ir.msob.jima.core.commons.model.channel.BaseChannelTypeReference;
-import ir.msob.jima.core.commons.model.channel.ChannelMessage;
-import ir.msob.jima.core.commons.model.channel.message.*;
-import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
-import ir.msob.jima.core.commons.model.domain.BaseDomain;
-import ir.msob.jima.core.commons.model.dto.BaseDto;
-import ir.msob.jima.core.commons.model.dto.ModelType;
+import ir.msob.jima.core.commons.channel.BaseChannelTypeReference;
+import ir.msob.jima.core.commons.channel.ChannelMessage;
+import ir.msob.jima.core.commons.channel.message.*;
+import ir.msob.jima.core.commons.domain.BaseDomain;
+import ir.msob.jima.core.commons.dto.BaseDto;
+import ir.msob.jima.core.commons.dto.ModelType;
+import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.commons.shared.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.util.GenericTypeUtil;
 import ir.msob.jima.crud.api.kafka.client.ChannelUtil;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
 import lombok.SneakyThrows;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.domain.Page;
 import org.springframework.kafka.listener.ContainerProperties;
 
@@ -83,10 +82,12 @@ public interface ParentCrudKafkaListener<
      */
     @SneakyThrows
     default <DATA extends ModelType> void sendCallbackDtos(ChannelMessage<USER, DATA> message, Collection<DTO> dtos, Integer status, USER user) {
-        if (Strings.isNotBlank(message.getCallback())) {
+        if (!message.getCallbacks().isEmpty()) {
             DtosMessage<ID, DTO> data = new DtosMessage<>();
             data.setDtos(dtos);
-            getAsyncClient().send(prepareChannelMessage(message, data, status, user), message.getCallback(), user);
+            for (ChannelMessage<USER, ? extends ModelType> callback : message.getCallbacks()) {
+                getAsyncClient().send(prepareChannelMessage(callback, data, status, user), callback.getChannel(), user);
+            }
         }
     }
 
@@ -100,10 +101,12 @@ public interface ParentCrudKafkaListener<
      */
     @SneakyThrows
     default <DATA extends ModelType> void sendCallbackDto(ChannelMessage<USER, DATA> message, DTO dto, Integer status, USER user) {
-        if (Strings.isNotBlank(message.getCallback())) {
+        if (!message.getCallbacks().isEmpty()) {
             DtoMessage<ID, DTO> data = new DtoMessage<>();
             data.setDto(dto);
-            getAsyncClient().send(prepareChannelMessage(message, data, status, user), message.getCallback(), user);
+            for (ChannelMessage<USER, ? extends ModelType> callback : message.getCallbacks()) {
+                getAsyncClient().send(prepareChannelMessage(callback, data, status, user), callback.getChannel(), user);
+            }
         }
     }
 
@@ -117,10 +120,12 @@ public interface ParentCrudKafkaListener<
      */
     @SneakyThrows
     default <DATA extends ModelType> void sendCallbackIds(ChannelMessage<USER, DATA> message, Collection<ID> ids, Integer status, USER user) {
-        if (Strings.isNotBlank(message.getCallback())) {
+        if (!message.getCallbacks().isEmpty()) {
             IdsMessage<ID> data = new IdsMessage<>();
             data.setIds(ids);
-            getAsyncClient().send(prepareChannelMessage(message, data, status, user), message.getCallback(), user);
+            for (ChannelMessage<USER, ? extends ModelType> callback : message.getCallbacks()) {
+                getAsyncClient().send(prepareChannelMessage(callback, data, status, user), callback.getChannel(), user);
+            }
         }
     }
 
@@ -134,10 +139,12 @@ public interface ParentCrudKafkaListener<
      */
     @SneakyThrows
     default <DATA extends ModelType> void sendCallbackId(ChannelMessage<USER, DATA> message, ID id, Integer status, USER user) {
-        if (Strings.isNotBlank(message.getCallback())) {
+        if (!message.getCallbacks().isEmpty()) {
             IdMessage<ID> data = new IdMessage<>();
             data.setId(id);
-            getAsyncClient().send(prepareChannelMessage(message, data, status, user), message.getCallback(), user);
+            for (ChannelMessage<USER, ? extends ModelType> callback : message.getCallbacks()) {
+                getAsyncClient().send(prepareChannelMessage(callback, data, status, user), callback.getChannel(), user);
+            }
         }
     }
 
@@ -151,10 +158,12 @@ public interface ParentCrudKafkaListener<
      */
     @SneakyThrows
     default void sendCallbackCountAll(ChannelMessage<USER, ModelType> message, Long count, Integer status, USER user) {
-        if (Strings.isNotBlank(message.getCallback())) {
+        if (!message.getCallbacks().isEmpty()) {
             LongMessage data = new LongMessage();
             data.setResult(count);
-            getAsyncClient().send(prepareChannelMessage(message, data, status, user), message.getCallback(), user);
+            for (ChannelMessage<USER, ? extends ModelType> callback : message.getCallbacks()) {
+                getAsyncClient().send(prepareChannelMessage(callback, data, status, user), callback.getChannel(), user);
+            }
         }
     }
 
@@ -168,10 +177,12 @@ public interface ParentCrudKafkaListener<
      */
     @SneakyThrows
     default void sendCallbackCount(ChannelMessage<USER, CriteriaMessage<ID, C>> message, Long count, Integer status, USER user) {
-        if (Strings.isNotBlank(message.getCallback())) {
+        if (!message.getCallbacks().isEmpty()) {
             LongMessage data = new LongMessage();
             data.setResult(count);
-            getAsyncClient().send(prepareChannelMessage(message, data, status, user), message.getCallback(), user);
+            for (ChannelMessage<USER, ? extends ModelType> callback : message.getCallbacks()) {
+                getAsyncClient().send(prepareChannelMessage(callback, data, status, user), callback.getChannel(), user);
+            }
         }
     }
 
@@ -185,10 +196,12 @@ public interface ParentCrudKafkaListener<
      */
     @SneakyThrows
     default <DATA extends ModelType> void sendCallbackPage(ChannelMessage<USER, DATA> message, Page<DTO> page, Integer status, USER user) {
-        if (Strings.isNotBlank(message.getCallback())) {
+        if (!message.getCallbacks().isEmpty()) {
             PageMessage<ID, DTO> data = new PageMessage<>();
             data.setPage(page);
-            getAsyncClient().send(prepareChannelMessage(message, data, status, user), message.getCallback(), user);
+            for (ChannelMessage<USER, ? extends ModelType> callback : message.getCallbacks()) {
+                getAsyncClient().send(prepareChannelMessage(callback, data, status, user), callback.getChannel(), user);
+            }
         }
     }
 

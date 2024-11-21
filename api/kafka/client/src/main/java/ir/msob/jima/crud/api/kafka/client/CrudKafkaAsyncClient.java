@@ -2,14 +2,14 @@ package ir.msob.jima.crud.api.kafka.client;
 
 import com.github.fge.jsonpatch.JsonPatch;
 import ir.msob.jima.core.api.kafka.beans.KafkaAsyncClient;
-import ir.msob.jima.core.commons.annotation.methodstats.MethodStats;
-import ir.msob.jima.core.commons.model.channel.ChannelMessage;
-import ir.msob.jima.core.commons.model.channel.message.*;
-import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
-import ir.msob.jima.core.commons.model.dto.BaseDto;
-import ir.msob.jima.core.commons.model.dto.ModelType;
+import ir.msob.jima.core.commons.channel.ChannelMessage;
+import ir.msob.jima.core.commons.channel.message.*;
+import ir.msob.jima.core.commons.dto.BaseDto;
+import ir.msob.jima.core.commons.dto.ModelType;
+import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.commons.shared.criteria.BaseCriteria;
 import ir.msob.jima.crud.client.BaseCrudAsyncClient;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -235,59 +235,60 @@ public class CrudKafkaAsyncClient implements BaseCrudAsyncClient {
     }
 
     public <ID extends Comparable<ID> & Serializable, USER extends BaseUser> ChannelMessage<USER, IdMessage<ID>> createChannelMessage(IdMessage<ID> data, Map<String, Serializable> metadata, String callback) {
-        ChannelMessage<USER, IdMessage<ID>> channelMessage = new ChannelMessage<>();
-        channelMessage.setMetadata(metadata);
-        channelMessage.setData(data);
-        channelMessage.setCallback(callback);
-        return channelMessage;
+        return ChannelMessage.<USER, IdMessage<ID>>builder()
+                .metadata(metadata)
+                .data(data)
+                .callback(ChannelMessage.<USER, ModelType>builder().channel(callback).build())
+                .build();
+
     }
 
     public <USER extends BaseUser> ChannelMessage<USER, ModelType> createChannelMessage(ModelType data, Map<String, Serializable> metadata, String callback) {
-        ChannelMessage<USER, ModelType> channelMessage = new ChannelMessage<>();
-        channelMessage.setMetadata(metadata);
-        channelMessage.setData(data);
-        channelMessage.setCallback(callback);
-        return channelMessage;
+        return ChannelMessage.<USER, ModelType>builder()
+                .metadata(metadata)
+                .data(data)
+                .callback(ChannelMessage.<USER, ModelType>builder().channel(callback).build())
+                .build();
     }
 
     public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, C extends BaseCriteria<ID>> ChannelMessage<USER, CriteriaMessage<ID, C>> createChannelMessage(CriteriaMessage<ID, C> data, Map<String, Serializable> metadata, String callback) {
-        ChannelMessage<USER, CriteriaMessage<ID, C>> channelMessage = new ChannelMessage<>();
-        channelMessage.setMetadata(metadata);
-        channelMessage.setData(data);
-        channelMessage.setCallback(callback);
-        return channelMessage;
+        return ChannelMessage.<USER, CriteriaMessage<ID, C>>builder()
+                .metadata(metadata)
+                .data(data)
+                .callback(ChannelMessage.<USER, ModelType>builder().channel(callback).build())
+                .build();
     }
 
     public <ID extends Comparable<ID> & Serializable, USER extends BaseUser> ChannelMessage<USER, IdJsonPatchMessage<ID>> createChannelMessage(IdJsonPatchMessage<ID> data, Map<String, Serializable> metadata, String callback) {
-        ChannelMessage<USER, IdJsonPatchMessage<ID>> channelMessage = new ChannelMessage<>();
-        channelMessage.setMetadata(metadata);
-        channelMessage.setData(data);
-        channelMessage.setCallback(callback);
-        return channelMessage;
+        return ChannelMessage.<USER, IdJsonPatchMessage<ID>>builder()
+                .metadata(metadata)
+                .data(data)
+                .callback(ChannelMessage.<USER, ModelType>builder().channel(callback).build())
+                .build();
     }
 
     public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, C extends BaseCriteria<ID>> ChannelMessage<USER, JsonPatchMessage<ID, C>> createChannelMessage(JsonPatchMessage<ID, C> data, Map<String, Serializable> metadata, String callback) {
-        ChannelMessage<USER, JsonPatchMessage<ID, C>> channelMessage = new ChannelMessage<>();
-        channelMessage.setMetadata(metadata);
-        channelMessage.setData(data);
-        channelMessage.setCallback(callback);
-        return channelMessage;
+        return ChannelMessage.<USER, JsonPatchMessage<ID, C>>builder()
+                .metadata(metadata)
+                .data(data)
+                .callback(ChannelMessage.<USER, ModelType>builder().channel(callback).build())
+                .build();
     }
 
     public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> ChannelMessage<USER, DtoMessage<ID, DTO>> createChannelMessage(DtoMessage<ID, DTO> data, Map<String, Serializable> metadata, String callback) {
-        ChannelMessage<USER, DtoMessage<ID, DTO>> channelMessage = new ChannelMessage<>();
-        channelMessage.setMetadata(metadata);
-        channelMessage.setData(data);
-        channelMessage.setCallback(callback);
-        return channelMessage;
+        return ChannelMessage.<USER, DtoMessage<ID, DTO>>builder()
+                .metadata(metadata)
+                .data(data)
+                .callback(ChannelMessage.<USER, ModelType>builder().channel(callback).build())
+                .build();
     }
 
     public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> ChannelMessage<USER, DtosMessage<ID, DTO>> createChannelMessage(DtosMessage<ID, DTO> data, Map<String, Serializable> metadata, String callback) {
-        ChannelMessage<USER, DtosMessage<ID, DTO>> channelMessage = new ChannelMessage<>();
-        channelMessage.setMetadata(metadata);
-        channelMessage.setData(data);
-        channelMessage.setCallback(callback);
-        return channelMessage;
+        return ChannelMessage.<USER, DtosMessage<ID, DTO>>builder()
+                .metadata(metadata)
+                .data(data)
+                .callback(ChannelMessage.<USER, ModelType>builder().channel(callback).build())
+                .build();
     }
 
     public <ID extends Comparable<ID> & Serializable> IdMessage<ID> createData(ID id) {

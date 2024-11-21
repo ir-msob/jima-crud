@@ -1,8 +1,8 @@
 package ir.msob.jima.crud.api.rsocket.service;
 
 
-import ir.msob.jima.core.commons.model.ResourceType;
-import ir.msob.jima.core.commons.model.scope.Resource;
+import ir.msob.jima.core.commons.scope.Resource;
+import ir.msob.jima.core.commons.shared.ResourceType;
 import ir.msob.jima.core.ral.mongo.it.Microservices;
 import ir.msob.jima.core.ral.mongo.it.test.TestCriteria;
 import ir.msob.jima.core.ral.mongo.it.test.TestDomain;

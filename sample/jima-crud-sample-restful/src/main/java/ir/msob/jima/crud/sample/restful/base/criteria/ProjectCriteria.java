@@ -2,7 +2,7 @@ package ir.msob.jima.crud.sample.restful.base.criteria;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import ir.msob.jima.core.commons.Constants;
-import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
+import ir.msob.jima.core.commons.shared.criteria.BaseCriteria;
 import org.bson.types.ObjectId;
 
 /**

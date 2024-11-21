@@ -1,11 +1,11 @@
 package ir.msob.jima.crud.test;
 
-import ir.msob.jima.core.commons.data.BaseQuery;
-import ir.msob.jima.core.commons.model.criteria.BaseCriteria;
-import ir.msob.jima.core.commons.model.domain.BaseDomain;
-import ir.msob.jima.core.commons.model.dto.BaseDto;
+import ir.msob.jima.core.commons.domain.BaseDomain;
+import ir.msob.jima.core.commons.dto.BaseDto;
 import ir.msob.jima.core.commons.operation.ConditionalOnOperationUtil;
+import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.commons.shared.criteria.BaseCriteria;
 import ir.msob.jima.core.test.BaseCoreResourceTest;
 import ir.msob.jima.crud.commons.BaseCrudRepository;
 import ir.msob.jima.crud.service.BaseCrudService;
