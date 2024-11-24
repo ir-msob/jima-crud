@@ -1,6 +1,6 @@
 package ir.msob.jima.crud.sample.kafka.base.criteria;
 
-import ir.msob.jima.core.commons.shared.criteria.BaseCriteriaAbstract;
+import ir.msob.jima.core.commons.criteria.BaseCriteriaAbstract;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

@@ -1,12 +1,12 @@
 package ir.msob.jima.crud.test;
 
+import ir.msob.jima.core.commons.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.dto.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.core.commons.shared.criteria.BaseCriteria;
 import ir.msob.jima.core.test.BaseCoreDataProvider;
 import ir.msob.jima.crud.commons.domain.BaseCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseCrudService;

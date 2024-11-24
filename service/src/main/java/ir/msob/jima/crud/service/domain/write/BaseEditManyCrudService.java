@@ -1,6 +1,7 @@
 package ir.msob.jima.crud.service.domain.write;
 
 import com.github.fge.jsonpatch.JsonPatch;
+import ir.msob.jima.core.commons.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.dto.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
@@ -9,7 +10,6 @@ import ir.msob.jima.core.commons.exception.validation.ValidationException;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.core.commons.shared.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.crud.commons.domain.BaseCrudRepository;
 import org.apache.commons.lang3.SerializationUtils;

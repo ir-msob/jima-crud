@@ -3,18 +3,18 @@ package ir.msob.jima.crud.service.domain.write;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
-import ir.msob.jima.core.commons.audit.AuditDomain;
-import ir.msob.jima.core.commons.audit.AuditDomainActionType;
-import ir.msob.jima.core.commons.audit.BaseAuditDomain;
+import ir.msob.jima.core.commons.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.dto.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.exception.validation.ValidationException;
-import ir.msob.jima.core.commons.relatedobject.relatedparty.RelatedParty;
+import ir.msob.jima.core.commons.relatedobject.relatedparty.RelatedPartyAbstract;
 import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.core.commons.shared.criteria.BaseCriteria;
+import ir.msob.jima.core.commons.shared.audit.auditdomain.AuditDomain;
+import ir.msob.jima.core.commons.shared.audit.auditdomain.AuditDomainActionType;
+import ir.msob.jima.core.commons.shared.audit.auditdomain.BaseAuditDomain;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.crud.commons.domain.BaseCrudRepository;
 import ir.msob.jima.crud.service.domain.ParentCrudService;
@@ -212,13 +212,15 @@ public interface ParentWriteCrudService<
      */
     default void addAudit(DTO dto, AuditDomainActionType actionType, USER user) {
         if (dto instanceof BaseAuditDomain auditDomainDto) {
-            auditDomainDto.getAuditDomains().add(AuditDomain.builder()
+            RelatedPartyAbstract<ID> relatedParty = new RelatedPartyAbstract<>() {
+            };
+            relatedParty.setRelatedId(user.getId());
+            relatedParty.setName(user.getName());
+
+            auditDomainDto.getAuditDomains().add(AuditDomain.<ID, RelatedPartyAbstract<ID>>builder()
                     .actionDate(Instant.now())
                     .actionType(actionType.name())
-                    .relatedParty(RelatedParty.builder()
-                            .relatedId(user.getId())
-                            .name(user.getName())
-                            .build())
+                    .relatedParty(relatedParty)
                     .build());
         }
     }

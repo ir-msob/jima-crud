@@ -2,12 +2,15 @@ package ir.msob.jima.crud.api.grpc.service.domain.base;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.msob.jima.core.beans.properties.JimaProperties;
+import ir.msob.jima.core.commons.relatedobject.relatedparty.RelatedPartyAbstract;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.ral.mongo.it.security.ProjectUser;
 import ir.msob.jima.security.it.BaseSecurityProjectUserService;
 import ir.msob.jima.security.ral.keycloak.it.security.BaseKeycloakProjectUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.io.Serializable;
 
 /**
  * This class provides a base implementation for user-related services within Jima projects.
@@ -64,5 +67,14 @@ public class ProjectUserService implements BaseKeycloakProjectUserService, BaseS
     @Override
     public <USER extends BaseUser> USER getUser(String token) {
         return (USER) new ProjectUser();
+    }
+
+    @Override
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, RP extends RelatedPartyAbstract<ID>> RP getRelatedParty(USER user) {
+        RelatedPartyAbstract<ID> relatedParty = new RelatedPartyAbstract<ID>() {
+        };
+        relatedParty.setRelatedId(user.getId());
+        relatedParty.setName(user.getName());
+        return (RP) relatedParty;
     }
 }

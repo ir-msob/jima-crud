@@ -2,6 +2,7 @@ package ir.msob.jima.crud.api.restful.service.domain.write;
 
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import ir.msob.jima.core.commons.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.dto.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
@@ -13,7 +14,6 @@ import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.core.commons.shared.criteria.BaseCriteria;
 import ir.msob.jima.crud.api.restful.service.domain.ParentCrudRestResource;
 import ir.msob.jima.crud.commons.domain.BaseCrudRepository;
 import ir.msob.jima.crud.service.domain.write.BaseDeleteCrudService;

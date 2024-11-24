@@ -1,6 +1,6 @@
 package ir.msob.jima.crud.sample.grpc.domain;
 
-import ir.msob.jima.core.commons.shared.criteria.filter.Filter;
+import ir.msob.jima.core.commons.criteria.filter.Filter;
 import ir.msob.jima.crud.sample.grpc.base.criteria.ProjectCriteriaAbstract;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

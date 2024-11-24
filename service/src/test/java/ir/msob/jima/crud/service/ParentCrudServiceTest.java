@@ -1,8 +1,8 @@
 package ir.msob.jima.crud.service;
 
+import ir.msob.jima.core.commons.criteria.SampleCriteria;
 import ir.msob.jima.core.commons.domain.SampleDomain;
 import ir.msob.jima.core.commons.dto.SampleDto;
-import ir.msob.jima.core.commons.shared.criteria.SampleCriteria;
 import ir.msob.jima.crud.service.common.ConcreteParentCrudService;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +17,7 @@ class ParentCrudServiceTest {
     ConcreteParentCrudService service = new ConcreteParentCrudService();
 
     private static SampleDomain<String> prepareDomain(String id) {
-        SampleDomain<String> domain1 = SampleDomain.<String>builder().build();
+        SampleDomain<String> domain1 = new SampleDomain<>();
         domain1.setDomainId(id);
         return domain1;
     }

@@ -2,6 +2,7 @@ package ir.msob.jima.crud.api.rsocket.service.domain.read;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import ir.msob.jima.core.commons.channel.ChannelMessage;
+import ir.msob.jima.core.commons.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.dto.BaseDto;
 import ir.msob.jima.core.commons.dto.ModelType;
@@ -12,7 +13,6 @@ import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.core.commons.shared.criteria.BaseCriteria;
 import ir.msob.jima.crud.api.rsocket.service.domain.ParentCrudRsocketResource;
 import ir.msob.jima.crud.commons.domain.BaseCrudRepository;
 import ir.msob.jima.crud.service.domain.read.BaseCountAllCrudService;

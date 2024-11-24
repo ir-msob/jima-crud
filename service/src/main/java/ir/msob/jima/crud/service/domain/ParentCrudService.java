@@ -1,6 +1,7 @@
 package ir.msob.jima.crud.service.domain;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.msob.jima.core.commons.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.dto.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
@@ -10,7 +11,6 @@ import ir.msob.jima.core.commons.operation.BaseBeforeAfterDomainOperation;
 import ir.msob.jima.core.commons.repository.BaseRepository;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.service.BaseService;
-import ir.msob.jima.core.commons.shared.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.util.GenericTypeUtil;
 import jakarta.validation.Valid;
 import lombok.SneakyThrows;

@@ -33,7 +33,7 @@ public class TestDomainDataProvider extends CrudDataProvider<TestDomain, TestDto
      * Creates a new DTO object with default values.
      */
     public static void createNewDto() {
-        newDto = TestDto.builder().build();
+        newDto = new TestDto();
         newDto.setDomainField(DEFAULT_STRING);
     }
 
@@ -41,7 +41,7 @@ public class TestDomainDataProvider extends CrudDataProvider<TestDomain, TestDto
      * Creates a new DTO object with mandatory fields set.
      */
     public static void createMandatoryNewDto() {
-        newMandatoryDto = TestDto.builder().build();
+        newMandatoryDto = new TestDto();
         newMandatoryDto.setDomainField(DEFAULT_STRING);
     }
 

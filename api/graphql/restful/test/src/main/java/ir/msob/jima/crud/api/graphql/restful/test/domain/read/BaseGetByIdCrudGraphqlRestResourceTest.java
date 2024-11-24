@@ -1,10 +1,10 @@
 package ir.msob.jima.crud.api.graphql.restful.test.domain.read;
 
+import ir.msob.jima.core.commons.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.dto.BaseDto;
 import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.core.commons.shared.criteria.BaseCriteria;
 import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.DtoType;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.IdInput;

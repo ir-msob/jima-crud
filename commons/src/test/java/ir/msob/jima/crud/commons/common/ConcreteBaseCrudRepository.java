@@ -1,10 +1,10 @@
 package ir.msob.jima.crud.commons.common;
 
+import ir.msob.jima.core.commons.criteria.SampleCriteria;
 import ir.msob.jima.core.commons.domain.SampleDomain;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.core.commons.shared.criteria.SampleCriteria;
 import ir.msob.jima.crud.commons.domain.BaseCrudRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

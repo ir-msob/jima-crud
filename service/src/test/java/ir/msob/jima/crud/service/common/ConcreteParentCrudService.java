@@ -1,12 +1,12 @@
 package ir.msob.jima.crud.service.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.msob.jima.core.commons.criteria.SampleCriteria;
 import ir.msob.jima.core.commons.domain.SampleDomain;
 import ir.msob.jima.core.commons.dto.SampleDto;
 import ir.msob.jima.core.commons.operation.BaseBeforeAfterDomainOperation;
 import ir.msob.jima.core.commons.repository.BaseRepository;
 import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.core.commons.shared.criteria.SampleCriteria;
 import ir.msob.jima.crud.service.domain.BeforeAfterComponent;
 import ir.msob.jima.crud.service.domain.ParentCrudService;
 

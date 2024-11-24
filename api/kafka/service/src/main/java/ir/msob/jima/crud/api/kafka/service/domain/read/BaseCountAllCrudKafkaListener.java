@@ -2,6 +2,7 @@ package ir.msob.jima.crud.api.kafka.service.domain.read;
 
 import ir.msob.jima.core.commons.callback.CallbackError;
 import ir.msob.jima.core.commons.channel.ChannelMessage;
+import ir.msob.jima.core.commons.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.dto.BaseDto;
 import ir.msob.jima.core.commons.dto.ModelType;
@@ -11,7 +12,6 @@ import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.core.commons.shared.criteria.BaseCriteria;
 import ir.msob.jima.crud.api.kafka.service.domain.ParentCrudKafkaListener;
 import ir.msob.jima.crud.commons.domain.BaseCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseCrudService;

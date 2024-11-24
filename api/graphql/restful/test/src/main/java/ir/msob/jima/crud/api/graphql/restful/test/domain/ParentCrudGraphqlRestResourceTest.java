@@ -1,11 +1,11 @@
 package ir.msob.jima.crud.api.graphql.restful.test.domain;
 
 import ir.msob.jima.core.api.graphql.test.BaseCoreGraphqlResourceTest;
+import ir.msob.jima.core.commons.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.service.BaseIdService;
-import ir.msob.jima.core.commons.shared.criteria.BaseCriteria;
 import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
 
