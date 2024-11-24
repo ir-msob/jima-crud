@@ -3,7 +3,7 @@ package ir.msob.jima.crud.sample.graphql.restful.base.resource;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.msob.jima.core.commons.security.BaseUserService;
 import ir.msob.jima.core.ral.mongo.commons.query.QueryBuilder;
-import ir.msob.jima.crud.api.graphql.restful.service.resource.BaseCrudGraphqlRestResource;
+import ir.msob.jima.crud.api.graphql.restful.service.domain.BaseCrudGraphqlRestResource;
 import ir.msob.jima.crud.sample.graphql.restful.base.criteria.ProjectCriteria;
 import ir.msob.jima.crud.sample.graphql.restful.base.domain.ProjectDomain;
 import ir.msob.jima.crud.sample.graphql.restful.base.dto.ProjectDto;

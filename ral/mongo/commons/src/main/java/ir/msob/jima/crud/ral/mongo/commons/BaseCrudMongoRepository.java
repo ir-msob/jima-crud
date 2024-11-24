@@ -6,7 +6,7 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.shared.criteria.BaseCriteria;
 import ir.msob.jima.core.ral.mongo.commons.query.QueryBuilder;
 import ir.msob.jima.core.ral.mongo.commons.query.QueryGenerator;
-import ir.msob.jima.crud.commons.BaseCrudRepository;
+import ir.msob.jima.crud.commons.domain.BaseCrudRepository;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

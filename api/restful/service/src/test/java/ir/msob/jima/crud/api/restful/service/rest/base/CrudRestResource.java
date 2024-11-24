@@ -6,7 +6,7 @@ import ir.msob.jima.core.ral.mongo.it.criteria.ProjectCriteria;
 import ir.msob.jima.core.ral.mongo.it.domain.ProjectDomain;
 import ir.msob.jima.core.ral.mongo.it.dto.ProjectDto;
 import ir.msob.jima.core.ral.mongo.it.security.ProjectUser;
-import ir.msob.jima.crud.api.restful.service.rest.BaseCrudRestResource;
+import ir.msob.jima.crud.api.restful.service.domain.BaseCrudRestResource;
 import ir.msob.jima.crud.ral.mongo.it.base.CrudService;
 import ir.msob.jima.crud.ral.mongo.it.base.MongoCrudRepository;
 import org.bson.types.ObjectId;

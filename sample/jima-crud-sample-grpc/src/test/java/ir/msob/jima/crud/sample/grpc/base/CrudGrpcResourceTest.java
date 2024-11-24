@@ -2,7 +2,7 @@ package ir.msob.jima.crud.sample.grpc.base;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.msob.jima.core.ral.mongo.commons.query.QueryBuilder;
-import ir.msob.jima.crud.api.grpc.test.BaseCrudGrpcResourceTest;
+import ir.msob.jima.crud.api.grpc.test.domain.BaseCrudGrpcResourceTest;
 import ir.msob.jima.crud.sample.grpc.base.criteria.ProjectCriteria;
 import ir.msob.jima.crud.sample.grpc.base.domain.ProjectDomain;
 import ir.msob.jima.crud.sample.grpc.base.dto.ProjectDto;

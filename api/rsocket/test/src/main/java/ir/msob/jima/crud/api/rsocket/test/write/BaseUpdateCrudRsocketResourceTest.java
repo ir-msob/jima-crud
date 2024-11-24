@@ -10,8 +10,8 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.shared.criteria.BaseCriteria;
 import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.rsocket.test.ParentCrudRsocketResourceTest;
-import ir.msob.jima.crud.commons.BaseCrudRepository;
-import ir.msob.jima.crud.service.BaseCrudService;
+import ir.msob.jima.crud.commons.domain.BaseCrudRepository;
+import ir.msob.jima.crud.service.domain.BaseCrudService;
 import ir.msob.jima.crud.test.write.BaseUpdateCrudResourceTest;
 import lombok.SneakyThrows;
 

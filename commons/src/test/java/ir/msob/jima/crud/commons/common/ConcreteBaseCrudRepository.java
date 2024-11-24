@@ -5,7 +5,7 @@ import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundExceptio
 import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.shared.criteria.SampleCriteria;
-import ir.msob.jima.crud.commons.BaseCrudRepository;
+import ir.msob.jima.crud.commons.domain.BaseCrudRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import reactor.core.publisher.Flux;

@@ -8,8 +8,8 @@ import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.shared.criteria.BaseCriteria;
 import ir.msob.jima.core.test.BaseCoreDataProvider;
-import ir.msob.jima.crud.commons.BaseCrudRepository;
-import ir.msob.jima.crud.service.BaseCrudService;
+import ir.msob.jima.crud.commons.domain.BaseCrudRepository;
+import ir.msob.jima.crud.service.domain.BaseCrudService;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;

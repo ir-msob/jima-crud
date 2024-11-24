@@ -7,7 +7,7 @@ import ir.msob.jima.core.commons.channel.message.*;
 import ir.msob.jima.core.commons.dto.ModelType;
 import ir.msob.jima.core.commons.security.BaseUserService;
 import ir.msob.jima.core.ral.mongo.commons.query.QueryBuilder;
-import ir.msob.jima.crud.api.rsocket.service.BaseCrudRsocketResource;
+import ir.msob.jima.crud.api.rsocket.service.domain.BaseCrudRsocketResource;
 import ir.msob.jima.crud.sample.rsocket.base.criteria.ProjectCriteria;
 import ir.msob.jima.crud.sample.rsocket.base.domain.ProjectDomain;
 import ir.msob.jima.crud.sample.rsocket.base.dto.ProjectDto;

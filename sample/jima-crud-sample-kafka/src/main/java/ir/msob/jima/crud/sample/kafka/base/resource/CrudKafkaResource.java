@@ -8,7 +8,7 @@ import ir.msob.jima.core.commons.channel.message.*;
 import ir.msob.jima.core.commons.dto.ModelType;
 import ir.msob.jima.core.commons.security.BaseUserService;
 import ir.msob.jima.core.ral.mongo.commons.query.QueryBuilder;
-import ir.msob.jima.crud.api.kafka.service.BaseCrudKafkaListener;
+import ir.msob.jima.crud.api.kafka.service.domain.BaseCrudKafkaListener;
 import ir.msob.jima.crud.sample.kafka.base.criteria.ProjectCriteria;
 import ir.msob.jima.crud.sample.kafka.base.domain.ProjectDomain;
 import ir.msob.jima.crud.sample.kafka.base.dto.ProjectDto;

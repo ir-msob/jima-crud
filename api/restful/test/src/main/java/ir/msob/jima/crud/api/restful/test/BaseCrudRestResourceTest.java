@@ -7,8 +7,8 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.shared.criteria.BaseCriteria;
 import ir.msob.jima.crud.api.restful.test.read.*;
 import ir.msob.jima.crud.api.restful.test.write.*;
-import ir.msob.jima.crud.commons.BaseCrudRepository;
-import ir.msob.jima.crud.service.BaseCrudService;
+import ir.msob.jima.crud.commons.domain.BaseCrudRepository;
+import ir.msob.jima.crud.service.domain.BaseCrudService;
 
 import java.io.Serializable;
 

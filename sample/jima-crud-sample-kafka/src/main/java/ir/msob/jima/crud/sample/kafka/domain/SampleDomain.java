@@ -1,7 +1,7 @@
 package ir.msob.jima.crud.sample.kafka.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import ir.msob.jima.core.commons.domain.DomainService;
+import ir.msob.jima.core.commons.domain.DomainInfo;
 import ir.msob.jima.crud.sample.kafka.base.Microservices;
 import ir.msob.jima.crud.sample.kafka.base.domain.ProjectDomainAbstract;
 import jakarta.validation.constraints.NotBlank;
@@ -19,7 +19,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Document(collection = SampleDomain.DOMAIN_NAME)
-@DomainService(serviceName = Microservices.SAMPLE_MICROSERVICE, version = Microservices.VERSION, domainName = SampleDomain.DOMAIN_URI)
+@DomainInfo(serviceName = Microservices.SAMPLE_MICROSERVICE, version = Microservices.VERSION, domainName = SampleDomain.DOMAIN_URI)
 public class SampleDomain extends ProjectDomainAbstract {
     @Transient
     public static final String DOMAIN_NAME = "SampleDomain";

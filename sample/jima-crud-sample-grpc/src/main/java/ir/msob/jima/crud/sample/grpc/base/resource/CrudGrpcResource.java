@@ -2,7 +2,7 @@ package ir.msob.jima.crud.sample.grpc.base.resource;
 
 import ir.msob.jima.core.commons.security.BaseUserService;
 import ir.msob.jima.core.ral.mongo.commons.query.QueryBuilder;
-import ir.msob.jima.crud.api.grpc.service.BaseCrudGrpcResource;
+import ir.msob.jima.crud.api.grpc.service.domain.BaseCrudGrpcResource;
 import ir.msob.jima.crud.sample.grpc.base.criteria.ProjectCriteria;
 import ir.msob.jima.crud.sample.grpc.base.domain.ProjectDomain;
 import ir.msob.jima.crud.sample.grpc.base.dto.ProjectDto;

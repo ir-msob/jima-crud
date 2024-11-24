@@ -7,8 +7,8 @@ import ir.msob.jima.core.commons.operation.BaseBeforeAfterDomainOperation;
 import ir.msob.jima.core.commons.repository.BaseRepository;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.shared.criteria.SampleCriteria;
-import ir.msob.jima.crud.service.BeforeAfterComponent;
-import ir.msob.jima.crud.service.ParentCrudService;
+import ir.msob.jima.crud.service.domain.BeforeAfterComponent;
+import ir.msob.jima.crud.service.domain.ParentCrudService;
 
 import java.util.Collection;
 
