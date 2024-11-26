@@ -1,7 +1,7 @@
 package ir.msob.jima.crud.api.graphql.restful.service.domain.base;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ir.msob.jima.core.commons.service.BaseIdService;
+import ir.msob.jima.core.commons.id.BaseIdService;
 import ir.msob.jima.core.ral.mongo.commons.query.QueryBuilder;
 import ir.msob.jima.core.ral.mongo.it.criteria.ProjectCriteria;
 import ir.msob.jima.core.ral.mongo.it.domain.ProjectDomain;

@@ -4,8 +4,8 @@ import ir.msob.jima.core.api.graphql.test.BaseCoreGraphqlResourceTest;
 import ir.msob.jima.core.commons.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.dto.BaseDto;
+import ir.msob.jima.core.commons.id.BaseIdService;
 import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.core.commons.service.BaseIdService;
 import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
 

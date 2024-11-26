@@ -1,6 +1,7 @@
 package ir.msob.jima.crud.ral.mongo.it.base;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.msob.jima.core.commons.id.BaseIdService;
 import ir.msob.jima.core.ral.mongo.commons.query.QueryBuilder;
 import ir.msob.jima.core.ral.mongo.it.criteria.ProjectCriteria;
 import ir.msob.jima.core.ral.mongo.it.domain.ProjectDomain;
@@ -21,10 +22,12 @@ public abstract class CrudDataProvider<
         R extends MongoCrudRepository<D, C>,
         S extends CrudService<D, DTO, C, R>>
         implements BaseCrudDataProvider<ObjectId, ProjectUser, D, DTO, C, QueryBuilder, R, S> {
+    @Autowired
+    BaseIdService idService;
 
-    public static final ProjectUser SAMPLE_USER = ProjectUser.builder()
-            .id(new ObjectId().toString())
-            .sessionId(new ObjectId().toString())
+    public final ProjectUser SAMPLE_USER = ProjectUser.builder()
+            .id(idService.newId().toString())
+            .sessionId(idService.newId().toString())
             .username("user")
             .audience("web")
             .roles(new TreeSet<>(Collections.singleton(Roles.USER)))
@@ -33,6 +36,7 @@ public abstract class CrudDataProvider<
     ObjectMapper objectMapper;
     @Autowired
     S service;
+
 
     @Override
     public ProjectUser getSampleUser() {

@@ -11,7 +11,7 @@
     <artifactId>crud-starter-graphql-restful</artifactId>
     <name>graphql-restful</name>
     <description>graphql-restful</description>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <dependencies>
         <dependency>
             <groupId>ir.msob.jima.crud</groupId>

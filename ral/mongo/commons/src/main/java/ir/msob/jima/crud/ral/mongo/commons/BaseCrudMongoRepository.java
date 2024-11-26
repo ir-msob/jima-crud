@@ -7,7 +7,6 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.ral.mongo.commons.query.QueryBuilder;
 import ir.msob.jima.core.ral.mongo.commons.query.QueryGenerator;
 import ir.msob.jima.crud.commons.domain.BaseCrudRepository;
-import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +15,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -27,8 +27,8 @@ import java.util.Collections;
  * @param <D>    The type of the domain.
  * @param <C>    The type of criteria used for querying.
  */
-public interface BaseCrudMongoRepository<USER extends BaseUser, D extends BaseDomain<ObjectId>, C extends BaseCriteria<ObjectId>>
-        extends BaseCrudRepository<ObjectId, USER, D, C, QueryBuilder> {
+public interface BaseCrudMongoRepository<ID extends Comparable<ID> & Serializable, USER extends BaseUser, D extends BaseDomain<ID>, C extends BaseCriteria<ID>>
+        extends BaseCrudRepository<ID, USER, D, C, QueryBuilder> {
 
     /**
      * Get the ReactiveMongoTemplate instance.
@@ -199,7 +199,7 @@ public interface BaseCrudMongoRepository<USER extends BaseUser, D extends BaseDo
     @Override
     @MethodStats
     default QueryBuilder generateQuery(C criteria) {
-        return new QueryGenerator<C>().generateQuery(criteria, null);
+        return new QueryGenerator<ID, C>().generateQuery(criteria, null);
     }
 
     /**
@@ -211,7 +211,7 @@ public interface BaseCrudMongoRepository<USER extends BaseUser, D extends BaseDo
      */
     @Override
     default QueryBuilder generateQuery(C criteria, Pageable pageable) {
-        return new QueryGenerator<C>().generateQuery(criteria, pageable);
+        return new QueryGenerator<ID, C>().generateQuery(criteria, pageable);
     }
 
     /**

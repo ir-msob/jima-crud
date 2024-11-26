@@ -11,7 +11,7 @@
     <artifactId>crud-starter-grpc</artifactId>
     <name>grpc</name>
     <description>grpc</description>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <dependencies>
         <dependency>
             <groupId>ir.msob.jima.crud</groupId>

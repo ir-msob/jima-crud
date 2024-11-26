@@ -11,7 +11,7 @@
     <artifactId>crud-starter-rsocket</artifactId>
     <name>rsocket</name>
     <description>rsocket</description>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <dependencies>
         <dependency>
             <groupId>ir.msob.jima.crud</groupId>

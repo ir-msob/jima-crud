@@ -12,7 +12,7 @@ import ir.msob.jima.core.commons.exception.validation.ValidationException;
 import ir.msob.jima.core.commons.relatedobject.relatedparty.RelatedPartyAbstract;
 import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.core.commons.shared.audit.auditdomain.AuditDomain;
+import ir.msob.jima.core.commons.shared.audit.auditdomain.AuditDomainAbstract;
 import ir.msob.jima.core.commons.shared.audit.auditdomain.AuditDomainActionType;
 import ir.msob.jima.core.commons.shared.audit.auditdomain.BaseAuditDomain;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
@@ -212,16 +212,19 @@ public interface ParentWriteCrudService<
      */
     default void addAudit(DTO dto, AuditDomainActionType actionType, USER user) {
         if (dto instanceof BaseAuditDomain auditDomainDto) {
+
             RelatedPartyAbstract<ID> relatedParty = new RelatedPartyAbstract<>() {
             };
             relatedParty.setRelatedId(user.getId());
             relatedParty.setName(user.getName());
 
-            auditDomainDto.getAuditDomains().add(AuditDomain.<ID, RelatedPartyAbstract<ID>>builder()
-                    .actionDate(Instant.now())
-                    .actionType(actionType.name())
-                    .relatedParty(relatedParty)
-                    .build());
+            AuditDomainAbstract<ID, RelatedPartyAbstract<ID>> auditDomain = new AuditDomainAbstract<>() {
+            };
+            auditDomain.setActionDate(Instant.now());
+            auditDomain.setActionType(actionType.name());
+            auditDomain.setRelatedParty(relatedParty);
+
+            auditDomainDto.getAuditDomains().add(auditDomain);
         }
     }
 

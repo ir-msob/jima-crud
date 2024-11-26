@@ -11,7 +11,7 @@
     <artifactId>crud-starter-mongo-test</artifactId>
     <name>mongo-test</name>
     <description>mongo-test</description>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <dependencies>
         <dependency>
             <groupId>ir.msob.jima.core</groupId>

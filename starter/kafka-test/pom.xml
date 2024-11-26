@@ -11,7 +11,7 @@
     <artifactId>crud-starter-kafka-test</artifactId>
     <name>kafka-test</name>
     <description>kafka-test</description>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <dependencies>
         <dependency>
             <groupId>ir.msob.jima.crud</groupId>
