@@ -60,46 +60,4 @@ public interface ParentRelatedObjectService<
         criteria.setRelatedId(Filter.eq(relatedId));
         return delete(parentId, criteria, getter, user);
     }
-
-    default boolean isMatching(C criteria, RO relatedObject) {
-        if (criteria == null || relatedObject == null) {
-            return false;
-        }
-
-        if (criteria.getName() != null) {
-            if (!criteria.getName().isMatching(relatedObject.getName())) return false;
-        }
-
-        if (criteria.getRelatedId() != null) {
-            if (!criteria.getRelatedId().isMatching(relatedObject.getRelatedId())) return false;
-        }
-
-        if (criteria.getRole() != null) {
-            if (!criteria.getRole().isMatching(relatedObject.getRole())) return false;
-        }
-
-        if (criteria.getReferringType() != null) {
-            if (!criteria.getReferringType().isMatching(relatedObject.getReferringType())) return false;
-        }
-
-        if (criteria.getStatus() != null) {
-            if (!criteria.getStatus().isMatching(relatedObject.getStatus())) return false;
-        }
-
-        if (criteria.getEnabled() != null) {
-            if (!criteria.getEnabled().isMatching(relatedObject.getEnabled())) return false;
-        }
-
-        if (criteria.getValidFor() != null) {
-            if (!criteria.getValidFor().isMatching(relatedObject.getValidFor()))
-                return false;
-        }
-
-        if (criteria.getAuditInfo() != null) {
-            return criteria.getAuditInfo().isMatching(relatedObject.getAuditInfo());
-        }
-
-        return true;
-    }
-
 }

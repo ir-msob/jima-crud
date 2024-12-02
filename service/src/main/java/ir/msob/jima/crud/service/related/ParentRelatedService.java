@@ -72,7 +72,7 @@ public interface ParentRelatedService<
 
 
     @MethodStats
-    default Mono<DTO> update(@NotNull ID parentId, IDM idModel, C criteria, Function<DTO, SortedSet<IDM>> getter, USER user) throws DomainNotFoundException, BadRequestException {
+    default Mono<DTO> update(@NotNull ID parentId, IDM idModel,@NotNull C criteria, Function<DTO, SortedSet<IDM>> getter, USER user) throws DomainNotFoundException, BadRequestException {
         return getDtoById(parentId, user)
                 .doOnNext(dto -> {
                     if (getRelatedObjectDtoClass().isInstance(dto)) {
@@ -81,7 +81,7 @@ public interface ParentRelatedService<
 
                         while (iterator.hasNext()) {
                             IDM next = iterator.next();
-                            if (this.isMatching(criteria, next)) {
+                            if (criteria.isMatching(next)) {
                                 idModel.setDomainId(next.getDomainId());
                                 getter.apply(dto).add(idModel);
                                 iterator.remove();
@@ -138,7 +138,7 @@ public interface ParentRelatedService<
 
 
     @MethodStats
-    default Mono<DTO> delete(@NotNull ID parentId, C criteria, Function<DTO, SortedSet<IDM>> getter, USER user) throws DomainNotFoundException, BadRequestException {
+    default Mono<DTO> delete(@NotNull ID parentId, @NotNull C criteria, Function<DTO, SortedSet<IDM>> getter, USER user) throws DomainNotFoundException, BadRequestException {
         return getDtoById(parentId, user)
                 .doOnNext(dto -> {
                     if (getRelatedObjectDtoClass().isInstance(dto)) {
@@ -148,7 +148,7 @@ public interface ParentRelatedService<
                         while (iterator.hasNext()) {
                             IDM ro = iterator.next();
 
-                            if (this.isMatching(criteria, ro)) {
+                            if (criteria.isMatching(ro)) {
                                 iterator.remove();
                                 found = true;
                                 break;
@@ -166,7 +166,7 @@ public interface ParentRelatedService<
     }
 
     @MethodStats
-    default Mono<DTO> deleteMany(@NotNull ID parentId, C criteria, Function<DTO, SortedSet<IDM>> getter, USER user) throws DomainNotFoundException, BadRequestException {
+    default Mono<DTO> deleteMany(@NotNull ID parentId,@NotNull C criteria, Function<DTO, SortedSet<IDM>> getter, USER user) throws DomainNotFoundException, BadRequestException {
         return getDtoById(parentId, user)
                 .doOnNext(dto -> {
                     if (getRelatedObjectDtoClass().isInstance(dto)) {
@@ -175,7 +175,7 @@ public interface ParentRelatedService<
 
                         while (iterator.hasNext()) {
                             IDM ro = iterator.next();
-                            if (this.isMatching(criteria, ro)) {
+                            if (criteria.isMatching(ro)) {
                                 iterator.remove();
                                 found = true;
                             }
@@ -212,7 +212,4 @@ public interface ParentRelatedService<
     }
 
     BaseIdService getIdService();
-
-    boolean isMatching(C criteria, IDM idModel);
-
 }
