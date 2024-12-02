@@ -71,9 +71,11 @@ public interface BaseGetStreamCrudService<ID extends Comparable<ID> & Serializab
         log.debug("GetStream, criteria: {}, user: {}", criteria, user);
 
         getBeforeAfterComponent().beforeGet(criteria, user, getBeforeAfterDomainOperations());
+        Q baseQuery = this.getRepository().generateQuery(criteria);
+        baseQuery = this.getRepository().criteria(baseQuery, criteria, user);
 
         return this.preGet(criteria, user)
-                .thenMany(this.getStreamExecute(criteria, user))
+                .thenMany(this.getRepository().getMany(baseQuery))
                 .flatMap(domain -> {
                     DTO dto = toDto(domain, user);
                     Collection<DTO> dtos = Collections.singleton(dto);
@@ -82,19 +84,5 @@ public interface BaseGetStreamCrudService<ID extends Comparable<ID> & Serializab
                             .doOnSuccess(x -> getBeforeAfterComponent().afterGet(ids, dtos, criteria, user, getBeforeAfterDomainOperations()))
                             .thenReturn(dto);
                 });
-    }
-
-    /**
-     * Execute the retrieval of multiple domain entities based on specific criteria.
-     *
-     * @param criteria The criteria used for filtering entities.
-     * @param user     A user associated with the operation.
-     * @return A Flux emitting a collection of domain entities.
-     * @throws DomainNotFoundException If the requested domain is not found.
-     */
-    default Flux<D> getStreamExecute(C criteria, USER user) throws DomainNotFoundException {
-        Q baseQuery = this.getRepository().generateQuery(criteria);
-        baseQuery = this.getRepository().criteria(baseQuery, criteria, user);
-        return this.getRepository().getMany(baseQuery);
     }
 }

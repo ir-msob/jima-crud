@@ -95,24 +95,11 @@ public interface BaseUpdateCrudService<ID extends Comparable<ID> & Serializable,
 
         return this.preUpdate(dto, user)
                 .doOnSuccess(unused -> addAudit(dto, AuditDomainActionType.UPDATE, user))
-                .then(this.updateExecute(dto, domain, user))
+                .then(this.getRepository().updateOne(domain))
                 .doOnSuccess(updatedDomain -> this.postUpdate(dto, updatedDomain, user))
                 .flatMap(updatedDomain -> getOneByID(updatedDomain.getDomainId(), user))
                 .doOnSuccess(updatedDto ->
                         getBeforeAfterComponent().afterUpdate(previousDto, updatedDto, user, getBeforeAfterDomainOperations()));
     }
 
-    /**
-     * Executes the actual update operation for a single entity using a DTO and a domain entity.
-     * This method is called by the update method after the preUpdate method.
-     *
-     * @param dto    The DTO representing the entity after the update.
-     * @param domain The domain entity to be updated.
-     * @param user   A user associated with the operation.
-     * @return A Mono representing the updated domain entity.
-     * @throws DomainNotFoundException if the entity to be updated is not found.
-     */
-    default Mono<D> updateExecute(DTO dto, D domain, USER user) throws DomainNotFoundException {
-        return this.getRepository().updateOne(domain);
-    }
 }

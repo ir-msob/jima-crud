@@ -53,22 +53,9 @@ public interface BaseSaveCrudService<ID extends Comparable<ID> & Serializable, U
         getBeforeAfterComponent().beforeSave(dto, user, getBeforeAfterDomainOperations());
         return this.preSave(dto, user)
                 .doOnSuccess(unused -> addAudit(dto, AuditDomainActionType.CREATE, user))
-                .then(this.saveExecute(dto, domain, user))
+                .then(this.getRepository().insertOne(domain))
                 .doOnSuccess(savedDomain -> this.postSave(dto, savedDomain, user))
                 .flatMap(savedDomain -> getOneByID(savedDomain.getDomainId(), user))
                 .doOnSuccess(savedDto -> getBeforeAfterComponent().afterSave(dto, savedDto, user, getBeforeAfterDomainOperations()));
-    }
-
-    /**
-     * Executes the actual save operation for a single entity (DTO), saving it as a domain entity.
-     * This method is called by the save method after the preSave method.
-     *
-     * @param dto    The DTO to be saved.
-     * @param domain The domain entity to be saved.
-     * @param user   A user associated with the operation.
-     * @return A Mono containing the saved domain entity.
-     */
-    default Mono<D> saveExecute(DTO dto, D domain, USER user) {
-        return this.getRepository().insertOne(domain);
     }
 }

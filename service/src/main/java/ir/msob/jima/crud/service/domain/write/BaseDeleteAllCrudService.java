@@ -49,31 +49,21 @@ public interface BaseDeleteAllCrudService<ID extends Comparable<ID> & Serializab
         log.debug("Delete, user: {}", user);
 
         C criteria = newCriteriaClass();
+        getBeforeAfterComponent().beforeDelete(criteria, user, getBeforeAfterDomainOperations());
 
         return getStream(criteria, user)
-//                .doOnNext(dto -> getBeforeAfterComponent().beforeDelete(criteria, user, getBeforeAfterDomainServices()))
                 .flatMap(dto -> this.preDelete(criteria, user).thenReturn(dto))
-                .flatMap(dto -> this.deleteAllExecute(dto, user).thenReturn(dto))
+                .flatMap(dto -> {
+                    C criteriaId = CriteriaUtil.idCriteria(getCriteriaClass(), dto.getDomainId());
+                    Q baseQuery = this.getRepository().generateQuery(criteriaId);
+                    baseQuery = this.getRepository().criteria(baseQuery, criteriaId, user);
+                    return this.getRepository().removeOne(baseQuery).thenReturn(dto);
+                })
                 .flatMap(dto -> this.postDelete(dto, criteria, user).thenReturn(dto))
-//                .doOnNext(dto -> this.getBeforeAfterComponent().afterDelete(dto, criteria, getDtoClass(), user, getBeforeAfterDomainServices()))
+                .doOnNext(dto -> this.getBeforeAfterComponent().afterDelete(dto, criteria, getDtoClass(), user, getBeforeAfterDomainOperations()))
                 .map(BaseDomain::getDomainId)
                 .collectList()
                 .map(ArrayList::new);
     }
 
-    /**
-     * Executes the actual removal of all entities based on the specified criteria.
-     * This method is called by the deleteAll method after the preDelete method.
-     *
-     * @param dto  The DTO to be deleted.
-     * @param user A user associated with the operation.
-     * @return A Flux of entities (domains) to be removed.
-     * @throws DomainNotFoundException if the entities to be deleted are not found.
-     */
-    default Mono<DTO> deleteAllExecute(DTO dto, USER user) throws DomainNotFoundException {
-        C criteria = CriteriaUtil.idCriteria(getCriteriaClass(), dto.getDomainId());
-        Q baseQuery = this.getRepository().generateQuery(criteria);
-        baseQuery = this.getRepository().criteria(baseQuery, criteria, user);
-        return this.getRepository().removeOne(baseQuery).thenReturn(dto);
-    }
 }

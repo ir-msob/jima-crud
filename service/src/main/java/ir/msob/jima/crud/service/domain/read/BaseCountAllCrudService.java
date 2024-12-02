@@ -51,18 +51,7 @@ public interface BaseCountAllCrudService<ID extends Comparable<ID> & Serializabl
         C criteria = newCriteriaClass();
         getBeforeAfterComponent().beforeCount(criteria, user, getBeforeAfterDomainOperations());
 
-        return this.countAllExecute(user)
+        return this.getRepository().countAll()
                 .doOnSuccess(aLong -> getBeforeAfterComponent().afterCount(criteria, user, getBeforeAfterDomainOperations()));
-    }
-
-    /**
-     * Execute the counting of all domain entities.
-     *
-     * @param user A user associated with the operation.
-     * @return A Mono emitting the count of domain entities.
-     * @throws DomainNotFoundException If the requested domain is not found.
-     */
-    default Mono<Long> countAllExecute(USER user) throws DomainNotFoundException {
-        return this.getRepository().countAll();
     }
 }

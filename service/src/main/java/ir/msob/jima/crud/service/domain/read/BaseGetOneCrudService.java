@@ -69,8 +69,11 @@ public interface BaseGetOneCrudService<ID extends Comparable<ID> & Serializable,
 
         getBeforeAfterComponent().beforeGet(criteria, user, getBeforeAfterDomainOperations());
 
+        Q baseQuery = this.getRepository().generateQuery(criteria);
+        baseQuery = this.getRepository().criteria(baseQuery, criteria, user);
+
         return this.preGet(criteria, user)
-                .then(this.getOneExecute(criteria, user))
+                .then(this.getRepository().getOne(baseQuery))
                 .flatMap(domain -> {
                     DTO dto = toDto(domain, user);
                     Collection<ID> ids = Collections.singletonList(domain.getDomainId());
@@ -82,17 +85,4 @@ public interface BaseGetOneCrudService<ID extends Comparable<ID> & Serializable,
                 });
     }
 
-    /**
-     * Execute the retrieval of a single domain entity based on specific criteria.
-     *
-     * @param criteria The criteria used for filtering entities.
-     * @param user     A user associated with the operation.
-     * @return A Mono emitting a single domain entity.
-     * @throws DomainNotFoundException If the requested domain is not found.
-     */
-    default Mono<D> getOneExecute(C criteria, USER user) throws DomainNotFoundException {
-        Q baseQuery = this.getRepository().generateQuery(criteria);
-        baseQuery = this.getRepository().criteria(baseQuery, criteria, user);
-        return this.getRepository().getOne(baseQuery);
-    }
 }

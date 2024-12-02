@@ -13,7 +13,6 @@ import ir.msob.jima.crud.commons.domain.BaseCrudRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
@@ -76,44 +75,18 @@ public interface BaseGetManyCrudService<ID extends Comparable<ID> & Serializable
         log.debug("GetMany, criteria: {}, user: {}", criteria, user);
 
         getBeforeAfterComponent().beforeGet(criteria, user, getBeforeAfterDomainOperations());
+        Q baseQuery = this.getRepository().generateQuery(criteria);
+        baseQuery = this.getRepository().criteria(baseQuery, criteria, user);
 
         return this.preGet(criteria, user)
-                .thenMany(this.getManyExecute(criteria, user))
+                .thenMany(this.getRepository().getMany(baseQuery))
+                .map(d -> toDto(d, user))
                 .collectList()
-                .flatMap(domains -> {
-                    Collection<DTO> dtos = prepareDtos(domains, user);
-                    Collection<ID> ids = prepareIds(domains);
+                .flatMap(dtos -> {
+                    Collection<ID> ids = prepareIds(dtos);
                     return this.postGet(ids, dtos, criteria, user)
                             .doOnSuccess(x -> getBeforeAfterComponent().afterGet(ids, dtos, criteria, user, getBeforeAfterDomainOperations()))
                             .thenReturn(dtos);
                 });
-    }
-
-    /**
-     * Prepare a collection of DTO entities from a collection of domain entities.
-     *
-     * @param domains A collection of domain entities.
-     * @param user    A user associated with the operation.
-     * @return A collection of DTO entities.
-     */
-    private Collection<DTO> prepareDtos(Collection<D> domains, USER user) {
-        return domains
-                .stream()
-                .map(domain -> toDto(domain, user))
-                .toList();
-    }
-
-    /**
-     * Execute the retrieval of multiple domain entities based on specific criteria.
-     *
-     * @param criteria The criteria used for filtering entities.
-     * @param user     A user associated with the operation.
-     * @return A Flux emitting a collection of domain entities.
-     * @throws DomainNotFoundException If the requested domain is not found.
-     */
-    default Flux<D> getManyExecute(C criteria, USER user) throws DomainNotFoundException {
-        Q baseQuery = this.getRepository().generateQuery(criteria);
-        baseQuery = this.getRepository().criteria(baseQuery, criteria, user);
-        return this.getRepository().getMany(baseQuery);
     }
 }

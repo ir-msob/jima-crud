@@ -73,46 +73,25 @@ public interface BaseGetPageCrudService<ID extends Comparable<ID> & Serializable
         log.debug("GetPage, criteria: {}, user: {}", criteria, user);
 
         getBeforeAfterComponent().beforeGet(criteria, user, getBeforeAfterDomainOperations());
+        Q baseQuery = this.getRepository().generateQuery(criteria, pageable);
+        baseQuery = this.getRepository().criteria(baseQuery, criteria, user);
 
         return this.preGet(criteria, user)
-                .then(this.getPageExecute(criteria, pageable, user))
-                .flatMap(domainPage -> {
-                    Page<DTO> dtoPage = preparePage(domainPage, user);
-                    Collection<ID> ids = prepareIds(domainPage.getContent());
+                .then(this.getRepository().getPage(baseQuery, pageable))
+                .map(domainPage -> {
+                    List<DTO> dtos = domainPage
+                            .stream()
+                            .map(domain -> toDto(domain, user))
+                            .toList();
+
+                    return new PageImpl<>(dtos, domainPage.getPageable(), domainPage.getTotalElements());
+                })
+                .flatMap(dtoPage -> {
+                    Collection<ID> ids = prepareIds(dtoPage.getContent());
                     return this.postGet(ids, dtoPage.getContent(), criteria, user)
                             .doOnSuccess(x -> getBeforeAfterComponent().afterGet(ids, dtoPage.getContent(), criteria, user, getBeforeAfterDomainOperations()))
                             .thenReturn(dtoPage);
                 });
     }
 
-    /**
-     * Prepare a Page of DTO entities from a Page of domain entities and a user.
-     *
-     * @param domainPage A Page of domain entities.
-     * @param user       A user associated with the operation.
-     * @return A Page of DTO entities.
-     */
-    private PageImpl<DTO> preparePage(Page<D> domainPage, USER user) {
-        List<DTO> dtos = domainPage
-                .stream()
-                .map(domain -> toDto(domain, user))
-                .toList();
-
-        return new PageImpl<>(dtos, domainPage.getPageable(), domainPage.getTotalElements());
-    }
-
-    /**
-     * Execute the retrieval of a Page of domain entities based on specific criteria and pagination.
-     *
-     * @param criteria The criteria used for filtering entities.
-     * @param pageable The page information, including page number, size, and sorting.
-     * @param user     A user associated with the operation.
-     * @return A Mono emitting a Page of domain entities.
-     * @throws DomainNotFoundException If the requested domain is not found.
-     */
-    default Mono<Page<D>> getPageExecute(C criteria, Pageable pageable, USER user) throws DomainNotFoundException {
-        Q baseQuery = this.getRepository().generateQuery(criteria, pageable);
-        baseQuery = this.getRepository().criteria(baseQuery, criteria, user);
-        return this.getRepository().getPage(baseQuery, pageable);
-    }
 }

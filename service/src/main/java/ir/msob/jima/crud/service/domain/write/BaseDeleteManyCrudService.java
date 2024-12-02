@@ -70,27 +70,16 @@ public interface BaseDeleteManyCrudService<ID extends Comparable<ID> & Serializa
         return getStream(criteria, user)
                 .doOnNext(dto -> getBeforeAfterComponent().beforeDelete(criteria, user, getBeforeAfterDomainOperations()))
                 .flatMap(dto -> this.preDelete(criteria, user).thenReturn(dto))
-                .flatMap(dto -> this.deleteManyExecute(dto, user).thenReturn(dto))
+                .flatMap(dto -> {
+                    C criteriaId = CriteriaUtil.idCriteria(getCriteriaClass(), dto.getDomainId());
+                    Q baseQuery = this.getRepository().generateQuery(criteriaId);
+                    baseQuery = this.getRepository().criteria(baseQuery, criteriaId, user);
+                    return this.getRepository().removeOne(baseQuery).thenReturn(dto);
+                })
                 .flatMap(dto -> this.postDelete(dto, criteria, user).thenReturn(dto))
                 .doOnNext(dto -> this.getBeforeAfterComponent().afterDelete(dto, criteria, getDtoClass(), user, getBeforeAfterDomainOperations()))
                 .map(BaseDomain::getDomainId)
                 .collectList()
                 .map(ArrayList::new);
-    }
-
-    /**
-     * Executes the actual removal of multiple entities based on the specified criteria.
-     * This method is called by the deleteMany method after the preDelete method.
-     *
-     * @param dto  The DTO to be deleted.
-     * @param user A user associated with the operation.
-     * @return A Flux of entities (domains) to be removed.
-     * @throws DomainNotFoundException if the entities to be deleted are not found.
-     */
-    default Mono<DTO> deleteManyExecute(DTO dto, USER user) throws DomainNotFoundException {
-        C criteria = CriteriaUtil.idCriteria(getCriteriaClass(), dto.getDomainId());
-        Q baseQuery = this.getRepository().generateQuery(criteria);
-        baseQuery = this.getRepository().criteria(baseQuery, criteria, user);
-        return this.getRepository().removeOne(baseQuery).thenReturn(dto);
     }
 }

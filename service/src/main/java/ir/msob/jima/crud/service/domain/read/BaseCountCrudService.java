@@ -47,22 +47,9 @@ public interface BaseCountCrudService<ID extends Comparable<ID> & Serializable, 
     default Mono<Long> count(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
         log.debug("Count, criteria: {}, user: {}", criteria, user);
         getBeforeAfterComponent().beforeCount(criteria, user, getBeforeAfterDomainOperations());
-
-        return this.countExecute(criteria, user)
-                .doOnSuccess(result -> getBeforeAfterComponent().afterCount(criteria, user, getBeforeAfterDomainOperations()));
-    }
-
-    /**
-     * Execute the counting of domain entities based on specific criteria.
-     *
-     * @param criteria The criteria used for counting entities.
-     * @param user     A user associated with the operation.
-     * @return A Mono emitting the count of domain entities.
-     * @throws DomainNotFoundException If the requested domain is not found.
-     */
-    default Mono<Long> countExecute(C criteria, USER user) throws DomainNotFoundException {
         Q baseQuery = this.getRepository().generateQuery(criteria);
         baseQuery = this.getRepository().criteria(baseQuery, criteria, user);
-        return this.getRepository().count(baseQuery);
+        return this.getRepository().count(baseQuery)
+                .doOnSuccess(result -> getBeforeAfterComponent().afterCount(criteria, user, getBeforeAfterDomainOperations()));
     }
 }
