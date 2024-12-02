@@ -8,11 +8,12 @@ import ir.msob.jima.core.ral.mongo.it.dto.ProjectDto;
 import ir.msob.jima.core.ral.mongo.it.security.ProjectUser;
 import ir.msob.jima.crud.service.domain.BaseCrudService;
 import ir.msob.jima.crud.service.domain.BeforeAfterComponent;
+import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 
 @Validated
+@RequiredArgsConstructor
 public abstract class CrudService<
         D extends ProjectDomain,
         DTO extends ProjectDto,
@@ -21,12 +22,9 @@ public abstract class CrudService<
         >
         implements BaseCrudService<ObjectId, ProjectUser, D, DTO, C, QueryBuilder, R> {
 
-    @Autowired
-    private BeforeAfterComponent beforeAfterComponent;
-    @Autowired
-    private ObjectMapper objectMapper;
-    @Autowired
-    private R repository;
+    private final BeforeAfterComponent beforeAfterComponent;
+    private final ObjectMapper objectMapper;
+    private final R repository;
 
     @Override
     public BeforeAfterComponent getBeforeAfterComponent() {

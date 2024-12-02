@@ -10,7 +10,7 @@ import ir.msob.jima.crud.api.grpc.service.domain.read.*;
 import ir.msob.jima.crud.api.grpc.service.domain.write.*;
 import ir.msob.jima.crud.commons.domain.BaseCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseCrudService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 
 import java.io.Serializable;
 
@@ -29,6 +29,7 @@ import java.io.Serializable;
  * @param <S>    The type of CRUD service providing business logic.
  * @see ParentCrudGrpcResource
  */
+@RequiredArgsConstructor
 public abstract class BaseCrudGrpcResource<
         ID extends Comparable<ID> & Serializable,
         USER extends BaseUser,
@@ -57,8 +58,7 @@ public abstract class BaseCrudGrpcResource<
         BaseUpdateCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S>,
         BaseUpdateManyCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S> {
 
-    @Autowired
-    ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
     /**
      * Returns the ObjectMapper instance.

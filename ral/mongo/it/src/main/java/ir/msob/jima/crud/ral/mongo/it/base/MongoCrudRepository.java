@@ -6,20 +6,21 @@ import ir.msob.jima.core.ral.mongo.it.criteria.ProjectCriteria;
 import ir.msob.jima.core.ral.mongo.it.domain.ProjectDomain;
 import ir.msob.jima.core.ral.mongo.it.security.ProjectUser;
 import ir.msob.jima.crud.ral.mongo.commons.BaseCrudMongoRepository;
+import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 
 /**
  * @param <D>
  * @param <C>
  */
+@RequiredArgsConstructor
 public class MongoCrudRepository<D extends ProjectDomain, C extends ProjectCriteria>
         implements BaseCrudMongoRepository<ObjectId, ProjectUser, D, C>
         , BaseMongoRepository<ObjectId, ProjectUser, D> {
 
-    @Autowired
-    ReactiveMongoTemplate reactiveMongoTemplate;
+
+    private final ReactiveMongoTemplate reactiveMongoTemplate;
 
     @Override
     public ReactiveMongoTemplate getReactiveMongoTemplate() {

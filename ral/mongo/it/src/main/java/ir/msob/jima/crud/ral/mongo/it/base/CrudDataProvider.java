@@ -10,7 +10,6 @@ import ir.msob.jima.core.ral.mongo.it.security.ProjectUser;
 import ir.msob.jima.core.ral.mongo.it.security.Roles;
 import ir.msob.jima.crud.test.BaseCrudDataProvider;
 import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collections;
 import java.util.TreeSet;
@@ -22,21 +21,22 @@ public abstract class CrudDataProvider<
         R extends MongoCrudRepository<D, C>,
         S extends CrudService<D, DTO, C, R>>
         implements BaseCrudDataProvider<ObjectId, ProjectUser, D, DTO, C, QueryBuilder, R, S> {
-    @Autowired
-    BaseIdService idService;
 
-    public final ProjectUser SAMPLE_USER = ProjectUser.builder()
-            .id(idService.newId().toString())
-            .sessionId(idService.newId().toString())
-            .username("user")
-            .audience("web")
-            .roles(new TreeSet<>(Collections.singleton(Roles.USER)))
-            .build();
-    @Autowired
-    ObjectMapper objectMapper;
-    @Autowired
-    S service;
+    public final ProjectUser SAMPLE_USER;
+    private final ObjectMapper objectMapper;
+    private final S service;
 
+    public CrudDataProvider(BaseIdService idService, ObjectMapper objectMapper, S service) {
+        this.objectMapper = objectMapper;
+        this.service = service;
+        this.SAMPLE_USER = ProjectUser.builder()
+                .id(idService.newId().toString())
+                .sessionId(idService.newId().toString())
+                .username("user")
+                .audience("web")
+                .roles(new TreeSet<>(Collections.singleton(Roles.USER)))
+                .build();
+    }
 
     @Override
     public ProjectUser getSampleUser() {

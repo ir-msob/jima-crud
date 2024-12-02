@@ -9,7 +9,7 @@ import ir.msob.jima.core.commons.dto.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.exception.validation.ValidationException;
-import ir.msob.jima.core.commons.relatedobject.relatedparty.RelatedPartyAbstract;
+import ir.msob.jima.core.commons.related.relatedobject.relatedparty.RelatedPartyAbstract;
 import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.shared.audit.auditdomain.AuditDomainAbstract;

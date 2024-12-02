@@ -1,5 +1,6 @@
 package ir.msob.jima.crud.api.grpc.service.domain.base;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.msob.jima.core.commons.security.BaseUserService;
 import ir.msob.jima.core.ral.mongo.commons.query.QueryBuilder;
 import ir.msob.jima.core.ral.mongo.it.criteria.ProjectCriteria;
@@ -10,7 +11,6 @@ import ir.msob.jima.crud.api.grpc.service.domain.BaseCrudGrpcResource;
 import ir.msob.jima.crud.ral.mongo.it.base.CrudService;
 import ir.msob.jima.crud.ral.mongo.it.base.MongoCrudRepository;
 import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @param <D>
@@ -28,10 +28,14 @@ public abstract class CrudGrpcResource<
         S extends CrudService<D, DTO, C, R>
         > extends BaseCrudGrpcResource<ObjectId, ProjectUser, D, DTO, C, QueryBuilder, R, S> {
 
-    @Autowired
-    ProjectUserService projectUserService;
-    @Autowired
-    S service;
+    private final ProjectUserService projectUserService;
+    private final S service;
+
+    public CrudGrpcResource(ObjectMapper objectMapper, ProjectUserService projectUserService, S service) {
+        super(objectMapper);
+        this.projectUserService = projectUserService;
+        this.service = service;
+    }
 
     @Override
     public BaseUserService getUserService() {

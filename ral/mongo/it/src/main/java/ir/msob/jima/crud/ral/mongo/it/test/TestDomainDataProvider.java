@@ -1,11 +1,13 @@
 package ir.msob.jima.crud.ral.mongo.it.test;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.TextNode;
 import com.github.fge.jackson.jsonpointer.JsonPointer;
 import com.github.fge.jackson.jsonpointer.JsonPointerException;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchOperation;
 import com.github.fge.jsonpatch.ReplaceOperation;
+import ir.msob.jima.core.commons.id.BaseIdService;
 import ir.msob.jima.core.ral.mongo.it.test.TestCriteria;
 import ir.msob.jima.core.ral.mongo.it.test.TestDomain;
 import ir.msob.jima.core.ral.mongo.it.test.TestDto;
@@ -28,6 +30,10 @@ public class TestDomainDataProvider extends CrudDataProvider<TestDomain, TestDto
 
     private static TestDto newDto;
     private static TestDto newMandatoryDto;
+
+    public TestDomainDataProvider(BaseIdService idService, ObjectMapper objectMapper, TestService service) {
+        super(idService, objectMapper, service);
+    }
 
     /**
      * Creates a new DTO object with default values.
