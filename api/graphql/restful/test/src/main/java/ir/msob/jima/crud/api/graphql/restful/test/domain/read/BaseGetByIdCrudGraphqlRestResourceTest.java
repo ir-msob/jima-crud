@@ -74,7 +74,7 @@ public interface BaseGetByIdCrudGraphqlRestResourceTest<
     @Override
     default void getByIdRequest(DTO savedDto, Assertable<DTO> assertable) {
         IdInput input = IdInput.builder()
-                .id(convertToString(savedDto.getDomainId()))
+                .id(convertToString(savedDto.getId()))
                 .build();
         DtoType res = getGraphQlTester().document(DOCUMENT)
                 .variable("input", input)

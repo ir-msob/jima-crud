@@ -7,9 +7,9 @@ import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.exception.validation.ValidationException;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
+import ir.msob.jima.core.commons.related.auditdomain.AuditDomainActionType;
 import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.core.commons.shared.audit.auditdomain.AuditDomainActionType;
 import ir.msob.jima.crud.commons.domain.BaseCrudRepository;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -49,7 +49,7 @@ public interface BaseUpdateCrudService<ID extends Comparable<ID> & Serializable,
     @Transactional
     @MethodStats
     default Mono<DTO> update(ID id, @Valid DTO dto, USER user) {
-        dto.setDomainId(id);
+        dto.setId(id);
         return update(dto, user);
     }
 
@@ -67,7 +67,7 @@ public interface BaseUpdateCrudService<ID extends Comparable<ID> & Serializable,
     @Transactional
     @MethodStats
     default Mono<DTO> update(@Valid DTO dto, USER user) {
-        return getOneByID(dto.getDomainId(), user)
+        return getOneByID(dto.getId(), user)
                 .flatMap(previousDto -> this.update(previousDto, dto, user));
     }
 
@@ -97,7 +97,7 @@ public interface BaseUpdateCrudService<ID extends Comparable<ID> & Serializable,
                 .doOnSuccess(unused -> addAudit(dto, AuditDomainActionType.UPDATE, user))
                 .then(this.getRepository().updateOne(domain))
                 .doOnSuccess(updatedDomain -> this.postUpdate(dto, updatedDomain, user))
-                .flatMap(updatedDomain -> getOneByID(updatedDomain.getDomainId(), user))
+                .flatMap(updatedDomain -> getOneByID(updatedDomain.getId(), user))
                 .doOnSuccess(updatedDto ->
                         getBeforeAfterComponent().afterUpdate(previousDto, updatedDto, user, getBeforeAfterDomainOperations()));
     }

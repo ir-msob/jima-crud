@@ -72,7 +72,7 @@ public interface BaseGetOneCrudGraphqlRestResourceTest<
     @Override
     default void getOneRequest(DTO savedDto, Assertable<DTO> assertable) {
         CriteriaInput input = CriteriaInput.builder()
-                .criteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId())))
+                .criteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getId())))
                 .build();
         DtoType res = getGraphQlTester().document(DOCUMENT)
                 .variable("input", input)

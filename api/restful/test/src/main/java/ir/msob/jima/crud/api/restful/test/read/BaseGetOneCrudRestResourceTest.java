@@ -62,7 +62,7 @@ public interface BaseGetOneCrudRestResourceTest<
         // Expect the body to be of the DTO class type
         this.getWebTestClient()
                 .get()
-                .uri(String.format("%s/%s?%s.eq=%s", getBaseUri(), Operations.GET_ONE, savedDto.getDomainIdName(), savedDto.getDomainId()))
+                .uri(String.format("%s/%s?%s.eq=%s", getBaseUri(), Operations.GET_ONE, savedDto.getIdName(), savedDto.getId()))
                 .headers(this::prepareHeader)
                 .exchange()
                 .expectStatus().isEqualTo(OperationsStatus.GET_ONE)

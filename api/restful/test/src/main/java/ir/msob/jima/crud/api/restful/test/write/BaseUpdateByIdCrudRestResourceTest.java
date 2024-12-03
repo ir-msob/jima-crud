@@ -61,7 +61,7 @@ public interface BaseUpdateByIdCrudRestResourceTest<
         // Expect the body to be of the DTO class type
         this.getWebTestClient()
                 .put()
-                .uri(String.format("%s/%s", getBaseUri(), dto.getDomainId()))
+                .uri(String.format("%s/%s", getBaseUri(), dto.getId()))
                 .headers(this::prepareHeader)
                 .bodyValue(dto)
                 .exchange()

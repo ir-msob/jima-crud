@@ -76,7 +76,7 @@ public interface BaseDeleteCrudGraphqlRestResourceTest<
     @Override
     default void deleteRequest(DTO savedDto, Assertable<ID> assertable) throws DomainNotFoundException, BadRequestException {
         CriteriaInput input = CriteriaInput.builder()
-                .criteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId())))
+                .criteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getId())))
                 .build();
         IdType res = getGraphQlTester().document(DOCUMENT)
                 .variable("input", input)

@@ -23,9 +23,9 @@ public interface BaseRelatedPartyCrudService<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
         , DTO extends BaseDto<ID>
-        , C extends RelatedPartyCriteriaAbstract<ID>
-        , RP extends RelatedPartyAbstract<ID>>
-        extends ParentRelatedObjectService<ID, String, USER, DTO, C, RP, BaseRelatedPartyDto<ID, RP>> {
+        , RP extends RelatedPartyAbstract<ID>
+        , C extends RelatedPartyCriteriaAbstract<ID, RP>>
+        extends ParentRelatedObjectService<ID, String, USER, DTO, RP, C, BaseRelatedPartyDto<ID, RP>> {
     Logger log = LoggerFactory.getLogger(BaseRelatedPartyCrudService.class);
 
     @Transactional

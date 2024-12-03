@@ -79,7 +79,7 @@ public interface BaseGetStreamCrudService<ID extends Comparable<ID> & Serializab
                 .flatMap(domain -> {
                     DTO dto = toDto(domain, user);
                     Collection<DTO> dtos = Collections.singleton(dto);
-                    Collection<ID> ids = Collections.singleton(domain.getDomainId());
+                    Collection<ID> ids = Collections.singleton(domain.getId());
                     return this.postGet(ids, dtos, criteria, user)
                             .doOnSuccess(x -> getBeforeAfterComponent().afterGet(ids, dtos, criteria, user, getBeforeAfterDomainOperations()))
                             .thenReturn(dto);

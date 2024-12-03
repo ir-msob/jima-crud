@@ -70,7 +70,7 @@ public interface BaseEditManyCrudKafkaListenerTest<
         // Return the response body
         String topic = prepareTopic(Operations.EDIT_MANY);
         JsonPatchMessage<ID, C> data = new JsonPatchMessage<>();
-        data.setCriteria(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId()));
+        data.setCriteria(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getId()));
         data.setJsonPatch(jsonPatch);
 
         ChannelMessage<USER, JsonPatchMessage<ID, C>> channelMessage = ChannelMessage.<USER, JsonPatchMessage<ID, C>>builder()

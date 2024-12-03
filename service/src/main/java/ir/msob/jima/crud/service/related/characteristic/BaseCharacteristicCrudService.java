@@ -25,10 +25,10 @@ public interface BaseCharacteristicCrudService<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
         , DTO extends BaseDto<ID>
-        , C extends CharacteristicCriteria<ID>
         , CH extends Characteristic<ID>
+        , C extends CharacteristicCriteria<ID, CH>
         , CDTO extends BaseCharacteristicDto<ID, CH>>
-        extends ParentRelatedService<ID, USER, DTO, C, CH, CDTO> {
+        extends ParentRelatedService<ID, USER, DTO, CH, C, CDTO> {
     Logger log = LoggerFactory.getLogger(BaseCharacteristicCrudService.class);
 
     @Transactional
@@ -45,7 +45,7 @@ public interface BaseCharacteristicCrudService<
     @Transactional
     @MethodStats
     default Mono<DTO> deleteByKey(@NotNull ID parentId, @NotBlank String key, USER user) throws DomainNotFoundException, BadRequestException {
-        C criteria = getCriteriaClass().getConstructor().newInstance();
+        C criteria = getRelatedModelCriteriaClass().getConstructor().newInstance();
         criteria.setKey(Filter.eq(key));
         return delete(parentId, criteria, dto -> ((BaseCharacteristicDto<ID, CH>) dto).getCharacteristics(), user);
     }
@@ -105,7 +105,7 @@ public interface BaseCharacteristicCrudService<
     @Transactional
     @MethodStats
     default Mono<DTO> updateByKey(@NotNull ID parentId, @NotBlank String key, CH characteristic, USER user) throws DomainNotFoundException, BadRequestException {
-        C criteria = getCriteriaClass().getConstructor().newInstance();
+        C criteria = getRelatedModelCriteriaClass().getConstructor().newInstance();
         criteria.setKey(Filter.eq(key));
         return update(parentId, characteristic, criteria, dto -> ((BaseCharacteristicDto<ID, CH>) dto).getCharacteristics(), user);
     }

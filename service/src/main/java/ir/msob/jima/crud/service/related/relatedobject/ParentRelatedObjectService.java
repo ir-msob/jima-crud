@@ -25,12 +25,12 @@ public interface ParentRelatedObjectService<
         , RID extends Comparable<RID> & Serializable
         , USER extends BaseUser
         , DTO extends BaseDto<ID>
-        , C extends RelatedObjectCriteriaAbstract<ID, RID>
         , RO extends RelatedObjectAbstract<ID, RID>
+        , C extends RelatedObjectCriteriaAbstract<ID, RID, RO>
         , RODTO extends BaseRelatedObjectDto<ID>>
-        extends ParentRelatedService<ID, USER, DTO, C, RO, RODTO> {
+        extends ParentRelatedService<ID, USER, DTO, RO, C, RODTO> {
 
-    default Class<C> getCriteriaClass() {
+    default Class<C> getRelatedModelCriteriaClass() {
         return (Class<C>) GenericTypeUtil.resolveTypeArguments(getClass(), ParentRelatedObjectService.class, 4);
     }
 
@@ -47,7 +47,7 @@ public interface ParentRelatedObjectService<
     @Transactional
     @MethodStats
     default Mono<DTO> updateByRelatedId(@NotNull ID parentId, @NotNull RID relatedId, RO relatedObject, Function<DTO, SortedSet<RO>> getter, USER user) throws DomainNotFoundException, BadRequestException {
-        C criteria = getCriteriaClass().getConstructor().newInstance();
+        C criteria = getRelatedModelCriteriaClass().getConstructor().newInstance();
         criteria.setRelatedId(Filter.eq(relatedId));
         return update(parentId, relatedObject, criteria, getter, user);
     }
@@ -56,7 +56,7 @@ public interface ParentRelatedObjectService<
     @Transactional
     @MethodStats
     default Mono<DTO> deleteByRelatedId(@NotNull ID parentId, @NotNull RID relatedId, Function<DTO, SortedSet<RO>> getter, USER user) throws DomainNotFoundException, BadRequestException {
-        C criteria = getCriteriaClass().getConstructor().newInstance();
+        C criteria = getRelatedModelCriteriaClass().getConstructor().newInstance();
         criteria.setRelatedId(Filter.eq(relatedId));
         return delete(parentId, criteria, getter, user);
     }

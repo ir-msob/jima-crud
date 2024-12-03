@@ -76,7 +76,7 @@ public interface BaseGetOneCrudService<ID extends Comparable<ID> & Serializable,
                 .then(this.getRepository().getOne(baseQuery))
                 .flatMap(domain -> {
                     DTO dto = toDto(domain, user);
-                    Collection<ID> ids = Collections.singletonList(domain.getDomainId());
+                    Collection<ID> ids = Collections.singletonList(domain.getId());
                     Collection<DTO> dtos = Collections.singletonList(dto);
 
                     return this.postGet(ids, dtos, criteria, user)

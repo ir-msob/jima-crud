@@ -72,7 +72,7 @@ public interface BaseGetManyCrudGraphqlRestResourceTest<
     @Override
     default void getManyRequest(DTO savedDto, Assertable<Collection<DTO>> assertable) {
         CriteriaInput input = CriteriaInput.builder()
-                .criteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId())))
+                .criteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getId())))
                 .build();
         DtosType res = getGraphQlTester().document(DOCUMENT)
                 .variable("input", input)

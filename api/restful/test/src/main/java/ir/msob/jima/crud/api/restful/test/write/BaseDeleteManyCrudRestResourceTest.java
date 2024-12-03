@@ -64,7 +64,7 @@ public interface BaseDeleteManyCrudRestResourceTest<
         // Expect the body to be of type Set
         this.getWebTestClient()
                 .delete()
-                .uri(String.format("%s/%s?%s.eq=%s", getBaseUri(), Operations.DELETE_MANY, savedDto.getDomainIdName(), savedDto.getDomainId()))
+                .uri(String.format("%s/%s?%s.eq=%s", getBaseUri(), Operations.DELETE_MANY, savedDto.getIdName(), savedDto.getId()))
                 .headers(this::prepareHeader)
                 .exchange()
                 .expectStatus()

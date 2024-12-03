@@ -67,7 +67,7 @@ public interface BaseDeleteByIdCrudRsocketResourceTest<
         // Convert the Mono to a Future
         // Get the result from the Future
         IdMessage<ID> data = new IdMessage<>();
-        data.setId(savedDto.getDomainId());
+        data.setId(savedDto.getId());
 
         ChannelMessage<USER, IdMessage<ID>> message = ChannelMessage.<USER, IdMessage<ID>>builder()
                 .data(data)

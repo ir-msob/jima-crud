@@ -76,7 +76,7 @@ public interface BaseEditByIdCrudGraphqlRestResourceTest<
     default void editByIdRequest(DTO savedDto, JsonPatch jsonPatch, Assertable<DTO> assertable) {
         // Create an instance of IdJsonPatchInput with the ID of the saved entity and the JSON Patch operation
         IdJsonPatchInput input = IdJsonPatchInput.builder()
-                .id(convertToString(savedDto.getDomainId()))
+                .id(convertToString(savedDto.getId()))
                 .jsonPatch(convertToString(jsonPatch))
                 .build();
 

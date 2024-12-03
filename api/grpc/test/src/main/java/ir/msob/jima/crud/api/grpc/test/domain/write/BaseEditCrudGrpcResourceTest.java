@@ -62,7 +62,7 @@ public interface BaseEditCrudGrpcResourceTest<
     default void editRequest(DTO savedDto, JsonPatch jsonPatch, Assertable<DTO> assertable) {
         // Create an instance of CriteriaJsonPatchMsg with the ID of the saved entity and the JSON Patch
         CriteriaJsonPatchMsg msg = CriteriaJsonPatchMsg.newBuilder()
-                .setCriteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId())))
+                .setCriteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getId())))
                 .setJsonPatch(convertToString(jsonPatch))
                 .build();
         // Execute the gRPC request with the created CriteriaJsonPatchMsg and extract the result from the response

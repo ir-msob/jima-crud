@@ -77,7 +77,7 @@ public interface BaseEditManyCrudGraphqlRestResourceTest<
     @Override
     default void editManyRequest(DTO savedDto, JsonPatch jsonPatch, Assertable<Collection<DTO>> assertable) {
         CriteriaJsonPatchInput input = CriteriaJsonPatchInput.builder()
-                .criteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId())))
+                .criteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getId())))
                 .jsonPatch(convertToString(jsonPatch))
                 .build();
         DtosType res = getGraphQlTester().document(DOCUMENT)

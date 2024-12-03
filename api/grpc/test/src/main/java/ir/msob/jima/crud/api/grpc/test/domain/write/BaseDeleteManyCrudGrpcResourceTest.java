@@ -66,7 +66,7 @@ public interface BaseDeleteManyCrudGrpcResourceTest<
     default void deleteManyRequest(DTO savedDto, Assertable<Set<ID>> assertable) throws DomainNotFoundException, BadRequestException {
         // Create an instance of CriteriaMsg with the ID of the saved entity
         CriteriaMsg msg = CriteriaMsg.newBuilder()
-                .setCriteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId())))
+                .setCriteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getId())))
                 .build();
         // Execute the gRPC request with the created CriteriaMsg and extract the result from the response
         IdsMsg res = getReactorCrudServiceStub().deleteMany(Mono.just(msg))

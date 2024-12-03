@@ -69,13 +69,13 @@ public interface BaseDeleteCrudService<ID extends Comparable<ID> & Serializable,
                 .doOnNext(dto -> getBeforeAfterComponent().beforeDelete(criteria, user, getBeforeAfterDomainOperations()))
                 .flatMap(dto -> this.preDelete(criteria, user).thenReturn(dto))
                 .flatMap(dto -> {
-                    C criteriaId = CriteriaUtil.idCriteria(getCriteriaClass(), dto.getDomainId());
+                    C criteriaId = CriteriaUtil.idCriteria(getCriteriaClass(), dto.getId());
                     Q baseQuery = this.getRepository().generateQuery(criteriaId);
                     baseQuery = this.getRepository().criteria(baseQuery, criteriaId, user);
                     return this.getRepository().removeOne(baseQuery).thenReturn(dto);
                 })
                 .flatMap(dto -> this.postDelete(dto, criteria, user).thenReturn(dto))
                 .doOnNext(dto -> this.getBeforeAfterComponent().afterDelete(dto, criteria, getDtoClass(), user, getBeforeAfterDomainOperations()))
-                .map(BaseDomain::getDomainId);
+                .map(BaseDomain::getId);
     }
 }

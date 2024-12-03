@@ -54,7 +54,7 @@ public interface BaseUpdateByIdCrudRsocketResourceTest<
     @Override
     default void updateByIdRequest(DTO dto, Assertable<DTO> assertable) {
         DtoMessage<ID, DTO> data = new DtoMessage<>();
-        data.setId(dto.getDomainId());
+        data.setId(dto.getId());
         data.setDto(dto);
 
         ChannelMessage<USER, DtoMessage<ID, DTO>> message = ChannelMessage.<USER, DtoMessage<ID, DTO>>builder()

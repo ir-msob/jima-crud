@@ -18,7 +18,7 @@ class ParentCrudServiceTest {
 
     private static SampleDomain<String> prepareDomain(String id) {
         SampleDomain<String> domain1 = new SampleDomain<>();
-        domain1.setDomainId(id);
+        domain1.setId(id);
         return domain1;
     }
 

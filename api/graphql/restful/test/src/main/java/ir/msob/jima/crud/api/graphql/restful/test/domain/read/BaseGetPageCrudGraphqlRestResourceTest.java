@@ -80,7 +80,7 @@ public interface BaseGetPageCrudGraphqlRestResourceTest<
     @Override
     default void getPageRequest(DTO savedDto, Assertable<Page<DTO>> assertable) throws DomainNotFoundException, BadRequestException {
         CriteriaPageableInput input = CriteriaPageableInput.builder()
-                .criteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId())))
+                .criteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getId())))
                 .pageable(convertToString(PageRequest.of(0, 10)))
                 .build();
         PageType res = getGraphQlTester().document(DOCUMENT)

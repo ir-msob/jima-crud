@@ -54,14 +54,14 @@ public interface BaseDeleteAllCrudService<ID extends Comparable<ID> & Serializab
         return getStream(criteria, user)
                 .flatMap(dto -> this.preDelete(criteria, user).thenReturn(dto))
                 .flatMap(dto -> {
-                    C criteriaId = CriteriaUtil.idCriteria(getCriteriaClass(), dto.getDomainId());
+                    C criteriaId = CriteriaUtil.idCriteria(getCriteriaClass(), dto.getId());
                     Q baseQuery = this.getRepository().generateQuery(criteriaId);
                     baseQuery = this.getRepository().criteria(baseQuery, criteriaId, user);
                     return this.getRepository().removeOne(baseQuery).thenReturn(dto);
                 })
                 .flatMap(dto -> this.postDelete(dto, criteria, user).thenReturn(dto))
                 .doOnNext(dto -> this.getBeforeAfterComponent().afterDelete(dto, criteria, getDtoClass(), user, getBeforeAfterDomainOperations()))
-                .map(BaseDomain::getDomainId)
+                .map(BaseDomain::getId)
                 .collectList()
                 .map(ArrayList::new);
     }

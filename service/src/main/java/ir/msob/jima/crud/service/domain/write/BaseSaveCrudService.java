@@ -6,9 +6,9 @@ import ir.msob.jima.core.commons.dto.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
+import ir.msob.jima.core.commons.related.auditdomain.AuditDomainActionType;
 import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.core.commons.shared.audit.auditdomain.AuditDomainActionType;
 import ir.msob.jima.crud.commons.domain.BaseCrudRepository;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -55,7 +55,7 @@ public interface BaseSaveCrudService<ID extends Comparable<ID> & Serializable, U
                 .doOnSuccess(unused -> addAudit(dto, AuditDomainActionType.CREATE, user))
                 .then(this.getRepository().insertOne(domain))
                 .doOnSuccess(savedDomain -> this.postSave(dto, savedDomain, user))
-                .flatMap(savedDomain -> getOneByID(savedDomain.getDomainId(), user))
+                .flatMap(savedDomain -> getOneByID(savedDomain.getId(), user))
                 .doOnSuccess(savedDto -> getBeforeAfterComponent().afterSave(dto, savedDto, user, getBeforeAfterDomainOperations()));
     }
 }

@@ -65,7 +65,7 @@ public interface BaseEditManyCrudRestResourceTest<
         // Expect the body to be of type Collection
         this.getWebTestClient()
                 .patch()
-                .uri(String.format("%s/%s?%s.eq=%s", getBaseUri(), Operations.EDIT_MANY, savedDto.getDomainIdName(), savedDto.getDomainId()))
+                .uri(String.format("%s/%s?%s.eq=%s", getBaseUri(), Operations.EDIT_MANY, savedDto.getIdName(), savedDto.getId()))
                 .headers(this::prepareHeader)
                 .bodyValue(jsonPatch)
                 .exchange()

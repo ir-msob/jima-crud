@@ -67,7 +67,7 @@ public interface BaseGetPageCrudGrpcResourceTest<
     default void getPageRequest(DTO savedDto, Assertable<Page<DTO>> assertable) throws DomainNotFoundException, BadRequestException {
         // Create an instance of CriteriaPageableMsg with the ID of the saved entity and the page request details
         CriteriaPageableMsg msg = CriteriaPageableMsg.newBuilder()
-                .setCriteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId())))
+                .setCriteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getId())))
                 .setPageable(convertToString(PageRequest.of(0, 10)))
                 .build();
         // Execute the gRPC request with the created CriteriaPageableMsg and extract the result from the response

@@ -62,7 +62,7 @@ public interface BaseDeleteByIdCrudRestResourceTest<
         // Expect the body to be of the ID class type
         this.getWebTestClient()
                 .delete()
-                .uri(String.format("%s/%s", getBaseUri(), savedDto.getDomainId()))
+                .uri(String.format("%s/%s", getBaseUri(), savedDto.getId()))
                 .headers(this::prepareHeader)
                 .exchange()
                 .expectStatus()

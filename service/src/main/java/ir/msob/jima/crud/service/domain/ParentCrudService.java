@@ -210,7 +210,7 @@ public interface ParentCrudService<
     default Collection<ID> prepareIds(Collection<? extends BaseDomain<ID>> domains) {
         return domains
                 .stream()
-                .map(BaseDomain::getDomainId)
+                .map(BaseDomain::getId)
                 .toList();
     }
 }

@@ -59,7 +59,7 @@ public interface BaseUpdateByIdCrudGrpcResourceTest<
     default void updateByIdRequest(DTO dto, Assertable<DTO> assertable) {
         // Create an instance of DtoMsg with the ID and DTO of the entity to be updated
         DtoMsg msg = DtoMsg.newBuilder()
-                .setId(convertToString(dto.getDomainId()))
+                .setId(convertToString(dto.getId()))
                 .setDto(convertToString(dto))
                 .build();
         // Execute the gRPC request with the created DtoMsg and extract the result from the response

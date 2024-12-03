@@ -61,7 +61,7 @@ public interface BaseGetByIdCrudRestResourceTest<
         // Expect the body to be of the DTO class type
         this.getWebTestClient()
                 .get()
-                .uri(String.format("%s/%s", getBaseUri(), savedDto.getDomainId()))
+                .uri(String.format("%s/%s", getBaseUri(), savedDto.getId()))
                 .headers(this::prepareHeader)
                 .exchange()
                 .expectStatus().isEqualTo(OperationsStatus.GET_BY_ID)

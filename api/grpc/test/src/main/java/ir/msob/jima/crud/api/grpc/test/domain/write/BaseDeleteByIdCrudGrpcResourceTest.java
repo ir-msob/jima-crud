@@ -63,7 +63,7 @@ public interface BaseDeleteByIdCrudGrpcResourceTest<
     default void deleteByIdRequest(DTO savedDto, Assertable<ID> assertable) throws DomainNotFoundException, BadRequestException {
         // Create an instance of IdMsg with the ID of the saved entity
         IdMsg msg = IdMsg.newBuilder()
-                .setId(convertToString(savedDto.getDomainId()))
+                .setId(convertToString(savedDto.getId()))
                 .build();
         // Execute the gRPC request with the created IdMsg and extract the result from the response
         IdMsg res = getReactorCrudServiceStub().deleteById(Mono.just(msg))

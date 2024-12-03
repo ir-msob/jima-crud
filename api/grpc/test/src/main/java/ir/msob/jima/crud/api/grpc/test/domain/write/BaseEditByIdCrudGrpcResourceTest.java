@@ -62,7 +62,7 @@ public interface BaseEditByIdCrudGrpcResourceTest<
     default void editByIdRequest(DTO savedDto, JsonPatch jsonPatch, Assertable<DTO> assertable) {
         // Create an instance of IdJsonPatchMsg with the ID of the saved entity and the JsonPatch
         IdJsonPatchMsg msg = IdJsonPatchMsg.newBuilder()
-                .setId(convertToString(savedDto.getDomainId()))
+                .setId(convertToString(savedDto.getId()))
                 .setJsonPatch(convertToString(jsonPatch))
                 .build();
         // Execute the gRPC request with the created IdJsonPatchMsg and extract the result from the response

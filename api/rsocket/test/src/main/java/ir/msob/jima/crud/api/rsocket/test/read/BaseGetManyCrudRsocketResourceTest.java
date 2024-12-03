@@ -66,7 +66,7 @@ public interface BaseGetManyCrudRsocketResourceTest<
         // Convert the Mono to a Future
         // Get the result from the Future
         CriteriaMessage<ID, C> data = new CriteriaMessage<>();
-        data.setCriteria(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId()));
+        data.setCriteria(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getId()));
 
         ChannelMessage<USER, CriteriaMessage<ID, C>> message = ChannelMessage.<USER, CriteriaMessage<ID, C>>builder()
                 .data(data)

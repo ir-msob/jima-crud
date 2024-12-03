@@ -61,7 +61,7 @@ public interface BaseGetManyCrudGrpcResourceTest<
     default void getManyRequest(DTO savedDto, Assertable<Collection<DTO>> assertable) {
         // Create an instance of CriteriaMsg with the ID of the saved entity
         CriteriaMsg msg = CriteriaMsg.newBuilder()
-                .setCriteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId())))
+                .setCriteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getId())))
                 .build();
         // Execute the gRPC request with the created CriteriaMsg and extract the result from the response
         Collection<DTO> dtos = getReactorCrudServiceStub().getMany(Mono.just(msg))

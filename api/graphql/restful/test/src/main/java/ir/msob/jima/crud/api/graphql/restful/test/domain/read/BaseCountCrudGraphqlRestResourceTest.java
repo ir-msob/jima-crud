@@ -72,7 +72,7 @@ public interface BaseCountCrudGraphqlRestResourceTest<
     @Override
     default void countRequest(DTO savedDto, Assertable<Long> assertable) {
         CriteriaInput input = CriteriaInput.builder()
-                .criteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId())))
+                .criteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getId())))
                 .build();
         CountType res = getGraphQlTester()
                 .document(DOCUMENT)

@@ -66,7 +66,7 @@ public interface BaseUpdateByIdCrudKafkaListenerTest<
         // Return the response body
         String topic = prepareTopic(Operations.UPDATE_BY_ID);
         DtoMessage<ID, DTO> data = new DtoMessage<>();
-        data.setId(dto.getDomainId());
+        data.setId(dto.getId());
         data.setDto(dto);
 
         ChannelMessage<USER, DtoMessage<ID, DTO>> channelMessage = ChannelMessage.<USER, DtoMessage<ID, DTO>>builder()

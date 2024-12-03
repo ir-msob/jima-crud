@@ -75,7 +75,7 @@ public interface BaseUpdateManyCrudService<ID extends Comparable<ID> & Serializa
         return Flux.fromIterable(dtos)
                 .flatMap(dto -> {
                     DTO previousDto = previousDtos.stream()
-                            .filter(pd -> pd.getDomainId().equals(dto.getDomainId()))
+                            .filter(pd -> pd.getId().equals(dto.getId()))
                             .findFirst()
                             .orElseThrow();
                     return update(previousDto, dto, user);

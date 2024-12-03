@@ -60,7 +60,7 @@ public interface BaseGetByIdCrudGrpcResourceTest<
     default void getByIdRequest(DTO savedDto, Assertable<DTO> assertable) {
         // Create an instance of IdMsg with the ID of the saved entity
         IdMsg msg = IdMsg.newBuilder()
-                .setId(convertToString(savedDto.getDomainId()))
+                .setId(convertToString(savedDto.getId()))
                 .build();
         // Execute the gRPC request with the created IdMsg and extract the result from the response
         DtoMsg res = getReactorCrudServiceStub().getById(Mono.just(msg))

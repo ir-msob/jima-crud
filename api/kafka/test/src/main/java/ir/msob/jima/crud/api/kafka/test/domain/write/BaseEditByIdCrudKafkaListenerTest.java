@@ -68,7 +68,7 @@ public interface BaseEditByIdCrudKafkaListenerTest<
         // Return the response body
         String topic = prepareTopic(Operations.EDIT_BY_ID);
         IdJsonPatchMessage<ID> data = IdJsonPatchMessage.<ID>builder()
-                .id(savedDto.getDomainId())
+                .id(savedDto.getId())
                 .jsonPatch(jsonPatch)
                 .build();
 

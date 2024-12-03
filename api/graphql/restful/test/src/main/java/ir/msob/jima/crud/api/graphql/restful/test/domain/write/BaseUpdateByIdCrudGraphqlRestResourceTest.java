@@ -70,7 +70,7 @@ public interface BaseUpdateByIdCrudGraphqlRestResourceTest<
     default void updateByIdRequest(DTO dto, Assertable<DTO> assertable) {
         // Create an instance of DtoInput with the ID and DTO of the entity to be updated
         DtoInput input = DtoInput.builder()
-                .id(convertToString(dto.getDomainId()))
+                .id(convertToString(dto.getId()))
                 .dto(convertToString(dto))
                 .build();
         // Execute the GraphQL mutation with the created input and extract the result from the response

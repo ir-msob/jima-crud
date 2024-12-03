@@ -25,10 +25,10 @@ public interface BaseContactMediumCrudService<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
         , DTO extends BaseDto<ID>
-        , C extends ContactMediumCriteriaAbstract<ID>
         , CM extends ContactMediumAbstract<ID>
+        , C extends ContactMediumCriteriaAbstract<ID, CM>
         , CMDTO extends BaseContactMediumDto<ID, CM>>
-        extends ParentRelatedService<ID, USER, DTO, C, CM, CMDTO> {
+        extends ParentRelatedService<ID, USER, DTO, CM, C, CMDTO> {
     Logger log = LoggerFactory.getLogger(BaseContactMediumCrudService.class);
 
     @Transactional
@@ -45,7 +45,7 @@ public interface BaseContactMediumCrudService<
     @Transactional
     @MethodStats
     default Mono<DTO> deleteByName(@NotNull ID parentId, @NotBlank String name, USER user) throws DomainNotFoundException, BadRequestException {
-        C criteria = getCriteriaClass().getConstructor().newInstance();
+        C criteria = getRelatedModelCriteriaClass().getConstructor().newInstance();
         criteria.setName(Filter.eq(name));
         return delete(parentId, criteria, dto -> ((BaseContactMediumDto<ID, CM>) dto).getContactMediums(), user);
     }
@@ -54,7 +54,7 @@ public interface BaseContactMediumCrudService<
     @Transactional
     @MethodStats
     default Mono<DTO> deleteByType(@NotNull ID parentId, @NotBlank String type, USER user) throws DomainNotFoundException, BadRequestException {
-        C criteria = getCriteriaClass().getConstructor().newInstance();
+        C criteria = getRelatedModelCriteriaClass().getConstructor().newInstance();
         criteria.setType(Filter.eq(type));
         return delete(parentId, criteria, dto -> ((BaseContactMediumDto<ID, CM>) dto).getContactMediums(), user);
     }
@@ -114,7 +114,7 @@ public interface BaseContactMediumCrudService<
     @Transactional
     @MethodStats
     default Mono<DTO> updateByName(@NotNull ID parentId, @NotBlank String name, CM contactmedium, USER user) throws DomainNotFoundException, BadRequestException {
-        C criteria = getCriteriaClass().getConstructor().newInstance();
+        C criteria = getRelatedModelCriteriaClass().getConstructor().newInstance();
         criteria.setName(Filter.eq(name));
         return update(parentId, contactmedium, criteria, dto -> ((BaseContactMediumDto<ID, CM>) dto).getContactMediums(), user);
     }
@@ -123,7 +123,7 @@ public interface BaseContactMediumCrudService<
     @Transactional
     @MethodStats
     default Mono<DTO> updateByType(@NotNull ID parentId, @NotBlank String type, CM contactmedium, USER user) throws DomainNotFoundException, BadRequestException {
-        C criteria = getCriteriaClass().getConstructor().newInstance();
+        C criteria = getRelatedModelCriteriaClass().getConstructor().newInstance();
         criteria.setType(Filter.eq(type));
         return update(parentId, contactmedium, criteria, dto -> ((BaseContactMediumDto<ID, CM>) dto).getContactMediums(), user);
     }

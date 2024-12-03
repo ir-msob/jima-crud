@@ -73,7 +73,7 @@ public interface BaseGetPageCrudRsocketResourceTest<
         // Convert the Mono to a Future
         // Get the result from the Future
         PageableMessage<ID, C> data = new PageableMessage<>();
-        data.setCriteria(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId()));
+        data.setCriteria(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getId()));
         data.setPageable(PageRequest.of(0, 10));
 
         ChannelMessage<USER, PageableMessage<ID, C>> message = ChannelMessage.<USER, PageableMessage<ID, C>>builder()

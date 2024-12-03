@@ -25,10 +25,10 @@ public interface BaseObjectValidationCrudService<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
         , DTO extends BaseDto<ID>
-        , C extends ObjectValidationCriteriaAbstract<ID>
         , OV extends ObjectValidationAbstract<ID>
+        , C extends ObjectValidationCriteriaAbstract<ID, OV>
         , OVDTO extends BaseObjectValidationDto<ID, OV>>
-        extends ParentRelatedService<ID, USER, DTO, C, OV, OVDTO> {
+        extends ParentRelatedService<ID, USER, DTO, OV, C, OVDTO> {
     Logger log = LoggerFactory.getLogger(BaseObjectValidationCrudService.class);
 
     @Transactional
@@ -45,7 +45,7 @@ public interface BaseObjectValidationCrudService<
     @Transactional
     @MethodStats
     default Mono<DTO> deleteByName(@NotNull ID parentId, @NotBlank String name, USER user) throws DomainNotFoundException, BadRequestException {
-        C criteria = getCriteriaClass().getConstructor().newInstance();
+        C criteria = getRelatedModelCriteriaClass().getConstructor().newInstance();
         criteria.setName(Filter.eq(name));
         return delete(parentId, criteria, dto -> ((BaseObjectValidationDto<ID, OV>) dto).getObjectValidations(), user);
     }
@@ -105,7 +105,7 @@ public interface BaseObjectValidationCrudService<
     @Transactional
     @MethodStats
     default Mono<DTO> updateByName(@NotNull ID parentId, @NotBlank String name, OV objectvalidation, USER user) throws DomainNotFoundException, BadRequestException {
-        C criteria = getCriteriaClass().getConstructor().newInstance();
+        C criteria = getRelatedModelCriteriaClass().getConstructor().newInstance();
         criteria.setName(Filter.eq(name));
         return update(parentId, objectvalidation, criteria, dto -> ((BaseObjectValidationDto<ID, OV>) dto).getObjectValidations(), user);
     }

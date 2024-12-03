@@ -59,7 +59,7 @@ public interface BaseCountCrudRestResourceTest<
         // Expect the body to be of type Long
         this.getWebTestClient()
                 .get()
-                .uri(String.format("%s/%s?%s.eq=%s", getBaseUri(), Operations.COUNT, savedDto.getDomainIdName(), savedDto.getDomainId()))
+                .uri(String.format("%s/%s?%s.eq=%s", getBaseUri(), Operations.COUNT, savedDto.getIdName(), savedDto.getId()))
                 .headers(this::prepareHeader)
                 .exchange()
                 .expectStatus().isEqualTo(OperationsStatus.COUNT)

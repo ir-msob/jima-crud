@@ -75,7 +75,7 @@ public interface BaseEditCrudGraphqlRestResourceTest<
     @Override
     default void editRequest(DTO savedDto, JsonPatch jsonPatch, Assertable<DTO> assertable) {
         CriteriaJsonPatchInput input = CriteriaJsonPatchInput.builder()
-                .criteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId())))
+                .criteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getId())))
                 .jsonPatch(convertToString(jsonPatch))
                 .build();
         DtoType res = getGraphQlTester().document(DOCUMENT)

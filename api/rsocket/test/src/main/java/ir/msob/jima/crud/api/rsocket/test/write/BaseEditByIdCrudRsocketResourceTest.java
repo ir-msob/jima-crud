@@ -67,7 +67,7 @@ public interface BaseEditByIdCrudRsocketResourceTest<
         // Convert the Mono to a Future
         // Get the result from the Future
         IdJsonPatchMessage<ID> data = new IdJsonPatchMessage<>();
-        data.setId(savedDto.getDomainId());
+        data.setId(savedDto.getId());
         data.setJsonPatch(jsonPatch);
 
         ChannelMessage<USER, IdJsonPatchMessage<ID>> message = ChannelMessage.<USER, IdJsonPatchMessage<ID>>builder()

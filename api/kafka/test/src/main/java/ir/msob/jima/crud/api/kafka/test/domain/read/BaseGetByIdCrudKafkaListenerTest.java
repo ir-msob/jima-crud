@@ -66,7 +66,7 @@ public interface BaseGetByIdCrudKafkaListenerTest<
         // Return the response body
         String topic = prepareTopic(Operations.GET_BY_ID);
         IdMessage<ID> data = new IdMessage<>();
-        data.setId(savedDto.getDomainId());
+        data.setId(savedDto.getId());
 
         ChannelMessage<USER, IdMessage<ID>> channelMessage = ChannelMessage.<USER, IdMessage<ID>>builder()
                 .user(getSampleUser())

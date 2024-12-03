@@ -58,7 +58,7 @@ public interface BaseEditManyCrudRsocketResourceTest<
     @Override
     default void editManyRequest(DTO savedDto, JsonPatch jsonPatch, Assertable<Collection<DTO>> assertable) {
         JsonPatchMessage<ID, C> data = new JsonPatchMessage<>();
-        data.setCriteria(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId()));
+        data.setCriteria(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getId()));
         data.setJsonPatch(jsonPatch);
 
         ChannelMessage<USER, JsonPatchMessage<ID, C>> message = ChannelMessage.<USER, JsonPatchMessage<ID, C>>builder()

@@ -65,7 +65,7 @@ public interface BaseCountCrudKafkaListenerTest<
         // Return the response body
         String topic = prepareTopic(Operations.COUNT);
         CriteriaMessage<ID, C> data = new CriteriaMessage<>();
-        data.setCriteria(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getDomainId()));
+        data.setCriteria(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getId()));
 
         ChannelMessage<USER, CriteriaMessage<ID, C>> channelMessage = ChannelMessage.<USER, CriteriaMessage<ID, C>>builder()
                 .user(getSampleUser())

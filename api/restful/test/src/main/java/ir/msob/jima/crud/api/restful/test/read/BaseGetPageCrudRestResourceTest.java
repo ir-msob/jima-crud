@@ -66,7 +66,7 @@ public interface BaseGetPageCrudRestResourceTest<
         // Expect the body to be of type Page
         this.getWebTestClient()
                 .get()
-                .uri(String.format("%s?page=0&size=10&%s.eq=%s", getBaseUri(), savedDto.getDomainIdName(), savedDto.getDomainId()))
+                .uri(String.format("%s?page=0&size=10&%s.eq=%s", getBaseUri(), savedDto.getIdName(), savedDto.getId()))
                 .headers(this::prepareHeader)
                 .exchange()
                 .expectStatus().isEqualTo(OperationsStatus.GET_PAGE)

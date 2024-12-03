@@ -62,7 +62,7 @@ public interface BaseGetManyCrudRestResourceTest<
         // Expect the body to be of type Collection
         this.getWebTestClient()
                 .get()
-                .uri(String.format("%s/%s?%s.eq=%s", getBaseUri(), Operations.GET_MANY, savedDto.getDomainIdName(), savedDto.getDomainId()))
+                .uri(String.format("%s/%s?%s.eq=%s", getBaseUri(), Operations.GET_MANY, savedDto.getIdName(), savedDto.getId()))
                 .headers(this::prepareHeader)
                 .exchange()
                 .expectStatus().isEqualTo(OperationsStatus.GET_MANY)

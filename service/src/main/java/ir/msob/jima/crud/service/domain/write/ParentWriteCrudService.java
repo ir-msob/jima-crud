@@ -9,12 +9,12 @@ import ir.msob.jima.core.commons.dto.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.exception.validation.ValidationException;
+import ir.msob.jima.core.commons.related.auditdomain.AuditDomainAbstract;
+import ir.msob.jima.core.commons.related.auditdomain.AuditDomainActionType;
+import ir.msob.jima.core.commons.related.auditdomain.BaseAuditDomainDto;
 import ir.msob.jima.core.commons.related.relatedobject.relatedparty.RelatedPartyAbstract;
 import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.core.commons.shared.audit.auditdomain.AuditDomainAbstract;
-import ir.msob.jima.core.commons.shared.audit.auditdomain.AuditDomainActionType;
-import ir.msob.jima.core.commons.shared.audit.auditdomain.BaseAuditDomain;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.crud.commons.domain.BaseCrudRepository;
 import ir.msob.jima.crud.service.domain.ParentCrudService;
@@ -72,7 +72,7 @@ public interface ParentWriteCrudService<
     default Mono<Collection<DTO>> getManyByDto(Collection<DTO> dtos, USER user) {
         Collection<ID> ids = dtos
                 .stream()
-                .map(BaseDomain::getDomainId)
+                .map(BaseDomain::getId)
                 .toList();
         return this.getMany(CriteriaUtil.idCriteria(getCriteriaClass(), ids), user);
     }
@@ -211,7 +211,7 @@ public interface ParentWriteCrudService<
      * @param user       A user object.
      */
     default void addAudit(DTO dto, AuditDomainActionType actionType, USER user) {
-        if (dto instanceof BaseAuditDomain auditDomainDto) {
+        if (dto instanceof BaseAuditDomainDto auditDomainDto) {
 
             RelatedPartyAbstract<ID> relatedParty = new RelatedPartyAbstract<>() {
             };
