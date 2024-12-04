@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 
 public interface BaseRelatedPartyCrudService<
         ID extends Comparable<ID> & Serializable
@@ -70,7 +70,7 @@ public interface BaseRelatedPartyCrudService<
 
     @Transactional
     @MethodStats
-    default Mono<DTO> saveMany(@NotNull ID parentId, List<RP> relatedParties, USER user) throws DomainNotFoundException, BadRequestException {
+    default Mono<DTO> saveMany(@NotNull ID parentId, Collection<RP> relatedParties, USER user) throws DomainNotFoundException, BadRequestException {
         return saveMany(
                 parentId
                 , relatedParties
@@ -112,7 +112,7 @@ public interface BaseRelatedPartyCrudService<
 
     @Transactional
     @MethodStats
-    default Mono<DTO> updateMany(@NotNull ID parentId, List<RP> relatedParties, USER user) throws DomainNotFoundException, BadRequestException {
+    default Mono<DTO> updateMany(@NotNull ID parentId, Collection<RP> relatedParties, USER user) throws DomainNotFoundException, BadRequestException {
         return updateMany(
                 parentId
                 , relatedParties

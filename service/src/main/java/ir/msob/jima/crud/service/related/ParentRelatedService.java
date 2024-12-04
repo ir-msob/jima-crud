@@ -100,7 +100,7 @@ public interface ParentRelatedService<
     }
 
     @MethodStats
-    default Mono<DTO> updateMany(@NotNull ID parentId, List<RM> idModels, Function<DTO, SortedSet<RM>> getter, USER user) throws DomainNotFoundException, BadRequestException {
+    default Mono<DTO> updateMany(@NotNull ID parentId, Collection<RM> idModels, Function<DTO, SortedSet<RM>> getter, USER user) throws DomainNotFoundException, BadRequestException {
         return getDtoById(parentId, user)
                 .doOnNext(dto -> {
                     if (getRelatedObjectDtoClass().isInstance(dto)) {
@@ -197,7 +197,7 @@ public interface ParentRelatedService<
     }
 
     @MethodStats
-    default Mono<DTO> saveMany(@NotNull ID parentId, @NotEmpty List<@Valid RM> relatedObjects, Function<DTO, SortedSet<RM>> getter, USER user) throws DomainNotFoundException, BadRequestException {
+    default Mono<DTO> saveMany(@NotNull ID parentId, @NotEmpty Collection<@Valid RM> relatedObjects, Function<DTO, SortedSet<RM>> getter, USER user) throws DomainNotFoundException, BadRequestException {
         return getDtoById(parentId, user)
                 .doOnNext(dto -> {
                     for (RM idModel : relatedObjects) {

@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 
 public interface BaseRelatedActionCrudService<
         ID extends Comparable<ID> & Serializable
@@ -72,7 +72,7 @@ public interface BaseRelatedActionCrudService<
 
     @Transactional
     @MethodStats
-    default Mono<DTO> saveMany(@NotNull ID parentId, List<RA> objectvalidations, USER user) throws DomainNotFoundException, BadRequestException {
+    default Mono<DTO> saveMany(@NotNull ID parentId, Collection<RA> objectvalidations, USER user) throws DomainNotFoundException, BadRequestException {
         return saveMany(
                 parentId
                 , objectvalidations
@@ -112,7 +112,7 @@ public interface BaseRelatedActionCrudService<
 
     @Transactional
     @MethodStats
-    default Mono<DTO> updateMany(@NotNull ID parentId, List<RA> objectvalidations, USER user) throws DomainNotFoundException, BadRequestException {
+    default Mono<DTO> updateMany(@NotNull ID parentId, Collection<RA> objectvalidations, USER user) throws DomainNotFoundException, BadRequestException {
         return updateMany(
                 parentId
                 , objectvalidations

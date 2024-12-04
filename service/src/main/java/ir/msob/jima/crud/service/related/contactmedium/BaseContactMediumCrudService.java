@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 
 public interface BaseContactMediumCrudService<
         ID extends Comparable<ID> & Serializable
@@ -81,7 +81,7 @@ public interface BaseContactMediumCrudService<
 
     @Transactional
     @MethodStats
-    default Mono<DTO> saveMany(@NotNull ID parentId, List<CM> contactmediums, USER user) throws DomainNotFoundException, BadRequestException {
+    default Mono<DTO> saveMany(@NotNull ID parentId, Collection<CM> contactmediums, USER user) throws DomainNotFoundException, BadRequestException {
         return saveMany(
                 parentId
                 , contactmediums
@@ -130,7 +130,7 @@ public interface BaseContactMediumCrudService<
 
     @Transactional
     @MethodStats
-    default Mono<DTO> updateMany(@NotNull ID parentId, List<CM> contactmediums, USER user) throws DomainNotFoundException, BadRequestException {
+    default Mono<DTO> updateMany(@NotNull ID parentId, Collection<CM> contactmediums, USER user) throws DomainNotFoundException, BadRequestException {
         return updateMany(
                 parentId
                 , contactmediums
