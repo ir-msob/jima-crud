@@ -1,6 +1,5 @@
 package ir.msob.jima.crud.api.restful.service.domain.read;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import ir.msob.jima.core.commons.criteria.BaseCriteria;
@@ -64,7 +63,6 @@ public interface BaseGetByIdCrudRestResource<
      * @return a ResponseEntity containing a Mono of the DTO of the domain
      * @throws BadRequestException     if the request is bad
      * @throws DomainNotFoundException if the domain is not found
-     * @throws JsonProcessingException if there is an error processing the JSON
      */
     @GetMapping("{id}")
     @ApiResponses(value = {
@@ -74,22 +72,11 @@ public interface BaseGetByIdCrudRestResource<
     })
     @MethodStats
     @Scope(Operations.GET_BY_ID)
-    default ResponseEntity<Mono<DTO>> getById(@PathVariable("id") ID id, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
+    default ResponseEntity<Mono<DTO>> getById(@PathVariable("id") ID id, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to get by id domain, id {}", id);
 
         USER user = getUser(serverWebExchange, principal);
-        return this.getByIdResponse(this.getService().getOne(id, user), id, user);
-    }
-
-    /**
-     * This method provides a response for the getById method.
-     *
-     * @param dto  the DTO of the domain
-     * @param id   the ID of the domain
-     * @param user the user
-     * @return a ResponseEntity containing a Mono of the DTO of the domain
-     */
-    default ResponseEntity<Mono<DTO>> getByIdResponse(Mono<DTO> dto, ID id, USER user) {
-        return ResponseEntity.status(OperationsStatus.GET_BY_ID).body(dto);
+        Mono<DTO> res = this.getService().getOne(id, user);
+        return ResponseEntity.status(OperationsStatus.GET_BY_ID).body(res);
     }
 }

@@ -73,20 +73,6 @@ public interface BaseDeleteByIdCrudRsocketResource<
         ChannelMessage<USER, IdMessage<ID>> message = getObjectMapper().readValue(dto, getIdReferenceType());
 
         USER user = getUser(message.getUser(), principal);
-        return this.deleteByIdResponse(this.getService().delete(message.getData().getId(), user), message.getData().getId(), user);
+        return this.getService().delete(message.getData().getId(), user);
     }
-
-    /**
-     * This method creates a Mono with the ID of the deleted domain.
-     * It is called by the deleteById method.
-     *
-     * @param id        the ID of the deleted domain
-     * @param requestId the ID of the request
-     * @param user      the user
-     * @return a Mono with the ID of the deleted domain
-     */
-    default Mono<ID> deleteByIdResponse(Mono<ID> id, ID requestId, USER user) {
-        return id;
-    }
-
 }

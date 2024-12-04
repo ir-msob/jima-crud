@@ -81,19 +81,7 @@ public interface BaseSaveManyCrudRestResource<
         log.debug("REST request to create many new domain, dtos : {}", dtos);
 
         USER user = getUser(serverWebExchange, principal);
-        return this.saveManyResponse(dtos, this.getService().saveMany(dtos, user), user);
-    }
-
-    /**
-     * This method creates a ResponseEntity with the saved DTOs.
-     * It is called by the saveMany method.
-     *
-     * @param dtos      the DTOs to save the domains
-     * @param savedDtos the Mono object containing the saved DTOs
-     * @param user      the user
-     * @return a ResponseEntity with the saved DTOs
-     */
-    default ResponseEntity<Mono<Collection<DTO>>> saveManyResponse(Collection<DTO> dtos, Mono<Collection<DTO>> savedDtos, USER user) {
-        return ResponseEntity.status(OperationsStatus.SAVE_MANY).body(savedDtos);
+        Mono<Collection<DTO>> res = this.getService().saveMany(dtos, user);
+        return ResponseEntity.status(OperationsStatus.SAVE_MANY).body(res);
     }
 }

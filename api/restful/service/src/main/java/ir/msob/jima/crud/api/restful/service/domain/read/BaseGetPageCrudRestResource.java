@@ -1,6 +1,5 @@
 package ir.msob.jima.crud.api.restful.service.domain.read;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import ir.msob.jima.core.commons.criteria.BaseCriteria;
@@ -76,23 +75,11 @@ public interface BaseGetPageCrudRestResource<
             @ApiResponse(code = 400, message = "If the validation operation is incorrect throws BadRequestException otherwise nothing", response = BadRequestResponse.class)})
     @MethodStats
     @Scope(Operations.GET_PAGE)
-    default ResponseEntity<Mono<Page<DTO>>> getPage(C criteria, @RequestParam("page") int page, @RequestParam("size") int size, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
+    default ResponseEntity<Mono<Page<DTO>>> getPage(C criteria, @RequestParam("page") int page, @RequestParam("size") int size, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to get page domain, criteria {} : ", criteria);
 
         USER user = getUser(serverWebExchange, principal);
-        return this.getPageResponse(this.getService().getPage(criteria, PageRequest.of(page, size), user), criteria, user);
-    }
-
-    /**
-     * This method creates a ResponseEntity with the page of DTOs.
-     * It is called by the getPage method.
-     *
-     * @param dtoPage  the Mono object containing the page of DTOs
-     * @param criteria the criteria to get the page of domains
-     * @param user     the user
-     * @return a ResponseEntity with the page of DTOs
-     */
-    default ResponseEntity<Mono<Page<DTO>>> getPageResponse(Mono<Page<DTO>> dtoPage, C criteria, USER user) {
-        return ResponseEntity.status(OperationsStatus.GET_PAGE).body(dtoPage);
+        Mono<Page<DTO>> res = this.getService().getPage(criteria, PageRequest.of(page, size), user);
+        return ResponseEntity.status(OperationsStatus.GET_PAGE).body(res);
     }
 }

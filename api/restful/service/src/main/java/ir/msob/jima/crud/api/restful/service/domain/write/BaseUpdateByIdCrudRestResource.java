@@ -81,20 +81,7 @@ public interface BaseUpdateByIdCrudRestResource<
         log.debug("REST request to update new domain, id {}, dto : {}", id, dto);
 
         USER user = getUser(serverWebExchange, principal);
-        return this.updateByIdResponse(id, dto, this.getService().update(id, dto, user), user);
-    }
-
-    /**
-     * This method creates a ResponseEntity with the updated DTO.
-     * It is called by the updateById method.
-     *
-     * @param id         the ID of the domain to be updated
-     * @param dto        the DTO object containing the new data for the domain
-     * @param updatedDto the Mono object containing the updated DTO
-     * @param user       the user
-     * @return a ResponseEntity with the updated DTO
-     */
-    default ResponseEntity<Mono<DTO>> updateByIdResponse(ID id, DTO dto, Mono<DTO> updatedDto, USER user) {
-        return ResponseEntity.status(OperationsStatus.UPDATE_BY_ID).body(updatedDto);
+        Mono<DTO> res = this.getService().update(id, dto, user);
+        return ResponseEntity.status(OperationsStatus.UPDATE_BY_ID).body(res);
     }
 }

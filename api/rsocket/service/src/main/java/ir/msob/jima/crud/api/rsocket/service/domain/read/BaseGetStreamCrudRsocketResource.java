@@ -71,19 +71,6 @@ public interface BaseGetStreamCrudRsocketResource<
         ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());
 
         USER user = getUser(message.getUser(), principal);
-        return this.getStreamResponse(this.getService().getStream(message.getData().getCriteria(), user), message.getData().getCriteria(), user);
-    }
-
-    /**
-     * This method creates a Flux with the DTOs that meet the specific criteria.
-     * It is called by the getStream method.
-     *
-     * @param dtoFlux  the Flux with the DTOs that meet the criteria
-     * @param criteria the criteria used to filter the domains
-     * @param user     the user
-     * @return a Flux with the DTOs that meet the criteria
-     */
-    default Flux<DTO> getStreamResponse(Flux<DTO> dtoFlux, C criteria, USER user) {
-        return dtoFlux;
+        return this.getService().getStream(message.getData().getCriteria(), user);
     }
 }

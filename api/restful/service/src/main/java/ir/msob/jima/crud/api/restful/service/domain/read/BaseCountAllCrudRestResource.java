@@ -1,6 +1,5 @@
 package ir.msob.jima.crud.api.restful.service.domain.read;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import ir.msob.jima.core.commons.criteria.BaseCriteria;
@@ -26,7 +25,6 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 import java.security.Principal;
 
 /**
@@ -73,23 +71,11 @@ public interface BaseCountAllCrudRestResource<
             @ApiResponse(code = 400, message = "If the validation operation is incorrect throws BadRequestException otherwise nothing", response = BadRequestResponse.class)})
     @MethodStats
     @Scope(Operations.COUNT_ALL)
-    default ResponseEntity<Mono<Long>> countAll(ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, JsonProcessingException {
+    default ResponseEntity<Mono<Long>> countAll(ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to count all");
 
         USER user = getUser(serverWebExchange, principal);
-        return this.countAllResponse(this.getService().countAll(user), user);
+        Mono<Long> res = this.getService().countAll(user);
+        return ResponseEntity.status(OperationsStatus.COUNT_ALL).body(res);
     }
-
-    /**
-     * This method creates a ResponseEntity with the count of all domains.
-     * It is called by the countAll method.
-     *
-     * @param result the Mono object containing the count of all domains
-     * @param user   the object containing the user
-     * @return a ResponseEntity with the count of all domains
-     */
-    default ResponseEntity<Mono<Long>> countAllResponse(Mono<Long> result, USER user) {
-        return ResponseEntity.status(OperationsStatus.COUNT_ALL).body(result);
-    }
-
 }

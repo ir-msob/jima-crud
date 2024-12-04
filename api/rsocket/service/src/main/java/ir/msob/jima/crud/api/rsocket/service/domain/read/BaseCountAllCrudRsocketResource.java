@@ -72,19 +72,6 @@ public interface BaseCountAllCrudRsocketResource<
         ChannelMessage<USER, ModelType> message = getObjectMapper().readValue(dto, getModelTypeReferenceType());
 
         USER user = getUser(message.getUser(), principal);
-        return this.countAllResponse(this.getService().countAll(user), user);
+        return this.getService().countAll(user);
     }
-
-    /**
-     * This method creates a Mono with the count of all domains of the specified type.
-     * It is called by the countAll method.
-     *
-     * @param result the Mono with the count of all domains of the specified type
-     * @param user   the user
-     * @return a Mono with the count of all domains of the specified type
-     */
-    default Mono<Long> countAllResponse(Mono<Long> result, USER user) {
-        return result;
-    }
-
 }

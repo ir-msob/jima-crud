@@ -72,19 +72,6 @@ public interface BaseGetPageCrudRsocketResource<
         ChannelMessage<USER, PageableMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaPageReferenceType());
 
         USER user = getUser(message.getUser(), principal);
-        return this.getPageResponse(this.getService().getPage(message.getData().getCriteria(), message.getData().getPageable(), user), message.getData().getCriteria(), user);
-    }
-
-    /**
-     * This method creates a Mono with a page of DTOs that meet the specific criteria.
-     * It is called by the getPage method.
-     *
-     * @param dtoPage  the Mono with a page of DTOs that meet the criteria
-     * @param criteria the criteria used to filter the domains
-     * @param user     the user
-     * @return a Mono with a page of DTOs that meet the criteria
-     */
-    default Mono<Page<DTO>> getPageResponse(Mono<Page<DTO>> dtoPage, C criteria, USER user) {
-        return dtoPage;
+        return this.getService().getPage(message.getData().getCriteria(), message.getData().getPageable(), user);
     }
 }

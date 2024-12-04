@@ -1,7 +1,6 @@
 package ir.msob.jima.crud.api.rsocket.service.domain.write;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.github.fge.jsonpatch.JsonPatch;
 import ir.msob.jima.core.commons.channel.ChannelMessage;
 import ir.msob.jima.core.commons.channel.message.JsonPatchMessage;
 import ir.msob.jima.core.commons.criteria.BaseCriteria;
@@ -74,20 +73,6 @@ public interface BaseEditManyCrudRsocketResource<
         ChannelMessage<USER, JsonPatchMessage<ID, C>> message = getObjectMapper().readValue(dto, getEditReferenceType());
 
         USER user = getUser(message.getUser(), principal);
-        return this.editManyResponse(message.getData().getJsonPatch(), this.getService().editMany(message.getData().getCriteria(), message.getData().getJsonPatch(), user), message.getData().getCriteria(), user);
-    }
-
-    /**
-     * This method creates a Mono with the edited DTOs.
-     * It is called by the editMany method.
-     *
-     * @param dto        the JsonPatch with the changes to apply to the domains
-     * @param editedDtos the Mono with the edited DTOs
-     * @param criteria   the criteria used to filter the domains
-     * @param user       the user
-     * @return a Mono with the edited DTOs
-     */
-    default Mono<Collection<DTO>> editManyResponse(JsonPatch dto, Mono<Collection<DTO>> editedDtos, C criteria, USER user) {
-        return editedDtos;
+        return this.getService().editMany(message.getData().getCriteria(), message.getData().getJsonPatch(), user);
     }
 }

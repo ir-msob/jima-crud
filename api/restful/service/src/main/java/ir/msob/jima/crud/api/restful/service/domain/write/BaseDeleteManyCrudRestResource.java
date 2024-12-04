@@ -79,20 +79,7 @@ public interface BaseDeleteManyCrudRestResource<
         log.debug("REST request to delete many domain, criteria {} : ", criteria);
 
         USER user = getUser(serverWebExchange, principal);
-        return this.deleteManyResponse(this.getService().deleteMany(criteria, user), criteria, user);
+        Mono<Collection<ID>> res = this.getService().deleteMany(criteria, user);
+        return ResponseEntity.status(OperationsStatus.DELETE_MANY).body(res);
     }
-
-    /**
-     * This method creates a ResponseEntity with the IDs of the deleted domains.
-     * It is called by the deleteMany method.
-     *
-     * @param ids      the Mono object containing the IDs of the deleted domains
-     * @param criteria the criteria to delete the domains
-     * @param user     the user
-     * @return a ResponseEntity with the IDs of the deleted domains
-     */
-    default ResponseEntity<Mono<Collection<ID>>> deleteManyResponse(Mono<Collection<ID>> ids, C criteria, USER user) {
-        return ResponseEntity.status(OperationsStatus.DELETE_MANY).body(ids);
-    }
-
 }

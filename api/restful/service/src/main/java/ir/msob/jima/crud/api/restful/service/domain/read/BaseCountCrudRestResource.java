@@ -1,6 +1,5 @@
 package ir.msob.jima.crud.api.restful.service.domain.read;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import ir.msob.jima.core.commons.criteria.BaseCriteria;
@@ -73,24 +72,11 @@ public interface BaseCountCrudRestResource<
             @ApiResponse(code = 400, message = "If the validation operation is incorrect throws BadRequestException otherwise nothing", response = BadRequestResponse.class)})
     @MethodStats
     @Scope(Operations.COUNT)
-    default ResponseEntity<Mono<Long>> count(C criteria, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
+    default ResponseEntity<Mono<Long>> count(C criteria, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to count, criteria {} : ", criteria);
 
         USER user = getUser(serverWebExchange, principal);
-        return this.countResponse(this.getService().count(criteria, user), criteria, user);
+        Mono<Long> res = this.getService().count(criteria, user);
+        return ResponseEntity.status(OperationsStatus.COUNT).body(res);
     }
-
-    /**
-     * This method creates a ResponseEntity with the count of domains.
-     * It is called by the count method.
-     *
-     * @param result   the Mono object containing the count of domains
-     * @param criteria the criteria to count the domains
-     * @param user     the object containing the user
-     * @return a ResponseEntity with the count of domains
-     */
-    default ResponseEntity<Mono<Long>> countResponse(Mono<Long> result, C criteria, USER user) {
-        return ResponseEntity.status(OperationsStatus.COUNT).body(result);
-    }
-
 }

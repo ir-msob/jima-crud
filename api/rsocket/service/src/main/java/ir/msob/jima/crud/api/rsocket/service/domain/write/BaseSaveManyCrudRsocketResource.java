@@ -73,19 +73,6 @@ public interface BaseSaveManyCrudRsocketResource<
         ChannelMessage<USER, DtosMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getDtosReferenceType());
 
         USER user = getUser(message.getUser(), principal);
-        return this.saveManyResponse(message.getData().getDtos(), this.getService().saveMany(message.getData().getDtos(), user), user);
-    }
-
-    /**
-     * This method creates a Mono with the saved DTOs.
-     * It is called by the saveMany method.
-     *
-     * @param messages  the DTOs to save the domains
-     * @param savedDtos the Mono with the saved DTOs
-     * @param user      the user
-     * @return a Mono with the saved DTOs
-     */
-    default Mono<Collection<DTO>> saveManyResponse(Collection<DTO> messages, Mono<Collection<DTO>> savedDtos, USER user) {
-        return savedDtos;
+        return this.getService().saveMany(message.getData().getDtos(), user);
     }
 }

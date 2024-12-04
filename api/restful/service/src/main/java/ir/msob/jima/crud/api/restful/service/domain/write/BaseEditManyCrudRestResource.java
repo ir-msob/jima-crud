@@ -1,6 +1,5 @@
 package ir.msob.jima.crud.api.restful.service.domain.write;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.fge.jsonpatch.JsonPatch;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -79,24 +78,11 @@ public interface BaseEditManyCrudRestResource<
     @MethodStats
     @Scope(Operations.EDIT_MANY)
     default ResponseEntity<Mono<Collection<DTO>>> editMany(@RequestBody JsonPatch dto, C criteria, ServerWebExchange serverWebExchange, Principal principal)
-            throws BadRequestException, DomainNotFoundException, JsonProcessingException {
+            throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to edit many, dto : {}, criteria : {}", dto, criteria);
 
         USER user = getUser(serverWebExchange, principal);
-        return this.editManyResponse(dto, this.getService().editMany(criteria, dto, user), criteria, user);
-    }
-
-    /**
-     * This method creates a ResponseEntity with the edited DTOs.
-     * It is called by the editMany method.
-     *
-     * @param dto        the JsonPatch object containing the changes to apply to the domains
-     * @param editedDtos the Mono object containing the edited DTOs
-     * @param criteria   the criteria to edit the domains
-     * @param user       the user
-     * @return a ResponseEntity with the edited DTOs
-     */
-    default ResponseEntity<Mono<Collection<DTO>>> editManyResponse(JsonPatch dto, Mono<Collection<DTO>> editedDtos, C criteria, USER user) {
-        return ResponseEntity.status(OperationsStatus.EDIT_MANY).body(editedDtos);
+        Mono<Collection<DTO>> res = this.getService().editMany(criteria, dto, user);
+        return ResponseEntity.status(OperationsStatus.EDIT_MANY).body(res);
     }
 }

@@ -79,19 +79,7 @@ public interface BaseSaveCrudRestResource<
         log.debug("REST request to create new domain, dto : {}", dto);
 
         USER user = getUser(serverWebExchange, principal);
-        return this.saveResponse(dto, this.getService().save(dto, user), user);
-    }
-
-    /**
-     * This method creates a ResponseEntity with the saved DTO.
-     * It is called by the save method.
-     *
-     * @param dto      the DTO to save the domain
-     * @param savedDto the Mono object containing the saved DTO
-     * @param user     the user
-     * @return a ResponseEntity with the saved DTO
-     */
-    default ResponseEntity<Mono<DTO>> saveResponse(DTO dto, Mono<DTO> savedDto, USER user) {
-        return ResponseEntity.status(OperationsStatus.SAVE).body(savedDto);
+        Mono<DTO> res = this.getService().save(dto, user);
+        return ResponseEntity.status(OperationsStatus.SAVE).body(res);
     }
 }

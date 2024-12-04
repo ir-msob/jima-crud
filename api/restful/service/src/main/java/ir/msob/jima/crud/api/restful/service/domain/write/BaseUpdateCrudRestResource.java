@@ -79,19 +79,7 @@ public interface BaseUpdateCrudRestResource<
         log.debug("REST request to update new domain, dto : {}", dto);
 
         USER user = getUser(serverWebExchange, principal);
-        return this.updateResponse(dto, this.getService().update(dto, user), user);
-    }
-
-    /**
-     * This method creates a ResponseEntity with the updated DTO.
-     * It is called by the update method.
-     *
-     * @param dto        the DTO to update the domain
-     * @param updatedDto the Mono object containing the updated DTO
-     * @param user       the user
-     * @return a ResponseEntity with the updated DTO
-     */
-    default ResponseEntity<Mono<DTO>> updateResponse(DTO dto, Mono<DTO> updatedDto, USER user) {
-        return ResponseEntity.status(OperationsStatus.UPDATE).body(updatedDto);
+        Mono<DTO> res = this.getService().update(dto, user);
+        return ResponseEntity.status(OperationsStatus.UPDATE).body(res);
     }
 }

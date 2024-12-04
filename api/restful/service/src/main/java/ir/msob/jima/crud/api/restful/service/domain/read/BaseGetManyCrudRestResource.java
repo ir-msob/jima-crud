@@ -1,6 +1,5 @@
 package ir.msob.jima.crud.api.restful.service.domain.read;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import ir.msob.jima.core.commons.criteria.BaseCriteria;
@@ -72,23 +71,11 @@ public interface BaseGetManyCrudRestResource<
             @ApiResponse(code = 400, message = "If the validation operation is incorrect throws BadRequestException otherwise nothing", response = BadRequestResponse.class)})
     @MethodStats
     @Scope(Operations.GET_MANY)
-    default ResponseEntity<Mono<Collection<DTO>>> getMany(C criteria, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
+    default ResponseEntity<Mono<Collection<DTO>>> getMany(C criteria, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to get many domain, criteria {} : ", criteria);
 
         USER user = getUser(serverWebExchange, principal);
-        return this.getManyResponse(this.getService().getMany(criteria, user), criteria, user);
-    }
-
-    /**
-     * This method creates a ResponseEntity with the collection of DTOs.
-     * It is called by the getMany method.
-     *
-     * @param dtoPage  the Mono object containing the collection of DTOs
-     * @param criteria the criteria to get the domains
-     * @param user     the user
-     * @return a ResponseEntity with the collection of DTOs
-     */
-    default ResponseEntity<Mono<Collection<DTO>>> getManyResponse(Mono<Collection<DTO>> dtoPage, C criteria, USER user) {
-        return ResponseEntity.status(OperationsStatus.GET_MANY).body(dtoPage);
+        Mono<Collection<DTO>> res = this.getService().getMany(criteria, user);
+        return ResponseEntity.status(OperationsStatus.GET_MANY).body(res);
     }
 }

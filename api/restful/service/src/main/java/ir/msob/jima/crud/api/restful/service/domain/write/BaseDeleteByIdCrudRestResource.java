@@ -75,19 +75,7 @@ public interface BaseDeleteByIdCrudRestResource<
         log.debug("REST request to delete domain by id, id {}", id);
 
         USER user = getUser(serverWebExchange, principal);
-        return this.deleteByIdResponse(this.getService().delete(id, user), id, user);
+        Mono<ID> res = this.getService().delete(id, user);
+        return ResponseEntity.status(OperationsStatus.DELETE_BY_ID).body(res);
     }
-
-    /**
-     * This method provides a response for the deleteById method.
-     *
-     * @param id        the ID of the deleted domain
-     * @param requestId the ID of the request
-     * @param user      the user
-     * @return a ResponseEntity containing a Mono of the ID of the deleted domain
-     */
-    default ResponseEntity<Mono<ID>> deleteByIdResponse(Mono<ID> id, ID requestId, USER user) {
-        return ResponseEntity.status(OperationsStatus.DELETE_BY_ID).body(id);
-    }
-
 }

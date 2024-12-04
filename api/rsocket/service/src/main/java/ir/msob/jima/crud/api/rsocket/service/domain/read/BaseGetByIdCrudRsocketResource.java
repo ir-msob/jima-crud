@@ -73,19 +73,6 @@ public interface BaseGetByIdCrudRsocketResource<
         ChannelMessage<USER, IdMessage<ID>> message = getObjectMapper().readValue(dto, getIdReferenceType());
 
         USER user = getUser(message.getUser(), principal);
-        return this.getByIdResponse(this.getService().getOne(message.getData().getId(), user), message.getData().getId(), user);
-    }
-
-    /**
-     * This method creates a Mono with the retrieved DTO.
-     * It is called by the getById method.
-     *
-     * @param dto  the DTO to get the domain
-     * @param id   the ID of the domain
-     * @param user the user
-     * @return a Mono with the retrieved DTO
-     */
-    default Mono<DTO> getByIdResponse(Mono<DTO> dto, ID id, USER user) {
-        return dto;
+        return this.getService().getOne(message.getData().getId(), user);
     }
 }

@@ -72,19 +72,6 @@ public interface BaseUpdateCrudRsocketResource<
         ChannelMessage<USER, DtoMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getDtoReferenceType());
 
         USER user = getUser(message.getUser(), principal);
-        return this.updateResponse(message.getData().getDto(), this.getService().update(message.getData().getDto(), user), user);
-    }
-
-    /**
-     * This method creates a Mono with the updated DTO.
-     * It is called by the update method.
-     *
-     * @param dto        the DTO to update the domain
-     * @param updatedDto the Mono with the updated DTO
-     * @param user       the user
-     * @return a Mono with the updated DTO
-     */
-    default Mono<DTO> updateResponse(DTO dto, Mono<DTO> updatedDto, USER user) {
-        return updatedDto;
+        return this.getService().update(message.getData().getDto(), user);
     }
 }

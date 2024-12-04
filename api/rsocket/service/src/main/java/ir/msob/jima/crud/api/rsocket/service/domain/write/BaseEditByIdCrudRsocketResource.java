@@ -1,7 +1,6 @@
 package ir.msob.jima.crud.api.rsocket.service.domain.write;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.github.fge.jsonpatch.JsonPatch;
 import ir.msob.jima.core.commons.channel.ChannelMessage;
 import ir.msob.jima.core.commons.channel.message.IdJsonPatchMessage;
 import ir.msob.jima.core.commons.criteria.BaseCriteria;
@@ -60,10 +59,6 @@ public interface BaseEditByIdCrudRsocketResource<
         ChannelMessage<USER, IdJsonPatchMessage<ID>> message = getObjectMapper().readValue(dto, getIdJsonPatchReferenceType());
 
         USER user = getUser(message.getUser(), principal);
-        return this.editByIdResponse(message.getData().getJsonPatch(), this.getService().edit(message.getData().getId(), message.getData().getJsonPatch(), user), message.getData().getId(), user);
-    }
-
-    default Mono<DTO> editByIdResponse(JsonPatch dto, Mono<DTO> editedDto, ID id, USER user) {
-        return editedDto;
+        return this.getService().edit(message.getData().getId(), message.getData().getJsonPatch(), user);
     }
 }

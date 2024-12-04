@@ -1,6 +1,5 @@
 package ir.msob.jima.crud.api.restful.service.domain.write;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import ir.msob.jima.core.commons.criteria.BaseCriteria;
@@ -28,7 +27,6 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 import java.security.Principal;
 import java.util.Collection;
 
@@ -78,23 +76,11 @@ public interface BaseUpdateManyCrudRestResource<
     @MethodStats
     @Scope(Operations.UPDATE_MANY)
     default ResponseEntity<Mono<Collection<DTO>>> updateList(@RequestBody Collection<DTO> dtos, ServerWebExchange serverWebExchange, Principal principal)
-            throws BadRequestException, DomainNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, JsonProcessingException {
+            throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to update many domain, dtos : {}", dtos);
 
         USER user = getUser(serverWebExchange, principal);
-        return this.updateManyResponse(dtos, this.getService().updateMany(dtos, user), user);
-    }
-
-    /**
-     * This method creates a ResponseEntity with the updated DTOs.
-     * It is called by the updateList method.
-     *
-     * @param dtos        the DTOs to update the domains
-     * @param updatedDtos the Mono object containing the updated DTOs
-     * @param user        the user
-     * @return a ResponseEntity with the updated DTOs
-     */
-    default ResponseEntity<Mono<Collection<DTO>>> updateManyResponse(Collection<DTO> dtos, Mono<Collection<DTO>> updatedDtos, USER user) {
-        return ResponseEntity.status(OperationsStatus.UPDATE_MANY).body(updatedDtos);
+        Mono<Collection<DTO>> res = this.getService().updateMany(dtos, user);
+        return ResponseEntity.status(OperationsStatus.UPDATE_MANY).body(res);
     }
 }

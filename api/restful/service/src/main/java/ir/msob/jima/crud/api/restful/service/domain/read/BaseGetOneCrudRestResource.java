@@ -1,6 +1,5 @@
 package ir.msob.jima.crud.api.restful.service.domain.read;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import ir.msob.jima.core.commons.criteria.BaseCriteria;
@@ -71,23 +70,11 @@ public interface BaseGetOneCrudRestResource<
             @ApiResponse(code = 400, message = "If the validation operation is incorrect throws BadRequestException otherwise nothing", response = BadRequestResponse.class)})
     @MethodStats
     @Scope(Operations.GET_ONE)
-    default ResponseEntity<Mono<DTO>> getOne(C criteria, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
+    default ResponseEntity<Mono<DTO>> getOne(C criteria, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to get one domain, criteria {} : ", criteria);
 
         USER user = getUser(serverWebExchange, principal);
-        return this.getOneResponse(this.getService().getOne(criteria, user), criteria, user);
-    }
-
-    /**
-     * This method creates a ResponseEntity with the DTO.
-     * It is called by the getOne method.
-     *
-     * @param dto      the Mono object containing the DTO
-     * @param criteria the criteria to get the domain
-     * @param user     the Optional object containing the user
-     * @return a ResponseEntity with the DTO
-     */
-    default ResponseEntity<Mono<DTO>> getOneResponse(Mono<DTO> dto, C criteria, USER user) {
-        return ResponseEntity.status(OperationsStatus.GET_ONE).body(dto);
+        Mono<DTO> res = this.getService().getOne(criteria, user);
+        return ResponseEntity.status(OperationsStatus.GET_ONE).body(res);
     }
 }

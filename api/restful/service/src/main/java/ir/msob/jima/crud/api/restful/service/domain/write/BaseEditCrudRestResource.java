@@ -81,20 +81,7 @@ public interface BaseEditCrudRestResource<
         log.debug("REST request to edit new domain, dto : {}, criteria : {}", dto, criteria);
 
         USER user = getUser(serverWebExchange, principal);
-        return this.editResponse(dto, this.getService().edit(criteria, dto, user), criteria, user);
-    }
-
-    /**
-     * This method creates a ResponseEntity with the edited DTO.
-     * It is called by the edit method.
-     *
-     * @param dto       the JsonPatch object containing the changes to apply to the domain
-     * @param editedDto the Mono object containing the edited DTO
-     * @param criteria  the criteria to edit the domain
-     * @param user      the user
-     * @return a ResponseEntity with the edited DTO
-     */
-    default ResponseEntity<Mono<DTO>> editResponse(JsonPatch dto, Mono<DTO> editedDto, C criteria, USER user) {
-        return ResponseEntity.status(OperationsStatus.EDIT).body(editedDto);
+        Mono<DTO> res = this.getService().edit(criteria, dto, user);
+        return ResponseEntity.status(OperationsStatus.EDIT).body(res);
     }
 }

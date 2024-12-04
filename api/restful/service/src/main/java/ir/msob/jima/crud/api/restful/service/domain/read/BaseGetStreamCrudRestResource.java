@@ -1,6 +1,5 @@
 package ir.msob.jima.crud.api.restful.service.domain.read;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import ir.msob.jima.core.commons.criteria.BaseCriteria;
@@ -71,23 +70,11 @@ public interface BaseGetStreamCrudRestResource<
             @ApiResponse(code = 400, message = "If the validation operation is incorrect throws BadRequestException otherwise nothing", response = BadRequestResponse.class)})
     @MethodStats
     @Scope(Operations.GET_STREAM)
-    default ResponseEntity<Flux<DTO>> getStream(C criteria, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
+    default ResponseEntity<Flux<DTO>> getStream(C criteria, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to get stream domain, criteria {} : ", criteria);
 
         USER user = getUser(serverWebExchange, principal);
-        return this.getStreamResponse(this.getService().getStream(criteria, user), criteria, user);
-    }
-
-    /**
-     * This method creates a ResponseEntity with the Flux of DTOs.
-     * It is called by the getStream method.
-     *
-     * @param dtoFlux  the Flux object containing the DTOs
-     * @param criteria the criteria to get the stream of domains
-     * @param user     the user
-     * @return a ResponseEntity with the Flux of DTOs
-     */
-    default ResponseEntity<Flux<DTO>> getStreamResponse(Flux<DTO> dtoFlux, C criteria, USER user) {
-        return ResponseEntity.status(OperationsStatus.GET_STREAM).body(dtoFlux);
+        Flux<DTO> res = this.getService().getStream(criteria, user);
+        return ResponseEntity.status(OperationsStatus.GET_STREAM).body(res);
     }
 }

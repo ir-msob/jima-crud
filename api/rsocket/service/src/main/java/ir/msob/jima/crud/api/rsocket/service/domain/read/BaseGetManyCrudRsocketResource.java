@@ -73,19 +73,6 @@ public interface BaseGetManyCrudRsocketResource<
         ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());
 
         USER user = getUser(message.getUser(), principal);
-        return this.getManyResponse(this.getService().getMany(message.getData().getCriteria(), user), message.getData().getCriteria(), user);
-    }
-
-    /**
-     * This method creates a Mono with a collection of DTOs that meet the specific criteria.
-     * It is called by the getMany method.
-     *
-     * @param dtoPage  the Mono with a collection of DTOs that meet the criteria
-     * @param criteria the criteria used to filter the domains
-     * @param user     the user
-     * @return a Mono with a collection of DTOs that meet the criteria
-     */
-    default Mono<Collection<DTO>> getManyResponse(Mono<Collection<DTO>> dtoPage, C criteria, USER user) {
-        return dtoPage;
+        return this.getService().getMany(message.getData().getCriteria(), user);
     }
 }

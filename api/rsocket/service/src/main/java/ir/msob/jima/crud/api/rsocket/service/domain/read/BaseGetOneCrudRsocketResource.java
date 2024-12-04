@@ -71,19 +71,6 @@ public interface BaseGetOneCrudRsocketResource<
         ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());
 
         USER user = getUser(message.getUser(), principal);
-        return this.getOneResponse(this.getService().getOne(message.getData().getCriteria(), user), message.getData().getCriteria(), user);
-    }
-
-    /**
-     * This method creates a Mono with the DTO that meets the specific criteria.
-     * It is called by the getOne method.
-     *
-     * @param dto      the Mono with the DTO that meets the criteria
-     * @param criteria the criteria used to filter the domain
-     * @param user     the user
-     * @return a Mono with the DTO that meets the criteria
-     */
-    default Mono<DTO> getOneResponse(Mono<DTO> dto, C criteria, USER user) {
-        return dto;
+        return this.getService().getOne(message.getData().getCriteria(), user);
     }
 }

@@ -71,20 +71,6 @@ public interface BaseCountCrudRsocketResource<
         ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());
 
         USER user = getUser(message.getUser(), principal);
-        return this.countResponse(this.getService().count(message.getData().getCriteria(), user), message.getData().getCriteria(), user);
+        return this.getService().count(message.getData().getCriteria(), user);
     }
-
-    /**
-     * This method creates a Mono with the count of domains that meet the specific criteria.
-     * It is called by the count method.
-     *
-     * @param result   the Mono with the count of domains that meet the criteria
-     * @param criteria the criteria used to filter the domains
-     * @param user     the user
-     * @return a Mono with the count of domains that meet the criteria
-     */
-    default Mono<Long> countResponse(Mono<Long> result, C criteria, USER user) {
-        return result;
-    }
-
 }
