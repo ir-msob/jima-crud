@@ -34,9 +34,8 @@ public interface BaseDeleteByKeyCharacteristicCrudRestResource<
         , DTO extends BaseDto<ID>
         , CH extends Characteristic<ID>
         , C extends CharacteristicCriteria<ID, CH>
-        , RDTO extends BaseCharacteristicDto<ID, CH>
-        , S extends BaseCharacteristicCrudService<ID, USER, DTO, CH, C, RDTO>
-        > extends ParentRelatedCrudRestResource<ID, USER, DTO, CH, C, RDTO, S> {
+        , S extends BaseCharacteristicCrudService<ID, USER, DTO, CH, C>
+        > extends ParentRelatedCrudRestResource<ID, USER, DTO, CH, C, BaseCharacteristicDto<ID, CH>, S> {
 
     Logger log = LoggerFactory.getLogger(BaseDeleteByKeyCharacteristicCrudRestResource.class);
 
@@ -49,7 +48,7 @@ public interface BaseDeleteByKeyCharacteristicCrudRestResource<
     })
     @MethodStats
     @Scope(Operations.DELETE_BY_KEY)
-    default ResponseEntity<Mono<DTO>> deleteById(@PathVariable("parentId") ID parentId, @PathVariable("key") String key, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
+    default ResponseEntity<Mono<DTO>> deleteByKey(@PathVariable("parentId") ID parentId, @PathVariable("key") String key, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to delete characteristic by key, parentId {}, id {}", parentId, key);
 
         USER user = getUser(serverWebExchange, principal);

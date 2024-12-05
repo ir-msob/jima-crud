@@ -26,9 +26,8 @@ public interface BaseObjectValidationCrudService<
         , USER extends BaseUser
         , DTO extends BaseDto<ID>
         , OV extends ObjectValidationAbstract<ID>
-        , C extends ObjectValidationCriteriaAbstract<ID, OV>
-        , OVDTO extends BaseObjectValidationDto<ID, OV>>
-        extends ParentRelatedService<ID, USER, DTO, OV, C, OVDTO> {
+        , C extends ObjectValidationCriteriaAbstract<ID, OV>>
+        extends ParentRelatedService<ID, USER, DTO, OV, C, BaseObjectValidationDto<ID, OV>> {
     Logger log = LoggerFactory.getLogger(BaseObjectValidationCrudService.class);
 
     @Transactional

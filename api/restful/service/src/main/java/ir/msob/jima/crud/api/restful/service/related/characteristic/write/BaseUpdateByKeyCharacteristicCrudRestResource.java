@@ -36,9 +36,8 @@ public interface BaseUpdateByKeyCharacteristicCrudRestResource<
         , DTO extends BaseDto<ID>
         , CH extends Characteristic<ID>
         , C extends CharacteristicCriteria<ID, CH>
-        , RDTO extends BaseCharacteristicDto<ID, CH>
-        , S extends BaseCharacteristicCrudService<ID, USER, DTO, CH, C, RDTO>
-        > extends ParentRelatedCrudRestResource<ID, USER, DTO, CH, C, RDTO, S> {
+        , S extends BaseCharacteristicCrudService<ID, USER, DTO, CH, C>
+        > extends ParentRelatedCrudRestResource<ID, USER, DTO, CH, C, BaseCharacteristicDto<ID, CH>, S> {
 
     Logger log = LoggerFactory.getLogger(BaseUpdateByKeyCharacteristicCrudRestResource.class);
 

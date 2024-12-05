@@ -26,9 +26,8 @@ public interface BaseCharacteristicCrudService<
         , USER extends BaseUser
         , DTO extends BaseDto<ID>
         , CH extends Characteristic<ID>
-        , C extends CharacteristicCriteria<ID, CH>
-        , CDTO extends BaseCharacteristicDto<ID, CH>>
-        extends ParentRelatedService<ID, USER, DTO, CH, C, CDTO> {
+        , C extends CharacteristicCriteria<ID, CH>>
+        extends ParentRelatedService<ID, USER, DTO, CH, C, BaseCharacteristicDto<ID, CH>> {
     Logger log = LoggerFactory.getLogger(BaseCharacteristicCrudService.class);
 
     @Transactional

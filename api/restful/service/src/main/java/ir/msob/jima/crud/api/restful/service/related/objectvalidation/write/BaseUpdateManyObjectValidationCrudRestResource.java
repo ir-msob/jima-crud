@@ -37,9 +37,8 @@ public interface BaseUpdateManyObjectValidationCrudRestResource<
         , DTO extends BaseDto<ID>
         , OV extends ObjectValidationAbstract<ID>
         , C extends ObjectValidationCriteriaAbstract<ID, OV>
-        , RDTO extends BaseObjectValidationDto<ID, OV>
-        , S extends BaseObjectValidationCrudService<ID, USER, DTO, OV, C, RDTO>
-        > extends ParentRelatedCrudRestResource<ID, USER, DTO, OV, C, RDTO, S> {
+        , S extends BaseObjectValidationCrudService<ID, USER, DTO, OV, C>
+        > extends ParentRelatedCrudRestResource<ID, USER, DTO, OV, C, BaseObjectValidationDto<ID, OV>, S> {
 
     Logger log = LoggerFactory.getLogger(BaseUpdateManyObjectValidationCrudRestResource.class);
 

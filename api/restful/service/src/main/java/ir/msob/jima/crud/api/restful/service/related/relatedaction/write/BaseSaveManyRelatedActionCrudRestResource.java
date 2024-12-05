@@ -37,9 +37,8 @@ public interface BaseSaveManyRelatedActionCrudRestResource<
         , DTO extends BaseDto<ID>
         , OV extends RelatedActionAbstract<ID>
         , C extends RelatedActionCriteriaAbstract<ID, OV>
-        , RDTO extends BaseRelatedActionDto<ID, OV>
-        , S extends BaseRelatedActionCrudService<ID, USER, DTO, OV, C, RDTO>
-        > extends ParentRelatedCrudRestResource<ID, USER, DTO, OV, C, RDTO, S> {
+        , S extends BaseRelatedActionCrudService<ID, USER, DTO, OV, C>
+        > extends ParentRelatedCrudRestResource<ID, USER, DTO, OV, C, BaseRelatedActionDto<ID, OV>, S> {
 
     Logger log = LoggerFactory.getLogger(BaseSaveManyRelatedActionCrudRestResource.class);
 

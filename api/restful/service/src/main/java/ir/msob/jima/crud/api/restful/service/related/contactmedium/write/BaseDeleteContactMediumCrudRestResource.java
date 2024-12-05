@@ -34,9 +34,8 @@ public interface BaseDeleteContactMediumCrudRestResource<
         , DTO extends BaseDto<ID>
         , CM extends ContactMediumAbstract<ID>
         , C extends ContactMediumCriteriaAbstract<ID, CM>
-        , RDTO extends BaseContactMediumDto<ID, CM>
-        , S extends BaseContactMediumCrudService<ID, USER, DTO, CM, C, RDTO>
-        > extends ParentRelatedCrudRestResource<ID, USER, DTO, CM, C, RDTO, S> {
+        , S extends BaseContactMediumCrudService<ID, USER, DTO, CM, C>
+        > extends ParentRelatedCrudRestResource<ID, USER, DTO, CM, C, BaseContactMediumDto<ID, CM>, S> {
 
     Logger log = LoggerFactory.getLogger(BaseDeleteContactMediumCrudRestResource.class);
 

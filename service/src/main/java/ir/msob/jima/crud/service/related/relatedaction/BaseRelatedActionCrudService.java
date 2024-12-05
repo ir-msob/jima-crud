@@ -26,9 +26,8 @@ public interface BaseRelatedActionCrudService<
         , USER extends BaseUser
         , DTO extends BaseDto<ID>
         , RA extends RelatedActionAbstract<ID>
-        , C extends RelatedActionCriteriaAbstract<ID, RA>
-        , RADTO extends BaseRelatedActionDto<ID, RA>>
-        extends ParentRelatedService<ID, USER, DTO, RA, C, RADTO> {
+        , C extends RelatedActionCriteriaAbstract<ID, RA>>
+        extends ParentRelatedService<ID, USER, DTO, RA, C, BaseRelatedActionDto<ID, RA>> {
     Logger log = LoggerFactory.getLogger(BaseRelatedActionCrudService.class);
 
     @Transactional

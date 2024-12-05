@@ -1,7 +1,6 @@
 package ir.msob.jima.crud.api.restful.service.related.relatedaction;
 
 import ir.msob.jima.core.commons.dto.BaseDto;
-import ir.msob.jima.core.commons.related.relatedaction.BaseRelatedActionDto;
 import ir.msob.jima.core.commons.related.relatedaction.RelatedActionAbstract;
 import ir.msob.jima.core.commons.related.relatedaction.RelatedActionCriteriaAbstract;
 import ir.msob.jima.core.commons.security.BaseUser;
@@ -17,17 +16,16 @@ public interface BaseRelatedActionCrudRestResource<
         , DTO extends BaseDto<ID>
         , OV extends RelatedActionAbstract<ID>
         , C extends RelatedActionCriteriaAbstract<ID, OV>
-        , RDTO extends BaseRelatedActionDto<ID, OV>
-        , S extends BaseRelatedActionCrudService<ID, USER, DTO, OV, C, RDTO>
+        , S extends BaseRelatedActionCrudService<ID, USER, DTO, OV, C>
         > extends
-        BaseDeleteByIdRelatedActionCrudRestResource<ID, USER, DTO, OV, C, RDTO, S>
-        , BaseDeleteByNameRelatedActionCrudRestResource<ID, USER, DTO, OV, C, RDTO, S>
-        , BaseDeleteRelatedActionCrudRestResource<ID, USER, DTO, OV, C, RDTO, S>
-        , BaseDeleteManyRelatedActionCrudRestResource<ID, USER, DTO, OV, C, RDTO, S>
-        , BaseSaveRelatedActionCrudRestResource<ID, USER, DTO, OV, C, RDTO, S>
-        , BaseSaveManyRelatedActionCrudRestResource<ID, USER, DTO, OV, C, RDTO, S>
-        , BaseUpdateByIdRelatedActionCrudRestResource<ID, USER, DTO, OV, C, RDTO, S>
-        , BaseUpdateByNameRelatedActionCrudRestResource<ID, USER, DTO, OV, C, RDTO, S>
-        , BaseUpdateRelatedActionCrudRestResource<ID, USER, DTO, OV, C, RDTO, S>
-        , BaseUpdateManyRelatedActionCrudRestResource<ID, USER, DTO, OV, C, RDTO, S> {
+        BaseDeleteByIdRelatedActionCrudRestResource<ID, USER, DTO, OV, C, S>
+        , BaseDeleteByNameRelatedActionCrudRestResource<ID, USER, DTO, OV, C, S>
+        , BaseDeleteRelatedActionCrudRestResource<ID, USER, DTO, OV, C, S>
+        , BaseDeleteManyRelatedActionCrudRestResource<ID, USER, DTO, OV, C, S>
+        , BaseSaveRelatedActionCrudRestResource<ID, USER, DTO, OV, C, S>
+        , BaseSaveManyRelatedActionCrudRestResource<ID, USER, DTO, OV, C, S>
+        , BaseUpdateByIdRelatedActionCrudRestResource<ID, USER, DTO, OV, C, S>
+        , BaseUpdateByNameRelatedActionCrudRestResource<ID, USER, DTO, OV, C, S>
+        , BaseUpdateRelatedActionCrudRestResource<ID, USER, DTO, OV, C, S>
+        , BaseUpdateManyRelatedActionCrudRestResource<ID, USER, DTO, OV, C, S> {
 }

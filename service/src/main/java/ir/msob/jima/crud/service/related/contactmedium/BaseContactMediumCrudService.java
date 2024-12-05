@@ -26,9 +26,8 @@ public interface BaseContactMediumCrudService<
         , USER extends BaseUser
         , DTO extends BaseDto<ID>
         , CM extends ContactMediumAbstract<ID>
-        , C extends ContactMediumCriteriaAbstract<ID, CM>
-        , CMDTO extends BaseContactMediumDto<ID, CM>>
-        extends ParentRelatedService<ID, USER, DTO, CM, C, CMDTO> {
+        , C extends ContactMediumCriteriaAbstract<ID, CM>>
+        extends ParentRelatedService<ID, USER, DTO, CM, C, BaseContactMediumDto<ID, CM>> {
     Logger log = LoggerFactory.getLogger(BaseContactMediumCrudService.class);
 
     @Transactional

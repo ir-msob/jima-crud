@@ -34,9 +34,8 @@ public interface BaseDeleteByNameContactMediumCrudRestResource<
         , DTO extends BaseDto<ID>
         , CM extends ContactMediumAbstract<ID>
         , C extends ContactMediumCriteriaAbstract<ID, CM>
-        , RDTO extends BaseContactMediumDto<ID, CM>
-        , S extends BaseContactMediumCrudService<ID, USER, DTO, CM, C, RDTO>
-        > extends ParentRelatedCrudRestResource<ID, USER, DTO, CM, C, RDTO, S> {
+        , S extends BaseContactMediumCrudService<ID, USER, DTO, CM, C>
+        > extends ParentRelatedCrudRestResource<ID, USER, DTO, CM, C, BaseContactMediumDto<ID, CM>, S> {
 
     Logger log = LoggerFactory.getLogger(BaseDeleteByNameContactMediumCrudRestResource.class);
 
@@ -49,7 +48,7 @@ public interface BaseDeleteByNameContactMediumCrudRestResource<
     })
     @MethodStats
     @Scope(Operations.DELETE_BY_NAME)
-    default ResponseEntity<Mono<DTO>> deleteById(@PathVariable("parentId") ID parentId, @PathVariable("name") String name, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
+    default ResponseEntity<Mono<DTO>> deleteByName(@PathVariable("parentId") ID parentId, @PathVariable("name") String name, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to delete contact medium by name, parentId {}, id {}", parentId, name);
 
         USER user = getUser(serverWebExchange, principal);

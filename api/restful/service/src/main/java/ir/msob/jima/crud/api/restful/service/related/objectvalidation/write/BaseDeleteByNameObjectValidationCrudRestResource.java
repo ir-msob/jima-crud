@@ -34,9 +34,8 @@ public interface BaseDeleteByNameObjectValidationCrudRestResource<
         , DTO extends BaseDto<ID>
         , OV extends ObjectValidationAbstract<ID>
         , C extends ObjectValidationCriteriaAbstract<ID, OV>
-        , RDTO extends BaseObjectValidationDto<ID, OV>
-        , S extends BaseObjectValidationCrudService<ID, USER, DTO, OV, C, RDTO>
-        > extends ParentRelatedCrudRestResource<ID, USER, DTO, OV, C, RDTO, S> {
+        , S extends BaseObjectValidationCrudService<ID, USER, DTO, OV, C>
+        > extends ParentRelatedCrudRestResource<ID, USER, DTO, OV, C, BaseObjectValidationDto<ID, OV>, S> {
 
     Logger log = LoggerFactory.getLogger(BaseDeleteByNameObjectValidationCrudRestResource.class);
 
@@ -49,7 +48,7 @@ public interface BaseDeleteByNameObjectValidationCrudRestResource<
     })
     @MethodStats
     @Scope(Operations.DELETE_BY_NAME)
-    default ResponseEntity<Mono<DTO>> deleteById(@PathVariable("parentId") ID parentId, @PathVariable("name") String name, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
+    default ResponseEntity<Mono<DTO>> deleteByName(@PathVariable("parentId") ID parentId, @PathVariable("name") String name, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to delete object-validation by name, parentId {}, id {}", parentId, name);
 
         USER user = getUser(serverWebExchange, principal);
