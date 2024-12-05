@@ -64,15 +64,15 @@ public interface ParentRelatedService<
 
     @SneakyThrows
     @MethodStats
-    default Mono<DTO> updateById(@NotNull ID parentId, @NotNull ID id, RM idModel, Function<DTO, SortedSet<RM>> getter, USER user) throws DomainNotFoundException, BadRequestException {
+    default Mono<DTO> updateById(@NotNull ID parentId, @NotNull ID id, RM relatedModel, Function<DTO, SortedSet<RM>> getter, USER user) throws DomainNotFoundException, BadRequestException {
         C criteria = getRelatedModelCriteriaClass().getConstructor().newInstance();
         criteria.setId(Filter.eq(id));
-        return update(parentId, idModel, criteria, getter, user);
+        return update(parentId, relatedModel, criteria, getter, user);
     }
 
 
     @MethodStats
-    default Mono<DTO> update(@NotNull ID parentId, RM idModel, @NotNull C criteria, Function<DTO, SortedSet<RM>> getter, USER user) throws DomainNotFoundException, BadRequestException {
+    default Mono<DTO> update(@NotNull ID parentId, RM relatedModel, @NotNull C criteria, Function<DTO, SortedSet<RM>> getter, USER user) throws DomainNotFoundException, BadRequestException {
         return getDtoById(parentId, user)
                 .doOnNext(dto -> {
                     if (getRelatedObjectDtoClass().isInstance(dto)) {
@@ -82,8 +82,8 @@ public interface ParentRelatedService<
                         while (iterator.hasNext()) {
                             RM next = iterator.next();
                             if (criteria.isMatching(next)) {
-                                idModel.setId(next.getId());
-                                getter.apply(dto).add(idModel);
+                                relatedModel.setId(next.getId());
+                                getter.apply(dto).add(relatedModel);
                                 iterator.remove();
                                 found = true;
                                 break;
@@ -100,13 +100,13 @@ public interface ParentRelatedService<
     }
 
     @MethodStats
-    default Mono<DTO> updateMany(@NotNull ID parentId, Collection<RM> idModels, Function<DTO, SortedSet<RM>> getter, USER user) throws DomainNotFoundException, BadRequestException {
+    default Mono<DTO> updateMany(@NotNull ID parentId, Collection<RM> relatedModels, Function<DTO, SortedSet<RM>> getter, USER user) throws DomainNotFoundException, BadRequestException {
         return getDtoById(parentId, user)
                 .doOnNext(dto -> {
                     if (getRelatedObjectDtoClass().isInstance(dto)) {
                         Iterator<RM> iterator = getter.apply(dto).iterator();
 
-                        for (RM ro : idModels) {
+                        for (RM ro : relatedModels) {
                             boolean found = false;
                             while (iterator.hasNext()) {
                                 RM next = iterator.next();
@@ -200,9 +200,9 @@ public interface ParentRelatedService<
     default Mono<DTO> saveMany(@NotNull ID parentId, @NotEmpty Collection<@Valid RM> relatedObjects, Function<DTO, SortedSet<RM>> getter, USER user) throws DomainNotFoundException, BadRequestException {
         return getDtoById(parentId, user)
                 .doOnNext(dto -> {
-                    for (RM idModel : relatedObjects) {
-                        if (idModel.getId() == null || Strings.isBlank(idModel.getId().toString())) {
-                            idModel.setId(getIdService().newId());
+                    for (RM relatedModel : relatedObjects) {
+                        if (relatedModel.getId() == null || Strings.isBlank(relatedModel.getId().toString())) {
+                            relatedModel.setId(getIdService().newId());
                         }
                     }
 
