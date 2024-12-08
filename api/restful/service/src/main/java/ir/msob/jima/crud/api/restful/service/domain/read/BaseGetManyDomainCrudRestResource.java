@@ -1,0 +1,81 @@
+package ir.msob.jima.crud.api.restful.service.domain.read;
+
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import ir.msob.jima.core.commons.criteria.BaseCriteria;
+import ir.msob.jima.core.commons.domain.BaseDomain;
+import ir.msob.jima.core.commons.dto.BaseDto;
+import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
+import ir.msob.jima.core.commons.exception.badrequest.BadRequestResponse;
+import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.methodstats.MethodStats;
+import ir.msob.jima.core.commons.operation.Operations;
+import ir.msob.jima.core.commons.operation.OperationsStatus;
+import ir.msob.jima.core.commons.repository.BaseQuery;
+import ir.msob.jima.core.commons.scope.Scope;
+import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.crud.api.restful.service.domain.ParentDomainCrudRestResource;
+import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
+import ir.msob.jima.crud.service.domain.read.BaseGetManyDomainCrudService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
+
+import java.io.Serializable;
+import java.security.Principal;
+import java.util.Collection;
+
+/**
+ * This interface provides a RESTful API for retrieving multiple domains based on a given criteria.
+ * It extends the ParentDomainCrudRestResource interface and provides a default implementation for the getMany method.
+ *
+ * @param <ID>   the type of the ID of the domain
+ * @param <USER> the type of the user
+ * @param <D>    the type of the domain
+ * @param <DTO>  the type of the DTO
+ * @param <C>    the type of the criteria
+ * @param <Q>    the type of the query
+ * @param <R>    the type of the repository
+ * @param <S>    the type of the service
+ * @author Yaqub Abdi
+ */
+public interface BaseGetManyDomainCrudRestResource<
+        ID extends Comparable<ID> & Serializable,
+        USER extends BaseUser,
+        D extends BaseDomain<ID>,
+        DTO extends BaseDto<ID>,
+        C extends BaseCriteria<ID>,
+        Q extends BaseQuery,
+        R extends BaseDomainCrudRepository<ID, USER, D, C, Q>,
+        S extends BaseGetManyDomainCrudService<ID, USER, D, DTO, C, Q, R>
+        > extends ParentDomainCrudRestResource<ID, USER, D, DTO, C, Q, R, S> {
+    Logger log = LoggerFactory.getLogger(BaseGetManyDomainCrudRestResource.class);
+
+    /**
+     * This method provides a RESTful API for retrieving multiple domains based on a given criteria.
+     * It validates the operation, retrieves the user, and then calls the service to get the domains.
+     * It returns a ResponseEntity with the collection of DTOs.
+     *
+     * @param criteria          the criteria to get the domains
+     * @param serverWebExchange the ServerWebExchange object
+     * @param principal         the Principal object
+     * @return a ResponseEntity with the collection of DTOs
+     * @throws BadRequestException     if the validation operation is incorrect
+     * @throws DomainNotFoundException if the domain is not found
+     */
+    @GetMapping(Operations.GET_MANY)
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Return a domain or null"),
+            @ApiResponse(code = 400, message = "If the validation operation is incorrect throws BadRequestException otherwise nothing", response = BadRequestResponse.class)})
+    @MethodStats
+    @Scope(Operations.GET_MANY)
+    default ResponseEntity<Mono<Collection<DTO>>> getMany(C criteria, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
+        log.debug("REST request to get many domain, criteria {} : ", criteria);
+
+        USER user = getUser(serverWebExchange, principal);
+        Mono<Collection<DTO>> res = this.getService().getMany(criteria, user);
+        return ResponseEntity.status(OperationsStatus.GET_MANY).body(res);
+    }
+}

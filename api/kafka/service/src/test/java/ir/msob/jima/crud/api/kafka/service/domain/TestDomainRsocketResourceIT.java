@@ -11,10 +11,10 @@ import ir.msob.jima.core.ral.mongo.it.test.TestDto;
 import ir.msob.jima.core.ral.mongo.test.configuration.MongoContainerConfiguration;
 import ir.msob.jima.core.test.CoreTestData;
 import ir.msob.jima.crud.api.kafka.service.TestMicroserviceApplication;
-import ir.msob.jima.crud.api.kafka.service.domain.base.CrudKafkaResourceTest;
-import ir.msob.jima.crud.ral.mongo.it.test.TestDomainDataProvider;
+import ir.msob.jima.crud.api.kafka.service.domain.base.DomainCrudKafkaResourceTest;
+import ir.msob.jima.crud.ral.mongo.it.test.TestDataProvider;
 import ir.msob.jima.crud.ral.mongo.it.test.TestRepository;
-import ir.msob.jima.crud.ral.mongo.it.test.TestService;
+import ir.msob.jima.crud.ral.mongo.it.test.TestServiceDomain;
 import ir.msob.jima.security.ral.keycloak.test.KeycloakContainerConfiguration;
 import lombok.SneakyThrows;
 import lombok.extern.apachecommons.CommonsLog;
@@ -31,10 +31,10 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @ContextConfiguration
 @Testcontainers
 @CommonsLog
-public class TestDomainRsocketResourceIT extends CrudKafkaResourceTest<TestDomain, TestDto, TestCriteria, TestRepository, TestService, TestDomainDataProvider> {
+public class TestDomainRsocketResourceIT extends DomainCrudKafkaResourceTest<TestDomain, TestDto, TestCriteria, TestRepository, TestServiceDomain, TestDataProvider> {
 
     @Autowired
-    TestDomainKafkaResource testDomainRsocketResource;
+    TestDomainKafkaResourceDomain testDomainRsocketResource;
     @Autowired
     JimaProperties jimaProperties;
 
@@ -49,19 +49,19 @@ public class TestDomainRsocketResourceIT extends CrudKafkaResourceTest<TestDomai
     @BeforeEach
     public void beforeEach() {
         getDataProvider().cleanups();
-        TestDomainDataProvider.createNewDto();
-        TestDomainDataProvider.createMandatoryNewDto();
+        TestDataProvider.createNewDto();
+        TestDataProvider.createMandatoryNewDto();
     }
 
 
     @Override
     public Class<? extends BaseResource<ObjectId, ProjectUser>> getResourceClass() {
-        return TestDomainKafkaResource.class;
+        return TestDomainKafkaResourceDomain.class;
     }
 
     @Override
     public String getBaseUri() {
-        return TestDomainKafkaResource.BASE_URI;
+        return TestDomainKafkaResourceDomain.BASE_URI;
     }
 
 }

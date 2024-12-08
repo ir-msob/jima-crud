@@ -8,10 +8,10 @@ import ir.msob.jima.core.ral.mongo.it.test.TestDto;
 import ir.msob.jima.core.ral.mongo.test.configuration.MongoContainerConfiguration;
 import ir.msob.jima.core.test.CoreTestData;
 import ir.msob.jima.crud.api.graphql.restful.service.JimaApplication;
-import ir.msob.jima.crud.api.graphql.restful.service.domain.base.CrudGraphqlRestResourceTest;
-import ir.msob.jima.crud.ral.mongo.it.test.TestDomainDataProvider;
+import ir.msob.jima.crud.api.graphql.restful.service.domain.base.DomainCrudGraphqlRestResourceTest;
+import ir.msob.jima.crud.ral.mongo.it.test.TestDataProvider;
 import ir.msob.jima.crud.ral.mongo.it.test.TestRepository;
-import ir.msob.jima.crud.ral.mongo.it.test.TestService;
+import ir.msob.jima.crud.ral.mongo.it.test.TestServiceDomain;
 import ir.msob.jima.security.ral.keycloak.test.KeycloakContainerConfiguration;
 import lombok.SneakyThrows;
 import lombok.extern.apachecommons.CommonsLog;
@@ -29,7 +29,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @ContextConfiguration
 @Testcontainers
 @CommonsLog
-public class TestDomainGraphqlRestResourceIT extends CrudGraphqlRestResourceTest<TestDomain, TestDto, TestCriteria, TestRepository, TestService, TestDomainDataProvider> {
+public class TestDomainGraphqlRestResourceIT extends DomainCrudGraphqlRestResourceTest<TestDomain, TestDto, TestCriteria, TestRepository, TestServiceDomain, TestDataProvider> {
 
     @SneakyThrows
     @BeforeAll
@@ -48,7 +48,7 @@ public class TestDomainGraphqlRestResourceIT extends CrudGraphqlRestResourceTest
 
     @Override
     public Class<? extends BaseResource<ObjectId, ProjectUser>> getResourceClass() {
-        return TestDomainGraphqlRestResource.class;
+        return TestDomainGraphqlRestResourceDomain.class;
     }
 
 }

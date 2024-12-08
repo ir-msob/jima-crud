@@ -10,10 +10,10 @@ import ir.msob.jima.core.ral.mongo.test.configuration.MongoContainerConfiguratio
 import ir.msob.jima.core.test.CoreTestData;
 import ir.msob.jima.crud.api.grpc.commons.ReactorCrudServiceGrpc;
 import ir.msob.jima.crud.api.grpc.service.TestMicroserviceApplication;
-import ir.msob.jima.crud.api.grpc.service.domain.base.CrudGrpcResourceTest;
-import ir.msob.jima.crud.ral.mongo.it.test.TestDomainDataProvider;
+import ir.msob.jima.crud.api.grpc.service.domain.base.DomainCrudGrpcResourceTest;
+import ir.msob.jima.crud.ral.mongo.it.test.TestDataProvider;
 import ir.msob.jima.crud.ral.mongo.it.test.TestRepository;
-import ir.msob.jima.crud.ral.mongo.it.test.TestService;
+import ir.msob.jima.crud.ral.mongo.it.test.TestServiceDomain;
 import ir.msob.jima.security.ral.keycloak.test.KeycloakContainerConfiguration;
 import lombok.SneakyThrows;
 import lombok.extern.apachecommons.CommonsLog;
@@ -36,14 +36,14 @@ import java.io.IOException;
 @EnableConfigurationProperties
 @SpringBootTest
 @Disabled // FIXME
-public class TestDomainGrpcResourceIT extends CrudGrpcResourceTest<TestDomain, TestDto, TestCriteria, TestRepository, TestService, TestDomainDataProvider> {
+public class TestDomainGrpcResourceIT extends DomainCrudGrpcResourceTest<TestDomain, TestDto, TestCriteria, TestRepository, TestServiceDomain, TestDataProvider> {
 
     @Rule
     public final GrpcCleanupRule grpcCleanupRule = new GrpcCleanupRule();
     @Autowired
-    TestService service;
+    TestServiceDomain service;
     @Autowired
-    TestDomainGrpcResource resource;
+    TestDomainGrpcResourceDomain resource;
     private ReactorCrudServiceGrpc.ReactorCrudServiceStub reactorCrudServiceStub;
 
     @SneakyThrows
@@ -74,8 +74,8 @@ public class TestDomainGrpcResourceIT extends CrudGrpcResourceTest<TestDomain, T
     }
 
     @Override
-    public Class<TestDomainGrpcResource> getResourceClass() {
-        return TestDomainGrpcResource.class;
+    public Class<TestDomainGrpcResourceDomain> getResourceClass() {
+        return TestDomainGrpcResourceDomain.class;
     }
 
     @Override

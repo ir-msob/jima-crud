@@ -7,10 +7,10 @@ import ir.msob.jima.core.ral.mongo.it.test.TestDomain;
 import ir.msob.jima.core.ral.mongo.it.test.TestDto;
 import ir.msob.jima.core.ral.mongo.test.configuration.MongoContainerConfiguration;
 import ir.msob.jima.core.test.CoreTestData;
-import ir.msob.jima.crud.api.restful.service.rest.base.CrudRestResourceTest;
-import ir.msob.jima.crud.ral.mongo.it.test.TestDomainDataProvider;
+import ir.msob.jima.crud.api.restful.service.rest.base.DomainCrudRestResourceTest;
+import ir.msob.jima.crud.ral.mongo.it.test.TestDataProvider;
 import ir.msob.jima.crud.ral.mongo.it.test.TestRepository;
-import ir.msob.jima.crud.ral.mongo.it.test.TestService;
+import ir.msob.jima.crud.ral.mongo.it.test.TestServiceDomain;
 import ir.msob.jima.security.ral.keycloak.test.KeycloakContainerConfiguration;
 import lombok.SneakyThrows;
 import lombok.extern.apachecommons.CommonsLog;
@@ -28,7 +28,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @ContextConfiguration
 @Testcontainers
 @CommonsLog
-public class TestDomainRestResourceIT extends CrudRestResourceTest<TestDomain, TestDto, TestCriteria, TestRepository, TestService, TestDomainDataProvider> {
+public class TestDomainRestResourceIT extends DomainCrudRestResourceTest<TestDomain, TestDto, TestCriteria, TestRepository, TestServiceDomain, TestDataProvider> {
 
     @SneakyThrows
     @BeforeAll
@@ -41,8 +41,8 @@ public class TestDomainRestResourceIT extends CrudRestResourceTest<TestDomain, T
     @BeforeEach
     public void beforeEach() {
         getDataProvider().cleanups();
-        TestDomainDataProvider.createNewDto();
-        TestDomainDataProvider.createMandatoryNewDto();
+        TestDataProvider.createNewDto();
+        TestDataProvider.createMandatoryNewDto();
     }
 
 
