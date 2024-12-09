@@ -2,7 +2,7 @@ package ir.msob.jima.crud.api.grpc.service.domain.base;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.msob.jima.core.beans.properties.JimaProperties;
-import ir.msob.jima.core.commons.related.relatedobject.relatedparty.RelatedPartyAbstract;
+import ir.msob.jima.core.commons.child.relatedobject.relatedparty.RelatedPartyAbstract;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.ral.mongo.it.security.ProjectUser;
 import ir.msob.jima.security.it.BaseSecurityProjectUserService;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.io.Serializable;
 
 /**
- * This class provides a base implementation for user-related services within Jima projects.
+ * This class provides a base implementation for user-child services within Jima projects.
  * <p>
  * It implements interfaces for both Keycloak and a generic security project user service.
  * This allows for potential customization based on the chosen security provider.

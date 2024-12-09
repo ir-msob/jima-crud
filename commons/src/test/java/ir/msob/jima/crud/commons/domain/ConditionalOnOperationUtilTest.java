@@ -2,7 +2,7 @@ package ir.msob.jima.crud.commons.domain;
 
 import ir.msob.jima.core.commons.operation.ConditionalOnOperationUtil;
 import ir.msob.jima.core.commons.properties.CrudProperties;
-import ir.msob.jima.core.commons.scope.Resource;
+import ir.msob.jima.core.commons.resource.Resource;
 import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.shared.ResourceType;
 import org.junit.jupiter.api.Test;

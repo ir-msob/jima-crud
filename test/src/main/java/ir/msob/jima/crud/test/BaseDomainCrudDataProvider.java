@@ -16,7 +16,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.ExecutionException;
 
 /**
- * This interface is designed to provide data-related methods for CRUD operations.
+ * This interface is designed to provide data-child methods for CRUD operations.
  * It extends the BaseDataProvider interface, which includes common data provider methods.
  *
  * @param <ID>   The type of the entity's ID, which must be comparable and serializable.

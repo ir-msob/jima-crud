@@ -21,7 +21,7 @@ import java.lang.annotation.Annotation;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * This interface is designed for testing resources related to CRUD (Create, Read, Update, Delete) operations.
+ * This interface is designed for testing resources child to CRUD (Create, Read, Update, Delete) operations.
  * It defines methods to validate and assert various aspects of CRUD operations.
  *
  * @param <ID>   The type of the entity's ID, which must be comparable and serializable.

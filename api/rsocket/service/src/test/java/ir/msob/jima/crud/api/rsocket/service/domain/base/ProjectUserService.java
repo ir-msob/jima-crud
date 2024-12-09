@@ -2,7 +2,7 @@ package ir.msob.jima.crud.api.rsocket.service.domain.base;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.msob.jima.core.beans.properties.JimaProperties;
-import ir.msob.jima.core.commons.related.relatedobject.relatedparty.RelatedPartyAbstract;
+import ir.msob.jima.core.commons.child.relatedobject.relatedparty.RelatedPartyAbstract;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.ral.mongo.it.security.ProjectUser;
 import ir.msob.jima.security.it.BaseSecurityProjectUserService;

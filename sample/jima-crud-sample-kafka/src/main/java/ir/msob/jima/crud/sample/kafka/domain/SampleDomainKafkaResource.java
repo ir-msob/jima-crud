@@ -1,7 +1,7 @@
 package ir.msob.jima.crud.sample.kafka.domain;
 
 
-import ir.msob.jima.core.commons.scope.Resource;
+import ir.msob.jima.core.commons.resource.Resource;
 import ir.msob.jima.core.commons.operation.ConditionalOnOperation;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.crud.api.kafka.client.ChannelUtil;

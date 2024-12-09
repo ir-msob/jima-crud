@@ -30,7 +30,7 @@ import java.util.concurrent.ExecutionException;
 /**
  * The {@code ParentDomainCrudGrpcResource} interface defines the base contract for gRPC (Google Remote Procedure Call) services in a CRUD (Create, Read, Update, Delete) context.
  * It extends {@link ir.msob.jima.core.commons.resource.BaseResource} and {@link ir.msob.jima.crud.commons.BaseCrudResource} interfaces,
- * providing methods and utilities related to gRPC operations, as well as CRUD functionality.
+ * providing methods and utilities child to gRPC operations, as well as CRUD functionality.
  *
  * @param <ID>   The type of entity ID.
  * @param <USER> The type of the user (security context).

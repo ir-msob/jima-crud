@@ -15,7 +15,7 @@ import java.io.Serializable;
  * The {@code BaseWriteDomainCrudGraphqlRestResource} interface extends several GraphQL resource interfaces,
  * providing write-specific GraphQL operations for a CRUD service.
  * It is generic and allows customization for different types such as ID, USER, D, DTO, C, Q, R, and S.
- * This interface combines methods from various write-related GraphQL resource interfaces.
+ * This interface combines methods from various write-child GraphQL resource interfaces.
  *
  * @param <ID>   The type of the resource ID, which should be comparable and serializable.
  * @param <USER> The type of the user associated with the resource, extending {@code BaseUser}.
