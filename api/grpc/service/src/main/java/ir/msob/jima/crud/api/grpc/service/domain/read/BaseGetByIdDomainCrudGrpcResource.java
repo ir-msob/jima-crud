@@ -52,7 +52,7 @@ public interface BaseGetByIdDomainCrudGrpcResource<
      */
     @Override
     @MethodStats
-    @Scope(Operations.GET_BY_ID)
+    @Scope(operation = Operations.GET_BY_ID)
     default Mono<DtoMsg> getById(Mono<IdMsg> request) {
         return request.flatMap(this::getById);
     }
@@ -65,7 +65,7 @@ public interface BaseGetByIdDomainCrudGrpcResource<
      */
     @Override
     @MethodStats
-    @Scope(Operations.GET_BY_ID)
+    @Scope(operation = Operations.GET_BY_ID)
     default Mono<DtoMsg> getById(IdMsg request) {
         log.debug("Request to get by id: dto {}", request);
         return getService().getOne(convertToId(request.getId()), getUser())

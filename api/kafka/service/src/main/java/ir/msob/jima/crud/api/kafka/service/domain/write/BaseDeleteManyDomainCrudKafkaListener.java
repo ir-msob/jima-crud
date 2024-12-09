@@ -52,7 +52,7 @@ public interface BaseDeleteManyDomainCrudKafkaListener<
     /**
      * Initializes the listener for the DELETE_MANY operation.
      */
-    @Scope(Operations.DELETE_MANY)
+    @Scope(operation = Operations.DELETE_MANY)
     @PostConstruct
     default void deleteMany() {
         String operation = Operations.DELETE_MANY;
@@ -70,7 +70,7 @@ public interface BaseDeleteManyDomainCrudKafkaListener<
     @MethodStats
     @SneakyThrows
     @CallbackError("dto")
-    @Scope(Operations.DELETE_MANY)
+    @Scope(operation = Operations.DELETE_MANY)
     private void serviceDeleteMany(String dto) {
         log.debug("Received message for delete many: dto {}", dto);
         ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());

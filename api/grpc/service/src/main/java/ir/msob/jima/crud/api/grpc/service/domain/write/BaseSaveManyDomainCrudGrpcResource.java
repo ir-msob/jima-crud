@@ -51,7 +51,7 @@ public interface BaseSaveManyDomainCrudGrpcResource<
      */
     @Override
     @MethodStats
-    @Scope(Operations.SAVE_MANY)
+    @Scope(operation = Operations.SAVE_MANY)
     default Mono<DtosMsg> saveMany(Mono<DtosMsg> request) {
         return request.flatMap(this::saveMany);
     }
@@ -64,7 +64,7 @@ public interface BaseSaveManyDomainCrudGrpcResource<
      */
     @Override
     @MethodStats
-    @Scope(Operations.SAVE_MANY)
+    @Scope(operation = Operations.SAVE_MANY)
     default Mono<DtosMsg> saveMany(DtosMsg request) {
         log.debug("Request to save many: dto {}", request);
         return getService().saveMany(convertToDtos(request.getDtosList()), getUser())

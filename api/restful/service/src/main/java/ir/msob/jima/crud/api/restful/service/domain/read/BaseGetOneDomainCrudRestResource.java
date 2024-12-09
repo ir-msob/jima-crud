@@ -69,7 +69,7 @@ public interface BaseGetOneDomainCrudRestResource<
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Return a domain or null"),
             @ApiResponse(code = 400, message = "If the validation operation is incorrect throws BadRequestException otherwise nothing", response = BadRequestResponse.class)})
     @MethodStats
-    @Scope(Operations.GET_ONE)
+    @Scope(operation = Operations.GET_ONE)
     default ResponseEntity<Mono<DTO>> getOne(C criteria, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to get one domain, criteria {} : ", criteria);
 

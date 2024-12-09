@@ -64,7 +64,7 @@ public interface BaseDeleteManyDomainCrudGraphqlRestResource<
      */
     @MethodStats
     @MutationMapping
-    @Scope(Operations.DELETE_MANY)
+    @Scope(operation = Operations.DELETE_MANY)
     default Mono<IdsType> deleteMany(@Argument("input") CriteriaInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
         log.debug("Request to delete many: dto {}", input);
 

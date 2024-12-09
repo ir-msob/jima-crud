@@ -75,7 +75,7 @@ public interface BaseSaveManyDomainCrudRestResource<
             @ApiResponse(code = 400, message = "If the validation operation is incorrect throws BadRequestException otherwise nothing", response = BadRequestResponse.class),
             @ApiResponse(code = 409, message = "If the check operation is false throws ConflictException otherwise nothing", response = ConflictResponse.class)})
     @MethodStats
-    @Scope(Operations.SAVE_MANY)
+    @Scope(operation = Operations.SAVE_MANY)
     default ResponseEntity<Mono<Collection<DTO>>> saveMany(@RequestBody Collection<DTO> dtos, ServerWebExchange serverWebExchange, Principal principal)
             throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("REST request to create many new domain, dtos : {}", dtos);

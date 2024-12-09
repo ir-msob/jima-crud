@@ -65,7 +65,7 @@ public interface BaseGetPageDomainCrudGraphqlRestResource<
      */
     @MethodStats
     @QueryMapping
-    @Scope(Operations.GET_PAGE)
+    @Scope(operation = Operations.GET_PAGE)
     default Mono<PageType> getPage(@Argument("input") CriteriaPageableInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
         log.debug("Request to get page: dto {}", input);
 

@@ -12,6 +12,7 @@ import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.related.contactmedium.BaseContactMediumDto;
 import ir.msob.jima.core.commons.related.contactmedium.ContactMediumAbstract;
 import ir.msob.jima.core.commons.related.contactmedium.ContactMediumCriteriaAbstract;
+import ir.msob.jima.core.commons.scope.Elements;
 import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.related.ParentRelatedCrudRestResource;
@@ -49,7 +50,7 @@ public interface BaseSaveContactMediumCrudRestResource<
             @ApiResponse(code = 404, message = "Domain not found", response = DomainNotFoundException.class)
     })
     @MethodStats
-    @Scope(Operations.SAVE)
+    @Scope(element = Elements.CONTACT_MEDIUM, operation = Operations.SAVE)
     default ResponseEntity<Mono<DTO>> save(@PathVariable("parentId") ID parentId, @RequestBody @Valid CM dto, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to save contact medium, parentId {}, dto {}", parentId, dto);
 

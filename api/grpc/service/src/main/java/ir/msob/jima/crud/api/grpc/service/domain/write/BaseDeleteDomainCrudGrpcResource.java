@@ -52,7 +52,7 @@ public interface BaseDeleteDomainCrudGrpcResource<
      */
     @Override
     @MethodStats
-    @Scope(Operations.DELETE)
+    @Scope(operation = Operations.DELETE)
     default Mono<IdMsg> delete(Mono<CriteriaMsg> request) {
         return request.flatMap(this::delete);
     }
@@ -65,7 +65,7 @@ public interface BaseDeleteDomainCrudGrpcResource<
      */
     @Override
     @MethodStats
-    @Scope(Operations.DELETE)
+    @Scope(operation = Operations.DELETE)
     default Mono<IdMsg> delete(CriteriaMsg request) {
         log.debug("Request to delete: dto {}", request);
         return getService().delete(convertToCriteria(request.getCriteria()), getUser())

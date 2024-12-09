@@ -63,7 +63,7 @@ public interface BaseSaveDomainCrudGraphqlRestResource<
      */
     @MethodStats
     @MutationMapping
-    @Scope(Operations.SAVE)
+    @Scope(operation = Operations.SAVE)
     default Mono<DtoType> save(@Argument("input") DtoInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
         log.debug("Request to save: dto {}", input);
 

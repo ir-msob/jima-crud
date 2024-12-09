@@ -52,7 +52,7 @@ public interface BaseEditManyDomainCrudGrpcResource<
      */
     @Override
     @MethodStats
-    @Scope(Operations.EDIT_MANY)
+    @Scope(operation = Operations.EDIT_MANY)
     default Mono<DtosMsg> editMany(Mono<CriteriaJsonPatchMsg> request) {
         return request.flatMap(this::editMany);
     }
@@ -65,7 +65,7 @@ public interface BaseEditManyDomainCrudGrpcResource<
      */
     @Override
     @MethodStats
-    @Scope(Operations.EDIT_MANY)
+    @Scope(operation = Operations.EDIT_MANY)
     default Mono<DtosMsg> editMany(CriteriaJsonPatchMsg request) {
         log.debug("Request to edit many: dto {}", request);
         return getService().editMany(convertToCriteria(request.getCriteria()), convertToJsonPatch(request.getJsonPatch()), getUser())

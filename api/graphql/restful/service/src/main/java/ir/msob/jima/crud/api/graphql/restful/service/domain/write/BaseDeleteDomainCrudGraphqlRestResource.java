@@ -64,7 +64,7 @@ public interface BaseDeleteDomainCrudGraphqlRestResource<
      */
     @MethodStats
     @MutationMapping
-    @Scope(Operations.DELETE)
+    @Scope(operation = Operations.DELETE)
     default Mono<IdType> delete(@Argument("input") CriteriaInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
         log.debug("Request to delete: dto {}", input);
 

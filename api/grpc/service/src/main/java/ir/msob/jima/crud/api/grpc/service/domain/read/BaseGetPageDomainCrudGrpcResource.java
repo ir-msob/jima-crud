@@ -52,7 +52,7 @@ public interface BaseGetPageDomainCrudGrpcResource<
      */
     @Override
     @MethodStats
-    @Scope(Operations.GET_PAGE)
+    @Scope(operation = Operations.GET_PAGE)
     default Mono<PageMsg> getPage(Mono<CriteriaPageableMsg> request) {
         return request.flatMap(this::getPage);
     }
@@ -65,7 +65,7 @@ public interface BaseGetPageDomainCrudGrpcResource<
      */
     @Override
     @MethodStats
-    @Scope(Operations.GET_PAGE)
+    @Scope(operation = Operations.GET_PAGE)
     default Mono<PageMsg> getPage(CriteriaPageableMsg request) {
         log.debug("Request to get page: dto {}", request);
         return getService().getPage(convertToCriteria(request.getCriteria()), convertToPageable(request.getPageable()), getUser())

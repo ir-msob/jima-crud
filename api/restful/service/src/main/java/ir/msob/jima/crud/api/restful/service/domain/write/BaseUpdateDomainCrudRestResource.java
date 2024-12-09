@@ -73,7 +73,7 @@ public interface BaseUpdateDomainCrudRestResource<
             @ApiResponse(code = 400, message = "If the validation operation is incorrect throws BadRequestException otherwise nothing", response = BadRequestResponse.class),
             @ApiResponse(code = 409, message = "If the check operation is false throws ConflictException otherwise nothing", response = ConflictResponse.class)})
     @MethodStats
-    @Scope(Operations.UPDATE)
+    @Scope(operation = Operations.UPDATE)
     default ResponseEntity<Mono<DTO>> update(@RequestBody DTO dto, ServerWebExchange serverWebExchange, Principal principal)
             throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to update new domain, dto : {}", dto);

@@ -52,7 +52,7 @@ public interface BaseGetPageDomainCrudKafkaListener<
     /**
      * Initializes the listener for the GET_PAGE operation.
      */
-    @Scope(Operations.GET_PAGE)
+    @Scope(operation = Operations.GET_PAGE)
     @PostConstruct
     default void getPage() {
         String operation = Operations.GET_PAGE;
@@ -70,7 +70,7 @@ public interface BaseGetPageDomainCrudKafkaListener<
     @MethodStats
     @SneakyThrows
     @CallbackError("dto")
-    @Scope(Operations.GET_PAGE)
+    @Scope(operation = Operations.GET_PAGE)
     private void serviceGetPage(String dto) {
         log.debug("Received message for get page: dto {}", dto);
         ChannelMessage<USER, PageableMessage<ID, C>> message;

@@ -70,7 +70,7 @@ public interface BaseDeleteByIdDomainCrudRestResource<
             @ApiResponse(code = 404, message = "Domain not found", response = DomainNotFoundException.class)
     })
     @MethodStats
-    @Scope(Operations.DELETE_BY_ID)
+    @Scope(operation = Operations.DELETE_BY_ID)
     default ResponseEntity<Mono<ID>> deleteById(@PathVariable("id") ID id, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to delete domain by id, id {}", id);
 

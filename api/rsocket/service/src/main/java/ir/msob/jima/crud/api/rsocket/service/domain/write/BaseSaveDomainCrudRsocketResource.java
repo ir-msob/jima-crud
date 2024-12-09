@@ -65,7 +65,7 @@ public interface BaseSaveDomainCrudRsocketResource<
      */
     @MessageMapping(Operations.SAVE)
     @MethodStats
-    @Scope(Operations.SAVE)
+    @Scope(operation = Operations.SAVE)
     default Mono<DTO> save(@Payload String dto, @AuthenticationPrincipal Jwt principal)
             throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("RSocket request to create new domain, dto : {}", dto);

@@ -52,7 +52,7 @@ public interface BaseGetManyDomainCrudGrpcResource<
      */
     @Override
     @MethodStats
-    @Scope(Operations.GET_MANY)
+    @Scope(operation = Operations.GET_MANY)
     default Mono<DtosMsg> getMany(Mono<CriteriaMsg> request) {
         return request.flatMap(this::getMany);
     }
@@ -65,7 +65,7 @@ public interface BaseGetManyDomainCrudGrpcResource<
      */
     @Override
     @MethodStats
-    @Scope(Operations.GET_MANY)
+    @Scope(operation = Operations.GET_MANY)
     default Mono<DtosMsg> getMany(CriteriaMsg request) {
         log.debug("Request to get many: dto {}", request);
         return getService().getMany(convertToCriteria(request.getCriteria()), getUser())

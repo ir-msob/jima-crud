@@ -12,6 +12,7 @@ import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.related.relatedobject.relatedprocess.BaseRelatedProcessDto;
 import ir.msob.jima.core.commons.related.relatedobject.relatedprocess.RelatedProcessAbstract;
 import ir.msob.jima.core.commons.related.relatedobject.relatedprocess.RelatedProcessCriteriaAbstract;
+import ir.msob.jima.core.commons.scope.Elements;
 import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.related.ParentRelatedCrudRestResource;
@@ -49,7 +50,7 @@ public interface BaseSaveRelatedProcessCrudRestResource<
             @ApiResponse(code = 404, message = "Domain not found", response = DomainNotFoundException.class)
     })
     @MethodStats
-    @Scope(Operations.SAVE)
+    @Scope(element = Elements.RELATED_PROCESS, operation = Operations.SAVE)
     default ResponseEntity<Mono<DTO>> save(@PathVariable("parentId") ID parentId, @RequestBody @Valid RP dto, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to save related process, parentId {}, dto {}", parentId, dto);
 

@@ -1,10 +1,12 @@
 package ir.msob.jima.crud.test;
 
+import ir.msob.jima.core.beans.properties.JimaProperties;
 import ir.msob.jima.core.commons.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.dto.BaseDto;
 import ir.msob.jima.core.commons.operation.ConditionalOnOperationUtil;
 import ir.msob.jima.core.commons.repository.BaseQuery;
+import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.test.BaseCoreResourceTest;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
@@ -14,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
+import java.lang.annotation.Annotation;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -49,15 +52,36 @@ public interface ParentDomainCrudResourceTest<
     /**
      * Determines whether a specific CRUD operation should be ignored for testing.
      *
-     * @param operation The CRUD operation to check.
+     * @param scope The CRUD scope to check.
      * @return True if the operation should be ignored, false otherwise.
      */
-    default boolean ignoreTest(String operation) {
-        boolean result = !ConditionalOnOperationUtil.hasOperation(operation, getResourceClass());
+    default boolean ignoreTest(Scope scope) {
+        boolean result = !ConditionalOnOperationUtil.hasOperation(scope, getJimaProperties().getCrud(), getResourceClass());
         if (result) {
-            log.info("Perform {} test for {} is ignored.", operation, getResourceClass().getSimpleName());
+            log.info("Perform {}/{} test for {} is ignored.", scope.element(), scope.operation(), getResourceClass().getSimpleName());
         }
         return result;
+    }
+
+    default boolean ignoreTest(String operation) {
+        Scope scope = new Scope() {
+
+            @Override
+            public String element() {
+                return "domain";
+            }
+
+            @Override
+            public String operation() {
+                return operation;
+            }
+
+            @Override
+            public Class<? extends Annotation> annotationType() {
+                return Scope.class;
+            }
+        };
+        return ignoreTest(scope);
     }
 
     /**
@@ -66,6 +90,9 @@ public interface ParentDomainCrudResourceTest<
      * @return The data provider used for CRUD operations.
      */
     DP getDataProvider();
+
+
+    JimaProperties getJimaProperties();
 
     /**
      * Asserts all aspects of a CRUD operation before and after.

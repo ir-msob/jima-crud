@@ -52,7 +52,7 @@ public interface BaseCountDomainCrudGrpcResource<
      */
     @Override
     @MethodStats
-    @Scope(Operations.COUNT)
+    @Scope(operation = Operations.COUNT)
     default Mono<CountMsg> count(Mono<CriteriaMsg> request) {
         return request.flatMap(this::count);
     }
@@ -65,7 +65,7 @@ public interface BaseCountDomainCrudGrpcResource<
      */
     @Override
     @MethodStats
-    @Scope(Operations.COUNT)
+    @Scope(operation = Operations.COUNT)
     default Mono<CountMsg> count(CriteriaMsg request) {
         log.debug("Request to count: dto {}", request);
         return getService().count(convertToCriteria(request.getCriteria()), getUser())

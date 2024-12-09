@@ -52,7 +52,7 @@ public interface BaseDeleteDomainCrudKafkaListener<
     /**
      * Initializes the listener for the DELETE operation.
      */
-    @Scope(Operations.DELETE)
+    @Scope(operation = Operations.DELETE)
     @PostConstruct
     default void delete() {
         String operation = Operations.DELETE;
@@ -70,7 +70,7 @@ public interface BaseDeleteDomainCrudKafkaListener<
     @MethodStats
     @SneakyThrows
     @CallbackError("dto")
-    @Scope(Operations.DELETE)
+    @Scope(operation = Operations.DELETE)
     private void serviceDelete(String dto) {
         log.debug("Received message for delete: dto {}", dto);
         ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());

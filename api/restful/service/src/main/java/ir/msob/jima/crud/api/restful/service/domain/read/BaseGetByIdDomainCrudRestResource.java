@@ -71,7 +71,7 @@ public interface BaseGetByIdDomainCrudRestResource<
             @ApiResponse(code = 404, message = "Domain not found", response = DomainNotFoundException.class)
     })
     @MethodStats
-    @Scope(Operations.GET_BY_ID)
+    @Scope(operation = Operations.GET_BY_ID)
     default ResponseEntity<Mono<DTO>> getById(@PathVariable("id") ID id, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to get by id domain, id {}", id);
 

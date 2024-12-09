@@ -1,9 +1,17 @@
 package ir.msob.jima.crud.commons.domain;
 
 import ir.msob.jima.core.commons.operation.ConditionalOnOperationUtil;
-import ir.msob.jima.core.commons.operation.Operations;
+import ir.msob.jima.core.commons.properties.CrudProperties;
+import ir.msob.jima.core.commons.scope.Resource;
+import ir.msob.jima.core.commons.scope.Scope;
+import ir.msob.jima.core.commons.shared.ResourceType;
 import org.junit.jupiter.api.Test;
 
+import java.lang.annotation.Annotation;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -11,80 +19,90 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class ConditionalOnOperationUtilTest {
 
-    /**
-     * Test whether hasOperation returns true when there's no domain annotation.
-     */
+    private final CrudProperties crudProperties = new CrudProperties();
+
     @Test
-    void testHasOperationNoDomainAnnotation() {
-        Class<?> clazz = SomeClassWithoutDomainAnnotation.class;
-        // Expect true because the annotation is null.
-        assertTrue(ConditionalOnOperationUtil.hasOperation(Operations.GET_ONE, clazz));
-        assertTrue(ConditionalOnOperationUtil.hasOperation(Operations.GET_PAGE, clazz));
-        assertTrue(ConditionalOnOperationUtil.hasOperation(Operations.GET_MANY, clazz));
-        assertTrue(ConditionalOnOperationUtil.hasOperation(Operations.DELETE, clazz));
-        assertTrue(ConditionalOnOperationUtil.hasOperation(Operations.DELETE_ALL, clazz));
-        assertTrue(ConditionalOnOperationUtil.hasOperation(Operations.COUNT, clazz));
-        assertTrue(ConditionalOnOperationUtil.hasOperation(Operations.COUNT_ALL, clazz));
-        assertTrue(ConditionalOnOperationUtil.hasOperation(Operations.SAVE, clazz));
-        assertTrue(ConditionalOnOperationUtil.hasOperation(Operations.SAVE_MANY, clazz));
-        assertTrue(ConditionalOnOperationUtil.hasOperation(Operations.UPDATE, clazz));
-        assertTrue(ConditionalOnOperationUtil.hasOperation(Operations.UPDATE_MANY, clazz));
-        assertTrue(ConditionalOnOperationUtil.hasOperation(Operations.EDIT, clazz));
-        assertTrue(ConditionalOnOperationUtil.hasOperation(Operations.EDIT_MANY, clazz));
+    void testHasOperationWithValidDomain() {
+        // Set up a domain with allowed operations
+        CrudProperties.Domain domain = new CrudProperties.Domain();
+        domain.setName("testDomain");
+        domain.setOperations(Arrays.asList("save", "delete"));
+        crudProperties.getDomains().add(domain);
+
+        // Create a scope for testing
+        Scope scope = new Scope() {
+            @Override
+            public String element() {
+                return "domain";
+            }
+
+            @Override
+            public String operation() {
+                return "save";
+            }
+
+            @Override
+            public Class<? extends Annotation> annotationType() {
+                return Scope.class;
+            }
+        };
+
+        // Check if the operation is allowed
+        assertTrue(ConditionalOnOperationUtil.hasOperation(scope, crudProperties, SomeClassWithDomain.class));
     }
 
-    /**
-     * Test whether hasOperation returns true for a class that allows the READ operation.
-     */
     @Test
-    void testHasOperationWithReadOperationAllowed() {
-        Class<?> clazz = SomeClassWithReadAllowedAnnotation.class;
-        boolean result = ConditionalOnOperationUtil.hasOperation(Operations.GET_ONE, clazz);
-        // Expect true because the class allows the READ operation.
-        assertTrue(result);
+    void testHasOperationWithInvalidDomain() {
+        // Set up a domain with no allowed operations
+        CrudProperties.Domain domain = new CrudProperties.Domain();
+        domain.setName("testDomain");
+        domain.setOperations(List.of("delete"));
+        crudProperties.getDomains().add(domain);
+
+        // Create a scope for testing
+        Scope scope = new Scope() {
+            @Override
+            public String element() {
+                return "domain";
+            }
+
+            @Override
+            public String operation() {
+                return "save"; // Not allowed
+            }
+
+            @Override
+            public Class<? extends Annotation> annotationType() {
+                return Scope.class;
+            }
+        };
+
+        // Check if the operation is denied
+        assertFalse(ConditionalOnOperationUtil.hasOperation(scope, crudProperties, SomeClassWithDomain.class));
     }
 
-    /**
-     * Test whether hasOperation returns true for a class that allows the WRITE operation.
-     */
     @Test
-    void testHasOperationWithWriteOperationAllowed() {
-        Class<?> clazz = SomeClassWithWriteAllowedAnnotation.class;
-        boolean result = ConditionalOnOperationUtil.hasOperation(Operations.SAVE, clazz);
-        // Expect true because the class allows the WRITE operation.
-        assertTrue(result);
-    }
+    void testHasOperationWithNoDomain() {
+        // Create a scope for testing
+        Scope scope = new Scope() {
+            @Override
+            public String element() {
+                return "domain";
+            }
 
-    /**
-     * Test whether hasOperation returns false for a class that doesn't allow the READ operation.
-     */
-    @Test
-    void testHasOperationWithReadOperationNotAllowed() {
-        Class<?> clazz = SomeClassWithWriteAllowedAnnotation.class;
-        boolean result = ConditionalOnOperationUtil.hasOperation(Operations.GET_ONE, clazz);
-        // Expect false because the class doesn't allow the READ operation.
-        assertTrue(result);
-    }
+            @Override
+            public String operation() {
+                return "save"; // No domain defined
+            }
 
-    /**
-     * Test whether hasOperation returns false for a class that doesn't allow the WRITE operation.
-     */
-    @Test
-    void testHasOperationWithWriteOperationNotAllowed() {
-        Class<?> clazz = SomeClassWithReadAllowedAnnotation.class;
-        boolean result = ConditionalOnOperationUtil.hasOperation(Operations.SAVE, clazz);
-        // Expect false because the class doesn't allow the WRITE operation.
-        assertTrue(result);
-    }
+            @Override
+            public Class<? extends Annotation> annotationType() {
+                return Scope.class;
+            }
+        };
 
-    /**
-     * Test whether hasOperation handles null annotations by returning true.
-     */
-    @Test
-    void testHasOperationWithNullAnnotation() {
-        Class<?> clazz = SomeClassWithNullAnnotation.class;
-        // Expect true because the annotation is null.
-        assertTrue(ConditionalOnOperationUtil.hasOperation(Operations.GET_ONE, clazz));
+        // Check if the operation is allowed when no domain is defined
+        assertTrue(ConditionalOnOperationUtil.hasOperation(scope, crudProperties, SomeClassWithNoDomain.class));
     }
 
     private static class SomeClassWithoutDomainAnnotation {
@@ -98,5 +116,13 @@ class ConditionalOnOperationUtilTest {
 
     private static class SomeClassWithNullAnnotation {
 
+    }
+
+    @Resource(value = "testDomain", type = ResourceType.RESTFUL)
+    // Dummy classes for testing
+    private static class SomeClassWithDomain {
+    }
+
+    private static class SomeClassWithNoDomain {
     }
 }

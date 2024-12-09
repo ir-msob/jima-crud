@@ -66,7 +66,7 @@ public interface BaseEditManyDomainCrudRsocketResource<
      */
     @MessageMapping(Operations.EDIT_MANY)
     @MethodStats
-    @Scope(Operations.EDIT_MANY)
+    @Scope(operation = Operations.EDIT_MANY)
     default Mono<Collection<DTO>> editMany(@Payload String dto, @AuthenticationPrincipal Jwt principal)
             throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("RSocket request to edit many, dto : {}", dto);

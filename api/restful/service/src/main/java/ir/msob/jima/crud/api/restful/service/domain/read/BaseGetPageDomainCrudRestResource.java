@@ -74,7 +74,7 @@ public interface BaseGetPageDomainCrudRestResource<
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Return a domain or null"),
             @ApiResponse(code = 400, message = "If the validation operation is incorrect throws BadRequestException otherwise nothing", response = BadRequestResponse.class)})
     @MethodStats
-    @Scope(Operations.GET_PAGE)
+    @Scope(operation = Operations.GET_PAGE)
     default ResponseEntity<Mono<Page<DTO>>> getPage(C criteria, @RequestParam("page") int page, @RequestParam("size") int size, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to get page domain, criteria {} : ", criteria);
 

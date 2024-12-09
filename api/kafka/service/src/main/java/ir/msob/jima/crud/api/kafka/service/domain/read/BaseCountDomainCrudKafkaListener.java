@@ -52,7 +52,7 @@ public interface BaseCountDomainCrudKafkaListener<
     /**
      * Initializes the listener for the COUNT operation.
      */
-    @Scope(Operations.COUNT)
+    @Scope(operation = Operations.COUNT)
     @PostConstruct
     default void count() {
         String operation = Operations.COUNT;
@@ -70,7 +70,7 @@ public interface BaseCountDomainCrudKafkaListener<
     @MethodStats
     @SneakyThrows
     @CallbackError("dto")
-    @Scope(Operations.COUNT)
+    @Scope(operation = Operations.COUNT)
     private void serviceCount(String dto) {
         log.debug("Received message for count: dto {}", dto);
         ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());

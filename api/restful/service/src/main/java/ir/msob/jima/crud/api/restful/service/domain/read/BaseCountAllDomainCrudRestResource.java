@@ -70,7 +70,7 @@ public interface BaseCountAllDomainCrudRestResource<
             @ApiResponse(code = 200, message = "If domain(s) already count return true otherwise return false", response = Long.class),
             @ApiResponse(code = 400, message = "If the validation operation is incorrect throws BadRequestException otherwise nothing", response = BadRequestResponse.class)})
     @MethodStats
-    @Scope(Operations.COUNT_ALL)
+    @Scope(operation = Operations.COUNT_ALL)
     default ResponseEntity<Mono<Long>> countAll(ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to count all");
 

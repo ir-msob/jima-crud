@@ -64,7 +64,7 @@ public interface BaseGetOneDomainCrudGraphqlRestResource<
      */
     @MethodStats
     @QueryMapping
-    @Scope(Operations.GET_ONE)
+    @Scope(operation = Operations.GET_ONE)
     default Mono<DtoType> getOne(@Argument("input") CriteriaInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
         log.debug("Request to get one: dto {}", input);
 

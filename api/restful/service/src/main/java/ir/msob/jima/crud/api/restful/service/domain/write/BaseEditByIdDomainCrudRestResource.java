@@ -76,7 +76,7 @@ public interface BaseEditByIdDomainCrudRestResource<
             @ApiResponse(code = 400, message = "If the validation operation is incorrect throws BadRequestException otherwise nothing", response = BadRequestResponse.class),
             @ApiResponse(code = 409, message = "If the check operation is false throws ConflictException otherwise nothing", response = ConflictResponse.class)})
     @MethodStats
-    @Scope(Operations.EDIT_BY_ID)
+    @Scope(operation = Operations.EDIT_BY_ID)
     default ResponseEntity<Mono<DTO>> editById(@PathVariable("id") ID id, @RequestBody JsonPatch dto, ServerWebExchange serverWebExchange, Principal principal)
             throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to edit domain, id {}, dto {} ", id, dto);

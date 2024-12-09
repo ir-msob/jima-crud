@@ -52,7 +52,7 @@ public interface BaseGetOneDomainCrudGrpcResource<
      */
     @Override
     @MethodStats
-    @Scope(Operations.GET_ONE)
+    @Scope(operation = Operations.GET_ONE)
     default Mono<DtoMsg> getOne(Mono<CriteriaMsg> request) {
         return request.flatMap(this::getOne);
     }
@@ -65,7 +65,7 @@ public interface BaseGetOneDomainCrudGrpcResource<
      */
     @Override
     @MethodStats
-    @Scope(Operations.GET_ONE)
+    @Scope(operation = Operations.GET_ONE)
     default Mono<DtoMsg> getOne(CriteriaMsg request) {
         log.debug("Request to get one: dto {}", request);
         return getService().getOne(convertToCriteria(request.getCriteria()), getUser())

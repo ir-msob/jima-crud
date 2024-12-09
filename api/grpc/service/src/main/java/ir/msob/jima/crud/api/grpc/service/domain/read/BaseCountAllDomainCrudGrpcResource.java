@@ -52,7 +52,7 @@ public interface BaseCountAllDomainCrudGrpcResource<
      */
     @Override
     @MethodStats
-    @Scope(Operations.COUNT_ALL)
+    @Scope(operation = Operations.COUNT_ALL)
     default Mono<CountMsg> countAll(Mono<Empty> request) {
         return request.flatMap(this::countAll);
     }
@@ -65,7 +65,7 @@ public interface BaseCountAllDomainCrudGrpcResource<
      */
     @Override
     @MethodStats
-    @Scope(Operations.COUNT_ALL)
+    @Scope(operation = Operations.COUNT_ALL)
     default Mono<CountMsg> countAll(Empty request) {
         log.debug("Request to count all: dto {}", request);
         return getService().countAll(getUser())

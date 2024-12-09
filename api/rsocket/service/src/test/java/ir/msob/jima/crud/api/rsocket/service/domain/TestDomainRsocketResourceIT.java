@@ -38,7 +38,8 @@ public class TestDomainRsocketResourceIT extends DomainCrudRsocketResourceTest<T
 
     @Autowired
     TestDomainRsocketResource testDomainRsocketResource;
-
+    @Autowired
+    JimaProperties jimaProperties;
     @Autowired
     BaseRSocketRequesterBuilder rSocketOauth2RequesterBuilder;
 
@@ -47,8 +48,6 @@ public class TestDomainRsocketResourceIT extends DomainCrudRsocketResourceTest<T
     @Value("${spring.rsocket.server.port}")
     Integer port;
     String host = "localhost";
-    @Autowired
-    JimaProperties jimaProperties;
 
     @SneakyThrows
     @BeforeAll
@@ -82,4 +81,8 @@ public class TestDomainRsocketResourceIT extends DomainCrudRsocketResourceTest<T
         return TestDomainRsocketResource.BASE_URI;
     }
 
+    @Override
+    public JimaProperties getJimaProperties() {
+        return jimaProperties;
+    }
 }

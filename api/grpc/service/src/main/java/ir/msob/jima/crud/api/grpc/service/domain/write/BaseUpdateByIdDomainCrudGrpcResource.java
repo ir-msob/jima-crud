@@ -51,7 +51,7 @@ public interface BaseUpdateByIdDomainCrudGrpcResource<
      */
     @Override
     @MethodStats
-    @Scope(Operations.UPDATE_BY_ID)
+    @Scope(operation = Operations.UPDATE_BY_ID)
     default Mono<DtoMsg> updateById(Mono<DtoMsg> request) {
         return request.flatMap(this::updateById);
     }
@@ -64,7 +64,7 @@ public interface BaseUpdateByIdDomainCrudGrpcResource<
      */
     @Override
     @MethodStats
-    @Scope(Operations.UPDATE_BY_ID)
+    @Scope(operation = Operations.UPDATE_BY_ID)
     default Mono<DtoMsg> updateById(DtoMsg request) {
         log.debug("Request to update by id: dto {}", request);
         return getService().update(convertToId(request.getId()), convertToDto(request.getDto()), getUser())

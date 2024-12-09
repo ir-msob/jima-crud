@@ -66,7 +66,7 @@ public interface BaseCountAllDomainCrudRsocketResource<
      */
     @MessageMapping(Operations.COUNT_ALL)
     @MethodStats
-    @Scope(Operations.COUNT_ALL)
+    @Scope(operation = Operations.COUNT_ALL)
     default Mono<Long> countAll(@Payload String dto, @AuthenticationPrincipal Jwt principal) throws BadRequestException, DomainNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, JsonProcessingException {
         log.debug("RSocket request to count all dto {}", dto);
         ChannelMessage<USER, ModelType> message = getObjectMapper().readValue(dto, getModelTypeReferenceType());

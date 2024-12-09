@@ -63,7 +63,7 @@ public interface BaseEditDomainCrudGraphqlRestResource<
      */
     @MethodStats
     @MutationMapping
-    @Scope(Operations.EDIT)
+    @Scope(operation = Operations.EDIT)
     default Mono<DtoType> edit(@Argument("input") CriteriaJsonPatchInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
         log.debug("Request to edit: dto {}", input);
 

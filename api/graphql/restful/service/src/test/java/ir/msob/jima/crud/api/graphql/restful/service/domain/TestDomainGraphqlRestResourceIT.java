@@ -1,5 +1,6 @@
 package ir.msob.jima.crud.api.graphql.restful.service.domain;
 
+import ir.msob.jima.core.beans.properties.JimaProperties;
 import ir.msob.jima.core.commons.resource.BaseResource;
 import ir.msob.jima.core.ral.mongo.it.security.ProjectUser;
 import ir.msob.jima.core.ral.mongo.it.test.TestCriteria;
@@ -18,6 +19,7 @@ import lombok.extern.apachecommons.CommonsLog;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
@@ -30,6 +32,9 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers
 @CommonsLog
 public class TestDomainGraphqlRestResourceIT extends DomainCrudGraphqlRestResourceTest<TestDomain, TestDto, TestCriteria, TestRepository, TestServiceDomain, TestDataProvider> {
+
+    @Autowired
+    JimaProperties jimaProperties;
 
     @SneakyThrows
     @BeforeAll
@@ -51,4 +56,8 @@ public class TestDomainGraphqlRestResourceIT extends DomainCrudGraphqlRestResour
         return TestDomainGraphqlRestResourceDomain.class;
     }
 
+    @Override
+    public JimaProperties getJimaProperties() {
+        return jimaProperties;
+    }
 }

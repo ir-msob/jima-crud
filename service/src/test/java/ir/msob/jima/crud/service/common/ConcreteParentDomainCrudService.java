@@ -14,13 +14,13 @@ import java.util.Collection;
 
 public class ConcreteParentDomainCrudService implements
         ParentDomainCrudService<String,
+                BaseUser,
+                SampleDomain<String>,
+                SampleDto<String>,
+                SampleCriteria<String>,
+                BaseRepository<String,
                         BaseUser,
-                        SampleDomain<String>,
-                        SampleDto<String>,
-                        SampleCriteria<String>,
-                        BaseRepository<String,
-                                BaseUser,
-                                SampleDomain<String>>> {
+                        SampleDomain<String>>> {
 
 
     @Override

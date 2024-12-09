@@ -64,4 +64,8 @@ public class TestDomainRsocketResourceIT extends DomainCrudKafkaResourceTest<Tes
         return TestDomainKafkaResourceDomain.BASE_URI;
     }
 
+    @Override
+    public JimaProperties getJimaProperties() {
+        return jimaProperties;
+    }
 }

@@ -63,7 +63,7 @@ public interface BaseCountDomainCrudGraphqlRestResource<
      */
     @MethodStats
     @QueryMapping
-    @Scope(Operations.COUNT)
+    @Scope(operation = Operations.COUNT)
     default Mono<CountType> count(@Argument("input") CriteriaInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
         log.debug("Request to count: dto {}", input);
 

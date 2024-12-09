@@ -65,7 +65,7 @@ public interface BaseEditDomainCrudRsocketResource<
      */
     @MessageMapping(Operations.EDIT)
     @MethodStats
-    @Scope(Operations.EDIT)
+    @Scope(operation = Operations.EDIT)
     default Mono<DTO> edit(@Payload String dto, @AuthenticationPrincipal Jwt principal)
             throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("RSocket request to edit new domain, dto : {}", dto);

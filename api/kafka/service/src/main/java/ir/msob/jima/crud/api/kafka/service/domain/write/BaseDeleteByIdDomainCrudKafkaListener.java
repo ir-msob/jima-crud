@@ -52,7 +52,7 @@ public interface BaseDeleteByIdDomainCrudKafkaListener<
     /**
      * Initializes the listener for the DELETE_BY_ID operation.
      */
-    @Scope(Operations.DELETE_BY_ID)
+    @Scope(operation = Operations.DELETE_BY_ID)
     @PostConstruct
     default void deleteById() {
         String operation = Operations.DELETE_BY_ID;
@@ -70,7 +70,7 @@ public interface BaseDeleteByIdDomainCrudKafkaListener<
     @MethodStats
     @SneakyThrows
     @CallbackError("dto")
-    @Scope(Operations.DELETE_BY_ID)
+    @Scope(operation = Operations.DELETE_BY_ID)
     private void serviceDeleteById(String dto) {
         log.debug("Received message for delete by id: dto {}", dto);
         ChannelMessage<USER, IdMessage<ID>> message = getObjectMapper().readValue(dto, getIdReferenceType());

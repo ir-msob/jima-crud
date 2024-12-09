@@ -52,7 +52,7 @@ public interface BaseUpdateManyDomainCrudKafkaListener<
     /**
      * Initializes the listener for the UPDATE_MANY operation.
      */
-    @Scope(Operations.UPDATE_MANY)
+    @Scope(operation = Operations.UPDATE_MANY)
     @PostConstruct
     default void updateMany() {
         String operation = Operations.UPDATE_MANY;
@@ -73,7 +73,7 @@ public interface BaseUpdateManyDomainCrudKafkaListener<
     @MethodStats
     @SneakyThrows
     @CallbackError("dto")
-    @Scope(Operations.UPDATE_MANY)
+    @Scope(operation = Operations.UPDATE_MANY)
     private void serviceUpdateMany(String dto) {
         log.debug("Received message for update many: dto {}", dto);
         // Parse the message from the JSON string

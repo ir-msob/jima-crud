@@ -51,7 +51,7 @@ public interface BaseDeleteByIdDomainCrudGrpcResource<
      */
     @Override
     @MethodStats
-    @Scope(Operations.DELETE_BY_ID)
+    @Scope(operation = Operations.DELETE_BY_ID)
     default Mono<IdMsg> deleteById(Mono<IdMsg> request) {
         return request.flatMap(this::deleteById);
     }
@@ -64,7 +64,7 @@ public interface BaseDeleteByIdDomainCrudGrpcResource<
      */
     @Override
     @MethodStats
-    @Scope(Operations.DELETE_BY_ID)
+    @Scope(operation = Operations.DELETE_BY_ID)
     default Mono<IdMsg> deleteById(IdMsg request) {
         log.debug("Request to delete by id: dto {}", request);
         return getService().delete(convertToId(request.getId()), getUser())

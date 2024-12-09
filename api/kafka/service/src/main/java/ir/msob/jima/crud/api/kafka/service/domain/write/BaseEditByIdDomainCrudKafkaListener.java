@@ -52,7 +52,7 @@ public interface BaseEditByIdDomainCrudKafkaListener<
     /**
      * Initializes the listener for the EDIT_BY_ID operation.
      */
-    @Scope(Operations.EDIT_BY_ID)
+    @Scope(operation = Operations.EDIT_BY_ID)
     @PostConstruct
     default void editById() {
         String operation = Operations.EDIT_BY_ID;
@@ -70,7 +70,7 @@ public interface BaseEditByIdDomainCrudKafkaListener<
     @MethodStats
     @SneakyThrows
     @CallbackError("dto")
-    @Scope(Operations.EDIT_BY_ID)
+    @Scope(operation = Operations.EDIT_BY_ID)
     private void serviceEditById(String dto) {
         log.debug("Received message for edit by id: dto {}", dto);
         ChannelMessage<USER, IdJsonPatchMessage<ID>> message = getObjectMapper().readValue(dto, getIdJsonPatchReferenceType());

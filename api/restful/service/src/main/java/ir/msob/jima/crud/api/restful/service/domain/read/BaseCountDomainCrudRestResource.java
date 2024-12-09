@@ -71,7 +71,7 @@ public interface BaseCountDomainCrudRestResource<
             @ApiResponse(code = 200, message = "If domain(s) already count return true otherwise return false", response = Long.class),
             @ApiResponse(code = 400, message = "If the validation operation is incorrect throws BadRequestException otherwise nothing", response = BadRequestResponse.class)})
     @MethodStats
-    @Scope(Operations.COUNT)
+    @Scope(operation = Operations.COUNT)
     default ResponseEntity<Mono<Long>> count(C criteria, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to count, criteria {} : ", criteria);
 

@@ -52,7 +52,7 @@ public interface BaseEditByIdDomainCrudGrpcResource<
      */
     @Override
     @MethodStats
-    @Scope(Operations.EDIT_BY_ID)
+    @Scope(operation = Operations.EDIT_BY_ID)
     default Mono<DtoMsg> editById(Mono<IdJsonPatchMsg> request) {
         return request.flatMap(this::editById);
     }
@@ -65,7 +65,7 @@ public interface BaseEditByIdDomainCrudGrpcResource<
      */
     @Override
     @MethodStats
-    @Scope(Operations.EDIT_BY_ID)
+    @Scope(operation = Operations.EDIT_BY_ID)
     default Mono<DtoMsg> editById(IdJsonPatchMsg request) {
         log.debug("Request to edit by id: dto {}", request);
         return getService().edit(convertToId(request.getId()), convertToJsonPatch(request.getJsonPatch()), getUser())

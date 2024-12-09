@@ -12,6 +12,7 @@ import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.related.relatedaction.BaseRelatedActionDto;
 import ir.msob.jima.core.commons.related.relatedaction.RelatedActionAbstract;
 import ir.msob.jima.core.commons.related.relatedaction.RelatedActionCriteriaAbstract;
+import ir.msob.jima.core.commons.scope.Elements;
 import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.related.ParentRelatedCrudRestResource;
@@ -49,7 +50,7 @@ public interface BaseUpdateRelatedActionCrudRestResource<
             @ApiResponse(code = 404, message = "Domain not found", response = DomainNotFoundException.class)
     })
     @MethodStats
-    @Scope(Operations.UPDATE)
+    @Scope(element = Elements.RELATED_ACTION, operation = Operations.UPDATE)
     default ResponseEntity<Mono<DTO>> update(@PathVariable("parentId") ID parentId, @RequestBody @Valid OV dto, C criteria, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to update related action, parentId {}, dto {}, criteria {}", parentId, dto, criteria);
 

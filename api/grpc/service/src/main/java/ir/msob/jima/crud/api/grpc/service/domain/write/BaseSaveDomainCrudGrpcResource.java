@@ -51,7 +51,7 @@ public interface BaseSaveDomainCrudGrpcResource<
      */
     @Override
     @MethodStats
-    @Scope(Operations.SAVE)
+    @Scope(operation = Operations.SAVE)
     default Mono<DtoMsg> save(Mono<DtoMsg> request) {
         return request.flatMap(this::save);
     }
@@ -64,7 +64,7 @@ public interface BaseSaveDomainCrudGrpcResource<
      */
     @Override
     @MethodStats
-    @Scope(Operations.SAVE)
+    @Scope(operation = Operations.SAVE)
     default Mono<DtoMsg> save(DtoMsg request) {
         log.debug("Request to save: dto {}", request);
         return getService().save(convertToDto(request.getDto()), getUser())

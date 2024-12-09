@@ -52,7 +52,7 @@ public interface BaseGetOneDomainCrudKafkaListener<
     /**
      * Initializes the listener for the GET_ONE operation.
      */
-    @Scope(Operations.GET_ONE)
+    @Scope(operation = Operations.GET_ONE)
     @PostConstruct
     default void getOne() {
         String operation = Operations.GET_ONE;
@@ -70,7 +70,7 @@ public interface BaseGetOneDomainCrudKafkaListener<
     @MethodStats
     @SneakyThrows
     @CallbackError("dto")
-    @Scope(Operations.GET_ONE)
+    @Scope(operation = Operations.GET_ONE)
     private void serviceGetOne(String dto) {
         log.debug("Received message for get one: dto {}", dto);
         ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());

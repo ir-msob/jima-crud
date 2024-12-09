@@ -12,6 +12,7 @@ import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.related.relatedobject.relatedprocess.BaseRelatedProcessDto;
 import ir.msob.jima.core.commons.related.relatedobject.relatedprocess.RelatedProcessAbstract;
 import ir.msob.jima.core.commons.related.relatedobject.relatedprocess.RelatedProcessCriteriaAbstract;
+import ir.msob.jima.core.commons.scope.Elements;
 import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.related.ParentRelatedCrudRestResource;
@@ -47,7 +48,7 @@ public interface BaseDeleteByRelatedIdRelatedProcessCrudRestResource<
             @ApiResponse(code = 404, message = "Domain not found", response = DomainNotFoundException.class)
     })
     @MethodStats
-    @Scope(Operations.DELETE_BY_RELATED_ID)
+    @Scope(element = Elements.RELATED_PROCESS, operation = Operations.DELETE_BY_RELATED_ID)
     default ResponseEntity<Mono<DTO>> deleteByRelatedId(@PathVariable("parentId") ID parentId, @PathVariable("relatedId") String relatedId, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to delete related process by relatedId, parentId {}, id {}", parentId, relatedId);
 

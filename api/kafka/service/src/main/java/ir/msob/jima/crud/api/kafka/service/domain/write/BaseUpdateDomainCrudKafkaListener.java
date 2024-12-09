@@ -52,7 +52,7 @@ public interface BaseUpdateDomainCrudKafkaListener<
     /**
      * Initializes the listener for the UPDATE operation.
      */
-    @Scope(Operations.UPDATE)
+    @Scope(operation = Operations.UPDATE)
     @PostConstruct
     default void update() {
         String operation = Operations.UPDATE;
@@ -70,7 +70,7 @@ public interface BaseUpdateDomainCrudKafkaListener<
     @MethodStats
     @SneakyThrows
     @CallbackError("dto")
-    @Scope(Operations.UPDATE)
+    @Scope(operation = Operations.UPDATE)
     private void serviceUpdate(String dto) {
         log.debug("Received message for update: dto {}", dto);
         ChannelMessage<USER, DtoMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getDtoReferenceType());

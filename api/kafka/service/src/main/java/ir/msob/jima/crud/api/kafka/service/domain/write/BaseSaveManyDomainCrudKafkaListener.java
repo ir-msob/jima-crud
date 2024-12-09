@@ -52,7 +52,7 @@ public interface BaseSaveManyDomainCrudKafkaListener<
     /**
      * Initializes the listener for the SAVE_MANY operation.
      */
-    @Scope(Operations.SAVE_MANY)
+    @Scope(operation = Operations.SAVE_MANY)
     @PostConstruct
     default void saveMany() {
         String operation = Operations.SAVE_MANY;
@@ -70,7 +70,7 @@ public interface BaseSaveManyDomainCrudKafkaListener<
     @MethodStats
     @SneakyThrows
     @CallbackError("dto")
-    @Scope(Operations.SAVE_MANY)
+    @Scope(operation = Operations.SAVE_MANY)
     private void serviceSaveMany(String dto) {
         log.debug("Received message for save many: dto {}", dto);
         ChannelMessage<USER, DtosMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getDtosReferenceType());

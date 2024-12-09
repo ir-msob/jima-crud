@@ -51,7 +51,7 @@ public interface BaseUpdateDomainCrudGrpcResource<
      */
     @Override
     @MethodStats
-    @Scope(Operations.UPDATE)
+    @Scope(operation = Operations.UPDATE)
     default Mono<DtoMsg> update(Mono<DtoMsg> request) {
         return request.flatMap(this::update);
     }
@@ -64,7 +64,7 @@ public interface BaseUpdateDomainCrudGrpcResource<
      */
     @Override
     @MethodStats
-    @Scope(Operations.UPDATE)
+    @Scope(operation = Operations.UPDATE)
     default Mono<DtoMsg> update(DtoMsg request) {
         log.debug("Request to update: dto {}", request);
         return getService().update(convertToDto(request.getDto()), getUser())

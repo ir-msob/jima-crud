@@ -65,7 +65,7 @@ public interface BaseGetOneDomainCrudRsocketResource<
      */
     @MessageMapping(Operations.GET_ONE)
     @MethodStats
-    @Scope(Operations.GET_ONE)
+    @Scope(operation = Operations.GET_ONE)
     default Mono<DTO> getOne(@Payload String dto, @AuthenticationPrincipal Jwt principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("RSocket request to get one domain, dto {}", dto);
         ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());

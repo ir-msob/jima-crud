@@ -60,7 +60,7 @@ public interface BaseGetByIdDomainCrudGraphqlRestResource<
      */
     @MethodStats
     @QueryMapping
-    @Scope(Operations.GET_BY_ID)
+    @Scope(operation = Operations.GET_BY_ID)
     default Mono<DtoType> getById(@Argument("input") IdInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
         log.debug("Request to get by id: dto {}", input);
 

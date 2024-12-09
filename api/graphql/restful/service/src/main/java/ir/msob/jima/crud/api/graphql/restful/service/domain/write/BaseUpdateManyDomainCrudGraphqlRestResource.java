@@ -68,7 +68,7 @@ public interface BaseUpdateManyDomainCrudGraphqlRestResource<
      */
     @MethodStats
     @MutationMapping
-    @Scope(Operations.UPDATE_MANY)
+    @Scope(operation = Operations.UPDATE_MANY)
     default Mono<DtosType> updateMany(@Argument("input") DtosInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         log.debug("Request to update many: dto {}", input);
 

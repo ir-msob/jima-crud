@@ -12,6 +12,7 @@ import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.related.objectvalidation.BaseObjectValidationDto;
 import ir.msob.jima.core.commons.related.objectvalidation.ObjectValidationAbstract;
 import ir.msob.jima.core.commons.related.objectvalidation.ObjectValidationCriteriaAbstract;
+import ir.msob.jima.core.commons.scope.Elements;
 import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.related.ParentRelatedCrudRestResource;
@@ -49,7 +50,7 @@ public interface BaseUpdateByNameObjectValidationCrudRestResource<
             @ApiResponse(code = 404, message = "Domain not found", response = DomainNotFoundException.class)
     })
     @MethodStats
-    @Scope(Operations.UPDATE_BY_NAME)
+    @Scope(element = Elements.OBJECT_VALIDATION, operation = Operations.UPDATE_BY_NAME)
     default ResponseEntity<Mono<DTO>> updateByName(@PathVariable("parentId") ID parentId, @PathVariable("name") String name, @RequestBody @Valid OV dto, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to update object validation, parentId {}, name {}, dto {}", parentId, name, dto);
 

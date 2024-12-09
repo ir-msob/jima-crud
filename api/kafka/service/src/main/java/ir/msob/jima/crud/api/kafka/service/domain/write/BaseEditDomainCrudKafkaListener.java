@@ -52,7 +52,7 @@ public interface BaseEditDomainCrudKafkaListener<
     /**
      * Initializes the listener for the EDIT operation.
      */
-    @Scope(Operations.EDIT)
+    @Scope(operation = Operations.EDIT)
     @PostConstruct
     default void edit() {
         String operation = Operations.EDIT;
@@ -70,7 +70,7 @@ public interface BaseEditDomainCrudKafkaListener<
     @MethodStats
     @SneakyThrows
     @CallbackError("dto")
-    @Scope(Operations.EDIT)
+    @Scope(operation = Operations.EDIT)
     private void serviceEdit(String dto) {
         log.debug("Received message for edit: dto {}", dto);
         ChannelMessage<USER, JsonPatchMessage<ID, C>> message = getObjectMapper().readValue(dto, getEditReferenceType());

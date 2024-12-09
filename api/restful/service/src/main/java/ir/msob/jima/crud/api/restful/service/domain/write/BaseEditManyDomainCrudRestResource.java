@@ -76,7 +76,7 @@ public interface BaseEditManyDomainCrudRestResource<
             @ApiResponse(code = 400, message = "If the validation operation is incorrect throws BadRequestException otherwise nothing", response = BadRequestResponse.class),
             @ApiResponse(code = 409, message = "If the check operation is false throws ConflictException otherwise nothing", response = ConflictResponse.class)})
     @MethodStats
-    @Scope(Operations.EDIT_MANY)
+    @Scope(operation = Operations.EDIT_MANY)
     default ResponseEntity<Mono<Collection<DTO>>> editMany(@RequestBody JsonPatch dto, C criteria, ServerWebExchange serverWebExchange, Principal principal)
             throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to edit many, dto : {}, criteria : {}", dto, criteria);

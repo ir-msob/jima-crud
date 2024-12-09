@@ -64,7 +64,7 @@ public interface BaseGetManyDomainCrudGraphqlRestResource<
      */
     @MethodStats
     @QueryMapping
-    @Scope(Operations.GET_MANY)
+    @Scope(operation = Operations.GET_MANY)
     default Mono<DtosType> getMany(@Argument("input") CriteriaInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
         log.debug("Request to get many: dto {}", input);
 

@@ -12,6 +12,7 @@ import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.related.relatedaction.BaseRelatedActionDto;
 import ir.msob.jima.core.commons.related.relatedaction.RelatedActionAbstract;
 import ir.msob.jima.core.commons.related.relatedaction.RelatedActionCriteriaAbstract;
+import ir.msob.jima.core.commons.scope.Elements;
 import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.related.ParentRelatedCrudRestResource;
@@ -47,7 +48,7 @@ public interface BaseDeleteByNameRelatedActionCrudRestResource<
             @ApiResponse(code = 404, message = "Domain not found", response = DomainNotFoundException.class)
     })
     @MethodStats
-    @Scope(Operations.DELETE_BY_NAME)
+    @Scope(element = Elements.RELATED_ACTION, operation = Operations.DELETE_BY_NAME)
     default ResponseEntity<Mono<DTO>> deleteByName(@PathVariable("parentId") ID parentId, @PathVariable("name") String name, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to delete related-action by name, parentId {}, id {}", parentId, name);
 

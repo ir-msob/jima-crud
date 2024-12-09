@@ -52,7 +52,7 @@ public interface BaseCountAllDomainCrudKafkaListener<
     /**
      * Initializes the listener for the COUNT_ALL operation.
      */
-    @Scope(Operations.COUNT_ALL)
+    @Scope(operation = Operations.COUNT_ALL)
     @PostConstruct
     default void countAll() {
         String operation = Operations.COUNT_ALL;
@@ -70,7 +70,7 @@ public interface BaseCountAllDomainCrudKafkaListener<
     @MethodStats
     @SneakyThrows
     @CallbackError("dto")
-    @Scope(Operations.COUNT_ALL)
+    @Scope(operation = Operations.COUNT_ALL)
     private void serviceCountAll(String dto) {
         log.debug("Received message for count all: dto {}", dto);
         ChannelMessage<USER, ModelType> message = getObjectMapper().readValue(dto, getModelTypeReferenceType());

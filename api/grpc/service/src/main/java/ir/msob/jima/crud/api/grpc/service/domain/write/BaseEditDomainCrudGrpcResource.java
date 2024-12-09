@@ -52,7 +52,7 @@ public interface BaseEditDomainCrudGrpcResource<
      */
     @Override
     @MethodStats
-    @Scope(Operations.EDIT)
+    @Scope(operation = Operations.EDIT)
     default Mono<DtoMsg> edit(Mono<CriteriaJsonPatchMsg> request) {
         return request.flatMap(this::edit);
     }
@@ -65,7 +65,7 @@ public interface BaseEditDomainCrudGrpcResource<
      */
     @Override
     @MethodStats
-    @Scope(Operations.EDIT)
+    @Scope(operation = Operations.EDIT)
     default Mono<DtoMsg> edit(CriteriaJsonPatchMsg request) {
         log.debug("Request to edit: dto {}", request);
         return getService().edit(convertToCriteria(request.getCriteria()), convertToJsonPatch(request.getJsonPatch()), getUser())

@@ -12,6 +12,7 @@ import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.related.relatedobject.relateddomain.BaseRelatedDomainDto;
 import ir.msob.jima.core.commons.related.relatedobject.relateddomain.RelatedDomainAbstract;
 import ir.msob.jima.core.commons.related.relatedobject.relateddomain.RelatedDomainCriteriaAbstract;
+import ir.msob.jima.core.commons.scope.Elements;
 import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.related.ParentRelatedCrudRestResource;
@@ -50,7 +51,7 @@ public interface BaseSaveManyRelatedDomainCrudRestResource<
             @ApiResponse(code = 404, message = "Domain not found", response = DomainNotFoundException.class)
     })
     @MethodStats
-    @Scope(Operations.SAVE_MANY)
+    @Scope(element = Elements.RELATED_DOMAIN, operation = Operations.SAVE_MANY)
     default ResponseEntity<Mono<DTO>> saveMany(@PathVariable("parentId") ID parentId, @RequestBody Collection<@Valid RD> dtos, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to save many related domains, parentId {}, dtos {}", parentId, dtos);
 

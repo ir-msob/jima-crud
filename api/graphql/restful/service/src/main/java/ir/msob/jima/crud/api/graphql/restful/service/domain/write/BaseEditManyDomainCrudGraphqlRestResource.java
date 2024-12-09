@@ -63,7 +63,7 @@ public interface BaseEditManyDomainCrudGraphqlRestResource<
      */
     @MethodStats
     @MutationMapping
-    @Scope(Operations.EDIT_MANY)
+    @Scope(operation = Operations.EDIT_MANY)
     default Mono<DtosType> editMany(@Argument("input") CriteriaJsonPatchInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
         log.debug("Request to edit many: dto {}", input);
 

@@ -52,7 +52,7 @@ public interface BaseGetManyDomainCrudKafkaListener<
     /**
      * Initializes the listener for the GET_MANY operation.
      */
-    @Scope(Operations.GET_MANY)
+    @Scope(operation = Operations.GET_MANY)
     @PostConstruct
     default void getMany() {
         String operation = Operations.GET_MANY;
@@ -70,7 +70,7 @@ public interface BaseGetManyDomainCrudKafkaListener<
     @MethodStats
     @SneakyThrows
     @CallbackError("dto")
-    @Scope(Operations.GET_MANY)
+    @Scope(operation = Operations.GET_MANY)
     private void serviceGetMany(String dto) {
         log.debug("Received message for get many: dto {}", dto);
         ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());

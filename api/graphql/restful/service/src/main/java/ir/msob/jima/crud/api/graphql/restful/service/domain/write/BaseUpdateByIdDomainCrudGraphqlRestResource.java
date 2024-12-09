@@ -68,7 +68,7 @@ public interface BaseUpdateByIdDomainCrudGraphqlRestResource<
      */
     @MethodStats
     @MutationMapping
-    @Scope(Operations.UPDATE_BY_ID)
+    @Scope(operation = Operations.UPDATE_BY_ID)
     default Mono<DtoType> updateById(@Argument("input") DtoInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         log.debug("Request to update by id: dto {}", input);
 

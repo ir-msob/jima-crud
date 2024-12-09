@@ -3,6 +3,7 @@ package ir.msob.jima.crud.api.grpc.service.domain;
 import io.grpc.inprocess.InProcessChannelBuilder;
 import io.grpc.inprocess.InProcessServerBuilder;
 import io.grpc.testing.GrpcCleanupRule;
+import ir.msob.jima.core.beans.properties.JimaProperties;
 import ir.msob.jima.core.ral.mongo.it.test.TestCriteria;
 import ir.msob.jima.core.ral.mongo.it.test.TestDomain;
 import ir.msob.jima.core.ral.mongo.it.test.TestDto;
@@ -44,6 +45,8 @@ public class TestDomainGrpcResourceIT extends DomainCrudGrpcResourceTest<TestDom
     TestServiceDomain service;
     @Autowired
     TestDomainGrpcResourceDomain resource;
+    @Autowired
+    JimaProperties jimaProperties;
     private ReactorCrudServiceGrpc.ReactorCrudServiceStub reactorCrudServiceStub;
 
     @SneakyThrows
@@ -83,4 +86,8 @@ public class TestDomainGrpcResourceIT extends DomainCrudGrpcResourceTest<TestDom
         return reactorCrudServiceStub;
     }
 
+    @Override
+    public JimaProperties getJimaProperties() {
+        return jimaProperties;
+    }
 }

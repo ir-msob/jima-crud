@@ -64,7 +64,7 @@ public interface BaseDeleteByIdDomainCrudGraphqlRestResource<
      */
     @MethodStats
     @MutationMapping
-    @Scope(Operations.DELETE_BY_ID)
+    @Scope(operation = Operations.DELETE_BY_ID)
     default Mono<IdType> deleteById(@Argument("input") IdInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
         log.debug("Request to delete by id: dto {}", input);
 

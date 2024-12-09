@@ -65,7 +65,7 @@ public interface BaseCountAllDomainCrudGraphqlRestResource<
      */
     @MethodStats
     @QueryMapping
-    @Scope(Operations.COUNT_ALL)
+    @Scope(operation = Operations.COUNT_ALL)
     default Mono<CountType> countAll(@ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         log.debug("Request to count all");
 

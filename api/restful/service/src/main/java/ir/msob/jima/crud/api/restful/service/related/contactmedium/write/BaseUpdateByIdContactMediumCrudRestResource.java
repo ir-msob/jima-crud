@@ -12,6 +12,7 @@ import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.related.contactmedium.BaseContactMediumDto;
 import ir.msob.jima.core.commons.related.contactmedium.ContactMediumAbstract;
 import ir.msob.jima.core.commons.related.contactmedium.ContactMediumCriteriaAbstract;
+import ir.msob.jima.core.commons.scope.Elements;
 import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.related.ParentRelatedCrudRestResource;
@@ -49,7 +50,7 @@ public interface BaseUpdateByIdContactMediumCrudRestResource<
             @ApiResponse(code = 404, message = "Domain not found", response = DomainNotFoundException.class)
     })
     @MethodStats
-    @Scope(Operations.UPDATE_BY_ID)
+    @Scope(element = Elements.CONTACT_MEDIUM, operation = Operations.UPDATE_BY_ID)
     default ResponseEntity<Mono<DTO>> updateById(@PathVariable("parentId") ID parentId, @PathVariable("id") ID id, @RequestBody @Valid CM dto, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to update contact medium, parentId {}, id {}, dto {}", parentId, id, dto);
 

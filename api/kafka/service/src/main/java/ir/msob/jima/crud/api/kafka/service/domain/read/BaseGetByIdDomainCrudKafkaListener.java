@@ -52,7 +52,7 @@ public interface BaseGetByIdDomainCrudKafkaListener<
     /**
      * Initializes the listener for the GET_BY_ID operation.
      */
-    @Scope(Operations.GET_BY_ID)
+    @Scope(operation = Operations.GET_BY_ID)
     @PostConstruct
     default void getById() {
         String operation = Operations.GET_BY_ID;
@@ -70,7 +70,7 @@ public interface BaseGetByIdDomainCrudKafkaListener<
     @MethodStats
     @SneakyThrows
     @CallbackError("dto")
-    @Scope(Operations.GET_BY_ID)
+    @Scope(operation = Operations.GET_BY_ID)
     private void serviceGetById(String dto) {
         log.debug("Received message for get by id: dto {}", dto);
         ChannelMessage<USER, IdMessage<ID>> message = getObjectMapper().readValue(dto, getIdReferenceType());

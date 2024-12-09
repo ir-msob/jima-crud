@@ -12,6 +12,7 @@ import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.related.relatedobject.relatedintegration.BaseRelatedIntegrationDto;
 import ir.msob.jima.core.commons.related.relatedobject.relatedintegration.RelatedIntegrationAbstract;
 import ir.msob.jima.core.commons.related.relatedobject.relatedintegration.RelatedIntegrationCriteriaAbstract;
+import ir.msob.jima.core.commons.scope.Elements;
 import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.related.ParentRelatedCrudRestResource;
@@ -50,7 +51,7 @@ public interface BaseUpdateManyRelatedIntegrationCrudRestResource<
             @ApiResponse(code = 404, message = "Domain not found", response = DomainNotFoundException.class)
     })
     @MethodStats
-    @Scope(Operations.UPDATE_MANY)
+    @Scope(element = Elements.RELATED_INTEGRATION, operation = Operations.UPDATE_MANY)
     default ResponseEntity<Mono<DTO>> updateMany(@PathVariable("parentId") ID parentId, @RequestBody Collection<@Valid RI> dtos, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to update related integration, parentId {}, dtos {}", parentId, dtos);
 

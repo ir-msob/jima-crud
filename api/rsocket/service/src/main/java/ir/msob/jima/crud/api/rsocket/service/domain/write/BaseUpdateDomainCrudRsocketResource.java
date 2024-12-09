@@ -65,7 +65,7 @@ public interface BaseUpdateDomainCrudRsocketResource<
      */
     @MessageMapping(Operations.UPDATE)
     @MethodStats
-    @Scope(Operations.UPDATE)
+    @Scope(operation = Operations.UPDATE)
     default Mono<DTO> update(@Payload String dto, @AuthenticationPrincipal Jwt principal)
             throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("RSocket request to update new domain, dto : {}", dto);

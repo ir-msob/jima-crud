@@ -66,7 +66,7 @@ public interface BaseSaveManyDomainCrudRsocketResource<
      */
     @MessageMapping(Operations.SAVE_MANY)
     @MethodStats
-    @Scope(Operations.SAVE_MANY)
+    @Scope(operation = Operations.SAVE_MANY)
     default Mono<Collection<DTO>> saveMany(@Payload String dto, @AuthenticationPrincipal Jwt principal)
             throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("RSocket request to create many new domain, dtos : {}", dto);

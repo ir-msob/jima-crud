@@ -12,6 +12,7 @@ import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.related.characteristic.BaseCharacteristicDto;
 import ir.msob.jima.core.commons.related.characteristic.Characteristic;
 import ir.msob.jima.core.commons.related.characteristic.CharacteristicCriteria;
+import ir.msob.jima.core.commons.scope.Elements;
 import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.related.ParentRelatedCrudRestResource;
@@ -49,7 +50,7 @@ public interface BaseUpdateByIdCharacteristicCrudRestResource<
             @ApiResponse(code = 404, message = "Domain not found", response = DomainNotFoundException.class)
     })
     @MethodStats
-    @Scope(Operations.UPDATE_BY_ID)
+    @Scope(element = Elements.CHARACTERISTIC, operation = Operations.UPDATE_BY_ID)
     default ResponseEntity<Mono<DTO>> updateById(@PathVariable("parentId") ID parentId, @PathVariable("id") ID id, @RequestBody @Valid CH dto, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to update characteristic, parentId {}, id {}, dto {}", parentId, id, dto);
 

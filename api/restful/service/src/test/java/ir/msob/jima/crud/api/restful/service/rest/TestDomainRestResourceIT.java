@@ -1,5 +1,6 @@
 package ir.msob.jima.crud.api.restful.service.rest;
 
+import ir.msob.jima.core.beans.properties.JimaProperties;
 import ir.msob.jima.core.commons.resource.BaseResource;
 import ir.msob.jima.core.ral.mongo.it.security.ProjectUser;
 import ir.msob.jima.core.ral.mongo.it.test.TestCriteria;
@@ -17,6 +18,7 @@ import lombok.extern.apachecommons.CommonsLog;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
@@ -29,6 +31,9 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers
 @CommonsLog
 public class TestDomainRestResourceIT extends DomainCrudRestResourceTest<TestDomain, TestDto, TestCriteria, TestRepository, TestServiceDomain, TestDataProvider> {
+
+    @Autowired
+    JimaProperties jimaProperties;
 
     @SneakyThrows
     @BeforeAll
@@ -54,5 +59,10 @@ public class TestDomainRestResourceIT extends DomainCrudRestResourceTest<TestDom
     @Override
     public Class<? extends BaseResource<ObjectId, ProjectUser>> getResourceClass() {
         return TestDomainRestResource.class;
+    }
+
+    @Override
+    public JimaProperties getJimaProperties() {
+        return jimaProperties;
     }
 }

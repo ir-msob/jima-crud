@@ -66,7 +66,7 @@ public interface BaseDeleteManyDomainCrudRsocketResource<
      */
     @MessageMapping(Operations.DELETE_MANY)
     @MethodStats
-    @Scope(Operations.DELETE_MANY)
+    @Scope(operation = Operations.DELETE_MANY)
     default Mono<Collection<ID>> deleteMany(@Payload String dto, @AuthenticationPrincipal Jwt principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("RSocket request to delete many domain, dto {}", dto);
         ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());

@@ -70,7 +70,7 @@ public interface BaseGetManyDomainCrudRestResource<
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Return a domain or null"),
             @ApiResponse(code = 400, message = "If the validation operation is incorrect throws BadRequestException otherwise nothing", response = BadRequestResponse.class)})
     @MethodStats
-    @Scope(Operations.GET_MANY)
+    @Scope(operation = Operations.GET_MANY)
     default ResponseEntity<Mono<Collection<DTO>>> getMany(C criteria, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to get many domain, criteria {} : ", criteria);
 

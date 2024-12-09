@@ -65,7 +65,7 @@ public interface BaseCountDomainCrudRsocketResource<
      */
     @MessageMapping(Operations.COUNT)
     @MethodStats
-    @Scope(Operations.COUNT)
+    @Scope(operation = Operations.COUNT)
     default Mono<Long> count(@Payload String dto, @AuthenticationPrincipal Jwt principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("RSocket request to count, dto {} : ", dto);
         ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());

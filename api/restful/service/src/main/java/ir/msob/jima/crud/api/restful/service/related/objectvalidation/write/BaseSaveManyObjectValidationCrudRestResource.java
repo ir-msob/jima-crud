@@ -12,6 +12,7 @@ import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.related.objectvalidation.BaseObjectValidationDto;
 import ir.msob.jima.core.commons.related.objectvalidation.ObjectValidationAbstract;
 import ir.msob.jima.core.commons.related.objectvalidation.ObjectValidationCriteriaAbstract;
+import ir.msob.jima.core.commons.scope.Elements;
 import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.related.ParentRelatedCrudRestResource;
@@ -50,7 +51,7 @@ public interface BaseSaveManyObjectValidationCrudRestResource<
             @ApiResponse(code = 404, message = "Domain not found", response = DomainNotFoundException.class)
     })
     @MethodStats
-    @Scope(Operations.SAVE_MANY)
+    @Scope(element = Elements.OBJECT_VALIDATION, operation = Operations.SAVE_MANY)
     default ResponseEntity<Mono<DTO>> saveMany(@PathVariable("parentId") ID parentId, @RequestBody Collection<@Valid OV> dtos, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to save many object-validations, parentId {}, dtos {}", parentId, dtos);
 
