@@ -1,6 +1,6 @@
 package ir.msob.jima.crud.service.child.relatedobject.relateddomain;
 
-import ir.msob.jima.core.commons.child.relatedobject.relateddomain.BaseRelatedDomainDto;
+import ir.msob.jima.core.commons.child.relatedobject.relateddomain.BaseRelatedDomainContainer;
 import ir.msob.jima.core.commons.child.relatedobject.relateddomain.RelatedDomainAbstract;
 import ir.msob.jima.core.commons.child.relatedobject.relateddomain.RelatedDomainCriteriaAbstract;
 import ir.msob.jima.core.commons.dto.BaseDto;
@@ -25,7 +25,7 @@ public interface BaseRelatedDomainCrudService<
         , DTO extends BaseDto<ID>
         , RD extends RelatedDomainAbstract<ID>
         , C extends RelatedDomainCriteriaAbstract<ID, RD>>
-        extends ParentRelatedObjectService<ID, ID, USER, DTO, RD, C, BaseRelatedDomainDto<ID, RD>> {
+        extends ParentRelatedObjectService<ID, ID, USER, DTO, RD, C, BaseRelatedDomainContainer<ID, RD>> {
     Logger log = LoggerFactory.getLogger(BaseRelatedDomainCrudService.class);
 
     @Transactional
@@ -34,7 +34,7 @@ public interface BaseRelatedDomainCrudService<
         return deleteById(
                 parentId
                 , id
-                , dto -> ((BaseRelatedDomainDto<ID, RD>) dto).getRelatedDomains()
+                , dto -> ((BaseRelatedDomainContainer<ID, RD>) dto).getRelatedDomains()
                 , user);
     }
 
@@ -44,7 +44,7 @@ public interface BaseRelatedDomainCrudService<
         return deleteByRelatedId(
                 parentId
                 , relatedId
-                , dto -> ((BaseRelatedDomainDto<ID, RD>) dto).getRelatedDomains()
+                , dto -> ((BaseRelatedDomainContainer<ID, RD>) dto).getRelatedDomains()
                 , user);
     }
 
@@ -54,7 +54,7 @@ public interface BaseRelatedDomainCrudService<
         return deleteMany(
                 parentId
                 , criteria
-                , dto -> ((BaseRelatedDomainDto<ID, RD>) dto).getRelatedDomains()
+                , dto -> ((BaseRelatedDomainContainer<ID, RD>) dto).getRelatedDomains()
                 , user);
     }
 
@@ -64,7 +64,7 @@ public interface BaseRelatedDomainCrudService<
         return delete(
                 parentId
                 , criteria
-                , dto -> ((BaseRelatedDomainDto<ID, RD>) dto).getRelatedDomains()
+                , dto -> ((BaseRelatedDomainContainer<ID, RD>) dto).getRelatedDomains()
                 , user);
     }
 
@@ -74,7 +74,7 @@ public interface BaseRelatedDomainCrudService<
         return saveMany(
                 parentId
                 , relatedDomains
-                , dto -> ((BaseRelatedDomainDto<ID, RD>) dto).getRelatedDomains()
+                , dto -> ((BaseRelatedDomainContainer<ID, RD>) dto).getRelatedDomains()
                 , user);
     }
 
@@ -84,7 +84,7 @@ public interface BaseRelatedDomainCrudService<
         return save(
                 parentId
                 , relatedDomain
-                , dto -> ((BaseRelatedDomainDto<ID, RD>) dto).getRelatedDomains()
+                , dto -> ((BaseRelatedDomainContainer<ID, RD>) dto).getRelatedDomains()
                 , user);
     }
 
@@ -95,7 +95,7 @@ public interface BaseRelatedDomainCrudService<
                 parentId
                 , id
                 , relatedDomain
-                , dto -> ((BaseRelatedDomainDto<ID, RD>) dto).getRelatedDomains()
+                , dto -> ((BaseRelatedDomainContainer<ID, RD>) dto).getRelatedDomains()
                 , user);
     }
 
@@ -106,7 +106,7 @@ public interface BaseRelatedDomainCrudService<
                 parentId
                 , relatedId
                 , relatedDomain
-                , dto -> ((BaseRelatedDomainDto<ID, RD>) dto).getRelatedDomains()
+                , dto -> ((BaseRelatedDomainContainer<ID, RD>) dto).getRelatedDomains()
                 , user);
     }
 
@@ -116,7 +116,7 @@ public interface BaseRelatedDomainCrudService<
         return updateMany(
                 parentId
                 , relatedDomains
-                , dto -> ((BaseRelatedDomainDto<ID, RD>) dto).getRelatedDomains()
+                , dto -> ((BaseRelatedDomainContainer<ID, RD>) dto).getRelatedDomains()
                 , user);
     }
 
@@ -127,7 +127,7 @@ public interface BaseRelatedDomainCrudService<
                 parentId
                 , relatedDomain
                 , criteria
-                , dto -> ((BaseRelatedDomainDto<ID, RD>) dto).getRelatedDomains()
+                , dto -> ((BaseRelatedDomainContainer<ID, RD>) dto).getRelatedDomains()
                 , user);
     }
 

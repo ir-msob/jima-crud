@@ -2,7 +2,7 @@ package ir.msob.jima.crud.api.restful.service.child.relatedobject;
 
 import ir.msob.jima.core.commons.child.BaseChild;
 import ir.msob.jima.core.commons.child.BaseChildCriteria;
-import ir.msob.jima.core.commons.child.relatedobject.BaseRelatedObjectDto;
+import ir.msob.jima.core.commons.child.BaseContainer;
 import ir.msob.jima.core.commons.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.child.ParentChildCrudRestResource;
@@ -17,9 +17,9 @@ public interface ParentRelatedObjectCrudRestResource<
         , DTO extends BaseDto<ID>
         , RM extends BaseChild<ID>
         , C extends BaseChildCriteria<ID, RM>
-        , RDTO extends BaseRelatedObjectDto<ID>
-        , S extends ParentChildService<ID, USER, DTO, RM, C, RDTO>>
-        extends ParentChildCrudRestResource<ID, USER, DTO, RM, C, RDTO, S> {
+        , CNT extends BaseContainer
+        , S extends ParentChildService<ID, USER, DTO, RM, C, CNT>>
+        extends ParentChildCrudRestResource<ID, USER, DTO, RM, C, CNT, S> {
 
     S getService();
 

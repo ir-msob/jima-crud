@@ -2,7 +2,7 @@ package ir.msob.jima.crud.api.restful.service.child.relatedobject.relatedparty.w
 
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import ir.msob.jima.core.commons.child.relatedobject.relatedparty.BaseRelatedPartyDto;
+import ir.msob.jima.core.commons.child.relatedobject.relatedparty.BaseRelatedPartyContainer;
 import ir.msob.jima.core.commons.child.relatedobject.relatedparty.RelatedPartyAbstract;
 import ir.msob.jima.core.commons.child.relatedobject.relatedparty.RelatedPartyCriteriaAbstract;
 import ir.msob.jima.core.commons.dto.BaseDto;
@@ -39,7 +39,7 @@ public interface BaseSaveManyRelatedPartyCrudRestResource<
         , RP extends RelatedPartyAbstract<ID>
         , C extends RelatedPartyCriteriaAbstract<ID, RP>
         , S extends BaseRelatedPartyCrudService<ID, USER, DTO, RP, C>
-        > extends ParentChildCrudRestResource<ID, USER, DTO, RP, C, BaseRelatedPartyDto<ID, RP>, S> {
+        > extends ParentChildCrudRestResource<ID, USER, DTO, RP, C, BaseRelatedPartyContainer<ID, RP>, S> {
 
     Logger log = LoggerFactory.getLogger(BaseSaveManyRelatedPartyCrudRestResource.class);
 

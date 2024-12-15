@@ -2,7 +2,7 @@ package ir.msob.jima.crud.api.restful.service.child.characteristic.write;
 
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import ir.msob.jima.core.commons.child.characteristic.BaseCharacteristicDto;
+import ir.msob.jima.core.commons.child.characteristic.BaseCharacteristicContainer;
 import ir.msob.jima.core.commons.child.characteristic.Characteristic;
 import ir.msob.jima.core.commons.child.characteristic.CharacteristicCriteria;
 import ir.msob.jima.core.commons.dto.BaseDto;
@@ -38,7 +38,7 @@ public interface BaseUpdateByIdCharacteristicCrudRestResource<
         , CH extends Characteristic<ID>
         , C extends CharacteristicCriteria<ID, CH>
         , S extends BaseCharacteristicCrudService<ID, USER, DTO, CH, C>
-        > extends ParentChildCrudRestResource<ID, USER, DTO, CH, C, BaseCharacteristicDto<ID, CH>, S> {
+        > extends ParentChildCrudRestResource<ID, USER, DTO, CH, C, BaseCharacteristicContainer<ID, CH>, S> {
 
     Logger log = LoggerFactory.getLogger(BaseUpdateByIdCharacteristicCrudRestResource.class);
 

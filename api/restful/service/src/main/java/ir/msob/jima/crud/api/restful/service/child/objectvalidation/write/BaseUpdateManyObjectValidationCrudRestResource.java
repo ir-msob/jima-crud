@@ -2,7 +2,7 @@ package ir.msob.jima.crud.api.restful.service.child.objectvalidation.write;
 
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import ir.msob.jima.core.commons.child.objectvalidation.BaseObjectValidationDto;
+import ir.msob.jima.core.commons.child.objectvalidation.BaseObjectValidationContainer;
 import ir.msob.jima.core.commons.child.objectvalidation.ObjectValidationAbstract;
 import ir.msob.jima.core.commons.child.objectvalidation.ObjectValidationCriteriaAbstract;
 import ir.msob.jima.core.commons.dto.BaseDto;
@@ -39,7 +39,7 @@ public interface BaseUpdateManyObjectValidationCrudRestResource<
         , OV extends ObjectValidationAbstract<ID>
         , C extends ObjectValidationCriteriaAbstract<ID, OV>
         , S extends BaseObjectValidationCrudService<ID, USER, DTO, OV, C>
-        > extends ParentChildCrudRestResource<ID, USER, DTO, OV, C, BaseObjectValidationDto<ID, OV>, S> {
+        > extends ParentChildCrudRestResource<ID, USER, DTO, OV, C, BaseObjectValidationContainer<ID, OV>, S> {
 
     Logger log = LoggerFactory.getLogger(BaseUpdateManyObjectValidationCrudRestResource.class);
 

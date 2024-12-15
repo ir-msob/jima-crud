@@ -1,6 +1,6 @@
 package ir.msob.jima.crud.service.child.relatedobject.relatedparty;
 
-import ir.msob.jima.core.commons.child.relatedobject.relatedparty.BaseRelatedPartyDto;
+import ir.msob.jima.core.commons.child.relatedobject.relatedparty.BaseRelatedPartyContainer;
 import ir.msob.jima.core.commons.child.relatedobject.relatedparty.RelatedPartyAbstract;
 import ir.msob.jima.core.commons.child.relatedobject.relatedparty.RelatedPartyCriteriaAbstract;
 import ir.msob.jima.core.commons.dto.BaseDto;
@@ -25,7 +25,7 @@ public interface BaseRelatedPartyCrudService<
         , DTO extends BaseDto<ID>
         , RP extends RelatedPartyAbstract<ID>
         , C extends RelatedPartyCriteriaAbstract<ID, RP>>
-        extends ParentRelatedObjectService<ID, String, USER, DTO, RP, C, BaseRelatedPartyDto<ID, RP>> {
+        extends ParentRelatedObjectService<ID, String, USER, DTO, RP, C, BaseRelatedPartyContainer<ID, RP>> {
     Logger log = LoggerFactory.getLogger(BaseRelatedPartyCrudService.class);
 
     @Transactional
@@ -34,7 +34,7 @@ public interface BaseRelatedPartyCrudService<
         return deleteById(
                 parentId
                 , id
-                , dto -> ((BaseRelatedPartyDto<ID, RP>) dto).getRelatedParties()
+                , dto -> ((BaseRelatedPartyContainer<ID, RP>) dto).getRelatedParties()
                 , user);
     }
 
@@ -44,7 +44,7 @@ public interface BaseRelatedPartyCrudService<
         return deleteByRelatedId(
                 parentId
                 , relatedId
-                , dto -> ((BaseRelatedPartyDto<ID, RP>) dto).getRelatedParties()
+                , dto -> ((BaseRelatedPartyContainer<ID, RP>) dto).getRelatedParties()
                 , user);
     }
 
@@ -54,7 +54,7 @@ public interface BaseRelatedPartyCrudService<
         return deleteMany(
                 parentId
                 , criteria
-                , dto -> ((BaseRelatedPartyDto<ID, RP>) dto).getRelatedParties()
+                , dto -> ((BaseRelatedPartyContainer<ID, RP>) dto).getRelatedParties()
                 , user);
     }
 
@@ -64,7 +64,7 @@ public interface BaseRelatedPartyCrudService<
         return delete(
                 parentId
                 , criteria
-                , dto -> ((BaseRelatedPartyDto<ID, RP>) dto).getRelatedParties()
+                , dto -> ((BaseRelatedPartyContainer<ID, RP>) dto).getRelatedParties()
                 , user);
     }
 
@@ -74,7 +74,7 @@ public interface BaseRelatedPartyCrudService<
         return saveMany(
                 parentId
                 , relatedParties
-                , dto -> ((BaseRelatedPartyDto<ID, RP>) dto).getRelatedParties()
+                , dto -> ((BaseRelatedPartyContainer<ID, RP>) dto).getRelatedParties()
                 , user);
     }
 
@@ -84,7 +84,7 @@ public interface BaseRelatedPartyCrudService<
         return save(
                 parentId
                 , relatedParty
-                , dto -> ((BaseRelatedPartyDto<ID, RP>) dto).getRelatedParties()
+                , dto -> ((BaseRelatedPartyContainer<ID, RP>) dto).getRelatedParties()
                 , user);
     }
 
@@ -95,7 +95,7 @@ public interface BaseRelatedPartyCrudService<
                 parentId
                 , id
                 , relatedParty
-                , dto -> ((BaseRelatedPartyDto<ID, RP>) dto).getRelatedParties()
+                , dto -> ((BaseRelatedPartyContainer<ID, RP>) dto).getRelatedParties()
                 , user);
     }
 
@@ -106,7 +106,7 @@ public interface BaseRelatedPartyCrudService<
                 parentId
                 , relatedId
                 , relatedParty
-                , dto -> ((BaseRelatedPartyDto<ID, RP>) dto).getRelatedParties()
+                , dto -> ((BaseRelatedPartyContainer<ID, RP>) dto).getRelatedParties()
                 , user);
     }
 
@@ -116,7 +116,7 @@ public interface BaseRelatedPartyCrudService<
         return updateMany(
                 parentId
                 , relatedParties
-                , dto -> ((BaseRelatedPartyDto<ID, RP>) dto).getRelatedParties()
+                , dto -> ((BaseRelatedPartyContainer<ID, RP>) dto).getRelatedParties()
                 , user);
     }
 
@@ -127,7 +127,7 @@ public interface BaseRelatedPartyCrudService<
                 parentId
                 , relatedParty
                 , criteria
-                , dto -> ((BaseRelatedPartyDto<ID, RP>) dto).getRelatedParties()
+                , dto -> ((BaseRelatedPartyContainer<ID, RP>) dto).getRelatedParties()
                 , user);
     }
 }

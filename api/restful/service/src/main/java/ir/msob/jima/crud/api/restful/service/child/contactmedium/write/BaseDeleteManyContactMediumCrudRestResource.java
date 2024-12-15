@@ -2,7 +2,7 @@ package ir.msob.jima.crud.api.restful.service.child.contactmedium.write;
 
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import ir.msob.jima.core.commons.child.contactmedium.BaseContactMediumDto;
+import ir.msob.jima.core.commons.child.contactmedium.BaseContactMediumContainer;
 import ir.msob.jima.core.commons.child.contactmedium.ContactMediumAbstract;
 import ir.msob.jima.core.commons.child.contactmedium.ContactMediumCriteriaAbstract;
 import ir.msob.jima.core.commons.dto.BaseDto;
@@ -36,7 +36,7 @@ public interface BaseDeleteManyContactMediumCrudRestResource<
         , CM extends ContactMediumAbstract<ID>
         , C extends ContactMediumCriteriaAbstract<ID, CM>
         , S extends BaseContactMediumCrudService<ID, USER, DTO, CM, C>
-        > extends ParentChildCrudRestResource<ID, USER, DTO, CM, C, BaseContactMediumDto<ID, CM>, S> {
+        > extends ParentChildCrudRestResource<ID, USER, DTO, CM, C, BaseContactMediumContainer<ID, CM>, S> {
 
     Logger log = LoggerFactory.getLogger(BaseDeleteManyContactMediumCrudRestResource.class);
 

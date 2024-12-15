@@ -2,7 +2,7 @@ package ir.msob.jima.crud.api.restful.service.child.relatedobject.relateddomain.
 
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import ir.msob.jima.core.commons.child.relatedobject.relateddomain.BaseRelatedDomainDto;
+import ir.msob.jima.core.commons.child.relatedobject.relateddomain.BaseRelatedDomainContainer;
 import ir.msob.jima.core.commons.child.relatedobject.relateddomain.RelatedDomainAbstract;
 import ir.msob.jima.core.commons.child.relatedobject.relateddomain.RelatedDomainCriteriaAbstract;
 import ir.msob.jima.core.commons.dto.BaseDto;
@@ -36,7 +36,7 @@ public interface BaseDeleteByIdRelatedDomainCrudRestResource<
         , RD extends RelatedDomainAbstract<ID>
         , C extends RelatedDomainCriteriaAbstract<ID, RD>
         , S extends BaseRelatedDomainCrudService<ID, USER, DTO, RD, C>
-        > extends ParentRelatedObjectCrudRestResource<ID, USER, DTO, RD, C, BaseRelatedDomainDto<ID, RD>, S> {
+        > extends ParentRelatedObjectCrudRestResource<ID, USER, DTO, RD, C, BaseRelatedDomainContainer<ID, RD>, S> {
 
     Logger log = LoggerFactory.getLogger(BaseDeleteByIdRelatedDomainCrudRestResource.class);
 

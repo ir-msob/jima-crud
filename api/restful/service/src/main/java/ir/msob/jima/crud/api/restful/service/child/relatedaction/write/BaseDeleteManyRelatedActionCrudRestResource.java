@@ -2,7 +2,7 @@ package ir.msob.jima.crud.api.restful.service.child.relatedaction.write;
 
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import ir.msob.jima.core.commons.child.relatedaction.BaseRelatedActionDto;
+import ir.msob.jima.core.commons.child.relatedaction.BaseRelatedActionContainer;
 import ir.msob.jima.core.commons.child.relatedaction.RelatedActionAbstract;
 import ir.msob.jima.core.commons.child.relatedaction.RelatedActionCriteriaAbstract;
 import ir.msob.jima.core.commons.dto.BaseDto;
@@ -36,7 +36,7 @@ public interface BaseDeleteManyRelatedActionCrudRestResource<
         , OV extends RelatedActionAbstract<ID>
         , C extends RelatedActionCriteriaAbstract<ID, OV>
         , S extends BaseRelatedActionCrudService<ID, USER, DTO, OV, C>
-        > extends ParentChildCrudRestResource<ID, USER, DTO, OV, C, BaseRelatedActionDto<ID, OV>, S> {
+        > extends ParentChildCrudRestResource<ID, USER, DTO, OV, C, BaseRelatedActionContainer<ID, OV>, S> {
 
     Logger log = LoggerFactory.getLogger(BaseDeleteManyRelatedActionCrudRestResource.class);
 

@@ -1,6 +1,6 @@
 package ir.msob.jima.crud.service.child.relatedobject;
 
-import ir.msob.jima.core.commons.child.relatedobject.BaseRelatedObjectDto;
+import ir.msob.jima.core.commons.child.BaseContainer;
 import ir.msob.jima.core.commons.child.relatedobject.RelatedObjectAbstract;
 import ir.msob.jima.core.commons.child.relatedobject.RelatedObjectCriteriaAbstract;
 import ir.msob.jima.core.commons.criteria.filter.Filter;
@@ -9,7 +9,6 @@ import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.core.commons.util.GenericTypeUtil;
 import ir.msob.jima.crud.service.child.ParentChildService;
 import jakarta.validation.constraints.NotNull;
 import lombok.SneakyThrows;
@@ -27,20 +26,8 @@ public interface ParentRelatedObjectService<
         , DTO extends BaseDto<ID>
         , RO extends RelatedObjectAbstract<ID, RID>
         , C extends RelatedObjectCriteriaAbstract<ID, RID, RO>
-        , RODTO extends BaseRelatedObjectDto<ID>>
-        extends ParentChildService<ID, USER, DTO, RO, C, RODTO> {
-
-    default Class<C> getChildCriteriaClass() {
-        return (Class<C>) GenericTypeUtil.resolveTypeArguments(getClass(), ParentRelatedObjectService.class, 4);
-    }
-
-    default Class<RO> getRelatedObjectClass() {
-        return (Class<RO>) GenericTypeUtil.resolveTypeArguments(getClass(), ParentRelatedObjectService.class, 5);
-    }
-
-    default Class<RODTO> getRelatedObjectDtoClass() {
-        return (Class<RODTO>) GenericTypeUtil.resolveTypeArguments(getClass(), ParentRelatedObjectService.class, 6);
-    }
+        , CNT extends BaseContainer>
+        extends ParentChildService<ID, USER, DTO, RO, C, CNT> {
 
 
     @SneakyThrows

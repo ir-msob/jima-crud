@@ -2,7 +2,7 @@ package ir.msob.jima.crud.service.child;
 
 import ir.msob.jima.core.commons.child.BaseChild;
 import ir.msob.jima.core.commons.child.BaseChildCriteria;
-import ir.msob.jima.core.commons.child.BaseChildDto;
+import ir.msob.jima.core.commons.child.BaseContainer;
 import ir.msob.jima.core.commons.criteria.filter.Filter;
 import ir.msob.jima.core.commons.dto.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
@@ -29,7 +29,7 @@ public interface ParentChildService<
         , DTO extends BaseDto<ID>
         , RM extends BaseChild<ID>
         , C extends BaseChildCriteria<ID, RM>
-        , RDTO extends BaseChildDto<ID>> {
+        , CNT extends BaseContainer> {
 
     default Class<RM> getChildClass() {
         return (Class<RM>) GenericTypeUtil.resolveTypeArguments(getClass(), ParentChildService.class, 4);
@@ -39,8 +39,8 @@ public interface ParentChildService<
         return (Class<C>) GenericTypeUtil.resolveTypeArguments(getClass(), ParentChildService.class, 5);
     }
 
-    default Class<RDTO> getRelatedObjectDtoClass() {
-        return (Class<RDTO>) GenericTypeUtil.resolveTypeArguments(getClass(), ParentChildService.class, 6);
+    default Class<CNT> getContinerClass() {
+        return (Class<CNT>) GenericTypeUtil.resolveTypeArguments(getClass(), ParentChildService.class, 6);
     }
 
     /**
@@ -75,7 +75,7 @@ public interface ParentChildService<
     default Mono<DTO> update(@NotNull ID parentId, RM relatedModel, @NotNull C criteria, Function<DTO, SortedSet<RM>> getter, USER user) throws DomainNotFoundException, BadRequestException {
         return getDtoById(parentId, user)
                 .doOnNext(dto -> {
-                    if (getRelatedObjectDtoClass().isInstance(dto)) {
+                    if (getContinerClass().isInstance(dto)) {
                         Iterator<RM> iterator = getter.apply(dto).iterator();
                         boolean found = false;
 
@@ -90,10 +90,10 @@ public interface ParentChildService<
                             }
                         }
                         if (!found) {
-                            throw new DataNotFoundException("No child model found with Criteria in the parent DTO of type " + getRelatedObjectDtoClass().getSimpleName(), getChildClass().getSimpleName(), criteria.toString(), getRelatedObjectDtoClass());
+                            throw new DataNotFoundException("No child model found with Criteria in the parent DTO of type " + getContinerClass().getSimpleName(), getChildClass().getSimpleName(), criteria.toString(), getContinerClass());
                         }
                     } else {
-                        throw new BadRequestException("Provided DTO is of type " + dto.getClass().getSimpleName() + " but expected type is " + getRelatedObjectDtoClass().getSimpleName());
+                        throw new BadRequestException("Provided DTO is of type " + dto.getClass().getSimpleName() + " but expected type is " + getContinerClass().getSimpleName());
                     }
                 })
                 .flatMap(updatedDto -> updateDto(parentId, updatedDto, user));
@@ -103,7 +103,7 @@ public interface ParentChildService<
     default Mono<DTO> updateMany(@NotNull ID parentId, Collection<RM> relatedModels, Function<DTO, SortedSet<RM>> getter, USER user) throws DomainNotFoundException, BadRequestException {
         return getDtoById(parentId, user)
                 .doOnNext(dto -> {
-                    if (getRelatedObjectDtoClass().isInstance(dto)) {
+                    if (getContinerClass().isInstance(dto)) {
                         Iterator<RM> iterator = getter.apply(dto).iterator();
 
                         for (RM ro : relatedModels) {
@@ -118,11 +118,11 @@ public interface ParentChildService<
                                 }
                             }
                             if (!found) {
-                                throw new DataNotFoundException("No child object found with Criteria in the parent DTO of type " + getRelatedObjectDtoClass().getSimpleName(), getChildClass().getSimpleName(), null, getRelatedObjectDtoClass());
+                                throw new DataNotFoundException("No child object found with Criteria in the parent DTO of type " + getContinerClass().getSimpleName(), getChildClass().getSimpleName(), null, getContinerClass());
                             }
                         }
                     } else {
-                        throw new BadRequestException("Provided DTO is of type " + dto.getClass().getSimpleName() + " but expected type is " + getRelatedObjectDtoClass().getSimpleName());
+                        throw new BadRequestException("Provided DTO is of type " + dto.getClass().getSimpleName() + " but expected type is " + getContinerClass().getSimpleName());
                     }
                 })
                 .flatMap(updatedDto -> updateDto(parentId, updatedDto, user));
@@ -141,7 +141,7 @@ public interface ParentChildService<
     default Mono<DTO> delete(@NotNull ID parentId, @NotNull C criteria, Function<DTO, SortedSet<RM>> getter, USER user) throws DomainNotFoundException, BadRequestException {
         return getDtoById(parentId, user)
                 .doOnNext(dto -> {
-                    if (getRelatedObjectDtoClass().isInstance(dto)) {
+                    if (getContinerClass().isInstance(dto)) {
                         Iterator<RM> iterator = getter.apply(dto).iterator();
                         boolean found = false;
 
@@ -156,10 +156,10 @@ public interface ParentChildService<
                         }
 
                         if (!found) {
-                            throw new DataNotFoundException("No child object found with Criteria in the parent DTO of type " + getRelatedObjectDtoClass().getSimpleName(), getChildClass().getSimpleName(), criteria.toString(), getChildClass());
+                            throw new DataNotFoundException("No child object found with Criteria in the parent DTO of type " + getContinerClass().getSimpleName(), getChildClass().getSimpleName(), criteria.toString(), getChildClass());
                         }
                     } else {
-                        throw new BadRequestException("Provided DTO is of type " + dto.getClass().getSimpleName() + " but expected type is " + getRelatedObjectDtoClass().getSimpleName());
+                        throw new BadRequestException("Provided DTO is of type " + dto.getClass().getSimpleName() + " but expected type is " + getContinerClass().getSimpleName());
                     }
                 })
                 .flatMap(updatedDto -> updateDto(parentId, updatedDto, user));
@@ -169,7 +169,7 @@ public interface ParentChildService<
     default Mono<DTO> deleteMany(@NotNull ID parentId, @NotNull C criteria, Function<DTO, SortedSet<RM>> getter, USER user) throws DomainNotFoundException, BadRequestException {
         return getDtoById(parentId, user)
                 .doOnNext(dto -> {
-                    if (getRelatedObjectDtoClass().isInstance(dto)) {
+                    if (getContinerClass().isInstance(dto)) {
                         Iterator<RM> iterator = getter.apply(dto).iterator();
                         boolean found = false;
 
@@ -182,10 +182,10 @@ public interface ParentChildService<
                         }
 
                         if (!found) {
-                            throw new DataNotFoundException("No child object found with Criteria in the parent DTO of type " + getRelatedObjectDtoClass().getSimpleName(), getChildClass().getSimpleName(), criteria.toString(), getChildClass());
+                            throw new DataNotFoundException("No child object found with Criteria in the parent DTO of type " + getContinerClass().getSimpleName(), getChildClass().getSimpleName(), criteria.toString(), getChildClass());
                         }
                     } else {
-                        throw new BadRequestException("Provided DTO is of type " + dto.getClass().getSimpleName() + " but expected type is " + getRelatedObjectDtoClass().getSimpleName());
+                        throw new BadRequestException("Provided DTO is of type " + dto.getClass().getSimpleName() + " but expected type is " + getContinerClass().getSimpleName());
                     }
                 })
                 .flatMap(updatedDto -> updateDto(parentId, updatedDto, user));

@@ -1,6 +1,6 @@
 package ir.msob.jima.crud.service.child.relatedaction;
 
-import ir.msob.jima.core.commons.child.relatedaction.BaseRelatedActionDto;
+import ir.msob.jima.core.commons.child.relatedaction.BaseRelatedActionContainer;
 import ir.msob.jima.core.commons.child.relatedaction.RelatedActionAbstract;
 import ir.msob.jima.core.commons.child.relatedaction.RelatedActionCriteriaAbstract;
 import ir.msob.jima.core.commons.criteria.filter.Filter;
@@ -27,7 +27,7 @@ public interface BaseRelatedActionCrudService<
         , DTO extends BaseDto<ID>
         , RA extends RelatedActionAbstract<ID>
         , C extends RelatedActionCriteriaAbstract<ID, RA>>
-        extends ParentChildService<ID, USER, DTO, RA, C, BaseRelatedActionDto<ID, RA>> {
+        extends ParentChildService<ID, USER, DTO, RA, C, BaseRelatedActionContainer<ID, RA>> {
     Logger log = LoggerFactory.getLogger(BaseRelatedActionCrudService.class);
 
     @Transactional
@@ -36,7 +36,7 @@ public interface BaseRelatedActionCrudService<
         return deleteById(
                 parentId
                 , id
-                , dto -> ((BaseRelatedActionDto<ID, RA>) dto).getRelatedActions()
+                , dto -> ((BaseRelatedActionContainer<ID, RA>) dto).getRelatedActions()
                 , user);
     }
 
@@ -46,7 +46,7 @@ public interface BaseRelatedActionCrudService<
     default Mono<DTO> deleteByName(@NotNull ID parentId, @NotBlank String name, USER user) throws DomainNotFoundException, BadRequestException {
         C criteria = getChildCriteriaClass().getConstructor().newInstance();
         criteria.setName(Filter.eq(name));
-        return delete(parentId, criteria, dto -> ((BaseRelatedActionDto<ID, RA>) dto).getRelatedActions(), user);
+        return delete(parentId, criteria, dto -> ((BaseRelatedActionContainer<ID, RA>) dto).getRelatedActions(), user);
     }
 
     @Transactional
@@ -55,7 +55,7 @@ public interface BaseRelatedActionCrudService<
         return deleteMany(
                 parentId
                 , criteria
-                , dto -> ((BaseRelatedActionDto<ID, RA>) dto).getRelatedActions()
+                , dto -> ((BaseRelatedActionContainer<ID, RA>) dto).getRelatedActions()
                 , user);
     }
 
@@ -65,7 +65,7 @@ public interface BaseRelatedActionCrudService<
         return delete(
                 parentId
                 , criteria
-                , dto -> ((BaseRelatedActionDto<ID, RA>) dto).getRelatedActions()
+                , dto -> ((BaseRelatedActionContainer<ID, RA>) dto).getRelatedActions()
                 , user);
     }
 
@@ -75,7 +75,7 @@ public interface BaseRelatedActionCrudService<
         return saveMany(
                 parentId
                 , objectvalidations
-                , dto -> ((BaseRelatedActionDto<ID, RA>) dto).getRelatedActions()
+                , dto -> ((BaseRelatedActionContainer<ID, RA>) dto).getRelatedActions()
                 , user);
     }
 
@@ -85,7 +85,7 @@ public interface BaseRelatedActionCrudService<
         return save(
                 parentId
                 , objectvalidation
-                , dto -> ((BaseRelatedActionDto<ID, RA>) dto).getRelatedActions()
+                , dto -> ((BaseRelatedActionContainer<ID, RA>) dto).getRelatedActions()
                 , user);
     }
 
@@ -96,7 +96,7 @@ public interface BaseRelatedActionCrudService<
                 parentId
                 , id
                 , objectvalidation
-                , dto -> ((BaseRelatedActionDto<ID, RA>) dto).getRelatedActions()
+                , dto -> ((BaseRelatedActionContainer<ID, RA>) dto).getRelatedActions()
                 , user);
     }
 
@@ -106,7 +106,7 @@ public interface BaseRelatedActionCrudService<
     default Mono<DTO> updateByName(@NotNull ID parentId, @NotBlank String name, RA objectvalidation, USER user) throws DomainNotFoundException, BadRequestException {
         C criteria = getChildCriteriaClass().getConstructor().newInstance();
         criteria.setName(Filter.eq(name));
-        return update(parentId, objectvalidation, criteria, dto -> ((BaseRelatedActionDto<ID, RA>) dto).getRelatedActions(), user);
+        return update(parentId, objectvalidation, criteria, dto -> ((BaseRelatedActionContainer<ID, RA>) dto).getRelatedActions(), user);
     }
 
     @Transactional
@@ -115,7 +115,7 @@ public interface BaseRelatedActionCrudService<
         return updateMany(
                 parentId
                 , objectvalidations
-                , dto -> ((BaseRelatedActionDto<ID, RA>) dto).getRelatedActions()
+                , dto -> ((BaseRelatedActionContainer<ID, RA>) dto).getRelatedActions()
                 , user);
     }
 
@@ -126,7 +126,7 @@ public interface BaseRelatedActionCrudService<
                 parentId
                 , objectvalidation
                 , criteria
-                , dto -> ((BaseRelatedActionDto<ID, RA>) dto).getRelatedActions()
+                , dto -> ((BaseRelatedActionContainer<ID, RA>) dto).getRelatedActions()
                 , user);
     }
 }

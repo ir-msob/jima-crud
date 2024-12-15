@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
 import ir.msob.jima.core.commons.child.auditdomain.AuditDomainAbstract;
 import ir.msob.jima.core.commons.child.auditdomain.AuditDomainActionType;
-import ir.msob.jima.core.commons.child.auditdomain.BaseAuditDomainDto;
+import ir.msob.jima.core.commons.child.auditdomain.BaseAuditDomainContainer;
 import ir.msob.jima.core.commons.child.relatedobject.relatedparty.RelatedPartyAbstract;
 import ir.msob.jima.core.commons.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
@@ -211,7 +211,7 @@ public interface ParentWriteDomainCrudService<
      * @param user       A user object.
      */
     default void addAudit(DTO dto, AuditDomainActionType actionType, USER user) {
-        if (dto instanceof BaseAuditDomainDto auditDomainDto) {
+        if (dto instanceof BaseAuditDomainContainer auditDomainDto) {
 
             RelatedPartyAbstract<ID> relatedParty = new RelatedPartyAbstract<>() {
             };

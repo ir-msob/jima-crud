@@ -1,6 +1,6 @@
 package ir.msob.jima.crud.service.child.contactmedium;
 
-import ir.msob.jima.core.commons.child.contactmedium.BaseContactMediumDto;
+import ir.msob.jima.core.commons.child.contactmedium.BaseContactMediumContainer;
 import ir.msob.jima.core.commons.child.contactmedium.ContactMediumAbstract;
 import ir.msob.jima.core.commons.child.contactmedium.ContactMediumCriteriaAbstract;
 import ir.msob.jima.core.commons.criteria.filter.Filter;
@@ -27,7 +27,7 @@ public interface BaseContactMediumCrudService<
         , DTO extends BaseDto<ID>
         , CM extends ContactMediumAbstract<ID>
         , C extends ContactMediumCriteriaAbstract<ID, CM>>
-        extends ParentChildService<ID, USER, DTO, CM, C, BaseContactMediumDto<ID, CM>> {
+        extends ParentChildService<ID, USER, DTO, CM, C, BaseContactMediumContainer<ID, CM>> {
     Logger log = LoggerFactory.getLogger(BaseContactMediumCrudService.class);
 
     @Transactional
@@ -36,7 +36,7 @@ public interface BaseContactMediumCrudService<
         return deleteById(
                 parentId
                 , id
-                , dto -> ((BaseContactMediumDto<ID, CM>) dto).getContactMediums()
+                , dto -> ((BaseContactMediumContainer<ID, CM>) dto).getContactMediums()
                 , user);
     }
 
@@ -46,7 +46,7 @@ public interface BaseContactMediumCrudService<
     default Mono<DTO> deleteByName(@NotNull ID parentId, @NotBlank String name, USER user) throws DomainNotFoundException, BadRequestException {
         C criteria = getChildCriteriaClass().getConstructor().newInstance();
         criteria.setName(Filter.eq(name));
-        return delete(parentId, criteria, dto -> ((BaseContactMediumDto<ID, CM>) dto).getContactMediums(), user);
+        return delete(parentId, criteria, dto -> ((BaseContactMediumContainer<ID, CM>) dto).getContactMediums(), user);
     }
 
     @SneakyThrows
@@ -55,7 +55,7 @@ public interface BaseContactMediumCrudService<
     default Mono<DTO> deleteByType(@NotNull ID parentId, @NotBlank String type, USER user) throws DomainNotFoundException, BadRequestException {
         C criteria = getChildCriteriaClass().getConstructor().newInstance();
         criteria.setType(Filter.eq(type));
-        return delete(parentId, criteria, dto -> ((BaseContactMediumDto<ID, CM>) dto).getContactMediums(), user);
+        return delete(parentId, criteria, dto -> ((BaseContactMediumContainer<ID, CM>) dto).getContactMediums(), user);
     }
 
     @Transactional
@@ -64,7 +64,7 @@ public interface BaseContactMediumCrudService<
         return deleteMany(
                 parentId
                 , criteria
-                , dto -> ((BaseContactMediumDto<ID, CM>) dto).getContactMediums()
+                , dto -> ((BaseContactMediumContainer<ID, CM>) dto).getContactMediums()
                 , user);
     }
 
@@ -74,7 +74,7 @@ public interface BaseContactMediumCrudService<
         return delete(
                 parentId
                 , criteria
-                , dto -> ((BaseContactMediumDto<ID, CM>) dto).getContactMediums()
+                , dto -> ((BaseContactMediumContainer<ID, CM>) dto).getContactMediums()
                 , user);
     }
 
@@ -84,7 +84,7 @@ public interface BaseContactMediumCrudService<
         return saveMany(
                 parentId
                 , contactmediums
-                , dto -> ((BaseContactMediumDto<ID, CM>) dto).getContactMediums()
+                , dto -> ((BaseContactMediumContainer<ID, CM>) dto).getContactMediums()
                 , user);
     }
 
@@ -94,7 +94,7 @@ public interface BaseContactMediumCrudService<
         return save(
                 parentId
                 , contactmedium
-                , dto -> ((BaseContactMediumDto<ID, CM>) dto).getContactMediums()
+                , dto -> ((BaseContactMediumContainer<ID, CM>) dto).getContactMediums()
                 , user);
     }
 
@@ -105,7 +105,7 @@ public interface BaseContactMediumCrudService<
                 parentId
                 , id
                 , contactmedium
-                , dto -> ((BaseContactMediumDto<ID, CM>) dto).getContactMediums()
+                , dto -> ((BaseContactMediumContainer<ID, CM>) dto).getContactMediums()
                 , user);
     }
 
@@ -115,7 +115,7 @@ public interface BaseContactMediumCrudService<
     default Mono<DTO> updateByName(@NotNull ID parentId, @NotBlank String name, CM contactmedium, USER user) throws DomainNotFoundException, BadRequestException {
         C criteria = getChildCriteriaClass().getConstructor().newInstance();
         criteria.setName(Filter.eq(name));
-        return update(parentId, contactmedium, criteria, dto -> ((BaseContactMediumDto<ID, CM>) dto).getContactMediums(), user);
+        return update(parentId, contactmedium, criteria, dto -> ((BaseContactMediumContainer<ID, CM>) dto).getContactMediums(), user);
     }
 
     @SneakyThrows
@@ -124,7 +124,7 @@ public interface BaseContactMediumCrudService<
     default Mono<DTO> updateByType(@NotNull ID parentId, @NotBlank String type, CM contactmedium, USER user) throws DomainNotFoundException, BadRequestException {
         C criteria = getChildCriteriaClass().getConstructor().newInstance();
         criteria.setType(Filter.eq(type));
-        return update(parentId, contactmedium, criteria, dto -> ((BaseContactMediumDto<ID, CM>) dto).getContactMediums(), user);
+        return update(parentId, contactmedium, criteria, dto -> ((BaseContactMediumContainer<ID, CM>) dto).getContactMediums(), user);
     }
 
     @Transactional
@@ -133,7 +133,7 @@ public interface BaseContactMediumCrudService<
         return updateMany(
                 parentId
                 , contactmediums
-                , dto -> ((BaseContactMediumDto<ID, CM>) dto).getContactMediums()
+                , dto -> ((BaseContactMediumContainer<ID, CM>) dto).getContactMediums()
                 , user);
     }
 
@@ -144,7 +144,7 @@ public interface BaseContactMediumCrudService<
                 parentId
                 , contactmedium
                 , criteria
-                , dto -> ((BaseContactMediumDto<ID, CM>) dto).getContactMediums()
+                , dto -> ((BaseContactMediumContainer<ID, CM>) dto).getContactMediums()
                 , user);
     }
 }

@@ -2,7 +2,7 @@ package ir.msob.jima.crud.api.restful.service.child.relatedobject.relatedintegra
 
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import ir.msob.jima.core.commons.child.relatedobject.relatedintegration.BaseRelatedIntegrationDto;
+import ir.msob.jima.core.commons.child.relatedobject.relatedintegration.BaseRelatedIntegrationContainer;
 import ir.msob.jima.core.commons.child.relatedobject.relatedintegration.RelatedIntegrationAbstract;
 import ir.msob.jima.core.commons.child.relatedobject.relatedintegration.RelatedIntegrationCriteriaAbstract;
 import ir.msob.jima.core.commons.dto.BaseDto;
@@ -38,7 +38,7 @@ public interface BaseUpdateByIdRelatedIntegrationCrudRestResource<
         , RI extends RelatedIntegrationAbstract<ID>
         , C extends RelatedIntegrationCriteriaAbstract<ID, RI>
         , S extends BaseRelatedIntegrationCrudService<ID, USER, DTO, RI, C>
-        > extends ParentChildCrudRestResource<ID, USER, DTO, RI, C, BaseRelatedIntegrationDto<ID, RI>, S> {
+        > extends ParentChildCrudRestResource<ID, USER, DTO, RI, C, BaseRelatedIntegrationContainer<ID, RI>, S> {
 
     Logger log = LoggerFactory.getLogger(BaseUpdateByIdRelatedIntegrationCrudRestResource.class);
 
