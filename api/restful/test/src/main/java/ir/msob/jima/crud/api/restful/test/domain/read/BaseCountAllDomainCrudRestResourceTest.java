@@ -1,26 +1,26 @@
-package ir.msob.jima.crud.api.restful.test.write;
+package ir.msob.jima.crud.api.restful.test.domain.read;
 
 import ir.msob.jima.core.commons.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.dto.BaseDto;
+import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.test.Assertable;
-import ir.msob.jima.crud.api.restful.test.ParentDomainCrudRestResourceTest;
+import ir.msob.jima.crud.api.restful.test.domain.ParentDomainCrudRestResourceTest;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
-import ir.msob.jima.crud.test.domain.write.BaseSaveDomainCrudResourceTest;
-import org.springframework.http.MediaType;
+import ir.msob.jima.crud.test.domain.read.BaseCountAllDomainCrudResourceTest;
 
 import java.io.Serializable;
 
 /**
- * The {@code BaseSaveDomainCrudRestResourceTest} interface represents a set of RESTful-specific test methods for saving an entity.
- * It extends both the {@code BaseSaveDomainCrudResourceTest} and {@code ParentDomainCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
+ * The {@code BaseCountAllDomainCrudRestResourceTest} interface represents a set of RESTful-specific test methods for counting all entities.
+ * It extends both the {@code BaseCountAllDomainCrudResourceTest} and {@code ParentDomainCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
  * <p>
- * The interface includes an implementation for making a request to save an entity using RESTful API. The result of the save operation is the DTO of the saved entity.
+ * The interface includes an implementation for making a request to count all entities using RESTful API. The result of the count operation is the total number of entities.
  *
  * @param <ID>   The type of entity ID.
  * @param <USER> The type of the user (security context).
@@ -31,10 +31,10 @@ import java.io.Serializable;
  * @param <R>    The type of the CRUD repository.
  * @param <S>    The type of the CRUD service.
  * @param <DP>   The type of data provider for CRUD testing.
- * @see BaseSaveDomainCrudResourceTest
+ * @see BaseCountAllDomainCrudResourceTest
  * @see ParentDomainCrudRestResourceTest
  */
-public interface BaseSaveDomainCrudRestResourceTest<
+public interface BaseCountAllDomainCrudRestResourceTest<
         ID extends Comparable<ID> & Serializable,
         USER extends BaseUser,
         D extends BaseDomain<ID>,
@@ -44,31 +44,25 @@ public interface BaseSaveDomainCrudRestResourceTest<
         R extends BaseDomainCrudRepository<ID, USER, D, C, Q>,
         S extends BaseDomainCrudService<ID, USER, D, DTO, C, Q, R>,
         DP extends BaseDomainCrudDataProvider<ID, USER, D, DTO, C, Q, R, S>>
-        extends BaseSaveDomainCrudResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>,
+        extends BaseCountAllDomainCrudResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>,
         ParentDomainCrudRestResourceTest<ID, USER, D, DTO, C> {
 
     /**
-     * Executes a RESTful request to save an entity and extracts the result from the response.
-     *
-     * @param dto The data transfer object (DTO) representing the entity to be saved.
+     * Executes a RESTful request to count all entities and extracts the result from the response.
      */
     @Override
-    default void saveRequest(DTO dto, Assertable<DTO> assertable) {
-        // Send a POST request to the SAVE operation URI
+    default void countAllRequest(Assertable<Long> assertable) {
+        // Send a GET request to the COUNT_ALL operation URI
         // Prepare the request header
-        // Set the body of the request to the DTO
-        // Expect the status to be equal to the SAVE operation status
-        // Expect the content type to be JSON
-        // Expect the body to be of the DTO class type
+        // Expect the status to be equal to the COUNT_ALL operation status
+        // Expect the body to be of type Long
         this.getWebTestClient()
-                .post()
-                .uri(getBaseUri())
+                .get()
+                .uri(String.format("%s/%s", getBaseUri(), Operations.COUNT_ALL))
                 .headers(this::prepareHeader)
-                .bodyValue(dto)
                 .exchange()
-                .expectStatus().isEqualTo(OperationsStatus.SAVE)
-                .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
-                .expectBody(this.getDataProvider().getService().getDtoClass())
+                .expectStatus().isEqualTo(OperationsStatus.COUNT_ALL)
+                .expectBody(Long.class)
                 .value(assertable::assertThan);
     }
 }

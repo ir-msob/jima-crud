@@ -1,12 +1,12 @@
-package ir.msob.jima.crud.api.restful.test;
+package ir.msob.jima.crud.api.restful.test.domain;
 
 import ir.msob.jima.core.commons.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.dto.BaseDto;
 import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.crud.api.restful.test.read.*;
-import ir.msob.jima.crud.api.restful.test.write.*;
+import ir.msob.jima.crud.api.restful.test.domain.read.*;
+import ir.msob.jima.crud.api.restful.test.domain.write.*;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;

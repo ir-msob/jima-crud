@@ -1,4 +1,4 @@
-package ir.msob.jima.crud.api.restful.test;
+package ir.msob.jima.crud.api.restful.test.domain;
 
 import ir.msob.jima.core.api.restful.test.BaseCoreRestResourceTest;
 import ir.msob.jima.core.commons.criteria.BaseCriteria;

@@ -1,29 +1,29 @@
-package ir.msob.jima.crud.api.restful.test.write;
+package ir.msob.jima.crud.api.restful.test.domain.read;
 
 import ir.msob.jima.core.commons.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.dto.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
-import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.test.Assertable;
-import ir.msob.jima.crud.api.restful.test.ParentDomainCrudRestResourceTest;
+import ir.msob.jima.crud.api.restful.test.domain.ParentDomainCrudRestResourceTest;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
-import ir.msob.jima.crud.test.domain.write.BaseDeleteManyDomainCrudResourceTest;
+import ir.msob.jima.crud.test.domain.read.BaseGetPageDomainCrudResourceTest;
+import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 
 import java.io.Serializable;
-import java.util.Set;
 
 /**
- * The {@code BaseDeleteManyDomainCrudRestResourceTest} interface represents a set of RESTful-specific test methods for deleting multiple entities.
- * It extends both the {@code BaseDeleteManyDomainCrudResourceTest} and {@code ParentDomainCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
+ * The {@code BaseGetPageDomainCrudRestResourceTest} interface represents a set of RESTful-specific test methods for retrieving a page of entities.
+ * It extends both the {@code BaseGetPageDomainCrudResourceTest} and {@code ParentDomainCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
  * <p>
- * The interface includes an implementation for making a request to delete multiple entities using RESTful API. The result of the delete operation is a set of IDs of the deleted entities.
+ * The interface includes an implementation for making a request to retrieve a page of entities using RESTful API. The result of the get operation is a page of DTOs of the retrieved entities.
  *
  * @param <ID>   The type of entity ID.
  * @param <USER> The type of the user (security context).
@@ -34,10 +34,10 @@ import java.util.Set;
  * @param <R>    The type of the CRUD repository.
  * @param <S>    The type of the CRUD service.
  * @param <DP>   The type of data provider for CRUD testing.
- * @see BaseDeleteManyDomainCrudResourceTest
+ * @see BaseGetPageDomainCrudResourceTest
  * @see ParentDomainCrudRestResourceTest
  */
-public interface BaseDeleteManyDomainCrudRestResourceTest<
+public interface BaseGetPageDomainCrudRestResourceTest<
         ID extends Comparable<ID> & Serializable,
         USER extends BaseUser,
         D extends BaseDomain<ID>,
@@ -47,30 +47,31 @@ public interface BaseDeleteManyDomainCrudRestResourceTest<
         R extends BaseDomainCrudRepository<ID, USER, D, C, Q>,
         S extends BaseDomainCrudService<ID, USER, D, DTO, C, Q, R>,
         DP extends BaseDomainCrudDataProvider<ID, USER, D, DTO, C, Q, R, S>>
-        extends BaseDeleteManyDomainCrudResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>,
+        extends BaseGetPageDomainCrudResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>,
         ParentDomainCrudRestResourceTest<ID, USER, D, DTO, C> {
 
     /**
-     * Executes a RESTful request to delete multiple entities and extracts the result from the response.
+     * Executes a RESTful request to retrieve a page of entities and extracts the result from the response.
      *
-     * @param savedDto The data transfer object (DTO) representing the entities to be deleted.
+     * @param savedDto The data transfer object (DTO) representing the entities to be retrieved.
      * @throws DomainNotFoundException If the entity is not found.
      * @throws BadRequestException     If the request is not valid.
      */
     @Override
-    default void deleteManyRequest(DTO savedDto, Assertable<Set<ID>> assertable) throws DomainNotFoundException, BadRequestException {
-        // Send a DELETE request to the DELETE_MANY operation URI with the ID of the entities to be deleted
+    default void getPageRequest(DTO savedDto, Assertable<Page<DTO>> assertable) throws DomainNotFoundException, BadRequestException {
+        // Send a GET request to the GET_PAGE operation URI with the ID of the entities to be retrieved
         // Prepare the request header
-        // Expect the status to be equal to the DELETE_MANY operation status
-        // Expect the body to be of type Set
+        // Expect the status to be equal to the GET_PAGE operation status
+        // Expect the content type to be JSON
+        // Expect the body to be of type Page
         this.getWebTestClient()
-                .delete()
-                .uri(String.format("%s/%s?%s.eq=%s", getBaseUri(), Operations.DELETE_MANY, savedDto.getIdName(), savedDto.getId()))
+                .get()
+                .uri(String.format("%s?page=0&size=10&%s.eq=%s", getBaseUri(), savedDto.getIdName(), savedDto.getId()))
                 .headers(this::prepareHeader)
                 .exchange()
-                .expectStatus()
-                .isEqualTo(OperationsStatus.DELETE_MANY)
-                .expectBody(Set.class)
+                .expectStatus().isEqualTo(OperationsStatus.GET_PAGE)
+                .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
+                .expectBody(Page.class)
                 .value(assertable::assertThan);
 
     }

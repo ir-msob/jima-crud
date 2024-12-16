@@ -1,27 +1,29 @@
-package ir.msob.jima.crud.api.restful.test.write;
+package ir.msob.jima.crud.api.restful.test.domain.write;
 
 import ir.msob.jima.core.commons.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.dto.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.test.Assertable;
-import ir.msob.jima.crud.api.restful.test.ParentDomainCrudRestResourceTest;
+import ir.msob.jima.crud.api.restful.test.domain.ParentDomainCrudRestResourceTest;
+import ir.msob.jima.crud.api.restful.test.domain.ParentDomainCrudRestResourceTest;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
-import ir.msob.jima.crud.test.domain.write.BaseDeleteByIdDomainCrudResourceTest;
+import ir.msob.jima.crud.test.domain.write.BaseDeleteDomainCrudResourceTest;
 
 import java.io.Serializable;
 
 /**
- * The {@code BaseDeleteByIdDomainCrudRestResourceTest} interface represents a set of RESTful-specific test methods for deleting an entity by its ID.
- * It extends both the {@code BaseDeleteByIdDomainCrudResourceTest} and {@code ParentDomainCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
+ * The {@code BaseDeleteDomainCrudRestResourceTest} interface represents a set of RESTful-specific test methods for deleting an entity.
+ * It extends both the {@code BaseDeleteDomainCrudResourceTest} and {@code ParentDomainCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
  * <p>
- * The interface includes an implementation for making a request to delete an entity by its ID using RESTful API. The result of the delete operation is the ID of the deleted entity.
+ * The interface includes an implementation for making a request to delete an entity using RESTful API. The result of the delete operation is the ID of the deleted entity.
  *
  * @param <ID>   The type of entity ID.
  * @param <USER> The type of the user (security context).
@@ -32,10 +34,10 @@ import java.io.Serializable;
  * @param <R>    The type of the CRUD repository.
  * @param <S>    The type of the CRUD service.
  * @param <DP>   The type of data provider for CRUD testing.
- * @see BaseDeleteByIdDomainCrudResourceTest
+ * @see BaseDeleteDomainCrudResourceTest
  * @see ParentDomainCrudRestResourceTest
  */
-public interface BaseDeleteByIdDomainCrudRestResourceTest<
+public interface BaseDeleteDomainCrudRestResourceTest<
         ID extends Comparable<ID> & Serializable,
         USER extends BaseUser,
         D extends BaseDomain<ID>,
@@ -45,29 +47,29 @@ public interface BaseDeleteByIdDomainCrudRestResourceTest<
         R extends BaseDomainCrudRepository<ID, USER, D, C, Q>,
         S extends BaseDomainCrudService<ID, USER, D, DTO, C, Q, R>,
         DP extends BaseDomainCrudDataProvider<ID, USER, D, DTO, C, Q, R, S>>
-        extends BaseDeleteByIdDomainCrudResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>,
+        extends BaseDeleteDomainCrudResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>,
         ParentDomainCrudRestResourceTest<ID, USER, D, DTO, C> {
 
     /**
-     * Executes a RESTful request to delete an entity by its ID and extracts the result from the response.
+     * Executes a RESTful request to delete an entity and extracts the result from the response.
      *
      * @param savedDto The data transfer object (DTO) representing the entity to be deleted.
      * @throws DomainNotFoundException If the entity is not found.
      * @throws BadRequestException     If the request is not valid.
      */
     @Override
-    default void deleteByIdRequest(DTO savedDto, Assertable<ID> assertable) throws DomainNotFoundException, BadRequestException {
-        // Send a DELETE request to the base URI with the ID of the entity to be deleted
+    default void deleteRequest(DTO savedDto, Assertable<ID> assertable) throws DomainNotFoundException, BadRequestException {
+        // Send a DELETE request to the DELETE operation URI with the ID of the entity to be deleted
         // Prepare the request header
-        // Expect the status to be equal to the DELETE_BY_ID operation status
+        // Expect the status to be equal to the DELETE operation status
         // Expect the body to be of the ID class type
         this.getWebTestClient()
                 .delete()
-                .uri(String.format("%s/%s", getBaseUri(), savedDto.getId()))
+                .uri(String.format("%s/%s?%s.eq=%s", getBaseUri(), Operations.DELETE, savedDto.getIdName(), savedDto.getId()))
                 .headers(this::prepareHeader)
                 .exchange()
                 .expectStatus()
-                .isEqualTo(OperationsStatus.DELETE_BY_ID)
+                .isEqualTo(OperationsStatus.DELETE)
                 .expectBody(getIdClass())
                 .value(assertable::assertThan);
     }

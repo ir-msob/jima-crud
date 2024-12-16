@@ -1,5 +1,6 @@
-package ir.msob.jima.crud.api.restful.test.write;
+package ir.msob.jima.crud.api.restful.test.domain.write;
 
+import com.github.fge.jsonpatch.JsonPatch;
 import ir.msob.jima.core.commons.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.dto.BaseDto;
@@ -8,20 +9,21 @@ import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.test.Assertable;
-import ir.msob.jima.crud.api.restful.test.ParentDomainCrudRestResourceTest;
+import ir.msob.jima.crud.api.restful.test.domain.ParentDomainCrudRestResourceTest;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
-import ir.msob.jima.crud.test.domain.write.BaseUpdateDomainCrudResourceTest;
+import ir.msob.jima.crud.test.domain.write.BaseEditManyDomainCrudResourceTest;
 import org.springframework.http.MediaType;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 /**
- * The {@code BaseUpdateDomainCrudRestResourceTest} interface represents a set of RESTful-specific test methods for updating an entity.
- * It extends both the {@code BaseUpdateDomainCrudResourceTest} and {@code ParentDomainCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
+ * The {@code BaseEditManyDomainCrudRestResourceTest} interface represents a set of RESTful-specific test methods for editing multiple entities.
+ * It extends both the {@code BaseEditManyDomainCrudResourceTest} and {@code ParentDomainCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
  * <p>
- * The interface includes an implementation for making a request to update an entity using RESTful API. The result of the update operation is the DTO of the updated entity.
+ * The interface includes an implementation for making a request to edit multiple entities using RESTful API. The result of the edit operation is a collection of DTOs of the edited entities.
  *
  * @param <ID>   The type of entity ID.
  * @param <USER> The type of the user (security context).
@@ -32,10 +34,10 @@ import java.io.Serializable;
  * @param <R>    The type of the CRUD repository.
  * @param <S>    The type of the CRUD service.
  * @param <DP>   The type of data provider for CRUD testing.
- * @see BaseUpdateDomainCrudResourceTest
+ * @see BaseEditManyDomainCrudResourceTest
  * @see ParentDomainCrudRestResourceTest
  */
-public interface BaseUpdateDomainCrudRestResourceTest<
+public interface BaseEditManyDomainCrudRestResourceTest<
         ID extends Comparable<ID> & Serializable,
         USER extends BaseUser,
         D extends BaseDomain<ID>,
@@ -45,31 +47,32 @@ public interface BaseUpdateDomainCrudRestResourceTest<
         R extends BaseDomainCrudRepository<ID, USER, D, C, Q>,
         S extends BaseDomainCrudService<ID, USER, D, DTO, C, Q, R>,
         DP extends BaseDomainCrudDataProvider<ID, USER, D, DTO, C, Q, R, S>>
-        extends BaseUpdateDomainCrudResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>,
+        extends BaseEditManyDomainCrudResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>,
         ParentDomainCrudRestResourceTest<ID, USER, D, DTO, C> {
 
     /**
-     * Executes a RESTful request to update an entity and extracts the result from the response.
+     * Executes a RESTful request to edit multiple entities and extracts the result from the response.
      *
-     * @param dto The data transfer object (DTO) representing the entity to be updated.
+     * @param savedDto  The data transfer object (DTO) representing the entities to be edited.
+     * @param jsonPatch The JSON Patch representing the changes to be applied to the entities.
      */
     @Override
-    default void updateRequest(DTO dto, Assertable<DTO> assertable) {
-        // Send a PUT request to the UPDATE operation URI
+    default void editManyRequest(DTO savedDto, JsonPatch jsonPatch, Assertable<Collection<DTO>> assertable) {
+        // Send a PATCH request to the EDIT_MANY operation URI with the ID of the entities to be edited
         // Prepare the request header
-        // Set the body of the request to the DTO
-        // Expect the status to be equal to the UPDATE operation status
+        // Set the body of the request to the JSON Patch
+        // Expect the status to be equal to the EDIT_MANY operation status
         // Expect the content type to be JSON
-        // Expect the body to be of the DTO class type
+        // Expect the body to be of type Collection
         this.getWebTestClient()
-                .put()
-                .uri(String.format("%s/%s", getBaseUri(), Operations.UPDATE))
+                .patch()
+                .uri(String.format("%s/%s?%s.eq=%s", getBaseUri(), Operations.EDIT_MANY, savedDto.getIdName(), savedDto.getId()))
                 .headers(this::prepareHeader)
-                .bodyValue(dto)
+                .bodyValue(jsonPatch)
                 .exchange()
-                .expectStatus().isEqualTo(OperationsStatus.UPDATE)
+                .expectStatus().isEqualTo(OperationsStatus.EDIT_MANY)
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
-                .expectBody(this.getDataProvider().getService().getDtoClass())
+                .expectBody(Collection.class)
                 .value(assertable::assertThan);
     }
 }
