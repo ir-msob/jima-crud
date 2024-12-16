@@ -32,11 +32,15 @@ import java.security.Principal;
 public interface BaseDeleteByNameObjectValidationCrudRestResource<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
-        , DTO extends BaseDto<ID>
+
         , OV extends ObjectValidationAbstract<ID>
         , C extends ObjectValidationCriteriaAbstract<ID, OV>
-        , S extends BaseObjectValidationCrudService<ID, USER, DTO, OV, C>
-        > extends ParentChildCrudRestResource<ID, USER, DTO, OV, C, BaseObjectValidationContainer<ID, OV>, S> {
+        , CNT extends BaseObjectValidationContainer<ID, OV>
+
+        , DTO extends BaseDto<ID> & BaseObjectValidationContainer<ID, OV>
+
+        , S extends BaseObjectValidationCrudService<ID, USER, OV, C, CNT, DTO>
+        > extends ParentChildCrudRestResource<ID, USER, OV, C, CNT, DTO, S> {
 
     Logger log = LoggerFactory.getLogger(BaseDeleteByNameObjectValidationCrudRestResource.class);
 
@@ -53,7 +57,7 @@ public interface BaseDeleteByNameObjectValidationCrudRestResource<
         log.debug("REST request to delete object-validation by name, parentId {}, id {}", parentId, name);
 
         USER user = getUser(serverWebExchange, principal);
-        return ResponseEntity.status(OperationsStatus.DELETE_BY_NAME).body(getService().deleteByName(parentId, name, user));
+        return ResponseEntity.status(OperationsStatus.DELETE_BY_NAME).body(getChildService().deleteByName(parentId, name, user));
 
     }
 

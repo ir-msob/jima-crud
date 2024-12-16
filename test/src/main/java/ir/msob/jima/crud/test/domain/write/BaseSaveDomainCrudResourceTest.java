@@ -1,4 +1,4 @@
-package ir.msob.jima.crud.test.read;
+package ir.msob.jima.crud.test.domain.write;
 
 
 import ir.msob.jima.core.commons.criteria.BaseCriteria;
@@ -12,8 +12,8 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
-import ir.msob.jima.crud.test.BaseDomainCrudDataProvider;
-import ir.msob.jima.crud.test.ParentDomainCrudResourceTest;
+import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
+import ir.msob.jima.crud.test.domain.ParentDomainCrudResourceTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,12 +21,10 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.ExecutionException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 /**
- * The {@code BaseCountAllDomainCrudResourceTest} interface defines test cases for the countAll functionality of a CRUD resource.
- * It extends the {@code ParentDomainCrudResourceTest} interface and provides methods to test the countAll operation for CRUD resources.
- * The tests include scenarios for normal countAll and mandatory countAll operations.
+ * The {@code BaseSaveDomainCrudResourceTest} interface defines test cases for the save functionality of a CRUD resource.
+ * It extends the {@code ParentDomainCrudResourceTest} interface and provides methods to test the save operation for CRUD resources.
+ * The tests include scenarios for normal save and mandatory save operations.
  * The interface is generic, allowing customization for different types such as ID, USER, D, DTO, C, Q, R, S, and DP.
  *
  * @param <ID>   The type of the resource ID, which should be comparable and serializable.
@@ -40,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @param <DP>   The type of the data provider associated with the resource, extending {@code BaseDomainCrudDataProvider<ID, USER, D, DTO, C, Q, R, S>}.
  * @see ParentDomainCrudResourceTest
  */
-public interface BaseCountAllDomainCrudResourceTest<
+public interface BaseSaveDomainCrudResourceTest<
         ID extends Comparable<ID> & Serializable,
         USER extends BaseUser,
         D extends BaseDomain<ID>,
@@ -48,12 +46,13 @@ public interface BaseCountAllDomainCrudResourceTest<
         C extends BaseCriteria<ID>,
         Q extends BaseQuery,
         R extends BaseDomainCrudRepository<ID, USER, D, C, Q>,
+
         S extends BaseDomainCrudService<ID, USER, D, DTO, C, Q, R>,
         DP extends BaseDomainCrudDataProvider<ID, USER, D, DTO, C, Q, R, S>>
         extends ParentDomainCrudResourceTest<ID, USER, D, DTO, C, Q, R, S, DP> {
 
     /**
-     * Tests the countAll operation, asserting that the count is as expected.
+     * Tests the normal save operation, asserting that the saved DTO matches the expected state.
      *
      * @throws BadRequestException       If the request is malformed or invalid.
      * @throws DomainNotFoundException   If the domain is not found.
@@ -66,18 +65,20 @@ public interface BaseCountAllDomainCrudResourceTest<
      */
     @Test
     @Transactional
-    default void countAll() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        if (ignoreTest(Operations.COUNT_ALL))
+    default void save() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        if (ignoreTest(Operations.SAVE))
             return;
-        getDataProvider().saveNew();
-        Long countBefore = getDataProvider().countDb();
-        this.countAllRequest(count -> assertEquals(1, count));
-        assertCount(countBefore);
 
+        Long countBefore = getDataProvider().countDb();
+        saveRequest(this.getDataProvider().getNewDto(), dto -> {
+            assertAll(this.getDataProvider().getNewDto(), dto);
+            assertSave(this.getDataProvider().getNewDto(), dto);
+            assertCount(countBefore + 1);
+        });
     }
 
     /**
-     * Tests the mandatory countAll operation, asserting that the count is as expected.
+     * Tests the mandatory save operation, asserting that the saved DTO matches the expected state.
      *
      * @throws BadRequestException       If the request is malformed or invalid.
      * @throws DomainNotFoundException   If the domain is not found.
@@ -90,15 +91,25 @@ public interface BaseCountAllDomainCrudResourceTest<
      */
     @Test
     @Transactional
-    default void countAllMandatory() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        if (ignoreTest(Operations.COUNT_ALL))
+    default void saveMandatory() throws ExecutionException, InterruptedException, BadRequestException, DomainNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        if (ignoreTest(Operations.SAVE))
             return;
-        getDataProvider().saveNewMandatory();
+
         Long countBefore = getDataProvider().countDb();
-        this.countAllRequest(count -> assertEquals(1, count));
-        assertCount(countBefore);
+        saveRequest(this.getDataProvider().getMandatoryNewDto(),
+                dto -> {
+                    assertMandatory(this.getDataProvider().getMandatoryNewDto(), dto);
+                    assertSave(this.getDataProvider().getMandatoryNewDto(), dto);
+                    assertCount(countBefore + 1);
+                });
     }
 
-
-    void countAllRequest(Assertable<Long> assertable);
+    /**
+     * Executes the save operation for the CRUD resource with the specified DTO and performs assertions on the resulting DTO.
+     *
+     * @param dto The DTO representing the new resource to be saved.
+     * @throws BadRequestException     If the request is malformed or invalid.
+     * @throws DomainNotFoundException If the domain is not found.
+     */
+    void saveRequest(DTO dto, Assertable<DTO> assertable);
 }

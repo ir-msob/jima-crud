@@ -10,8 +10,8 @@ import ir.msob.jima.crud.api.graphql.restful.commons.model.CountType;
 import ir.msob.jima.crud.api.graphql.restful.test.domain.ParentDomainCrudGraphqlRestResourceTest;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
-import ir.msob.jima.crud.test.BaseDomainCrudDataProvider;
-import ir.msob.jima.crud.test.read.BaseCountAllDomainCrudResourceTest;
+import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
+import ir.msob.jima.crud.test.domain.read.BaseCountAllDomainCrudResourceTest;
 
 import java.io.Serializable;
 

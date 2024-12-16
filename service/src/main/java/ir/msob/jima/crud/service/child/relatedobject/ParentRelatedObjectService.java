@@ -23,11 +23,11 @@ public interface ParentRelatedObjectService<
         ID extends Comparable<ID> & Serializable
         , RID extends Comparable<RID> & Serializable
         , USER extends BaseUser
-        , DTO extends BaseDto<ID>
         , RO extends RelatedObjectAbstract<ID, RID>
         , C extends RelatedObjectCriteriaAbstract<ID, RID, RO>
-        , CNT extends BaseContainer>
-        extends ParentChildService<ID, USER, DTO, RO, C, CNT> {
+        , CNT extends BaseContainer
+        , DTO extends BaseDto<ID> & BaseContainer>
+        extends ParentChildService<ID, USER, RO, C, CNT, DTO> {
 
 
     @SneakyThrows

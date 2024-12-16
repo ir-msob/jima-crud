@@ -12,8 +12,8 @@ import ir.msob.jima.crud.api.grpc.commons.CriteriaMsg;
 import ir.msob.jima.crud.api.grpc.test.domain.ParentDomainCrudGrpcResourceTest;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
-import ir.msob.jima.crud.test.BaseDomainCrudDataProvider;
-import ir.msob.jima.crud.test.read.BaseCountDomainCrudResourceTest;
+import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
+import ir.msob.jima.crud.test.domain.read.BaseCountDomainCrudResourceTest;
 import lombok.SneakyThrows;
 import reactor.core.publisher.Mono;
 

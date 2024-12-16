@@ -34,11 +34,15 @@ import java.security.Principal;
 public interface BaseSaveRelatedActionCrudRestResource<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
-        , DTO extends BaseDto<ID>
+
         , OV extends RelatedActionAbstract<ID>
         , C extends RelatedActionCriteriaAbstract<ID, OV>
-        , S extends BaseRelatedActionCrudService<ID, USER, DTO, OV, C>
-        > extends ParentChildCrudRestResource<ID, USER, DTO, OV, C, BaseRelatedActionContainer<ID, OV>, S> {
+        , CNT extends BaseRelatedActionContainer<ID, OV>
+
+        , DTO extends BaseDto<ID> & BaseRelatedActionContainer<ID, OV>
+
+        , S extends BaseRelatedActionCrudService<ID, USER, OV, C, CNT, DTO>
+        > extends ParentChildCrudRestResource<ID, USER, OV, C, CNT, DTO, S> {
 
     Logger log = LoggerFactory.getLogger(BaseSaveRelatedActionCrudRestResource.class);
 
@@ -55,7 +59,7 @@ public interface BaseSaveRelatedActionCrudRestResource<
         log.debug("REST request to save child action, parentId {}, dto {}", parentId, dto);
 
         USER user = getUser(serverWebExchange, principal);
-        return ResponseEntity.status(OperationsStatus.SAVE).body(getService().save(parentId, dto, user));
+        return ResponseEntity.status(OperationsStatus.SAVE).body(getChildService().save(parentId, dto, user));
     }
 
 }

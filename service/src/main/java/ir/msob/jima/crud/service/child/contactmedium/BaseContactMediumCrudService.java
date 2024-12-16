@@ -24,10 +24,11 @@ import java.util.Collection;
 public interface BaseContactMediumCrudService<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
-        , DTO extends BaseDto<ID>
         , CM extends ContactMediumAbstract<ID>
-        , C extends ContactMediumCriteriaAbstract<ID, CM>>
-        extends ParentChildService<ID, USER, DTO, CM, C, BaseContactMediumContainer<ID, CM>> {
+        , C extends ContactMediumCriteriaAbstract<ID, CM>
+        , CNT extends BaseContactMediumContainer<ID, CM>
+        , DTO extends BaseDto<ID> & BaseContactMediumContainer<ID, CM>>
+        extends ParentChildService<ID, USER, CM, C, CNT, DTO> {
     Logger log = LoggerFactory.getLogger(BaseContactMediumCrudService.class);
 
     @Transactional

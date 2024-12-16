@@ -1,5 +1,6 @@
 package ir.msob.jima.crud.api.restful.service.child.relatedobject.relateddomain;
 
+import ir.msob.jima.core.commons.child.relatedobject.relateddomain.BaseRelatedDomainContainer;
 import ir.msob.jima.core.commons.child.relatedobject.relateddomain.RelatedDomainAbstract;
 import ir.msob.jima.core.commons.child.relatedobject.relateddomain.RelatedDomainCriteriaAbstract;
 import ir.msob.jima.core.commons.dto.BaseDto;
@@ -13,21 +14,24 @@ import java.io.Serializable;
 public interface BaseRelatedDomainCrudRestResource<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
-        , DTO extends BaseDto<ID>
         , RD extends RelatedDomainAbstract<ID>
         , C extends RelatedDomainCriteriaAbstract<ID, RD>
-        , S extends BaseRelatedDomainCrudService<ID, USER, DTO, RD, C>
+        , CNT extends BaseRelatedDomainContainer<ID, RD>
+
+        , DTO extends BaseDto<ID> & BaseRelatedDomainContainer<ID, RD>
+
+        , S extends BaseRelatedDomainCrudService<ID, USER, RD, C, CNT, DTO>
         > extends
-        BaseDeleteByIdRelatedDomainCrudRestResource<ID, USER, DTO, RD, C, S>
-        , BaseDeleteByRelatedIdRelatedDomainCrudRestResource<ID, USER, DTO, RD, C, S>
-        , BaseDeleteRelatedDomainCrudRestResource<ID, USER, DTO, RD, C, S>
-        , BaseDeleteManyRelatedDomainCrudRestResource<ID, USER, DTO, RD, C, S>
-        , BaseSaveRelatedDomainCrudRestResource<ID, USER, DTO, RD, C, S>
-        , BaseSaveManyRelatedDomainCrudRestResource<ID, USER, DTO, RD, C, S>
-        , BaseUpdateByIdRelatedDomainCrudRestResource<ID, USER, DTO, RD, C, S>
-        , BaseUpdateByRelatedIdRelatedDomainCrudRestResource<ID, USER, DTO, RD, C, S>
-        , BaseUpdateRelatedDomainCrudRestResource<ID, USER, DTO, RD, C, S>
-        , BaseUpdateManyRelatedDomainCrudRestResource<ID, USER, DTO, RD, C, S> {
+        BaseDeleteByIdRelatedDomainCrudRestResource<ID, USER, RD, C, CNT, DTO, S>
+        , BaseDeleteByRelatedIdRelatedDomainCrudRestResource<ID, USER, RD, C, CNT, DTO, S>
+        , BaseDeleteRelatedDomainCrudRestResource<ID, USER, RD, C, CNT, DTO, S>
+        , BaseDeleteManyRelatedDomainCrudRestResource<ID, USER, RD, C, CNT, DTO, S>
+        , BaseSaveRelatedDomainCrudRestResource<ID, USER, RD, C, CNT, DTO, S>
+        , BaseSaveManyRelatedDomainCrudRestResource<ID, USER, RD, C, CNT, DTO, S>
+        , BaseUpdateByIdRelatedDomainCrudRestResource<ID, USER, RD, C, CNT, DTO, S>
+        , BaseUpdateByRelatedIdRelatedDomainCrudRestResource<ID, USER, RD, C, CNT, DTO, S>
+        , BaseUpdateRelatedDomainCrudRestResource<ID, USER, RD, C, CNT, DTO, S>
+        , BaseUpdateManyRelatedDomainCrudRestResource<ID, USER, RD, C, CNT, DTO, S> {
 
 
 }

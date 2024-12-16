@@ -1,6 +1,7 @@
-package ir.msob.jima.crud.test.read;
+package ir.msob.jima.crud.test.domain.write;
 
 
+import com.github.fge.jsonpatch.JsonPatch;
 import ir.msob.jima.core.commons.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.dto.BaseDto;
@@ -12,9 +13,8 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
-import ir.msob.jima.crud.test.BaseDomainCrudDataProvider;
-import ir.msob.jima.crud.test.ParentDomainCrudResourceTest;
-import org.assertj.core.api.Assertions;
+import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
+import ir.msob.jima.crud.test.domain.ParentDomainCrudResourceTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,9 +23,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.ExecutionException;
 
 /**
- * The {@code BaseCountDomainCrudResourceTest} interface defines test cases for the count functionality of a CRUD resource.
- * It extends the {@code ParentDomainCrudResourceTest} interface and provides methods to test the count operation for CRUD resources.
- * The tests include scenarios for normal count and mandatory count operations.
+ * The {@code BaseEditDomainCrudResourceTest} interface defines test cases for the edit functionality of a CRUD resource.
+ * It extends the {@code ParentDomainCrudResourceTest} interface and provides methods to test the edit operation for CRUD resources.
+ * The tests include scenarios for normal edit and mandatory edit operations using JSON Patch.
  * The interface is generic, allowing customization for different types such as ID, USER, D, DTO, C, Q, R, S, and DP.
  *
  * @param <ID>   The type of the resource ID, which should be comparable and serializable.
@@ -39,7 +39,7 @@ import java.util.concurrent.ExecutionException;
  * @param <DP>   The type of the data provider associated with the resource, extending {@code BaseDomainCrudDataProvider<ID, USER, D, DTO, C, Q, R, S>}.
  * @see ParentDomainCrudResourceTest
  */
-public interface BaseCountDomainCrudResourceTest<
+public interface BaseEditDomainCrudResourceTest<
         ID extends Comparable<ID> & Serializable,
         USER extends BaseUser,
         D extends BaseDomain<ID>,
@@ -52,7 +52,7 @@ public interface BaseCountDomainCrudResourceTest<
         extends ParentDomainCrudResourceTest<ID, USER, D, DTO, C, Q, R, S, DP> {
 
     /**
-     * Tests the count operation, asserting that the count is as expected.
+     * Tests the normal edit operation, asserting that the edited DTO matches the expected state.
      *
      * @throws BadRequestException       If the request is malformed or invalid.
      * @throws DomainNotFoundException   If the domain is not found.
@@ -65,17 +65,22 @@ public interface BaseCountDomainCrudResourceTest<
      */
     @Test
     @Transactional
-    default void count() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        if (ignoreTest(Operations.COUNT))
+    default void edit() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        if (ignoreTest(Operations.EDIT))
             return;
+
         DTO savedDto = getDataProvider().saveNew();
+        this.getDataProvider().getUpdateDto(savedDto);
         Long countBefore = getDataProvider().countDb();
-        this.countRequest(savedDto, count -> Assertions.assertThat(count).isEqualTo(1));
+        editRequest(savedDto, getDataProvider().getJsonPatch(), dto -> {
+            assertAll(savedDto, dto);
+            assertUpdate(savedDto, dto);
+        });
         assertCount(countBefore);
     }
 
     /**
-     * Tests the mandatory count operation, asserting that the count is as expected.
+     * Tests the mandatory edit operation, asserting that the edited DTO matches the expected state.
      *
      * @throws BadRequestException       If the request is malformed or invalid.
      * @throws DomainNotFoundException   If the domain is not found.
@@ -88,14 +93,29 @@ public interface BaseCountDomainCrudResourceTest<
      */
     @Test
     @Transactional
-    default void countMandatory() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        if (ignoreTest(Operations.COUNT))
+    default void editMandatory() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        if (ignoreTest(Operations.EDIT))
             return;
+
         DTO savedDto = getDataProvider().saveNewMandatory();
+        this.getDataProvider().getMandatoryUpdateDto(savedDto);
         Long countBefore = getDataProvider().countDb();
-        this.countRequest(savedDto, count -> Assertions.assertThat(count).isEqualTo(1));
+        editRequest(savedDto, getDataProvider().getMandatoryJsonPatch(),
+                dto -> {
+                    assertMandatory(savedDto, dto);
+                    assertUpdate(savedDto, dto);
+                });
         assertCount(countBefore);
+
     }
 
-    void countRequest(DTO savedDto, Assertable<Long> assertable);
+    /**
+     * Executes the edit operation for the CRUD resource with the specified DTO and JSON Patch and performs assertions.
+     *
+     * @param savedDto  The DTO representing the existing resource to be edited.
+     * @param jsonPatch The JSON Patch containing the changes to be applied to the resource.
+     * @throws BadRequestException     If the request is malformed or invalid.
+     * @throws DomainNotFoundException If the domain is not found.
+     */
+    void editRequest(DTO savedDto, JsonPatch jsonPatch, Assertable<DTO> assertable);
 }

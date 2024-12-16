@@ -15,7 +15,7 @@ import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.crud.api.restful.service.child.ParentChildCrudRestResource;
+import ir.msob.jima.crud.api.restful.service.child.relatedobject.ParentRelatedObjectCrudRestResource;
 import ir.msob.jima.crud.service.child.relatedobject.relatedparty.BaseRelatedPartyCrudService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -34,11 +34,15 @@ import java.security.Principal;
 public interface BaseSaveRelatedPartyCrudRestResource<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
-        , DTO extends BaseDto<ID>
+
         , RP extends RelatedPartyAbstract<ID>
         , C extends RelatedPartyCriteriaAbstract<ID, RP>
-        , S extends BaseRelatedPartyCrudService<ID, USER, DTO, RP, C>
-        > extends ParentChildCrudRestResource<ID, USER, DTO, RP, C, BaseRelatedPartyContainer<ID, RP>, S> {
+        , CNT extends BaseRelatedPartyContainer<ID, RP>
+
+        , DTO extends BaseDto<ID> & BaseRelatedPartyContainer<ID, RP>
+
+        , S extends BaseRelatedPartyCrudService<ID, USER, RP, C, CNT, DTO>
+        > extends ParentRelatedObjectCrudRestResource<ID, USER, RP, C, CNT, DTO, S> {
 
     Logger log = LoggerFactory.getLogger(BaseSaveRelatedPartyCrudRestResource.class);
 
@@ -55,7 +59,7 @@ public interface BaseSaveRelatedPartyCrudRestResource<
         log.debug("REST request to save child party, parentId {}, dto {}", parentId, dto);
 
         USER user = getUser(serverWebExchange, principal);
-        return ResponseEntity.status(OperationsStatus.SAVE).body(getService().save(parentId, dto, user));
+        return ResponseEntity.status(OperationsStatus.SAVE).body(getChildService().save(parentId, dto, user));
     }
 
 }

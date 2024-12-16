@@ -32,11 +32,15 @@ import java.security.Principal;
 public interface BaseDeleteByKeyCharacteristicCrudRestResource<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
-        , DTO extends BaseDto<ID>
+
         , CH extends Characteristic<ID>
         , C extends CharacteristicCriteria<ID, CH>
-        , S extends BaseCharacteristicCrudService<ID, USER, DTO, CH, C>
-        > extends ParentChildCrudRestResource<ID, USER, DTO, CH, C, BaseCharacteristicContainer<ID, CH>, S> {
+        , CNT extends BaseCharacteristicContainer<ID, CH>
+
+        , DTO extends BaseDto<ID> & BaseCharacteristicContainer<ID, CH>
+
+        , S extends BaseCharacteristicCrudService<ID, USER, CH, C, CNT, DTO>
+        > extends ParentChildCrudRestResource<ID, USER, CH, C, CNT, DTO, S> {
 
     Logger log = LoggerFactory.getLogger(BaseDeleteByKeyCharacteristicCrudRestResource.class);
 
@@ -53,7 +57,7 @@ public interface BaseDeleteByKeyCharacteristicCrudRestResource<
         log.debug("REST request to delete characteristic by key, parentId {}, id {}", parentId, key);
 
         USER user = getUser(serverWebExchange, principal);
-        return ResponseEntity.status(OperationsStatus.DELETE_BY_KEY).body(getService().deleteByKey(parentId, key, user));
+        return ResponseEntity.status(OperationsStatus.DELETE_BY_KEY).body(getChildService().deleteByKey(parentId, key, user));
 
     }
 

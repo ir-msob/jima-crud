@@ -32,11 +32,15 @@ import java.security.Principal;
 public interface BaseDeleteByIdRelatedDomainCrudRestResource<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
-        , DTO extends BaseDto<ID>
+
         , RD extends RelatedDomainAbstract<ID>
         , C extends RelatedDomainCriteriaAbstract<ID, RD>
-        , S extends BaseRelatedDomainCrudService<ID, USER, DTO, RD, C>
-        > extends ParentRelatedObjectCrudRestResource<ID, USER, DTO, RD, C, BaseRelatedDomainContainer<ID, RD>, S> {
+        , CNT extends BaseRelatedDomainContainer<ID, RD>
+
+        , DTO extends BaseDto<ID> & BaseRelatedDomainContainer<ID, RD>
+
+        , S extends BaseRelatedDomainCrudService<ID, USER, RD, C, CNT, DTO>
+        > extends ParentRelatedObjectCrudRestResource<ID, USER, RD, C, CNT, DTO, S> {
 
     Logger log = LoggerFactory.getLogger(BaseDeleteByIdRelatedDomainCrudRestResource.class);
 
@@ -53,7 +57,7 @@ public interface BaseDeleteByIdRelatedDomainCrudRestResource<
         log.debug("REST request to delete child domain by id, parentId {}, id {}", parentId, id);
 
         USER user = getUser(serverWebExchange, principal);
-        return ResponseEntity.status(OperationsStatus.DELETE_BY_ID).body(getService().deleteById(parentId, id, user));
+        return ResponseEntity.status(OperationsStatus.DELETE_BY_ID).body(getChildService().deleteById(parentId, id, user));
 
     }
 

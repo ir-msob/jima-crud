@@ -32,11 +32,15 @@ import java.security.Principal;
 public interface BaseDeleteByIdRelatedIntegrationCrudRestResource<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
-        , DTO extends BaseDto<ID>
+
         , RI extends RelatedIntegrationAbstract<ID>
         , C extends RelatedIntegrationCriteriaAbstract<ID, RI>
-        , S extends BaseRelatedIntegrationCrudService<ID, USER, DTO, RI, C>
-        > extends ParentRelatedObjectCrudRestResource<ID, USER, DTO, RI, C, BaseRelatedIntegrationContainer<ID, RI>, S> {
+        , CNT extends BaseRelatedIntegrationContainer<ID, RI>
+
+        , DTO extends BaseDto<ID> & BaseRelatedIntegrationContainer<ID, RI>
+
+        , S extends BaseRelatedIntegrationCrudService<ID, USER, RI, C, CNT, DTO>
+        > extends ParentRelatedObjectCrudRestResource<ID, USER, RI, C, CNT, DTO, S> {
 
     Logger log = LoggerFactory.getLogger(BaseDeleteByIdRelatedIntegrationCrudRestResource.class);
 
@@ -53,7 +57,7 @@ public interface BaseDeleteByIdRelatedIntegrationCrudRestResource<
         log.debug("REST request to delete child integration by id, parentId {}, id {}", parentId, id);
 
         USER user = getUser(serverWebExchange, principal);
-        return ResponseEntity.status(OperationsStatus.DELETE_BY_ID).body(getService().deleteById(parentId, id, user));
+        return ResponseEntity.status(OperationsStatus.DELETE_BY_ID).body(getChildService().deleteById(parentId, id, user));
 
     }
 

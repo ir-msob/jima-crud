@@ -11,9 +11,9 @@ import ir.msob.jima.crud.api.graphql.restful.commons.model.DtoType;
 import ir.msob.jima.crud.api.graphql.restful.test.domain.ParentDomainCrudGraphqlRestResourceTest;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
-import ir.msob.jima.crud.test.BaseDomainCrudDataProvider;
-import ir.msob.jima.crud.test.write.BaseUpdateByIdDomainCrudResourceTest;
-import ir.msob.jima.crud.test.write.BaseUpdateDomainCrudResourceTest;
+import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
+import ir.msob.jima.crud.test.domain.write.BaseUpdateByIdDomainCrudResourceTest;
+import ir.msob.jima.crud.test.domain.write.BaseUpdateDomainCrudResourceTest;
 
 import java.io.Serializable;
 

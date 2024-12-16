@@ -35,11 +35,15 @@ import java.util.Collection;
 public interface BaseSaveManyObjectValidationCrudRestResource<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
-        , DTO extends BaseDto<ID>
+
         , OV extends ObjectValidationAbstract<ID>
         , C extends ObjectValidationCriteriaAbstract<ID, OV>
-        , S extends BaseObjectValidationCrudService<ID, USER, DTO, OV, C>
-        > extends ParentChildCrudRestResource<ID, USER, DTO, OV, C, BaseObjectValidationContainer<ID, OV>, S> {
+        , CNT extends BaseObjectValidationContainer<ID, OV>
+
+        , DTO extends BaseDto<ID> & BaseObjectValidationContainer<ID, OV>
+
+        , S extends BaseObjectValidationCrudService<ID, USER, OV, C, CNT, DTO>
+        > extends ParentChildCrudRestResource<ID, USER, OV, C, CNT, DTO, S> {
 
     Logger log = LoggerFactory.getLogger(BaseSaveManyObjectValidationCrudRestResource.class);
 
@@ -56,7 +60,7 @@ public interface BaseSaveManyObjectValidationCrudRestResource<
         log.debug("REST request to save many object-validations, parentId {}, dtos {}", parentId, dtos);
 
         USER user = getUser(serverWebExchange, principal);
-        return ResponseEntity.status(OperationsStatus.SAVE_MANY).body(getService().saveMany(parentId, dtos, user));
+        return ResponseEntity.status(OperationsStatus.SAVE_MANY).body(getChildService().saveMany(parentId, dtos, user));
     }
 
 }

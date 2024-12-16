@@ -34,11 +34,14 @@ import java.security.Principal;
 public interface BaseUpdateContactMediumCrudRestResource<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
-        , DTO extends BaseDto<ID>
         , CM extends ContactMediumAbstract<ID>
         , C extends ContactMediumCriteriaAbstract<ID, CM>
-        , S extends BaseContactMediumCrudService<ID, USER, DTO, CM, C>
-        > extends ParentChildCrudRestResource<ID, USER, DTO, CM, C, BaseContactMediumContainer<ID, CM>, S> {
+        , CNT extends BaseContactMediumContainer<ID, CM>
+
+        , DTO extends BaseDto<ID> & BaseContactMediumContainer<ID, CM>
+
+        , S extends BaseContactMediumCrudService<ID, USER, CM, C, CNT, DTO>
+        > extends ParentChildCrudRestResource<ID, USER, CM, C, CNT, DTO, S> {
 
     Logger log = LoggerFactory.getLogger(BaseUpdateContactMediumCrudRestResource.class);
 
@@ -55,7 +58,7 @@ public interface BaseUpdateContactMediumCrudRestResource<
         log.debug("REST request to update contact medium, parentId {}, dto {}, criteria {}", parentId, dto, criteria);
 
         USER user = getUser(serverWebExchange, principal);
-        return ResponseEntity.status(OperationsStatus.UPDATE).body(getService().update(parentId, dto, criteria, user));
+        return ResponseEntity.status(OperationsStatus.UPDATE).body(getChildService().update(parentId, dto, criteria, user));
     }
 
 }

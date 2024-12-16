@@ -1,5 +1,6 @@
 package ir.msob.jima.crud.api.restful.service.child.relatedobject.relatedprocess;
 
+import ir.msob.jima.core.commons.child.relatedobject.relatedprocess.BaseRelatedProcessContainer;
 import ir.msob.jima.core.commons.child.relatedobject.relatedprocess.RelatedProcessAbstract;
 import ir.msob.jima.core.commons.child.relatedobject.relatedprocess.RelatedProcessCriteriaAbstract;
 import ir.msob.jima.core.commons.dto.BaseDto;
@@ -13,19 +14,23 @@ import java.io.Serializable;
 public interface BaseRelatedProcessCrudRestResource<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
-        , DTO extends BaseDto<ID>
+
         , RP extends RelatedProcessAbstract<ID>
         , C extends RelatedProcessCriteriaAbstract<ID, RP>
-        , S extends BaseRelatedProcessCrudService<ID, USER, DTO, RP, C>
-        > extends BaseDeleteByIdRelatedProcessCrudRestResource<ID, USER, DTO, RP, C, S>
-        , BaseDeleteByRelatedIdRelatedProcessCrudRestResource<ID, USER, DTO, RP, C, S>
-        , BaseDeleteRelatedProcessCrudRestResource<ID, USER, DTO, RP, C, S>
-        , BaseDeleteManyRelatedProcessCrudRestResource<ID, USER, DTO, RP, C, S>
-        , BaseSaveRelatedProcessCrudRestResource<ID, USER, DTO, RP, C, S>
-        , BaseSaveManyRelatedProcessCrudRestResource<ID, USER, DTO, RP, C, S>
-        , BaseUpdateByIdRelatedProcessCrudRestResource<ID, USER, DTO, RP, C, S>
-        , BaseUpdateByRelatedIdRelatedProcessCrudRestResource<ID, USER, DTO, RP, C, S>
-        , BaseUpdateRelatedProcessCrudRestResource<ID, USER, DTO, RP, C, S>
-        , BaseUpdateManyRelatedProcessCrudRestResource<ID, USER, DTO, RP, C, S> {
+        , CNT extends BaseRelatedProcessContainer<ID, RP>
+
+        , DTO extends BaseDto<ID> & BaseRelatedProcessContainer<ID, RP>
+
+        , S extends BaseRelatedProcessCrudService<ID, USER, RP, C, CNT, DTO>
+        > extends BaseDeleteByIdRelatedProcessCrudRestResource<ID, USER, RP, C, CNT, DTO, S>
+        , BaseDeleteByRelatedIdRelatedProcessCrudRestResource<ID, USER, RP, C, CNT, DTO, S>
+        , BaseDeleteRelatedProcessCrudRestResource<ID, USER, RP, C, CNT, DTO, S>
+        , BaseDeleteManyRelatedProcessCrudRestResource<ID, USER, RP, C, CNT, DTO, S>
+        , BaseSaveRelatedProcessCrudRestResource<ID, USER, RP, C, CNT, DTO, S>
+        , BaseSaveManyRelatedProcessCrudRestResource<ID, USER, RP, C, CNT, DTO, S>
+        , BaseUpdateByIdRelatedProcessCrudRestResource<ID, USER, RP, C, CNT, DTO, S>
+        , BaseUpdateByRelatedIdRelatedProcessCrudRestResource<ID, USER, RP, C, CNT, DTO, S>
+        , BaseUpdateRelatedProcessCrudRestResource<ID, USER, RP, C, CNT, DTO, S>
+        , BaseUpdateManyRelatedProcessCrudRestResource<ID, USER, RP, C, CNT, DTO, S> {
 
 }

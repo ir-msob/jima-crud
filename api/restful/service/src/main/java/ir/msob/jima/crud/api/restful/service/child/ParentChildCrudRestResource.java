@@ -15,14 +15,17 @@ import java.io.Serializable;
 public interface ParentChildCrudRestResource<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
-        , DTO extends BaseDto<ID>
-        , RM extends BaseChild<ID>
-        , C extends BaseChildCriteria<ID, RM>
+
+        , CHILD extends BaseChild<ID>
+        , CHILD_C extends BaseChildCriteria<ID, CHILD>
         , CNT extends BaseContainer
-        , S extends ParentChildService<ID, USER, DTO, RM, C, CNT>>
+
+        , DTO extends BaseDto<ID> & BaseContainer
+
+        , CHILD_S extends ParentChildService<ID, USER, CHILD, CHILD_C, CNT, DTO>>
         extends BaseRestResource<ID, USER>,
         BaseCrudResource {
 
-    S getService();
+    CHILD_S getChildService();
 
 }

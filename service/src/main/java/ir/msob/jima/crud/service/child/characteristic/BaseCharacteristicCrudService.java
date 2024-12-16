@@ -24,10 +24,11 @@ import java.util.Collection;
 public interface BaseCharacteristicCrudService<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
-        , DTO extends BaseDto<ID>
         , CH extends Characteristic<ID>
-        , C extends CharacteristicCriteria<ID, CH>>
-        extends ParentChildService<ID, USER, DTO, CH, C, BaseCharacteristicContainer<ID, CH>> {
+        , C extends CharacteristicCriteria<ID, CH>
+        , CNT extends BaseCharacteristicContainer<ID, CH>
+        , DTO extends BaseDto<ID> & BaseCharacteristicContainer<ID, CH>>
+        extends ParentChildService<ID, USER, CH, C, CNT, DTO> {
     Logger log = LoggerFactory.getLogger(BaseCharacteristicCrudService.class);
 
     @Transactional
@@ -36,7 +37,7 @@ public interface BaseCharacteristicCrudService<
         return deleteById(
                 parentId
                 , id
-                , dto -> ((BaseCharacteristicContainer<ID, CH>) dto).getCharacteristics()
+                , BaseCharacteristicContainer::getCharacteristics
                 , user);
     }
 
@@ -46,7 +47,7 @@ public interface BaseCharacteristicCrudService<
     default Mono<DTO> deleteByKey(@NotNull ID parentId, @NotBlank String key, USER user) throws DomainNotFoundException, BadRequestException {
         C criteria = getChildCriteriaClass().getConstructor().newInstance();
         criteria.setKey(Filter.eq(key));
-        return delete(parentId, criteria, dto -> ((BaseCharacteristicContainer<ID, CH>) dto).getCharacteristics(), user);
+        return delete(parentId, criteria, BaseCharacteristicContainer::getCharacteristics, user);
     }
 
     @Transactional
@@ -55,7 +56,7 @@ public interface BaseCharacteristicCrudService<
         return deleteMany(
                 parentId
                 , criteria
-                , dto -> ((BaseCharacteristicContainer<ID, CH>) dto).getCharacteristics()
+                , BaseCharacteristicContainer::getCharacteristics
                 , user);
     }
 
@@ -65,7 +66,7 @@ public interface BaseCharacteristicCrudService<
         return delete(
                 parentId
                 , criteria
-                , dto -> ((BaseCharacteristicContainer<ID, CH>) dto).getCharacteristics()
+                , BaseCharacteristicContainer::getCharacteristics
                 , user);
     }
 
@@ -75,7 +76,7 @@ public interface BaseCharacteristicCrudService<
         return saveMany(
                 parentId
                 , characteristics
-                , dto -> ((BaseCharacteristicContainer<ID, CH>) dto).getCharacteristics()
+                , BaseCharacteristicContainer::getCharacteristics
                 , user);
     }
 
@@ -85,7 +86,7 @@ public interface BaseCharacteristicCrudService<
         return save(
                 parentId
                 , characteristic
-                , dto -> ((BaseCharacteristicContainer<ID, CH>) dto).getCharacteristics()
+                , BaseCharacteristicContainer::getCharacteristics
                 , user);
     }
 
@@ -96,7 +97,7 @@ public interface BaseCharacteristicCrudService<
                 parentId
                 , id
                 , characteristic
-                , dto -> ((BaseCharacteristicContainer<ID, CH>) dto).getCharacteristics()
+                , BaseCharacteristicContainer::getCharacteristics
                 , user);
     }
 
@@ -106,7 +107,7 @@ public interface BaseCharacteristicCrudService<
     default Mono<DTO> updateByKey(@NotNull ID parentId, @NotBlank String key, CH characteristic, USER user) throws DomainNotFoundException, BadRequestException {
         C criteria = getChildCriteriaClass().getConstructor().newInstance();
         criteria.setKey(Filter.eq(key));
-        return update(parentId, characteristic, criteria, dto -> ((BaseCharacteristicContainer<ID, CH>) dto).getCharacteristics(), user);
+        return update(parentId, characteristic, criteria, BaseCharacteristicContainer::getCharacteristics, user);
     }
 
     @Transactional
@@ -115,7 +116,7 @@ public interface BaseCharacteristicCrudService<
         return updateMany(
                 parentId
                 , characteristics
-                , dto -> ((BaseCharacteristicContainer<ID, CH>) dto).getCharacteristics()
+                , BaseCharacteristicContainer::getCharacteristics
                 , user);
     }
 
@@ -126,7 +127,7 @@ public interface BaseCharacteristicCrudService<
                 parentId
                 , characteristic
                 , criteria
-                , dto -> ((BaseCharacteristicContainer<ID, CH>) dto).getCharacteristics()
+                , BaseCharacteristicContainer::getCharacteristics
                 , user);
     }
 }

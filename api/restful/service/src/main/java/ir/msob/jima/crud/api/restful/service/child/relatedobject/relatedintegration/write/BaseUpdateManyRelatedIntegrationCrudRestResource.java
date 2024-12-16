@@ -15,7 +15,7 @@ import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.crud.api.restful.service.child.ParentChildCrudRestResource;
+import ir.msob.jima.crud.api.restful.service.child.relatedobject.ParentRelatedObjectCrudRestResource;
 import ir.msob.jima.crud.service.child.relatedobject.relatedintegration.BaseRelatedIntegrationCrudService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -35,11 +35,15 @@ import java.util.Collection;
 public interface BaseUpdateManyRelatedIntegrationCrudRestResource<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
-        , DTO extends BaseDto<ID>
+
         , RI extends RelatedIntegrationAbstract<ID>
         , C extends RelatedIntegrationCriteriaAbstract<ID, RI>
-        , S extends BaseRelatedIntegrationCrudService<ID, USER, DTO, RI, C>
-        > extends ParentChildCrudRestResource<ID, USER, DTO, RI, C, BaseRelatedIntegrationContainer<ID, RI>, S> {
+        , CNT extends BaseRelatedIntegrationContainer<ID, RI>
+
+        , DTO extends BaseDto<ID> & BaseRelatedIntegrationContainer<ID, RI>
+
+        , S extends BaseRelatedIntegrationCrudService<ID, USER, RI, C, CNT, DTO>
+        > extends ParentRelatedObjectCrudRestResource<ID, USER, RI, C, CNT, DTO, S> {
 
     Logger log = LoggerFactory.getLogger(BaseUpdateManyRelatedIntegrationCrudRestResource.class);
 
@@ -56,7 +60,7 @@ public interface BaseUpdateManyRelatedIntegrationCrudRestResource<
         log.debug("REST request to update child integration, parentId {}, dtos {}", parentId, dtos);
 
         USER user = getUser(serverWebExchange, principal);
-        return ResponseEntity.status(OperationsStatus.UPDATE_MANY).body(getService().updateMany(parentId, dtos, user));
+        return ResponseEntity.status(OperationsStatus.UPDATE_MANY).body(getChildService().updateMany(parentId, dtos, user));
     }
 
 }

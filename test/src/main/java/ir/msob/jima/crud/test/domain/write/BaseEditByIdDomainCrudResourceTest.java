@@ -1,6 +1,6 @@
-package ir.msob.jima.crud.test.write;
+package ir.msob.jima.crud.test.domain.write;
 
-
+import com.github.fge.jsonpatch.JsonPatch;
 import ir.msob.jima.core.commons.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.dto.BaseDto;
@@ -12,23 +12,19 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
-import ir.msob.jima.crud.test.BaseDomainCrudDataProvider;
-import ir.msob.jima.crud.test.ParentDomainCrudResourceTest;
+import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
+import ir.msob.jima.crud.test.domain.ParentDomainCrudResourceTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 /**
- * The {@code BaseDeleteManyDomainCrudResourceTest} interface defines test cases for the deleteMany functionality of a CRUD resource.
- * It extends the {@code ParentDomainCrudResourceTest} interface and provides methods to test the deleteMany operation for CRUD resources.
- * The tests include scenarios for normal deleteMany and mandatory deleteMany operations.
+ * The {@code BaseEditDomainCrudResourceTest} interface defines test cases for the edit functionality of a CRUD resource.
+ * It extends the {@code ParentDomainCrudResourceTest} interface and provides methods to test the edit operation for CRUD resources.
+ * The tests include scenarios for normal edit and mandatory edit operations using JSON Patch.
  * The interface is generic, allowing customization for different types such as ID, USER, D, DTO, C, Q, R, S, and DP.
  *
  * @param <ID>   The type of the resource ID, which should be comparable and serializable.
@@ -42,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @param <DP>   The type of the data provider associated with the resource, extending {@code BaseDomainCrudDataProvider<ID, USER, D, DTO, C, Q, R, S>}.
  * @see ParentDomainCrudResourceTest
  */
-public interface BaseDeleteManyDomainCrudResourceTest<
+public interface BaseEditByIdDomainCrudResourceTest<
         ID extends Comparable<ID> & Serializable,
         USER extends BaseUser,
         D extends BaseDomain<ID>,
@@ -55,7 +51,7 @@ public interface BaseDeleteManyDomainCrudResourceTest<
         extends ParentDomainCrudResourceTest<ID, USER, D, DTO, C, Q, R, S, DP> {
 
     /**
-     * Tests the deleteMany operation, asserting that the returned set of IDs is as expected.
+     * Tests the normal edit operation, asserting that the edited DTO matches the expected state.
      *
      * @throws BadRequestException       If the request is malformed or invalid.
      * @throws DomainNotFoundException   If the domain is not found.
@@ -68,21 +64,24 @@ public interface BaseDeleteManyDomainCrudResourceTest<
      */
     @Test
     @Transactional
-    default void deleteMany() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        if (ignoreTest(Operations.DELETE_MANY))
+    default void editById() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        if (ignoreTest(Operations.EDIT_BY_ID))
             return;
+
         DTO savedDto = getDataProvider().saveNew();
+        this.getDataProvider().getUpdateDto(savedDto);
         Long countBefore = getDataProvider().countDb();
-        deleteManyRequest(savedDto, ids -> {
-            assertEquals(1, ids.size());
-            assertThat(ids.stream().map(Object::toString).toList()).contains(savedDto.getId().toString());
-            assertCount(countBefore - 1);
-            assertDelete(savedDto);
-        });
+        editByIdRequest(savedDto, getDataProvider().getJsonPatch(),
+                dto -> {
+                    assertAll(savedDto, dto);
+                    assertUpdate(savedDto, dto);
+                });
+        assertCount(countBefore);
+
     }
 
     /**
-     * Tests the mandatory deleteMany operation, asserting that the returned set of IDs is as expected.
+     * Tests the mandatory edit operation, asserting that the edited DTO matches the expected state.
      *
      * @throws BadRequestException       If the request is malformed or invalid.
      * @throws DomainNotFoundException   If the domain is not found.
@@ -95,18 +94,22 @@ public interface BaseDeleteManyDomainCrudResourceTest<
      */
     @Test
     @Transactional
-    default void deleteManyMandatory() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        if (ignoreTest(Operations.DELETE_MANY))
+    default void editByIdMandatory() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        if (ignoreTest(Operations.EDIT_BY_ID))
             return;
+
         DTO savedDto = getDataProvider().saveNewMandatory();
+        this.getDataProvider().getMandatoryUpdateDto(savedDto);
         Long countBefore = getDataProvider().countDb();
-        deleteManyRequest(savedDto, ids -> {
-            assertEquals(1, ids.size());
-            assertThat(ids.stream().map(Object::toString).toList()).contains(savedDto.getId().toString());
-            assertCount(countBefore - 1);
-            assertDelete(savedDto);
-        });
+        editByIdRequest(savedDto, getDataProvider().getMandatoryJsonPatch(),
+                dto -> {
+                    assertMandatory(savedDto, dto);
+                    assertUpdate(savedDto, dto);
+                });
+        assertCount(countBefore);
+
     }
 
-    void deleteManyRequest(DTO savedDto, Assertable<Set<ID>> assertable);
+
+    void editByIdRequest(DTO savedDto, JsonPatch jsonPatch, Assertable<DTO> assertable);
 }

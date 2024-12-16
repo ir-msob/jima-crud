@@ -15,7 +15,7 @@ import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.crud.api.restful.service.child.ParentChildCrudRestResource;
+import ir.msob.jima.crud.api.restful.service.child.relatedobject.ParentRelatedObjectCrudRestResource;
 import ir.msob.jima.crud.service.child.relatedobject.relatedprocess.BaseRelatedProcessCrudService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -34,11 +34,15 @@ import java.security.Principal;
 public interface BaseUpdateByIdRelatedProcessCrudRestResource<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
-        , DTO extends BaseDto<ID>
+
         , RP extends RelatedProcessAbstract<ID>
         , C extends RelatedProcessCriteriaAbstract<ID, RP>
-        , S extends BaseRelatedProcessCrudService<ID, USER, DTO, RP, C>
-        > extends ParentChildCrudRestResource<ID, USER, DTO, RP, C, BaseRelatedProcessContainer<ID, RP>, S> {
+        , CNT extends BaseRelatedProcessContainer<ID, RP>
+
+        , DTO extends BaseDto<ID> & BaseRelatedProcessContainer<ID, RP>
+
+        , S extends BaseRelatedProcessCrudService<ID, USER, RP, C, CNT, DTO>
+        > extends ParentRelatedObjectCrudRestResource<ID, USER, RP, C, CNT, DTO, S> {
 
     Logger log = LoggerFactory.getLogger(BaseUpdateByIdRelatedProcessCrudRestResource.class);
 
@@ -55,7 +59,7 @@ public interface BaseUpdateByIdRelatedProcessCrudRestResource<
         log.debug("REST request to update child process, parentId {}, id {}, dto {}", parentId, id, dto);
 
         USER user = getUser(serverWebExchange, principal);
-        return ResponseEntity.status(OperationsStatus.UPDATE_BY_ID).body(getService().updateById(parentId, id, dto, user));
+        return ResponseEntity.status(OperationsStatus.UPDATE_BY_ID).body(getChildService().updateById(parentId, id, dto, user));
     }
 
 }

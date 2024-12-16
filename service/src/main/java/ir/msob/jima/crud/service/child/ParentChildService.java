@@ -26,21 +26,21 @@ import java.util.function.Function;
 public interface ParentChildService<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
-        , DTO extends BaseDto<ID>
-        , RM extends BaseChild<ID>
-        , C extends BaseChildCriteria<ID, RM>
-        , CNT extends BaseContainer> {
+        , CHILD extends BaseChild<ID>
+        , C extends BaseChildCriteria<ID, CHILD>
+        , CNT extends BaseContainer
+        , DTO extends BaseDto<ID> & BaseContainer> {
 
-    default Class<RM> getChildClass() {
-        return (Class<RM>) GenericTypeUtil.resolveTypeArguments(getClass(), ParentChildService.class, 4);
+    default Class<CHILD> getChildClass() {
+        return (Class<CHILD>) GenericTypeUtil.resolveTypeArguments(getClass(), ParentChildService.class, 2);
     }
 
     default Class<C> getChildCriteriaClass() {
-        return (Class<C>) GenericTypeUtil.resolveTypeArguments(getClass(), ParentChildService.class, 5);
+        return (Class<C>) GenericTypeUtil.resolveTypeArguments(getClass(), ParentChildService.class, 3);
     }
 
     default Class<CNT> getContinerClass() {
-        return (Class<CNT>) GenericTypeUtil.resolveTypeArguments(getClass(), ParentChildService.class, 6);
+        return (Class<CNT>) GenericTypeUtil.resolveTypeArguments(getClass(), ParentChildService.class, 4);
     }
 
     /**
@@ -64,7 +64,7 @@ public interface ParentChildService<
 
     @SneakyThrows
     @MethodStats
-    default Mono<DTO> updateById(@NotNull ID parentId, @NotNull ID id, RM relatedModel, Function<DTO, SortedSet<RM>> getter, USER user) throws DomainNotFoundException, BadRequestException {
+    default Mono<DTO> updateById(@NotNull ID parentId, @NotNull ID id, CHILD relatedModel, Function<DTO, SortedSet<CHILD>> getter, USER user) throws DomainNotFoundException, BadRequestException {
         C criteria = getChildCriteriaClass().getConstructor().newInstance();
         criteria.setId(Filter.eq(id));
         return update(parentId, relatedModel, criteria, getter, user);
@@ -72,15 +72,15 @@ public interface ParentChildService<
 
 
     @MethodStats
-    default Mono<DTO> update(@NotNull ID parentId, RM relatedModel, @NotNull C criteria, Function<DTO, SortedSet<RM>> getter, USER user) throws DomainNotFoundException, BadRequestException {
+    default Mono<DTO> update(@NotNull ID parentId, CHILD relatedModel, @NotNull C criteria, Function<DTO, SortedSet<CHILD>> getter, USER user) throws DomainNotFoundException, BadRequestException {
         return getDtoById(parentId, user)
                 .doOnNext(dto -> {
                     if (getContinerClass().isInstance(dto)) {
-                        Iterator<RM> iterator = getter.apply(dto).iterator();
+                        Iterator<CHILD> iterator = getter.apply(dto).iterator();
                         boolean found = false;
 
                         while (iterator.hasNext()) {
-                            RM next = iterator.next();
+                            CHILD next = iterator.next();
                             if (criteria.isMatching(next)) {
                                 relatedModel.setId(next.getId());
                                 getter.apply(dto).add(relatedModel);
@@ -100,16 +100,16 @@ public interface ParentChildService<
     }
 
     @MethodStats
-    default Mono<DTO> updateMany(@NotNull ID parentId, Collection<RM> relatedModels, Function<DTO, SortedSet<RM>> getter, USER user) throws DomainNotFoundException, BadRequestException {
+    default Mono<DTO> updateMany(@NotNull ID parentId, Collection<CHILD> relatedModels, Function<DTO, SortedSet<CHILD>> getter, USER user) throws DomainNotFoundException, BadRequestException {
         return getDtoById(parentId, user)
                 .doOnNext(dto -> {
                     if (getContinerClass().isInstance(dto)) {
-                        Iterator<RM> iterator = getter.apply(dto).iterator();
+                        Iterator<CHILD> iterator = getter.apply(dto).iterator();
 
-                        for (RM ro : relatedModels) {
+                        for (CHILD ro : relatedModels) {
                             boolean found = false;
                             while (iterator.hasNext()) {
-                                RM next = iterator.next();
+                                CHILD next = iterator.next();
                                 if (Objects.equals(ro.getId(), next.getId())) {
                                     getter.apply(dto).add(ro);
                                     iterator.remove();
@@ -130,7 +130,7 @@ public interface ParentChildService<
 
     @SneakyThrows
     @MethodStats
-    default Mono<DTO> deleteById(@NotNull ID parentId, @NotNull ID id, Function<DTO, SortedSet<RM>> getter, USER user) throws DomainNotFoundException, BadRequestException {
+    default Mono<DTO> deleteById(@NotNull ID parentId, @NotNull ID id, Function<DTO, SortedSet<CHILD>> getter, USER user) throws DomainNotFoundException, BadRequestException {
         C criteria = getChildCriteriaClass().getConstructor().newInstance();
         criteria.setId(Filter.eq(id));
         return delete(parentId, criteria, getter, user);
@@ -138,15 +138,15 @@ public interface ParentChildService<
 
 
     @MethodStats
-    default Mono<DTO> delete(@NotNull ID parentId, @NotNull C criteria, Function<DTO, SortedSet<RM>> getter, USER user) throws DomainNotFoundException, BadRequestException {
+    default Mono<DTO> delete(@NotNull ID parentId, @NotNull C criteria, Function<DTO, SortedSet<CHILD>> getter, USER user) throws DomainNotFoundException, BadRequestException {
         return getDtoById(parentId, user)
                 .doOnNext(dto -> {
                     if (getContinerClass().isInstance(dto)) {
-                        Iterator<RM> iterator = getter.apply(dto).iterator();
+                        Iterator<CHILD> iterator = getter.apply(dto).iterator();
                         boolean found = false;
 
                         while (iterator.hasNext()) {
-                            RM ro = iterator.next();
+                            CHILD ro = iterator.next();
 
                             if (criteria.isMatching(ro)) {
                                 iterator.remove();
@@ -166,15 +166,15 @@ public interface ParentChildService<
     }
 
     @MethodStats
-    default Mono<DTO> deleteMany(@NotNull ID parentId, @NotNull C criteria, Function<DTO, SortedSet<RM>> getter, USER user) throws DomainNotFoundException, BadRequestException {
+    default Mono<DTO> deleteMany(@NotNull ID parentId, @NotNull C criteria, Function<DTO, SortedSet<CHILD>> getter, USER user) throws DomainNotFoundException, BadRequestException {
         return getDtoById(parentId, user)
                 .doOnNext(dto -> {
                     if (getContinerClass().isInstance(dto)) {
-                        Iterator<RM> iterator = getter.apply(dto).iterator();
+                        Iterator<CHILD> iterator = getter.apply(dto).iterator();
                         boolean found = false;
 
                         while (iterator.hasNext()) {
-                            RM ro = iterator.next();
+                            CHILD ro = iterator.next();
                             if (criteria.isMatching(ro)) {
                                 iterator.remove();
                                 found = true;
@@ -192,15 +192,15 @@ public interface ParentChildService<
     }
 
     @MethodStats
-    default Mono<DTO> save(@NotNull ID parentId, @NotNull @Valid RM relatedObject, Function<DTO, SortedSet<RM>> getter, USER user) throws DomainNotFoundException, BadRequestException {
+    default Mono<DTO> save(@NotNull ID parentId, @NotNull @Valid CHILD relatedObject, Function<DTO, SortedSet<CHILD>> getter, USER user) throws DomainNotFoundException, BadRequestException {
         return saveMany(parentId, Collections.singletonList(relatedObject), getter, user);
     }
 
     @MethodStats
-    default Mono<DTO> saveMany(@NotNull ID parentId, @NotEmpty Collection<@Valid RM> relatedObjects, Function<DTO, SortedSet<RM>> getter, USER user) throws DomainNotFoundException, BadRequestException {
+    default Mono<DTO> saveMany(@NotNull ID parentId, @NotEmpty Collection<@Valid CHILD> relatedObjects, Function<DTO, SortedSet<CHILD>> getter, USER user) throws DomainNotFoundException, BadRequestException {
         return getDtoById(parentId, user)
                 .doOnNext(dto -> {
-                    for (RM relatedModel : relatedObjects) {
+                    for (CHILD relatedModel : relatedObjects) {
                         if (relatedModel.getId() == null || Strings.isBlank(relatedModel.getId().toString())) {
                             relatedModel.setId(getIdService().newId());
                         }

@@ -34,11 +34,15 @@ import java.security.Principal;
 public interface BaseUpdateByNameObjectValidationCrudRestResource<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
-        , DTO extends BaseDto<ID>
+
         , OV extends ObjectValidationAbstract<ID>
         , C extends ObjectValidationCriteriaAbstract<ID, OV>
-        , S extends BaseObjectValidationCrudService<ID, USER, DTO, OV, C>
-        > extends ParentChildCrudRestResource<ID, USER, DTO, OV, C, BaseObjectValidationContainer<ID, OV>, S> {
+        , CNT extends BaseObjectValidationContainer<ID, OV>
+
+        , DTO extends BaseDto<ID> & BaseObjectValidationContainer<ID, OV>
+
+        , S extends BaseObjectValidationCrudService<ID, USER, OV, C, CNT, DTO>
+        > extends ParentChildCrudRestResource<ID, USER, OV, C, CNT, DTO, S> {
 
     Logger log = LoggerFactory.getLogger(BaseUpdateByNameObjectValidationCrudRestResource.class);
 
@@ -55,7 +59,7 @@ public interface BaseUpdateByNameObjectValidationCrudRestResource<
         log.debug("REST request to update object validation, parentId {}, name {}, dto {}", parentId, name, dto);
 
         USER user = getUser(serverWebExchange, principal);
-        return ResponseEntity.status(OperationsStatus.UPDATE_BY_NAME).body(getService().updateByName(parentId, name, dto, user));
+        return ResponseEntity.status(OperationsStatus.UPDATE_BY_NAME).body(getChildService().updateByName(parentId, name, dto, user));
     }
 
 }

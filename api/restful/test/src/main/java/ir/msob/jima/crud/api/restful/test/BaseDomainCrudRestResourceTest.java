@@ -9,7 +9,7 @@ import ir.msob.jima.crud.api.restful.test.read.*;
 import ir.msob.jima.crud.api.restful.test.write.*;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
-import ir.msob.jima.crud.test.BaseDomainCrudDataProvider;
+import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
 
 import java.io.Serializable;
 

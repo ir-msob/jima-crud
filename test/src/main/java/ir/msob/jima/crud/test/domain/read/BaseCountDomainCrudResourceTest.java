@@ -1,7 +1,6 @@
-package ir.msob.jima.crud.test.write;
+package ir.msob.jima.crud.test.domain.read;
 
 
-import com.github.fge.jsonpatch.JsonPatch;
 import ir.msob.jima.core.commons.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.dto.BaseDto;
@@ -13,20 +12,20 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
-import ir.msob.jima.crud.test.BaseDomainCrudDataProvider;
-import ir.msob.jima.crud.test.ParentDomainCrudResourceTest;
+import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
+import ir.msob.jima.crud.test.domain.ParentDomainCrudResourceTest;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 
 /**
- * The {@code BaseEditManyDomainCrudResourceTest} interface defines test cases for the editMany functionality of a CRUD resource.
- * It extends the {@code ParentDomainCrudResourceTest} interface and provides methods to test the editMany operation for CRUD resources.
- * The tests include scenarios for normal editMany and mandatory editMany operations using JSON Patch.
+ * The {@code BaseCountDomainCrudResourceTest} interface defines test cases for the count functionality of a CRUD resource.
+ * It extends the {@code ParentDomainCrudResourceTest} interface and provides methods to test the count operation for CRUD resources.
+ * The tests include scenarios for normal count and mandatory count operations.
  * The interface is generic, allowing customization for different types such as ID, USER, D, DTO, C, Q, R, S, and DP.
  *
  * @param <ID>   The type of the resource ID, which should be comparable and serializable.
@@ -40,7 +39,7 @@ import java.util.concurrent.ExecutionException;
  * @param <DP>   The type of the data provider associated with the resource, extending {@code BaseDomainCrudDataProvider<ID, USER, D, DTO, C, Q, R, S>}.
  * @see ParentDomainCrudResourceTest
  */
-public interface BaseEditManyDomainCrudResourceTest<
+public interface BaseCountDomainCrudResourceTest<
         ID extends Comparable<ID> & Serializable,
         USER extends BaseUser,
         D extends BaseDomain<ID>,
@@ -53,7 +52,7 @@ public interface BaseEditManyDomainCrudResourceTest<
         extends ParentDomainCrudResourceTest<ID, USER, D, DTO, C, Q, R, S, DP> {
 
     /**
-     * Tests the normal editMany operation, asserting that the collection of edited DTOs matches the expected state.
+     * Tests the count operation, asserting that the count is as expected.
      *
      * @throws BadRequestException       If the request is malformed or invalid.
      * @throws DomainNotFoundException   If the domain is not found.
@@ -66,24 +65,17 @@ public interface BaseEditManyDomainCrudResourceTest<
      */
     @Test
     @Transactional
-    default void editMany() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        if (ignoreTest(Operations.EDIT_MANY))
+    default void count() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        if (ignoreTest(Operations.COUNT))
             return;
-
         DTO savedDto = getDataProvider().saveNew();
-        this.getDataProvider().getUpdateDto(savedDto);
         Long countBefore = getDataProvider().countDb();
-        editManyRequest(savedDto, getDataProvider().getJsonPatch(),
-                dtos -> {
-                    DTO dto = getDataProvider().getObjectMapper().convertValue(dtos.stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());
-                    assertAll(savedDto, dto);
-                    assertUpdate(savedDto, dto);
-                });
+        this.countRequest(savedDto, count -> Assertions.assertThat(count).isEqualTo(1));
         assertCount(countBefore);
     }
 
     /**
-     * Tests the mandatory editMany operation, asserting that the collection of edited DTOs matches the expected state.
+     * Tests the mandatory count operation, asserting that the count is as expected.
      *
      * @throws BadRequestException       If the request is malformed or invalid.
      * @throws DomainNotFoundException   If the domain is not found.
@@ -96,30 +88,14 @@ public interface BaseEditManyDomainCrudResourceTest<
      */
     @Test
     @Transactional
-    default void editManyMandatory() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        if (ignoreTest(Operations.EDIT_MANY))
+    default void countMandatory() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        if (ignoreTest(Operations.COUNT))
             return;
-
         DTO savedDto = getDataProvider().saveNewMandatory();
-        this.getDataProvider().getMandatoryUpdateDto(savedDto);
         Long countBefore = getDataProvider().countDb();
-        editManyRequest(savedDto, getDataProvider().getMandatoryJsonPatch(),
-                dtos -> {
-                    DTO dto = getDataProvider().getObjectMapper().convertValue(dtos.stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());
-                    assertMandatory(savedDto, dto);
-                    assertUpdate(savedDto, dto);
-                });
+        this.countRequest(savedDto, count -> Assertions.assertThat(count).isEqualTo(1));
         assertCount(countBefore);
     }
 
-    /**
-     * Executes the editMany operation for the CRUD resource with the specified DTO, JSON Patch,
-     * and performs assertions on the resulting collection of edited DTOs.
-     *
-     * @param savedDto  The DTO representing the existing resource to be edited.
-     * @param jsonPatch The JSON Patch containing the changes to be applied to the resource.
-     * @throws BadRequestException     If the request is malformed or invalid.
-     * @throws DomainNotFoundException If the domain is not found.
-     */
-    void editManyRequest(DTO savedDto, JsonPatch jsonPatch, Assertable<Collection<DTO>> assertable);
+    void countRequest(DTO savedDto, Assertable<Long> assertable);
 }

@@ -15,7 +15,7 @@ import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.crud.api.restful.service.child.ParentChildCrudRestResource;
+import ir.msob.jima.crud.api.restful.service.child.relatedobject.ParentRelatedObjectCrudRestResource;
 import ir.msob.jima.crud.service.child.relatedobject.relatedparty.BaseRelatedPartyCrudService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -35,11 +35,15 @@ import java.util.Collection;
 public interface BaseUpdateManyRelatedPartyCrudRestResource<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
-        , DTO extends BaseDto<ID>
+
         , RP extends RelatedPartyAbstract<ID>
         , C extends RelatedPartyCriteriaAbstract<ID, RP>
-        , S extends BaseRelatedPartyCrudService<ID, USER, DTO, RP, C>
-        > extends ParentChildCrudRestResource<ID, USER, DTO, RP, C, BaseRelatedPartyContainer<ID, RP>, S> {
+        , CNT extends BaseRelatedPartyContainer<ID, RP>
+
+        , DTO extends BaseDto<ID> & BaseRelatedPartyContainer<ID, RP>
+
+        , S extends BaseRelatedPartyCrudService<ID, USER, RP, C, CNT, DTO>
+        > extends ParentRelatedObjectCrudRestResource<ID, USER, RP, C, CNT, DTO, S> {
 
     Logger log = LoggerFactory.getLogger(BaseUpdateManyRelatedPartyCrudRestResource.class);
 
@@ -56,7 +60,7 @@ public interface BaseUpdateManyRelatedPartyCrudRestResource<
         log.debug("REST request to update child party, parentId {}, dtos {}", parentId, dtos);
 
         USER user = getUser(serverWebExchange, principal);
-        return ResponseEntity.status(OperationsStatus.UPDATE_MANY).body(getService().updateMany(parentId, dtos, user));
+        return ResponseEntity.status(OperationsStatus.UPDATE_MANY).body(getChildService().updateMany(parentId, dtos, user));
     }
 
 }

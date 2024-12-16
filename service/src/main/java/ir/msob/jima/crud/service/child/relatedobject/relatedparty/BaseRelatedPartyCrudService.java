@@ -22,10 +22,11 @@ import java.util.Collection;
 public interface BaseRelatedPartyCrudService<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
-        , DTO extends BaseDto<ID>
         , RP extends RelatedPartyAbstract<ID>
-        , C extends RelatedPartyCriteriaAbstract<ID, RP>>
-        extends ParentRelatedObjectService<ID, String, USER, DTO, RP, C, BaseRelatedPartyContainer<ID, RP>> {
+        , C extends RelatedPartyCriteriaAbstract<ID, RP>
+        , CNT extends BaseRelatedPartyContainer<ID, RP>
+        , DTO extends BaseDto<ID> & BaseRelatedPartyContainer<ID, RP>>
+        extends ParentRelatedObjectService<ID, String, USER, RP, C, CNT, DTO> {
     Logger log = LoggerFactory.getLogger(BaseRelatedPartyCrudService.class);
 
     @Transactional
@@ -34,7 +35,7 @@ public interface BaseRelatedPartyCrudService<
         return deleteById(
                 parentId
                 , id
-                , dto -> ((BaseRelatedPartyContainer<ID, RP>) dto).getRelatedParties()
+                , BaseRelatedPartyContainer::getRelatedParties
                 , user);
     }
 
@@ -44,7 +45,7 @@ public interface BaseRelatedPartyCrudService<
         return deleteByRelatedId(
                 parentId
                 , relatedId
-                , dto -> ((BaseRelatedPartyContainer<ID, RP>) dto).getRelatedParties()
+                , BaseRelatedPartyContainer::getRelatedParties
                 , user);
     }
 
@@ -54,7 +55,7 @@ public interface BaseRelatedPartyCrudService<
         return deleteMany(
                 parentId
                 , criteria
-                , dto -> ((BaseRelatedPartyContainer<ID, RP>) dto).getRelatedParties()
+                , BaseRelatedPartyContainer::getRelatedParties
                 , user);
     }
 
@@ -64,7 +65,7 @@ public interface BaseRelatedPartyCrudService<
         return delete(
                 parentId
                 , criteria
-                , dto -> ((BaseRelatedPartyContainer<ID, RP>) dto).getRelatedParties()
+                , BaseRelatedPartyContainer::getRelatedParties
                 , user);
     }
 
@@ -74,7 +75,7 @@ public interface BaseRelatedPartyCrudService<
         return saveMany(
                 parentId
                 , relatedParties
-                , dto -> ((BaseRelatedPartyContainer<ID, RP>) dto).getRelatedParties()
+                , BaseRelatedPartyContainer::getRelatedParties
                 , user);
     }
 
@@ -84,7 +85,7 @@ public interface BaseRelatedPartyCrudService<
         return save(
                 parentId
                 , relatedParty
-                , dto -> ((BaseRelatedPartyContainer<ID, RP>) dto).getRelatedParties()
+                , BaseRelatedPartyContainer::getRelatedParties
                 , user);
     }
 
@@ -95,7 +96,7 @@ public interface BaseRelatedPartyCrudService<
                 parentId
                 , id
                 , relatedParty
-                , dto -> ((BaseRelatedPartyContainer<ID, RP>) dto).getRelatedParties()
+                , BaseRelatedPartyContainer::getRelatedParties
                 , user);
     }
 
@@ -106,7 +107,7 @@ public interface BaseRelatedPartyCrudService<
                 parentId
                 , relatedId
                 , relatedParty
-                , dto -> ((BaseRelatedPartyContainer<ID, RP>) dto).getRelatedParties()
+                , BaseRelatedPartyContainer::getRelatedParties
                 , user);
     }
 
@@ -116,7 +117,7 @@ public interface BaseRelatedPartyCrudService<
         return updateMany(
                 parentId
                 , relatedParties
-                , dto -> ((BaseRelatedPartyContainer<ID, RP>) dto).getRelatedParties()
+                , BaseRelatedPartyContainer::getRelatedParties
                 , user);
     }
 
@@ -127,7 +128,7 @@ public interface BaseRelatedPartyCrudService<
                 parentId
                 , relatedParty
                 , criteria
-                , dto -> ((BaseRelatedPartyContainer<ID, RP>) dto).getRelatedParties()
+                , BaseRelatedPartyContainer::getRelatedParties
                 , user);
     }
 }

@@ -35,11 +35,15 @@ import java.util.Collection;
 public interface BaseUpdateManyCharacteristicCrudRestResource<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
-        , DTO extends BaseDto<ID>
+
         , CH extends Characteristic<ID>
         , C extends CharacteristicCriteria<ID, CH>
-        , S extends BaseCharacteristicCrudService<ID, USER, DTO, CH, C>
-        > extends ParentChildCrudRestResource<ID, USER, DTO, CH, C, BaseCharacteristicContainer<ID, CH>, S> {
+        , CNT extends BaseCharacteristicContainer<ID, CH>
+
+        , DTO extends BaseDto<ID> & BaseCharacteristicContainer<ID, CH>
+
+        , S extends BaseCharacteristicCrudService<ID, USER, CH, C, CNT, DTO>
+        > extends ParentChildCrudRestResource<ID, USER, CH, C, CNT, DTO, S> {
 
     Logger log = LoggerFactory.getLogger(BaseUpdateManyCharacteristicCrudRestResource.class);
 
@@ -56,7 +60,7 @@ public interface BaseUpdateManyCharacteristicCrudRestResource<
         log.debug("REST request to update characteristic, parentId {}, dtos {}", parentId, dtos);
 
         USER user = getUser(serverWebExchange, principal);
-        return ResponseEntity.status(OperationsStatus.UPDATE_MANY).body(getService().updateMany(parentId, dtos, user));
+        return ResponseEntity.status(OperationsStatus.UPDATE_MANY).body(getChildService().updateMany(parentId, dtos, user));
     }
 
 }

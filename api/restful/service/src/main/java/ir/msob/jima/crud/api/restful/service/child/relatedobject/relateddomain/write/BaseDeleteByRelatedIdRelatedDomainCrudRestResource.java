@@ -15,7 +15,7 @@ import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.crud.api.restful.service.child.ParentChildCrudRestResource;
+import ir.msob.jima.crud.api.restful.service.child.relatedobject.ParentRelatedObjectCrudRestResource;
 import ir.msob.jima.crud.service.child.relatedobject.relateddomain.BaseRelatedDomainCrudService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,11 +32,15 @@ import java.security.Principal;
 public interface BaseDeleteByRelatedIdRelatedDomainCrudRestResource<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
-        , DTO extends BaseDto<ID>
+
         , RD extends RelatedDomainAbstract<ID>
         , C extends RelatedDomainCriteriaAbstract<ID, RD>
-        , S extends BaseRelatedDomainCrudService<ID, USER, DTO, RD, C>
-        > extends ParentChildCrudRestResource<ID, USER, DTO, RD, C, BaseRelatedDomainContainer<ID, RD>, S> {
+        , CNT extends BaseRelatedDomainContainer<ID, RD>
+
+        , DTO extends BaseDto<ID> & BaseRelatedDomainContainer<ID, RD>
+
+        , S extends BaseRelatedDomainCrudService<ID, USER, RD, C, CNT, DTO>
+        > extends ParentRelatedObjectCrudRestResource<ID, USER, RD, C, CNT, DTO, S> {
 
     Logger log = LoggerFactory.getLogger(BaseDeleteByRelatedIdRelatedDomainCrudRestResource.class);
 
@@ -53,7 +57,7 @@ public interface BaseDeleteByRelatedIdRelatedDomainCrudRestResource<
         log.debug("REST request to delete child domain by relatedId, parentId {}, id {}", parentId, relatedId);
 
         USER user = getUser(serverWebExchange, principal);
-        return ResponseEntity.status(OperationsStatus.DELETE_BY_RELATED_ID).body(getService().deleteByRelatedId(parentId, relatedId, user));
+        return ResponseEntity.status(OperationsStatus.DELETE_BY_RELATED_ID).body(getChildService().deleteByRelatedId(parentId, relatedId, user));
 
     }
 

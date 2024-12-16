@@ -35,11 +35,15 @@ import java.util.Collection;
 public interface BaseUpdateManyObjectValidationCrudRestResource<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
-        , DTO extends BaseDto<ID>
+
         , OV extends ObjectValidationAbstract<ID>
         , C extends ObjectValidationCriteriaAbstract<ID, OV>
-        , S extends BaseObjectValidationCrudService<ID, USER, DTO, OV, C>
-        > extends ParentChildCrudRestResource<ID, USER, DTO, OV, C, BaseObjectValidationContainer<ID, OV>, S> {
+        , CNT extends BaseObjectValidationContainer<ID, OV>
+
+        , DTO extends BaseDto<ID> & BaseObjectValidationContainer<ID, OV>
+
+        , S extends BaseObjectValidationCrudService<ID, USER, OV, C, CNT, DTO>
+        > extends ParentChildCrudRestResource<ID, USER, OV, C, CNT, DTO, S> {
 
     Logger log = LoggerFactory.getLogger(BaseUpdateManyObjectValidationCrudRestResource.class);
 
@@ -56,7 +60,7 @@ public interface BaseUpdateManyObjectValidationCrudRestResource<
         log.debug("REST request to update object validation, parentId {}, dtos {}", parentId, dtos);
 
         USER user = getUser(serverWebExchange, principal);
-        return ResponseEntity.status(OperationsStatus.UPDATE_MANY).body(getService().updateMany(parentId, dtos, user));
+        return ResponseEntity.status(OperationsStatus.UPDATE_MANY).body(getChildService().updateMany(parentId, dtos, user));
     }
 
 }

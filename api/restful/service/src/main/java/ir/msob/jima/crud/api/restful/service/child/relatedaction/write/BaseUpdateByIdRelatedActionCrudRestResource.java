@@ -34,11 +34,15 @@ import java.security.Principal;
 public interface BaseUpdateByIdRelatedActionCrudRestResource<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
-        , DTO extends BaseDto<ID>
+
         , OV extends RelatedActionAbstract<ID>
         , C extends RelatedActionCriteriaAbstract<ID, OV>
-        , S extends BaseRelatedActionCrudService<ID, USER, DTO, OV, C>
-        > extends ParentChildCrudRestResource<ID, USER, DTO, OV, C, BaseRelatedActionContainer<ID, OV>, S> {
+        , CNT extends BaseRelatedActionContainer<ID, OV>
+
+        , DTO extends BaseDto<ID> & BaseRelatedActionContainer<ID, OV>
+
+        , S extends BaseRelatedActionCrudService<ID, USER, OV, C, CNT, DTO>
+        > extends ParentChildCrudRestResource<ID, USER, OV, C, CNT, DTO, S> {
 
     Logger log = LoggerFactory.getLogger(BaseUpdateByIdRelatedActionCrudRestResource.class);
 
@@ -55,7 +59,7 @@ public interface BaseUpdateByIdRelatedActionCrudRestResource<
         log.debug("REST request to update child action, parentId {}, id {}, dto {}", parentId, id, dto);
 
         USER user = getUser(serverWebExchange, principal);
-        return ResponseEntity.status(OperationsStatus.UPDATE_BY_ID).body(getService().updateById(parentId, id, dto, user));
+        return ResponseEntity.status(OperationsStatus.UPDATE_BY_ID).body(getChildService().updateById(parentId, id, dto, user));
     }
 
 }

@@ -15,7 +15,7 @@ import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.crud.api.restful.service.child.ParentChildCrudRestResource;
+import ir.msob.jima.crud.api.restful.service.child.relatedobject.ParentRelatedObjectCrudRestResource;
 import ir.msob.jima.crud.service.child.relatedobject.relatedintegration.BaseRelatedIntegrationCrudService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -34,11 +34,15 @@ import java.security.Principal;
 public interface BaseSaveRelatedIntegrationCrudRestResource<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
-        , DTO extends BaseDto<ID>
+
         , RI extends RelatedIntegrationAbstract<ID>
         , C extends RelatedIntegrationCriteriaAbstract<ID, RI>
-        , S extends BaseRelatedIntegrationCrudService<ID, USER, DTO, RI, C>
-        > extends ParentChildCrudRestResource<ID, USER, DTO, RI, C, BaseRelatedIntegrationContainer<ID, RI>, S> {
+        , CNT extends BaseRelatedIntegrationContainer<ID, RI>
+
+        , DTO extends BaseDto<ID> & BaseRelatedIntegrationContainer<ID, RI>
+
+        , S extends BaseRelatedIntegrationCrudService<ID, USER, RI, C, CNT, DTO>
+        > extends ParentRelatedObjectCrudRestResource<ID, USER, RI, C, CNT, DTO, S> {
 
     Logger log = LoggerFactory.getLogger(BaseSaveRelatedIntegrationCrudRestResource.class);
 
@@ -55,7 +59,7 @@ public interface BaseSaveRelatedIntegrationCrudRestResource<
         log.debug("REST request to save child integration, parentId {}, dto {}", parentId, dto);
 
         USER user = getUser(serverWebExchange, principal);
-        return ResponseEntity.status(OperationsStatus.SAVE).body(getService().save(parentId, dto, user));
+        return ResponseEntity.status(OperationsStatus.SAVE).body(getChildService().save(parentId, dto, user));
     }
 
 }

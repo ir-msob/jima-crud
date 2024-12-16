@@ -12,8 +12,8 @@ import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.restful.test.ParentDomainCrudRestResourceTest;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
-import ir.msob.jima.crud.test.BaseDomainCrudDataProvider;
-import ir.msob.jima.crud.test.read.BaseGetPageDomainCrudResourceTest;
+import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
+import ir.msob.jima.crud.test.domain.read.BaseGetPageDomainCrudResourceTest;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 

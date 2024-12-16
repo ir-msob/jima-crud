@@ -35,11 +35,14 @@ import java.util.Collection;
 public interface BaseSaveManyContactMediumCrudRestResource<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
-        , DTO extends BaseDto<ID>
         , CM extends ContactMediumAbstract<ID>
         , C extends ContactMediumCriteriaAbstract<ID, CM>
-        , S extends BaseContactMediumCrudService<ID, USER, DTO, CM, C>
-        > extends ParentChildCrudRestResource<ID, USER, DTO, CM, C, BaseContactMediumContainer<ID, CM>, S> {
+        , CNT extends BaseContactMediumContainer<ID, CM>
+
+        , DTO extends BaseDto<ID> & BaseContactMediumContainer<ID, CM>
+
+        , S extends BaseContactMediumCrudService<ID, USER, CM, C, CNT, DTO>
+        > extends ParentChildCrudRestResource<ID, USER, CM, C, CNT, DTO, S> {
 
     Logger log = LoggerFactory.getLogger(BaseSaveManyContactMediumCrudRestResource.class);
 
@@ -56,7 +59,7 @@ public interface BaseSaveManyContactMediumCrudRestResource<
         log.debug("REST request to save many contact mediums, parentId {}, dtos {}", parentId, dtos);
 
         USER user = getUser(serverWebExchange, principal);
-        return ResponseEntity.status(OperationsStatus.SAVE_MANY).body(getService().saveMany(parentId, dtos, user));
+        return ResponseEntity.status(OperationsStatus.SAVE_MANY).body(getChildService().saveMany(parentId, dtos, user));
     }
 
 }

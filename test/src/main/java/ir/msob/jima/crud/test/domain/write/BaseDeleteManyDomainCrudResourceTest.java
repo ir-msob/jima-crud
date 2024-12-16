@@ -1,4 +1,4 @@
-package ir.msob.jima.crud.test.read;
+package ir.msob.jima.crud.test.domain.write;
 
 
 import ir.msob.jima.core.commons.criteria.BaseCriteria;
@@ -12,19 +12,23 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
-import ir.msob.jima.crud.test.BaseDomainCrudDataProvider;
-import ir.msob.jima.crud.test.ParentDomainCrudResourceTest;
+import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
+import ir.msob.jima.crud.test.domain.ParentDomainCrudResourceTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
- * The {@code BaseGetOneDomainCrudResourceTest} interface defines test cases for the getOne functionality of a CRUD resource.
- * It extends the {@code ParentDomainCrudResourceTest} interface and provides methods to test the getOne operation for CRUD resources.
- * The tests include scenarios for normal getOne and mandatory getOne operations.
+ * The {@code BaseDeleteManyDomainCrudResourceTest} interface defines test cases for the deleteMany functionality of a CRUD resource.
+ * It extends the {@code ParentDomainCrudResourceTest} interface and provides methods to test the deleteMany operation for CRUD resources.
+ * The tests include scenarios for normal deleteMany and mandatory deleteMany operations.
  * The interface is generic, allowing customization for different types such as ID, USER, D, DTO, C, Q, R, S, and DP.
  *
  * @param <ID>   The type of the resource ID, which should be comparable and serializable.
@@ -38,7 +42,7 @@ import java.util.concurrent.ExecutionException;
  * @param <DP>   The type of the data provider associated with the resource, extending {@code BaseDomainCrudDataProvider<ID, USER, D, DTO, C, Q, R, S>}.
  * @see ParentDomainCrudResourceTest
  */
-public interface BaseGetOneDomainCrudResourceTest<
+public interface BaseDeleteManyDomainCrudResourceTest<
         ID extends Comparable<ID> & Serializable,
         USER extends BaseUser,
         D extends BaseDomain<ID>,
@@ -51,7 +55,7 @@ public interface BaseGetOneDomainCrudResourceTest<
         extends ParentDomainCrudResourceTest<ID, USER, D, DTO, C, Q, R, S, DP> {
 
     /**
-     * Tests the getOne operation, asserting that the returned DTO is as expected.
+     * Tests the deleteMany operation, asserting that the returned set of IDs is as expected.
      *
      * @throws BadRequestException       If the request is malformed or invalid.
      * @throws DomainNotFoundException   If the domain is not found.
@@ -64,20 +68,21 @@ public interface BaseGetOneDomainCrudResourceTest<
      */
     @Test
     @Transactional
-    default void getOne() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        if (ignoreTest(Operations.GET_ONE))
+    default void deleteMany() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        if (ignoreTest(Operations.DELETE_MANY))
             return;
         DTO savedDto = getDataProvider().saveNew();
         Long countBefore = getDataProvider().countDb();
-        getOneRequest(savedDto, dto -> {
-            assertAll(this.getDataProvider().getNewDto(), dto);
-            assertGet(savedDto, dto);
+        deleteManyRequest(savedDto, ids -> {
+            assertEquals(1, ids.size());
+            assertThat(ids.stream().map(Object::toString).toList()).contains(savedDto.getId().toString());
+            assertCount(countBefore - 1);
+            assertDelete(savedDto);
         });
-        assertCount(countBefore);
     }
 
     /**
-     * Tests the mandatory getOne operation, asserting that the returned DTO is as expected.
+     * Tests the mandatory deleteMany operation, asserting that the returned set of IDs is as expected.
      *
      * @throws BadRequestException       If the request is malformed or invalid.
      * @throws DomainNotFoundException   If the domain is not found.
@@ -90,18 +95,18 @@ public interface BaseGetOneDomainCrudResourceTest<
      */
     @Test
     @Transactional
-    default void getOneMandatory() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        if (ignoreTest(Operations.GET_ONE))
+    default void deleteManyMandatory() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        if (ignoreTest(Operations.DELETE_MANY))
             return;
         DTO savedDto = getDataProvider().saveNewMandatory();
         Long countBefore = getDataProvider().countDb();
-        getOneRequest(savedDto, dto -> {
-            assertMandatory(this.getDataProvider().getMandatoryNewDto(), dto);
-            assertGet(savedDto, dto);
+        deleteManyRequest(savedDto, ids -> {
+            assertEquals(1, ids.size());
+            assertThat(ids.stream().map(Object::toString).toList()).contains(savedDto.getId().toString());
+            assertCount(countBefore - 1);
+            assertDelete(savedDto);
         });
-        assertCount(countBefore);
-
     }
 
-    void getOneRequest(DTO savedDto, Assertable<DTO> assertable);
+    void deleteManyRequest(DTO savedDto, Assertable<Set<ID>> assertable);
 }

@@ -14,8 +14,8 @@ import ir.msob.jima.crud.api.grpc.commons.IdsMsg;
 import ir.msob.jima.crud.api.grpc.test.domain.ParentDomainCrudGrpcResourceTest;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
-import ir.msob.jima.crud.test.BaseDomainCrudDataProvider;
-import ir.msob.jima.crud.test.write.BaseDeleteManyDomainCrudResourceTest;
+import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
+import ir.msob.jima.crud.test.domain.write.BaseDeleteManyDomainCrudResourceTest;
 import lombok.SneakyThrows;
 import reactor.core.publisher.Mono;
 

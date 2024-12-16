@@ -12,8 +12,8 @@ import ir.msob.jima.crud.api.graphql.restful.commons.model.CriteriaInput;
 import ir.msob.jima.crud.api.graphql.restful.test.domain.ParentDomainCrudGraphqlRestResourceTest;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
-import ir.msob.jima.crud.test.BaseDomainCrudDataProvider;
-import ir.msob.jima.crud.test.read.BaseCountDomainCrudResourceTest;
+import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
+import ir.msob.jima.crud.test.domain.read.BaseCountDomainCrudResourceTest;
 import lombok.SneakyThrows;
 
 import java.io.Serializable;

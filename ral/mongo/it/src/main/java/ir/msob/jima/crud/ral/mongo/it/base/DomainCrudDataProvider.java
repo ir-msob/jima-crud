@@ -8,7 +8,7 @@ import ir.msob.jima.core.ral.mongo.it.domain.ProjectDomain;
 import ir.msob.jima.core.ral.mongo.it.dto.ProjectDto;
 import ir.msob.jima.core.ral.mongo.it.security.ProjectUser;
 import ir.msob.jima.core.ral.mongo.it.security.Roles;
-import ir.msob.jima.crud.test.BaseDomainCrudDataProvider;
+import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
 import org.bson.types.ObjectId;
 
 import java.util.Collections;

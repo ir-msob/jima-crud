@@ -22,10 +22,11 @@ import java.util.Collection;
 public interface BaseRelatedProcessCrudService<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
-        , DTO extends BaseDto<ID>
         , RP extends RelatedProcessAbstract<ID>
-        , C extends RelatedProcessCriteriaAbstract<ID, RP>>
-        extends ParentRelatedObjectService<ID, String, USER, DTO, RP, C, BaseRelatedProcessContainer<ID, RP>> {
+        , C extends RelatedProcessCriteriaAbstract<ID, RP>
+        , CNT extends BaseRelatedProcessContainer<ID, RP>
+        , DTO extends BaseDto<ID> & BaseRelatedProcessContainer<ID, RP>>
+        extends ParentRelatedObjectService<ID, String, USER, RP, C, CNT, DTO> {
     Logger log = LoggerFactory.getLogger(BaseRelatedProcessCrudService.class);
 
     @Transactional
@@ -34,7 +35,7 @@ public interface BaseRelatedProcessCrudService<
         return deleteById(
                 parentId
                 , id
-                , dto -> ((BaseRelatedProcessContainer<ID, RP>) dto).getRelatedProcesses()
+                , BaseRelatedProcessContainer::getRelatedProcesses
                 , user);
     }
 
@@ -44,7 +45,7 @@ public interface BaseRelatedProcessCrudService<
         return deleteByRelatedId(
                 parentId
                 , relatedId
-                , dto -> ((BaseRelatedProcessContainer<ID, RP>) dto).getRelatedProcesses()
+                , BaseRelatedProcessContainer::getRelatedProcesses
                 , user);
     }
 
@@ -54,7 +55,7 @@ public interface BaseRelatedProcessCrudService<
         return deleteMany(
                 parentId
                 , criteria
-                , dto -> ((BaseRelatedProcessContainer<ID, RP>) dto).getRelatedProcesses()
+                , BaseRelatedProcessContainer::getRelatedProcesses
                 , user);
     }
 
@@ -64,7 +65,7 @@ public interface BaseRelatedProcessCrudService<
         return delete(
                 parentId
                 , criteria
-                , dto -> ((BaseRelatedProcessContainer<ID, RP>) dto).getRelatedProcesses()
+                , BaseRelatedProcessContainer::getRelatedProcesses
                 , user);
     }
 
@@ -74,7 +75,7 @@ public interface BaseRelatedProcessCrudService<
         return saveMany(
                 parentId
                 , relatedProcesses
-                , dto -> ((BaseRelatedProcessContainer<ID, RP>) dto).getRelatedProcesses()
+                , BaseRelatedProcessContainer::getRelatedProcesses
                 , user);
     }
 
@@ -84,7 +85,7 @@ public interface BaseRelatedProcessCrudService<
         return save(
                 parentId
                 , relatedProcess
-                , dto -> ((BaseRelatedProcessContainer<ID, RP>) dto).getRelatedProcesses()
+                , BaseRelatedProcessContainer::getRelatedProcesses
                 , user);
     }
 
@@ -95,7 +96,7 @@ public interface BaseRelatedProcessCrudService<
                 parentId
                 , id
                 , relatedProcess
-                , dto -> ((BaseRelatedProcessContainer<ID, RP>) dto).getRelatedProcesses()
+                , BaseRelatedProcessContainer::getRelatedProcesses
                 , user);
     }
 
@@ -106,7 +107,7 @@ public interface BaseRelatedProcessCrudService<
                 parentId
                 , relatedId
                 , relatedProcess
-                , dto -> ((BaseRelatedProcessContainer<ID, RP>) dto).getRelatedProcesses()
+                , BaseRelatedProcessContainer::getRelatedProcesses
                 , user);
     }
 
@@ -116,7 +117,7 @@ public interface BaseRelatedProcessCrudService<
         return updateMany(
                 parentId
                 , relatedProcesses
-                , dto -> ((BaseRelatedProcessContainer<ID, RP>) dto).getRelatedProcesses()
+                , BaseRelatedProcessContainer::getRelatedProcesses
                 , user);
     }
 
@@ -127,7 +128,7 @@ public interface BaseRelatedProcessCrudService<
                 parentId
                 , relatedProcess
                 , criteria
-                , dto -> ((BaseRelatedProcessContainer<ID, RP>) dto).getRelatedProcesses()
+                , BaseRelatedProcessContainer::getRelatedProcesses
                 , user);
     }
 }

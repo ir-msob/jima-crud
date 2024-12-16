@@ -15,7 +15,7 @@ import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.crud.api.restful.service.child.ParentChildCrudRestResource;
+import ir.msob.jima.crud.api.restful.service.child.relatedobject.ParentRelatedObjectCrudRestResource;
 import ir.msob.jima.crud.service.child.relatedobject.relateddomain.BaseRelatedDomainCrudService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -35,11 +35,15 @@ import java.util.Collection;
 public interface BaseSaveManyRelatedDomainCrudRestResource<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
-        , DTO extends BaseDto<ID>
+
         , RD extends RelatedDomainAbstract<ID>
         , C extends RelatedDomainCriteriaAbstract<ID, RD>
-        , S extends BaseRelatedDomainCrudService<ID, USER, DTO, RD, C>
-        > extends ParentChildCrudRestResource<ID, USER, DTO, RD, C, BaseRelatedDomainContainer<ID, RD>, S> {
+        , CNT extends BaseRelatedDomainContainer<ID, RD>
+
+        , DTO extends BaseDto<ID> & BaseRelatedDomainContainer<ID, RD>
+
+        , S extends BaseRelatedDomainCrudService<ID, USER, RD, C, CNT, DTO>
+        > extends ParentRelatedObjectCrudRestResource<ID, USER, RD, C, CNT, DTO, S> {
 
     Logger log = LoggerFactory.getLogger(BaseSaveManyRelatedDomainCrudRestResource.class);
 
@@ -56,7 +60,7 @@ public interface BaseSaveManyRelatedDomainCrudRestResource<
         log.debug("REST request to save many child domains, parentId {}, dtos {}", parentId, dtos);
 
         USER user = getUser(serverWebExchange, principal);
-        return ResponseEntity.status(OperationsStatus.SAVE_MANY).body(getService().saveMany(parentId, dtos, user));
+        return ResponseEntity.status(OperationsStatus.SAVE_MANY).body(getChildService().saveMany(parentId, dtos, user));
     }
 
 }

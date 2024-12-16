@@ -34,11 +34,15 @@ import java.security.Principal;
 public interface BaseUpdateCharacteristicCrudRestResource<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
-        , DTO extends BaseDto<ID>
+
         , CH extends Characteristic<ID>
         , C extends CharacteristicCriteria<ID, CH>
-        , S extends BaseCharacteristicCrudService<ID, USER, DTO, CH, C>
-        > extends ParentChildCrudRestResource<ID, USER, DTO, CH, C, BaseCharacteristicContainer<ID, CH>, S> {
+        , CNT extends BaseCharacteristicContainer<ID, CH>
+
+        , DTO extends BaseDto<ID> & BaseCharacteristicContainer<ID, CH>
+
+        , S extends BaseCharacteristicCrudService<ID, USER, CH, C, CNT, DTO>
+        > extends ParentChildCrudRestResource<ID, USER, CH, C, CNT, DTO, S> {
 
     Logger log = LoggerFactory.getLogger(BaseUpdateCharacteristicCrudRestResource.class);
 
@@ -55,7 +59,7 @@ public interface BaseUpdateCharacteristicCrudRestResource<
         log.debug("REST request to update characteristic, parentId {}, dto {}, criteria {}", parentId, dto, criteria);
 
         USER user = getUser(serverWebExchange, principal);
-        return ResponseEntity.status(OperationsStatus.UPDATE).body(getService().update(parentId, dto, criteria, user));
+        return ResponseEntity.status(OperationsStatus.UPDATE).body(getChildService().update(parentId, dto, criteria, user));
     }
 
 }

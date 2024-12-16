@@ -34,11 +34,14 @@ import java.security.Principal;
 public interface BaseSaveContactMediumCrudRestResource<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
-        , DTO extends BaseDto<ID>
         , CM extends ContactMediumAbstract<ID>
         , C extends ContactMediumCriteriaAbstract<ID, CM>
-        , S extends BaseContactMediumCrudService<ID, USER, DTO, CM, C>
-        > extends ParentChildCrudRestResource<ID, USER, DTO, CM, C, BaseContactMediumContainer<ID, CM>, S> {
+        , CNT extends BaseContactMediumContainer<ID, CM>
+
+        , DTO extends BaseDto<ID> & BaseContactMediumContainer<ID, CM>
+
+        , S extends BaseContactMediumCrudService<ID, USER, CM, C, CNT, DTO>
+        > extends ParentChildCrudRestResource<ID, USER, CM, C, CNT, DTO, S> {
 
     Logger log = LoggerFactory.getLogger(BaseSaveContactMediumCrudRestResource.class);
 
@@ -55,7 +58,7 @@ public interface BaseSaveContactMediumCrudRestResource<
         log.debug("REST request to save contact medium, parentId {}, dto {}", parentId, dto);
 
         USER user = getUser(serverWebExchange, principal);
-        return ResponseEntity.status(OperationsStatus.SAVE).body(getService().save(parentId, dto, user));
+        return ResponseEntity.status(OperationsStatus.SAVE).body(getChildService().save(parentId, dto, user));
     }
 
 }

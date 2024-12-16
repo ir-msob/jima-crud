@@ -1,4 +1,5 @@
-package ir.msob.jima.crud.test.read;
+package ir.msob.jima.crud.test.domain.read;
+
 
 import ir.msob.jima.core.commons.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
@@ -11,20 +12,20 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
-import ir.msob.jima.crud.test.BaseDomainCrudDataProvider;
-import ir.msob.jima.crud.test.ParentDomainCrudResourceTest;
+import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
+import ir.msob.jima.crud.test.domain.ParentDomainCrudResourceTest;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 
 /**
- * The {@code BaseGetManyDomainCrudResourceTest} interface defines test cases for the getMany functionality of a CRUD resource.
- * It extends the {@code ParentDomainCrudResourceTest} interface and provides methods to test the getMany operation for CRUD resources.
- * The tests include scenarios for normal getMany and mandatory getMany operations.
+ * The {@code BaseGetPageDomainCrudResourceTest} interface defines test cases for the getPage functionality of a CRUD resource.
+ * It extends the {@code ParentDomainCrudResourceTest} interface and provides methods to test the getPage operation for CRUD resources.
+ * The tests include scenarios for normal getPage and mandatory getPage operations.
  * The interface is generic, allowing customization for different types such as ID, USER, D, DTO, C, Q, R, S, and DP.
  *
  * @param <ID>   The type of the resource ID, which should be comparable and serializable.
@@ -38,7 +39,7 @@ import java.util.concurrent.ExecutionException;
  * @param <DP>   The type of the data provider associated with the resource, extending {@code BaseDomainCrudDataProvider<ID, USER, D, DTO, C, Q, R, S>}.
  * @see ParentDomainCrudResourceTest
  */
-public interface BaseGetManyDomainCrudResourceTest<
+public interface BaseGetPageDomainCrudResourceTest<
         ID extends Comparable<ID> & Serializable,
         USER extends BaseUser,
         D extends BaseDomain<ID>,
@@ -51,7 +52,7 @@ public interface BaseGetManyDomainCrudResourceTest<
         extends ParentDomainCrudResourceTest<ID, USER, D, DTO, C, Q, R, S, DP> {
 
     /**
-     * Tests the getMany operation, asserting that the returned collection of DTOs is as expected.
+     * Tests the getPage operation, asserting that the returned Page of DTOs is as expected.
      *
      * @throws BadRequestException       If the request is malformed or invalid.
      * @throws DomainNotFoundException   If the domain is not found.
@@ -64,14 +65,14 @@ public interface BaseGetManyDomainCrudResourceTest<
      */
     @Test
     @Transactional
-    default void getMany() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        if (ignoreTest(Operations.GET_MANY))
+    default void getPage() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        if (ignoreTest(Operations.GET_PAGE))
             return;
         DTO savedDto = getDataProvider().saveNew();
         Long countBefore = getDataProvider().countDb();
-        getManyRequest(savedDto, dtos -> {
+        getPageRequest(savedDto, dtos -> {
             if (dtos == null) throw new DomainNotFoundException();
-            DTO dto = getDataProvider().getObjectMapper().convertValue(dtos.stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());
+            DTO dto = getDataProvider().getObjectMapper().convertValue(dtos.getContent().stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());
             assertAll(this.getDataProvider().getNewDto(), dto);
             assertGet(savedDto, dto);
         });
@@ -79,7 +80,7 @@ public interface BaseGetManyDomainCrudResourceTest<
     }
 
     /**
-     * Tests the mandatory getMany operation, asserting that the returned collection of DTOs is as expected.
+     * Tests the mandatory getPage operation, asserting that the returned Page of DTOs is as expected.
      *
      * @throws BadRequestException       If the request is malformed or invalid.
      * @throws DomainNotFoundException   If the domain is not found.
@@ -92,14 +93,14 @@ public interface BaseGetManyDomainCrudResourceTest<
      */
     @Test
     @Transactional
-    default void getManyMandatory() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        if (ignoreTest(Operations.GET_MANY))
+    default void getPageMandatory() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        if (ignoreTest(Operations.GET_PAGE))
             return;
         DTO savedDto = getDataProvider().saveNewMandatory();
         Long countBefore = getDataProvider().countDb();
-        getManyRequest(savedDto, dtos -> {
+        getPageRequest(savedDto, dtos -> {
             if (dtos == null) throw new DomainNotFoundException();
-            DTO dto = getDataProvider().getObjectMapper().convertValue(dtos.stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());
+            DTO dto = getDataProvider().getObjectMapper().convertValue(dtos.getContent().stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());
             assertMandatory(this.getDataProvider().getMandatoryNewDto(), dto);
             assertGet(savedDto, dto);
         });
@@ -107,5 +108,5 @@ public interface BaseGetManyDomainCrudResourceTest<
     }
 
 
-    void getManyRequest(DTO savedDto, Assertable<Collection<DTO>> assertable);
+    void getPageRequest(DTO savedDto, Assertable<Page<DTO>> assertable);
 }

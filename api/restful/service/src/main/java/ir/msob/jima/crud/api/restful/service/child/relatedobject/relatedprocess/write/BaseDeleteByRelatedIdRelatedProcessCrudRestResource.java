@@ -15,7 +15,7 @@ import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.crud.api.restful.service.child.ParentChildCrudRestResource;
+import ir.msob.jima.crud.api.restful.service.child.relatedobject.ParentRelatedObjectCrudRestResource;
 import ir.msob.jima.crud.service.child.relatedobject.relatedprocess.BaseRelatedProcessCrudService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,11 +32,15 @@ import java.security.Principal;
 public interface BaseDeleteByRelatedIdRelatedProcessCrudRestResource<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
-        , DTO extends BaseDto<ID>
+
         , RP extends RelatedProcessAbstract<ID>
         , C extends RelatedProcessCriteriaAbstract<ID, RP>
-        , S extends BaseRelatedProcessCrudService<ID, USER, DTO, RP, C>
-        > extends ParentChildCrudRestResource<ID, USER, DTO, RP, C, BaseRelatedProcessContainer<ID, RP>, S> {
+        , CNT extends BaseRelatedProcessContainer<ID, RP>
+
+        , DTO extends BaseDto<ID> & BaseRelatedProcessContainer<ID, RP>
+
+        , S extends BaseRelatedProcessCrudService<ID, USER, RP, C, CNT, DTO>
+        > extends ParentRelatedObjectCrudRestResource<ID, USER, RP, C, CNT, DTO, S> {
 
     Logger log = LoggerFactory.getLogger(BaseDeleteByRelatedIdRelatedProcessCrudRestResource.class);
 
@@ -53,7 +57,7 @@ public interface BaseDeleteByRelatedIdRelatedProcessCrudRestResource<
         log.debug("REST request to delete child process by relatedId, parentId {}, id {}", parentId, relatedId);
 
         USER user = getUser(serverWebExchange, principal);
-        return ResponseEntity.status(OperationsStatus.DELETE_BY_RELATED_ID).body(getService().deleteByRelatedId(parentId, relatedId, user));
+        return ResponseEntity.status(OperationsStatus.DELETE_BY_RELATED_ID).body(getChildService().deleteByRelatedId(parentId, relatedId, user));
 
     }
 

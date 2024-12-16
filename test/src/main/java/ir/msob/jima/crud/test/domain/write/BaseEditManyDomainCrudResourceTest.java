@@ -1,6 +1,7 @@
-package ir.msob.jima.crud.test.write;
+package ir.msob.jima.crud.test.domain.write;
 
 
+import com.github.fge.jsonpatch.JsonPatch;
 import ir.msob.jima.core.commons.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.dto.BaseDto;
@@ -12,21 +13,20 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
-import ir.msob.jima.crud.test.BaseDomainCrudDataProvider;
-import ir.msob.jima.crud.test.ParentDomainCrudResourceTest;
+import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
+import ir.msob.jima.crud.test.domain.ParentDomainCrudResourceTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 
 /**
- * The {@code BaseSaveManyDomainCrudResourceTest} interface defines test cases for the saveMany functionality of a CRUD resource.
- * It extends the {@code ParentDomainCrudResourceTest} interface and provides methods to test the saveMany operation for CRUD resources.
- * The tests include scenarios for normal saveMany and mandatory saveMany operations.
+ * The {@code BaseEditManyDomainCrudResourceTest} interface defines test cases for the editMany functionality of a CRUD resource.
+ * It extends the {@code ParentDomainCrudResourceTest} interface and provides methods to test the editMany operation for CRUD resources.
+ * The tests include scenarios for normal editMany and mandatory editMany operations using JSON Patch.
  * The interface is generic, allowing customization for different types such as ID, USER, D, DTO, C, Q, R, S, and DP.
  *
  * @param <ID>   The type of the resource ID, which should be comparable and serializable.
@@ -40,7 +40,7 @@ import java.util.concurrent.ExecutionException;
  * @param <DP>   The type of the data provider associated with the resource, extending {@code BaseDomainCrudDataProvider<ID, USER, D, DTO, C, Q, R, S>}.
  * @see ParentDomainCrudResourceTest
  */
-public interface BaseSaveManyDomainCrudResourceTest<
+public interface BaseEditManyDomainCrudResourceTest<
         ID extends Comparable<ID> & Serializable,
         USER extends BaseUser,
         D extends BaseDomain<ID>,
@@ -48,13 +48,12 @@ public interface BaseSaveManyDomainCrudResourceTest<
         C extends BaseCriteria<ID>,
         Q extends BaseQuery,
         R extends BaseDomainCrudRepository<ID, USER, D, C, Q>,
-
         S extends BaseDomainCrudService<ID, USER, D, DTO, C, Q, R>,
         DP extends BaseDomainCrudDataProvider<ID, USER, D, DTO, C, Q, R, S>>
         extends ParentDomainCrudResourceTest<ID, USER, D, DTO, C, Q, R, S, DP> {
 
     /**
-     * Tests the normal saveMany operation, asserting that the saved DTOs match the expected state.
+     * Tests the normal editMany operation, asserting that the collection of edited DTOs matches the expected state.
      *
      * @throws BadRequestException       If the request is malformed or invalid.
      * @throws DomainNotFoundException   If the domain is not found.
@@ -67,22 +66,24 @@ public interface BaseSaveManyDomainCrudResourceTest<
      */
     @Test
     @Transactional
-    default void saveMany() throws ExecutionException, InterruptedException, BadRequestException, DomainNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        if (ignoreTest(Operations.SAVE_MANY))
+    default void editMany() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        if (ignoreTest(Operations.EDIT_MANY))
             return;
 
+        DTO savedDto = getDataProvider().saveNew();
+        this.getDataProvider().getUpdateDto(savedDto);
         Long countBefore = getDataProvider().countDb();
-        saveManyRequest(Collections.singleton(this.getDataProvider().getNewDto()),
+        editManyRequest(savedDto, getDataProvider().getJsonPatch(),
                 dtos -> {
                     DTO dto = getDataProvider().getObjectMapper().convertValue(dtos.stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());
-                    assertAll(this.getDataProvider().getNewDto(), dto);
-                    assertSave(this.getDataProvider().getNewDto(), dto);
-                    assertCount(countBefore + 1);
+                    assertAll(savedDto, dto);
+                    assertUpdate(savedDto, dto);
                 });
+        assertCount(countBefore);
     }
 
     /**
-     * Tests the mandatory saveMany operation, asserting that the saved DTOs match the expected state.
+     * Tests the mandatory editMany operation, asserting that the collection of edited DTOs matches the expected state.
      *
      * @throws BadRequestException       If the request is malformed or invalid.
      * @throws DomainNotFoundException   If the domain is not found.
@@ -95,26 +96,30 @@ public interface BaseSaveManyDomainCrudResourceTest<
      */
     @Test
     @Transactional
-    default void saveManyMandatory() throws ExecutionException, InterruptedException, BadRequestException, DomainNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        if (ignoreTest(Operations.SAVE_MANY))
+    default void editManyMandatory() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        if (ignoreTest(Operations.EDIT_MANY))
             return;
 
+        DTO savedDto = getDataProvider().saveNewMandatory();
+        this.getDataProvider().getMandatoryUpdateDto(savedDto);
         Long countBefore = getDataProvider().countDb();
-        saveManyRequest(Collections.singleton(this.getDataProvider().getMandatoryNewDto()),
+        editManyRequest(savedDto, getDataProvider().getMandatoryJsonPatch(),
                 dtos -> {
                     DTO dto = getDataProvider().getObjectMapper().convertValue(dtos.stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());
-                    assertMandatory(this.getDataProvider().getMandatoryNewDto(), dto);
-                    assertSave(this.getDataProvider().getMandatoryNewDto(), dto);
-                    assertCount(countBefore + 1);
+                    assertMandatory(savedDto, dto);
+                    assertUpdate(savedDto, dto);
                 });
+        assertCount(countBefore);
     }
 
     /**
-     * Executes the saveMany operation for the CRUD resource with the specified DTOs and performs assertions on the resulting DTOs.
+     * Executes the editMany operation for the CRUD resource with the specified DTO, JSON Patch,
+     * and performs assertions on the resulting collection of edited DTOs.
      *
-     * @param dtos The collection of DTOs representing the new resources to be saved.
+     * @param savedDto  The DTO representing the existing resource to be edited.
+     * @param jsonPatch The JSON Patch containing the changes to be applied to the resource.
      * @throws BadRequestException     If the request is malformed or invalid.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    void saveManyRequest(Collection<DTO> dtos, Assertable<Collection<DTO>> assertable);
+    void editManyRequest(DTO savedDto, JsonPatch jsonPatch, Assertable<Collection<DTO>> assertable);
 }

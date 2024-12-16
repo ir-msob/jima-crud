@@ -1,5 +1,4 @@
-package ir.msob.jima.crud.test.write;
-
+package ir.msob.jima.crud.test.domain.read;
 
 import ir.msob.jima.core.commons.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
@@ -12,19 +11,20 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
-import ir.msob.jima.crud.test.BaseDomainCrudDataProvider;
-import ir.msob.jima.crud.test.ParentDomainCrudResourceTest;
+import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
+import ir.msob.jima.crud.test.domain.ParentDomainCrudResourceTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 
 /**
- * The {@code BaseUpdateDomainCrudResourceTest} interface defines test cases for the update functionality of a CRUD resource.
- * It extends the {@code ParentDomainCrudResourceTest} interface and provides methods to test the update operation for CRUD resources.
- * The tests include scenarios for normal update and mandatory update operations.
+ * The {@code BaseGetManyDomainCrudResourceTest} interface defines test cases for the getMany functionality of a CRUD resource.
+ * It extends the {@code ParentDomainCrudResourceTest} interface and provides methods to test the getMany operation for CRUD resources.
+ * The tests include scenarios for normal getMany and mandatory getMany operations.
  * The interface is generic, allowing customization for different types such as ID, USER, D, DTO, C, Q, R, S, and DP.
  *
  * @param <ID>   The type of the resource ID, which should be comparable and serializable.
@@ -38,7 +38,7 @@ import java.util.concurrent.ExecutionException;
  * @param <DP>   The type of the data provider associated with the resource, extending {@code BaseDomainCrudDataProvider<ID, USER, D, DTO, C, Q, R, S>}.
  * @see ParentDomainCrudResourceTest
  */
-public interface BaseUpdateDomainCrudResourceTest<
+public interface BaseGetManyDomainCrudResourceTest<
         ID extends Comparable<ID> & Serializable,
         USER extends BaseUser,
         D extends BaseDomain<ID>,
@@ -46,13 +46,12 @@ public interface BaseUpdateDomainCrudResourceTest<
         C extends BaseCriteria<ID>,
         Q extends BaseQuery,
         R extends BaseDomainCrudRepository<ID, USER, D, C, Q>,
-
         S extends BaseDomainCrudService<ID, USER, D, DTO, C, Q, R>,
         DP extends BaseDomainCrudDataProvider<ID, USER, D, DTO, C, Q, R, S>>
         extends ParentDomainCrudResourceTest<ID, USER, D, DTO, C, Q, R, S, DP> {
 
     /**
-     * Tests the normal update operation, asserting that the updated DTO matches the expected state.
+     * Tests the getMany operation, asserting that the returned collection of DTOs is as expected.
      *
      * @throws BadRequestException       If the request is malformed or invalid.
      * @throws DomainNotFoundException   If the domain is not found.
@@ -65,22 +64,22 @@ public interface BaseUpdateDomainCrudResourceTest<
      */
     @Test
     @Transactional
-    default void update() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        if (ignoreTest(Operations.UPDATE))
+    default void getMany() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        if (ignoreTest(Operations.GET_MANY))
             return;
-
         DTO savedDto = getDataProvider().saveNew();
-        this.getDataProvider().getUpdateDto(savedDto);
         Long countBefore = getDataProvider().countDb();
-        updateRequest(savedDto, dto -> {
-            assertAll(savedDto, dto);
-            assertUpdate(savedDto, dto);
+        getManyRequest(savedDto, dtos -> {
+            if (dtos == null) throw new DomainNotFoundException();
+            DTO dto = getDataProvider().getObjectMapper().convertValue(dtos.stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());
+            assertAll(this.getDataProvider().getNewDto(), dto);
+            assertGet(savedDto, dto);
         });
         assertCount(countBefore);
     }
 
     /**
-     * Tests the mandatory update operation, asserting that the updated DTO matches the expected state.
+     * Tests the mandatory getMany operation, asserting that the returned collection of DTOs is as expected.
      *
      * @throws BadRequestException       If the request is malformed or invalid.
      * @throws DomainNotFoundException   If the domain is not found.
@@ -93,26 +92,20 @@ public interface BaseUpdateDomainCrudResourceTest<
      */
     @Test
     @Transactional
-    default void updateMandatory() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        if (ignoreTest(Operations.UPDATE))
+    default void getManyMandatory() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        if (ignoreTest(Operations.GET_MANY))
             return;
-
         DTO savedDto = getDataProvider().saveNewMandatory();
-        this.getDataProvider().getMandatoryUpdateDto(savedDto);
         Long countBefore = getDataProvider().countDb();
-        updateRequest(savedDto, dto -> {
-            assertMandatory(savedDto, dto);
-            assertUpdate(savedDto, dto);
+        getManyRequest(savedDto, dtos -> {
+            if (dtos == null) throw new DomainNotFoundException();
+            DTO dto = getDataProvider().getObjectMapper().convertValue(dtos.stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());
+            assertMandatory(this.getDataProvider().getMandatoryNewDto(), dto);
+            assertGet(savedDto, dto);
         });
         assertCount(countBefore);
     }
 
-    /**
-     * Executes the update operation for the CRUD resource with the specified DTO and performs assertions on the resulting DTO.
-     *
-     * @param dto The DTO representing the resource to be updated.
-     * @throws BadRequestException     If the request is malformed or invalid.
-     * @throws DomainNotFoundException If the domain is not found.
-     */
-    void updateRequest(DTO dto, Assertable<DTO> assertable);
+
+    void getManyRequest(DTO savedDto, Assertable<Collection<DTO>> assertable);
 }

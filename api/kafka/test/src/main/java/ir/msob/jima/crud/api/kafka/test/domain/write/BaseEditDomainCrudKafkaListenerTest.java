@@ -15,8 +15,8 @@ import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.kafka.test.domain.ParentDomainCrudKafkaListenerTest;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
-import ir.msob.jima.crud.test.BaseDomainCrudDataProvider;
-import ir.msob.jima.crud.test.write.BaseEditDomainCrudResourceTest;
+import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
+import ir.msob.jima.crud.test.domain.write.BaseEditDomainCrudResourceTest;
 import lombok.SneakyThrows;
 
 import java.io.Serializable;

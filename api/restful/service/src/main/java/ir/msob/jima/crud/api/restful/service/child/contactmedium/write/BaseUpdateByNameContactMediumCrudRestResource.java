@@ -30,15 +30,17 @@ import reactor.core.publisher.Mono;
 import java.io.Serializable;
 import java.security.Principal;
 
-
 public interface BaseUpdateByNameContactMediumCrudRestResource<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
-        , DTO extends BaseDto<ID>
         , CM extends ContactMediumAbstract<ID>
         , C extends ContactMediumCriteriaAbstract<ID, CM>
-        , S extends BaseContactMediumCrudService<ID, USER, DTO, CM, C>
-        > extends ParentChildCrudRestResource<ID, USER, DTO, CM, C, BaseContactMediumContainer<ID, CM>, S> {
+        , CNT extends BaseContactMediumContainer<ID, CM>
+
+        , DTO extends BaseDto<ID> & BaseContactMediumContainer<ID, CM>
+
+        , S extends BaseContactMediumCrudService<ID, USER, CM, C, CNT, DTO>
+        > extends ParentChildCrudRestResource<ID, USER, CM, C, CNT, DTO, S> {
 
     Logger log = LoggerFactory.getLogger(BaseUpdateByNameContactMediumCrudRestResource.class);
 
@@ -55,7 +57,7 @@ public interface BaseUpdateByNameContactMediumCrudRestResource<
         log.debug("REST request to update contact medium, parentId {}, name {}, dto {}", parentId, name, dto);
 
         USER user = getUser(serverWebExchange, principal);
-        return ResponseEntity.status(OperationsStatus.UPDATE_BY_NAME).body(getService().updateByName(parentId, name, dto, user));
+        return ResponseEntity.status(OperationsStatus.UPDATE_BY_NAME).body(getChildService().updateByName(parentId, name, dto, user));
     }
 
 }

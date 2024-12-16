@@ -9,7 +9,6 @@ import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundExceptio
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.service.child.relatedobject.ParentRelatedObjectService;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,10 +21,11 @@ import java.util.Collection;
 public interface BaseRelatedDomainCrudService<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
-        , DTO extends BaseDto<ID>
         , RD extends RelatedDomainAbstract<ID>
-        , C extends RelatedDomainCriteriaAbstract<ID, RD>>
-        extends ParentRelatedObjectService<ID, ID, USER, DTO, RD, C, BaseRelatedDomainContainer<ID, RD>> {
+        , C extends RelatedDomainCriteriaAbstract<ID, RD>
+        , CNT extends BaseRelatedDomainContainer<ID, RD>
+        , DTO extends BaseDto<ID> & BaseRelatedDomainContainer<ID, RD>>
+        extends ParentRelatedObjectService<ID, ID, USER, RD, C, CNT, DTO> {
     Logger log = LoggerFactory.getLogger(BaseRelatedDomainCrudService.class);
 
     @Transactional
@@ -34,17 +34,17 @@ public interface BaseRelatedDomainCrudService<
         return deleteById(
                 parentId
                 , id
-                , dto -> ((BaseRelatedDomainContainer<ID, RD>) dto).getRelatedDomains()
+                , BaseRelatedDomainContainer::getRelatedDomains
                 , user);
     }
 
     @Transactional
     @MethodStats
-    default Mono<DTO> deleteByRelatedId(@NotNull ID parentId, @NotBlank ID relatedId, USER user) throws DomainNotFoundException, BadRequestException {
+    default Mono<DTO> deleteByRelatedId(@NotNull ID parentId, @NotNull ID relatedId, USER user) throws DomainNotFoundException, BadRequestException {
         return deleteByRelatedId(
                 parentId
                 , relatedId
-                , dto -> ((BaseRelatedDomainContainer<ID, RD>) dto).getRelatedDomains()
+                , BaseRelatedDomainContainer::getRelatedDomains
                 , user);
     }
 
@@ -54,7 +54,7 @@ public interface BaseRelatedDomainCrudService<
         return deleteMany(
                 parentId
                 , criteria
-                , dto -> ((BaseRelatedDomainContainer<ID, RD>) dto).getRelatedDomains()
+                , BaseRelatedDomainContainer::getRelatedDomains
                 , user);
     }
 
@@ -64,7 +64,7 @@ public interface BaseRelatedDomainCrudService<
         return delete(
                 parentId
                 , criteria
-                , dto -> ((BaseRelatedDomainContainer<ID, RD>) dto).getRelatedDomains()
+                , BaseRelatedDomainContainer::getRelatedDomains
                 , user);
     }
 
@@ -74,7 +74,7 @@ public interface BaseRelatedDomainCrudService<
         return saveMany(
                 parentId
                 , relatedDomains
-                , dto -> ((BaseRelatedDomainContainer<ID, RD>) dto).getRelatedDomains()
+                , BaseRelatedDomainContainer::getRelatedDomains
                 , user);
     }
 
@@ -84,7 +84,7 @@ public interface BaseRelatedDomainCrudService<
         return save(
                 parentId
                 , relatedDomain
-                , dto -> ((BaseRelatedDomainContainer<ID, RD>) dto).getRelatedDomains()
+                , BaseRelatedDomainContainer::getRelatedDomains
                 , user);
     }
 
@@ -95,18 +95,18 @@ public interface BaseRelatedDomainCrudService<
                 parentId
                 , id
                 , relatedDomain
-                , dto -> ((BaseRelatedDomainContainer<ID, RD>) dto).getRelatedDomains()
+                , BaseRelatedDomainContainer::getRelatedDomains
                 , user);
     }
 
     @Transactional
     @MethodStats
-    default Mono<DTO> updateByRelatedId(@NotNull ID parentId, @NotBlank ID relatedId, RD relatedDomain, USER user) throws DomainNotFoundException, BadRequestException {
+    default Mono<DTO> updateByRelatedId(@NotNull ID parentId, @NotNull ID relatedId, RD relatedDomain, USER user) throws DomainNotFoundException, BadRequestException {
         return updateByRelatedId(
                 parentId
                 , relatedId
                 , relatedDomain
-                , dto -> ((BaseRelatedDomainContainer<ID, RD>) dto).getRelatedDomains()
+                , BaseRelatedDomainContainer::getRelatedDomains
                 , user);
     }
 
@@ -116,7 +116,7 @@ public interface BaseRelatedDomainCrudService<
         return updateMany(
                 parentId
                 , relatedDomains
-                , dto -> ((BaseRelatedDomainContainer<ID, RD>) dto).getRelatedDomains()
+                , BaseRelatedDomainContainer::getRelatedDomains
                 , user);
     }
 
@@ -127,7 +127,7 @@ public interface BaseRelatedDomainCrudService<
                 parentId
                 , relatedDomain
                 , criteria
-                , dto -> ((BaseRelatedDomainContainer<ID, RD>) dto).getRelatedDomains()
+                , BaseRelatedDomainContainer::getRelatedDomains
                 , user);
     }
 

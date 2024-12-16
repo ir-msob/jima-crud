@@ -15,7 +15,7 @@ import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.crud.api.restful.service.child.ParentChildCrudRestResource;
+import ir.msob.jima.crud.api.restful.service.child.relatedobject.ParentRelatedObjectCrudRestResource;
 import ir.msob.jima.crud.service.child.relatedobject.relatedintegration.BaseRelatedIntegrationCrudService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,11 +32,15 @@ import java.security.Principal;
 public interface BaseDeleteRelatedIntegrationCrudRestResource<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
-        , DTO extends BaseDto<ID>
+
         , RI extends RelatedIntegrationAbstract<ID>
         , C extends RelatedIntegrationCriteriaAbstract<ID, RI>
-        , S extends BaseRelatedIntegrationCrudService<ID, USER, DTO, RI, C>
-        > extends ParentChildCrudRestResource<ID, USER, DTO, RI, C, BaseRelatedIntegrationContainer<ID, RI>, S> {
+        , CNT extends BaseRelatedIntegrationContainer<ID, RI>
+
+        , DTO extends BaseDto<ID> & BaseRelatedIntegrationContainer<ID, RI>
+
+        , S extends BaseRelatedIntegrationCrudService<ID, USER, RI, C, CNT, DTO>
+        > extends ParentRelatedObjectCrudRestResource<ID, USER, RI, C, CNT, DTO, S> {
 
     Logger log = LoggerFactory.getLogger(BaseDeleteRelatedIntegrationCrudRestResource.class);
 
@@ -53,7 +57,7 @@ public interface BaseDeleteRelatedIntegrationCrudRestResource<
         log.debug("REST request to delete child integration by criteria, parentId {}, id {}", parentId, criteria);
 
         USER user = getUser(serverWebExchange, principal);
-        return ResponseEntity.status(OperationsStatus.DELETE).body(getService().delete(parentId, criteria, user));
+        return ResponseEntity.status(OperationsStatus.DELETE).body(getChildService().delete(parentId, criteria, user));
 
     }
 

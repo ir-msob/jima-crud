@@ -1,4 +1,4 @@
-package ir.msob.jima.crud.test;
+package ir.msob.jima.crud.test.domain;
 
 import ir.msob.jima.core.commons.criteria.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;

@@ -22,10 +22,11 @@ import java.util.Collection;
 public interface BaseRelatedIntegrationCrudService<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
-        , DTO extends BaseDto<ID>
         , RI extends RelatedIntegrationAbstract<ID>
-        , C extends RelatedIntegrationCriteriaAbstract<ID, RI>>
-        extends ParentRelatedObjectService<ID, String, USER, DTO, RI, C, BaseRelatedIntegrationContainer<ID, RI>> {
+        , C extends RelatedIntegrationCriteriaAbstract<ID, RI>
+        , CNT extends BaseRelatedIntegrationContainer<ID, RI>
+        , DTO extends BaseDto<ID> & BaseRelatedIntegrationContainer<ID, RI>>
+        extends ParentRelatedObjectService<ID, String, USER, RI, C, CNT, DTO> {
     Logger log = LoggerFactory.getLogger(BaseRelatedIntegrationCrudService.class);
 
     @Transactional
@@ -34,7 +35,7 @@ public interface BaseRelatedIntegrationCrudService<
         return deleteById(
                 parentId
                 , id
-                , dto -> ((BaseRelatedIntegrationContainer<ID, RI>) dto).getRelatedIntegrations()
+                , BaseRelatedIntegrationContainer::getRelatedIntegrations
                 , user);
     }
 
@@ -44,7 +45,7 @@ public interface BaseRelatedIntegrationCrudService<
         return deleteByRelatedId(
                 parentId
                 , relatedId
-                , dto -> ((BaseRelatedIntegrationContainer<ID, RI>) dto).getRelatedIntegrations()
+                , BaseRelatedIntegrationContainer::getRelatedIntegrations
                 , user);
     }
 
@@ -54,7 +55,7 @@ public interface BaseRelatedIntegrationCrudService<
         return deleteMany(
                 parentId
                 , criteria
-                , dto -> ((BaseRelatedIntegrationContainer<ID, RI>) dto).getRelatedIntegrations()
+                , BaseRelatedIntegrationContainer::getRelatedIntegrations
                 , user);
     }
 
@@ -64,7 +65,7 @@ public interface BaseRelatedIntegrationCrudService<
         return delete(
                 parentId
                 , criteria
-                , dto -> ((BaseRelatedIntegrationContainer<ID, RI>) dto).getRelatedIntegrations()
+                , BaseRelatedIntegrationContainer::getRelatedIntegrations
                 , user);
     }
 
@@ -74,7 +75,7 @@ public interface BaseRelatedIntegrationCrudService<
         return saveMany(
                 parentId
                 , relatedIntegrations
-                , dto -> ((BaseRelatedIntegrationContainer<ID, RI>) dto).getRelatedIntegrations()
+                , BaseRelatedIntegrationContainer::getRelatedIntegrations
                 , user);
     }
 
@@ -84,7 +85,7 @@ public interface BaseRelatedIntegrationCrudService<
         return save(
                 parentId
                 , relatedIntegration
-                , dto -> ((BaseRelatedIntegrationContainer<ID, RI>) dto).getRelatedIntegrations()
+                , BaseRelatedIntegrationContainer::getRelatedIntegrations
                 , user);
     }
 
@@ -95,7 +96,7 @@ public interface BaseRelatedIntegrationCrudService<
                 parentId
                 , id
                 , relatedIntegration
-                , dto -> ((BaseRelatedIntegrationContainer<ID, RI>) dto).getRelatedIntegrations()
+                , BaseRelatedIntegrationContainer::getRelatedIntegrations
                 , user);
     }
 
@@ -106,7 +107,7 @@ public interface BaseRelatedIntegrationCrudService<
                 parentId
                 , relatedId
                 , relatedIntegration
-                , dto -> ((BaseRelatedIntegrationContainer<ID, RI>) dto).getRelatedIntegrations()
+                , BaseRelatedIntegrationContainer::getRelatedIntegrations
                 , user);
     }
 
@@ -116,7 +117,7 @@ public interface BaseRelatedIntegrationCrudService<
         return updateMany(
                 parentId
                 , relatedIntegrations
-                , dto -> ((BaseRelatedIntegrationContainer<ID, RI>) dto).getRelatedIntegrations()
+                , BaseRelatedIntegrationContainer::getRelatedIntegrations
                 , user);
     }
 
@@ -127,7 +128,7 @@ public interface BaseRelatedIntegrationCrudService<
                 parentId
                 , relatedIntegration
                 , criteria
-                , dto -> ((BaseRelatedIntegrationContainer<ID, RI>) dto).getRelatedIntegrations()
+                , BaseRelatedIntegrationContainer::getRelatedIntegrations
                 , user);
     }
 }
