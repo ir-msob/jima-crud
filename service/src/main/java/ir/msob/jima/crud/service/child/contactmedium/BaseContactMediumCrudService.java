@@ -9,7 +9,7 @@ import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.crud.service.child.ParentChildService;
+import ir.msob.jima.crud.service.child.ParentChildCrudService;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.SneakyThrows;
@@ -28,7 +28,7 @@ public interface BaseContactMediumCrudService<
         , C extends ContactMediumCriteriaAbstract<ID, CM>
         , CNT extends BaseContactMediumContainer<ID, CM>
         , DTO extends BaseDto<ID> & BaseContactMediumContainer<ID, CM>>
-        extends ParentChildService<ID, USER, CM, C, CNT, DTO> {
+        extends ParentChildCrudService<ID, USER, CM, C, CNT, DTO> {
     Logger log = LoggerFactory.getLogger(BaseContactMediumCrudService.class);
 
     @Transactional
@@ -37,7 +37,7 @@ public interface BaseContactMediumCrudService<
         return deleteById(
                 parentId
                 , id
-                , dto -> ((BaseContactMediumContainer<ID, CM>) dto).getContactMediums()
+                , BaseContactMediumContainer::getContactMediums
                 , user);
     }
 
@@ -47,7 +47,7 @@ public interface BaseContactMediumCrudService<
     default Mono<DTO> deleteByName(@NotNull ID parentId, @NotBlank String name, USER user) throws DomainNotFoundException, BadRequestException {
         C criteria = getChildCriteriaClass().getConstructor().newInstance();
         criteria.setName(Filter.eq(name));
-        return delete(parentId, criteria, dto -> ((BaseContactMediumContainer<ID, CM>) dto).getContactMediums(), user);
+        return delete(parentId, criteria, BaseContactMediumContainer::getContactMediums, user);
     }
 
     @SneakyThrows
@@ -56,7 +56,7 @@ public interface BaseContactMediumCrudService<
     default Mono<DTO> deleteByType(@NotNull ID parentId, @NotBlank String type, USER user) throws DomainNotFoundException, BadRequestException {
         C criteria = getChildCriteriaClass().getConstructor().newInstance();
         criteria.setType(Filter.eq(type));
-        return delete(parentId, criteria, dto -> ((BaseContactMediumContainer<ID, CM>) dto).getContactMediums(), user);
+        return delete(parentId, criteria, BaseContactMediumContainer::getContactMediums, user);
     }
 
     @Transactional
@@ -65,7 +65,7 @@ public interface BaseContactMediumCrudService<
         return deleteMany(
                 parentId
                 , criteria
-                , dto -> ((BaseContactMediumContainer<ID, CM>) dto).getContactMediums()
+                , BaseContactMediumContainer::getContactMediums
                 , user);
     }
 
@@ -75,7 +75,7 @@ public interface BaseContactMediumCrudService<
         return delete(
                 parentId
                 , criteria
-                , dto -> ((BaseContactMediumContainer<ID, CM>) dto).getContactMediums()
+                , BaseContactMediumContainer::getContactMediums
                 , user);
     }
 
@@ -85,7 +85,7 @@ public interface BaseContactMediumCrudService<
         return saveMany(
                 parentId
                 , contactmediums
-                , dto -> ((BaseContactMediumContainer<ID, CM>) dto).getContactMediums()
+                , BaseContactMediumContainer::getContactMediums
                 , user);
     }
 
@@ -95,7 +95,7 @@ public interface BaseContactMediumCrudService<
         return save(
                 parentId
                 , contactmedium
-                , dto -> ((BaseContactMediumContainer<ID, CM>) dto).getContactMediums()
+                , BaseContactMediumContainer::getContactMediums
                 , user);
     }
 
@@ -106,7 +106,7 @@ public interface BaseContactMediumCrudService<
                 parentId
                 , id
                 , contactmedium
-                , dto -> ((BaseContactMediumContainer<ID, CM>) dto).getContactMediums()
+                , BaseContactMediumContainer::getContactMediums
                 , user);
     }
 
@@ -116,7 +116,7 @@ public interface BaseContactMediumCrudService<
     default Mono<DTO> updateByName(@NotNull ID parentId, @NotBlank String name, CM contactmedium, USER user) throws DomainNotFoundException, BadRequestException {
         C criteria = getChildCriteriaClass().getConstructor().newInstance();
         criteria.setName(Filter.eq(name));
-        return update(parentId, contactmedium, criteria, dto -> ((BaseContactMediumContainer<ID, CM>) dto).getContactMediums(), user);
+        return update(parentId, contactmedium, criteria, BaseContactMediumContainer::getContactMediums, user);
     }
 
     @SneakyThrows
@@ -125,7 +125,7 @@ public interface BaseContactMediumCrudService<
     default Mono<DTO> updateByType(@NotNull ID parentId, @NotBlank String type, CM contactmedium, USER user) throws DomainNotFoundException, BadRequestException {
         C criteria = getChildCriteriaClass().getConstructor().newInstance();
         criteria.setType(Filter.eq(type));
-        return update(parentId, contactmedium, criteria, dto -> ((BaseContactMediumContainer<ID, CM>) dto).getContactMediums(), user);
+        return update(parentId, contactmedium, criteria, BaseContactMediumContainer::getContactMediums, user);
     }
 
     @Transactional
@@ -134,7 +134,7 @@ public interface BaseContactMediumCrudService<
         return updateMany(
                 parentId
                 , contactmediums
-                , dto -> ((BaseContactMediumContainer<ID, CM>) dto).getContactMediums()
+                , BaseContactMediumContainer::getContactMediums
                 , user);
     }
 
@@ -145,7 +145,7 @@ public interface BaseContactMediumCrudService<
                 parentId
                 , contactmedium
                 , criteria
-                , dto -> ((BaseContactMediumContainer<ID, CM>) dto).getContactMediums()
+                , BaseContactMediumContainer::getContactMediums
                 , user);
     }
 }

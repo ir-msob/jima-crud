@@ -6,7 +6,7 @@ import ir.msob.jima.core.commons.child.BaseContainer;
 import ir.msob.jima.core.commons.dto.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.child.ParentChildCrudRestResource;
-import ir.msob.jima.crud.service.child.ParentChildService;
+import ir.msob.jima.crud.service.child.ParentChildCrudService;
 
 import java.io.Serializable;
 
@@ -21,6 +21,6 @@ public interface ParentRelatedObjectCrudRestResource<
 
         , DTO extends BaseDto<ID> & BaseContainer
 
-        , CHILD_S extends ParentChildService<ID, USER, CHILD, CHILD_C, CNT, DTO>>
+        , CHILD_S extends ParentChildCrudService<ID, USER, CHILD, CHILD_C, CNT, DTO>>
         extends ParentChildCrudRestResource<ID, USER, CHILD, CHILD_C, CNT, DTO, CHILD_S> {
 }

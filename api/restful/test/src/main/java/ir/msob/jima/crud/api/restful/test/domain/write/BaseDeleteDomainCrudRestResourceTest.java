@@ -11,7 +11,6 @@ import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.restful.test.domain.ParentDomainCrudRestResourceTest;
-import ir.msob.jima.crud.api.restful.test.domain.ParentDomainCrudRestResourceTest;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
@@ -21,7 +20,7 @@ import java.io.Serializable;
 
 /**
  * The {@code BaseDeleteDomainCrudRestResourceTest} interface represents a set of RESTful-specific test methods for deleting an entity.
- * It extends both the {@code BaseDeleteDomainCrudResourceTest} and {@code ParentDomainCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
+ * It extends both the {@code BaseDeleteDomainCrudResourceTest} and {@code ParentChildCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to delete an entity using RESTful API. The result of the delete operation is the ID of the deleted entity.
  *

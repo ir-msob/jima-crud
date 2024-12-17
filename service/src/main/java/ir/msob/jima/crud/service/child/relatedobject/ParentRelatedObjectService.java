@@ -9,7 +9,7 @@ import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.crud.service.child.ParentChildService;
+import ir.msob.jima.crud.service.child.ParentChildCrudService;
 import jakarta.validation.constraints.NotNull;
 import lombok.SneakyThrows;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +27,7 @@ public interface ParentRelatedObjectService<
         , C extends RelatedObjectCriteriaAbstract<ID, RID, RO>
         , CNT extends BaseContainer
         , DTO extends BaseDto<ID> & BaseContainer>
-        extends ParentChildService<ID, USER, RO, C, CNT, DTO> {
+        extends ParentChildCrudService<ID, USER, RO, C, CNT, DTO> {
 
 
     @SneakyThrows

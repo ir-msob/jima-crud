@@ -9,7 +9,7 @@ import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.crud.service.child.ParentChildService;
+import ir.msob.jima.crud.service.child.ParentChildCrudService;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.SneakyThrows;
@@ -28,7 +28,7 @@ public interface BaseCharacteristicCrudService<
         , C extends CharacteristicCriteria<ID, CH>
         , CNT extends BaseCharacteristicContainer<ID, CH>
         , DTO extends BaseDto<ID> & BaseCharacteristicContainer<ID, CH>>
-        extends ParentChildService<ID, USER, CH, C, CNT, DTO> {
+        extends ParentChildCrudService<ID, USER, CH, C, CNT, DTO> {
     Logger log = LoggerFactory.getLogger(BaseCharacteristicCrudService.class);
 
     @Transactional

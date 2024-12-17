@@ -9,7 +9,7 @@ import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.crud.service.child.ParentChildService;
+import ir.msob.jima.crud.service.child.ParentChildCrudService;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.SneakyThrows;
@@ -28,7 +28,7 @@ public interface BaseObjectValidationCrudService<
         , C extends ObjectValidationCriteriaAbstract<ID, OV>
         , CNT extends BaseObjectValidationContainer<ID, OV>
         , DTO extends BaseDto<ID> & BaseObjectValidationContainer<ID, OV>>
-        extends ParentChildService<ID, USER, OV, C, CNT, DTO> {
+        extends ParentChildCrudService<ID, USER, OV, C, CNT, DTO> {
     Logger log = LoggerFactory.getLogger(BaseObjectValidationCrudService.class);
 
     @Transactional
@@ -37,7 +37,7 @@ public interface BaseObjectValidationCrudService<
         return deleteById(
                 parentId
                 , id
-                , dto -> dto.getObjectValidations()
+                , BaseObjectValidationContainer::getObjectValidations
                 , user);
     }
 
@@ -47,7 +47,7 @@ public interface BaseObjectValidationCrudService<
     default Mono<DTO> deleteByName(@NotNull ID parentId, @NotBlank String name, USER user) throws DomainNotFoundException, BadRequestException {
         C criteria = getChildCriteriaClass().getConstructor().newInstance();
         criteria.setName(Filter.eq(name));
-        return delete(parentId, criteria, dto -> dto.getObjectValidations(), user);
+        return delete(parentId, criteria, BaseObjectValidationContainer::getObjectValidations, user);
     }
 
     @Transactional
@@ -56,7 +56,7 @@ public interface BaseObjectValidationCrudService<
         return deleteMany(
                 parentId
                 , criteria
-                , dto -> dto.getObjectValidations()
+                , BaseObjectValidationContainer::getObjectValidations
                 , user);
     }
 
@@ -66,7 +66,7 @@ public interface BaseObjectValidationCrudService<
         return delete(
                 parentId
                 , criteria
-                , dto -> dto.getObjectValidations()
+                , BaseObjectValidationContainer::getObjectValidations
                 , user);
     }
 
@@ -76,7 +76,7 @@ public interface BaseObjectValidationCrudService<
         return saveMany(
                 parentId
                 , objectvalidations
-                , dto -> dto.getObjectValidations()
+                , BaseObjectValidationContainer::getObjectValidations
                 , user);
     }
 
@@ -86,7 +86,7 @@ public interface BaseObjectValidationCrudService<
         return save(
                 parentId
                 , objectvalidation
-                , dto -> dto.getObjectValidations()
+                , BaseObjectValidationContainer::getObjectValidations
                 , user);
     }
 
@@ -97,7 +97,7 @@ public interface BaseObjectValidationCrudService<
                 parentId
                 , id
                 , objectvalidation
-                , dto -> dto.getObjectValidations()
+                , BaseObjectValidationContainer::getObjectValidations
                 , user);
     }
 
@@ -107,7 +107,7 @@ public interface BaseObjectValidationCrudService<
     default Mono<DTO> updateByName(@NotNull ID parentId, @NotBlank String name, OV objectvalidation, USER user) throws DomainNotFoundException, BadRequestException {
         C criteria = getChildCriteriaClass().getConstructor().newInstance();
         criteria.setName(Filter.eq(name));
-        return update(parentId, objectvalidation, criteria, dto -> dto.getObjectValidations(), user);
+        return update(parentId, objectvalidation, criteria, BaseObjectValidationContainer::getObjectValidations, user);
     }
 
     @Transactional
@@ -116,7 +116,7 @@ public interface BaseObjectValidationCrudService<
         return updateMany(
                 parentId
                 , objectvalidations
-                , dto -> dto.getObjectValidations()
+                , BaseObjectValidationContainer::getObjectValidations
                 , user);
     }
 
@@ -127,7 +127,7 @@ public interface BaseObjectValidationCrudService<
                 parentId
                 , objectvalidation
                 , criteria
-                , dto -> dto.getObjectValidations()
+                , BaseObjectValidationContainer::getObjectValidations
                 , user);
     }
 }

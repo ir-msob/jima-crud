@@ -19,6 +19,7 @@ import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import ir.msob.jima.crud.test.child.BaseChildCrudDataProvider;
 import ir.msob.jima.crud.test.child.ParentChildCrudResourceTest;
 import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.junit.jupiter.api.Test;
@@ -97,13 +98,18 @@ public interface BaseRelatedActionCrudResourceTest<
 
         getChildService().save(savedDto.getId(), child, getChildGetter(), getSampleUser())
                 .subscribe(dto ->
-                        updateByNameRequest(dto.getId()
-                                , dto.getRelatedActions().first().getName()
-                                , getUpdateAssertable())
+                        {
+                            CHILD toUpdate = dto.getRelatedActions().first();
+                            getChildDataProvider().getUpdateChild(toUpdate);
+                            updateByNameRequest(dto.getId()
+                                    , toUpdate.getName()
+                                    , toUpdate
+                                    , getDeleteAssertable());
+                        }
                 );
     }
 
-    void updateByNameRequest(@NotNull ID parentId, @NotBlank String key, Assertable<DTO> assertable);
+    void updateByNameRequest(@NotNull ID parentId, @NotBlank String key, @NotNull @Valid CHILD child, Assertable<DTO> assertable);
 
     @Override
     default String getElement() {

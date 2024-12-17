@@ -56,7 +56,7 @@ public interface ParentWriteDomainCrudService<
      * @throws BadRequestException     If the request is malformed.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    default Mono<DTO> getOneByID(ID id, USER user) {
+    default Mono<DTO> getOneById(ID id, USER user) {
         return getOne(CriteriaUtil.idCriteria(getCriteriaClass(), id), user);
     }
 

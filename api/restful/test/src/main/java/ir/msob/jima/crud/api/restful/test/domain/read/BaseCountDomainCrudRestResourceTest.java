@@ -18,7 +18,7 @@ import java.io.Serializable;
 
 /**
  * The {@code BaseCountDomainCrudRestResourceTest} interface represents a set of RESTful-specific test methods for counting entities.
- * It extends both the {@code BaseCountDomainCrudResourceTest} and {@code ParentDomainCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
+ * It extends both the {@code BaseCountDomainCrudResourceTest} and {@code ParentChildCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to count entities using RESTful API. The result of the count operation is the total number of entities that match the given criteria.
  *

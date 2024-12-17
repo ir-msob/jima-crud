@@ -16,7 +16,7 @@ import ir.msob.jima.core.commons.util.GenericTypeUtil;
 import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.core.test.BaseCoreResourceTest;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
-import ir.msob.jima.crud.service.child.ParentChildService;
+import ir.msob.jima.crud.service.child.ParentChildCrudService;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
 import jakarta.validation.Valid;
@@ -64,7 +64,7 @@ public interface ParentChildCrudResourceTest<
         , S extends BaseDomainCrudService<ID, USER, D, DTO, C, Q, R>
         , DP extends BaseDomainCrudDataProvider<ID, USER, D, DTO, C, Q, R, S>
 
-        , CHILD_S extends ParentChildService<ID, USER, CHILD, CHILD_C, CNT, DTO>
+        , CHILD_S extends ParentChildCrudService<ID, USER, CHILD, CHILD_C, CNT, DTO>
         , CHILD_DP extends BaseChildCrudDataProvider<ID, USER, CHILD, CHILD_C, CNT, DTO, CHILD_S>>
         extends BaseCoreResourceTest<ID, USER, D, DTO, C> {
 
@@ -96,14 +96,19 @@ public interface ParentChildCrudResourceTest<
         CHILD child = getChildDataProvider().getNewChild();
 
         getChildService().save(savedDto.getId(), child, getChildGetter(), getSampleUser())
-                .subscribe(dto ->
-                        updateByIdRequest(dto.getId()
-                                , getChildGetter().apply(dto).first().getId()
-                                , getUpdateAssertable())
+                .subscribe(dto -> {
+                            CHILD toUpdate = getChildGetter().apply(dto).first();
+                            getChildDataProvider().getUpdateChild(toUpdate);
+
+                            updateByIdRequest(dto.getId()
+                                    , toUpdate.getId()
+                                    , toUpdate
+                                    , getUpdateAssertable());
+                        }
                 );
     }
 
-    void updateByIdRequest(ID parentId, ID id, Assertable<DTO> assertable);
+    void updateByIdRequest(ID parentId, ID id, @NotNull @Valid CHILD child, Assertable<DTO> assertable);
 
     Assertable<DTO> getUpdateAssertable();
 
@@ -131,12 +136,13 @@ public interface ParentChildCrudResourceTest<
                             getChildDataProvider().getUpdateChild(toUpdate);
                             updateRequest(dto.getId()
                                     , criteria
+                                    , toUpdate
                                     , getUpdateAssertable());
                         }
                 );
     }
 
-    void updateRequest(@NotNull ID parentId, @NotNull CHILD_C criteria, Assertable<DTO> assertable);
+    void updateRequest(@NotNull ID parentId, @NotNull CHILD_C criteria, @NotNull @Valid CHILD child, Assertable<DTO> assertable);
 
 
     @Test

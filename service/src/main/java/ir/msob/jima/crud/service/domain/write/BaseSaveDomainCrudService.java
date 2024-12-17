@@ -55,7 +55,7 @@ public interface BaseSaveDomainCrudService<ID extends Comparable<ID> & Serializa
                 .doOnSuccess(unused -> addAudit(dto, AuditDomainActionType.CREATE, user))
                 .then(this.getRepository().insertOne(domain))
                 .doOnSuccess(savedDomain -> this.postSave(dto, savedDomain, user))
-                .flatMap(savedDomain -> getOneByID(savedDomain.getId(), user))
+                .flatMap(savedDomain -> getOneById(savedDomain.getId(), user))
                 .doOnSuccess(savedDto -> getBeforeAfterComponent().afterSave(dto, savedDto, user, getBeforeAfterDomainOperations()));
     }
 }

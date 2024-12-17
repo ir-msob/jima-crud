@@ -20,7 +20,7 @@ import java.util.Collection;
 
 /**
  * The {@code BaseGetManyDomainCrudRestResourceTest} interface represents a set of RESTful-specific test methods for retrieving multiple entities.
- * It extends both the {@code BaseGetManyDomainCrudResourceTest} and {@code ParentDomainCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
+ * It extends both the {@code BaseGetManyDomainCrudResourceTest} and {@code ParentChildCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to retrieve multiple entities using RESTful API. The result of the get operation is a collection of DTOs of the retrieved entities.
  *

@@ -67,7 +67,7 @@ public interface BaseUpdateDomainCrudService<ID extends Comparable<ID> & Seriali
     @Transactional
     @MethodStats
     default Mono<DTO> update(@Valid DTO dto, USER user) {
-        return getOneByID(dto.getId(), user)
+        return getOneById(dto.getId(), user)
                 .flatMap(previousDto -> this.update(previousDto, dto, user));
     }
 
@@ -97,7 +97,7 @@ public interface BaseUpdateDomainCrudService<ID extends Comparable<ID> & Seriali
                 .doOnSuccess(unused -> addAudit(dto, AuditDomainActionType.UPDATE, user))
                 .then(this.getRepository().updateOne(domain))
                 .doOnSuccess(updatedDomain -> this.postUpdate(dto, updatedDomain, user))
-                .flatMap(updatedDomain -> getOneByID(updatedDomain.getId(), user))
+                .flatMap(updatedDomain -> getOneById(updatedDomain.getId(), user))
                 .doOnSuccess(updatedDto ->
                         getBeforeAfterComponent().afterUpdate(previousDto, updatedDto, user, getBeforeAfterDomainOperations()));
     }

@@ -23,7 +23,7 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.function.Function;
 
-public interface ParentChildService<
+public interface ParentChildCrudService<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
         , CHILD extends BaseChild<ID>
@@ -32,15 +32,15 @@ public interface ParentChildService<
         , DTO extends BaseDto<ID> & BaseContainer> {
 
     default Class<CHILD> getChildClass() {
-        return (Class<CHILD>) GenericTypeUtil.resolveTypeArguments(getClass(), ParentChildService.class, 2);
+        return (Class<CHILD>) GenericTypeUtil.resolveTypeArguments(getClass(), ParentChildCrudService.class, 2);
     }
 
     default Class<C> getChildCriteriaClass() {
-        return (Class<C>) GenericTypeUtil.resolveTypeArguments(getClass(), ParentChildService.class, 3);
+        return (Class<C>) GenericTypeUtil.resolveTypeArguments(getClass(), ParentChildCrudService.class, 3);
     }
 
     default Class<CNT> getContinerClass() {
-        return (Class<CNT>) GenericTypeUtil.resolveTypeArguments(getClass(), ParentChildService.class, 4);
+        return (Class<CNT>) GenericTypeUtil.resolveTypeArguments(getClass(), ParentChildCrudService.class, 4);
     }
 
     /**
@@ -50,7 +50,7 @@ public interface ParentChildService<
      * @param user A user context.
      * @return A Mono that emits the found DTO entity.
      */
-    Mono<DTO> getDtoById(ID id, USER user);
+    Mono<DTO> getDto(ID id, USER user);
 
     /**
      * Update a DTO entity.
@@ -73,7 +73,7 @@ public interface ParentChildService<
 
     @MethodStats
     default Mono<DTO> update(@NotNull ID parentId, CHILD relatedModel, @NotNull C criteria, Function<DTO, SortedSet<CHILD>> getter, USER user) throws DomainNotFoundException, BadRequestException {
-        return getDtoById(parentId, user)
+        return getDto(parentId, user)
                 .doOnNext(dto -> {
                     if (getContinerClass().isInstance(dto)) {
                         Iterator<CHILD> iterator = getter.apply(dto).iterator();
@@ -101,7 +101,7 @@ public interface ParentChildService<
 
     @MethodStats
     default Mono<DTO> updateMany(@NotNull ID parentId, Collection<CHILD> relatedModels, Function<DTO, SortedSet<CHILD>> getter, USER user) throws DomainNotFoundException, BadRequestException {
-        return getDtoById(parentId, user)
+        return getDto(parentId, user)
                 .doOnNext(dto -> {
                     if (getContinerClass().isInstance(dto)) {
                         Iterator<CHILD> iterator = getter.apply(dto).iterator();
@@ -139,7 +139,7 @@ public interface ParentChildService<
 
     @MethodStats
     default Mono<DTO> delete(@NotNull ID parentId, @NotNull C criteria, Function<DTO, SortedSet<CHILD>> getter, USER user) throws DomainNotFoundException, BadRequestException {
-        return getDtoById(parentId, user)
+        return getDto(parentId, user)
                 .doOnNext(dto -> {
                     if (getContinerClass().isInstance(dto)) {
                         Iterator<CHILD> iterator = getter.apply(dto).iterator();
@@ -167,7 +167,7 @@ public interface ParentChildService<
 
     @MethodStats
     default Mono<DTO> deleteMany(@NotNull ID parentId, @NotNull C criteria, Function<DTO, SortedSet<CHILD>> getter, USER user) throws DomainNotFoundException, BadRequestException {
-        return getDtoById(parentId, user)
+        return getDto(parentId, user)
                 .doOnNext(dto -> {
                     if (getContinerClass().isInstance(dto)) {
                         Iterator<CHILD> iterator = getter.apply(dto).iterator();
@@ -198,7 +198,7 @@ public interface ParentChildService<
 
     @MethodStats
     default Mono<DTO> saveMany(@NotNull ID parentId, @NotEmpty Collection<@Valid CHILD> relatedObjects, Function<DTO, SortedSet<CHILD>> getter, USER user) throws DomainNotFoundException, BadRequestException {
-        return getDtoById(parentId, user)
+        return getDto(parentId, user)
                 .doOnNext(dto -> {
                     for (CHILD relatedModel : relatedObjects) {
                         if (relatedModel.getId() == null || Strings.isBlank(relatedModel.getId().toString())) {
