@@ -1,9 +1,9 @@
 package ir.msob.jima.crud.service.domain.write;
 
 import com.github.fge.jsonpatch.JsonPatch;
-import ir.msob.jima.core.commons.criteria.BaseCriteria;
+import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
-import ir.msob.jima.core.commons.dto.BaseDto;
+import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.exception.validation.ValidationException;

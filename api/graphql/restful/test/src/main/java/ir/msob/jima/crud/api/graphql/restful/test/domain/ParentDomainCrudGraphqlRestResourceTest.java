@@ -1,9 +1,9 @@
 package ir.msob.jima.crud.api.graphql.restful.test.domain;
 
 import ir.msob.jima.core.api.graphql.test.BaseCoreGraphqlResourceTest;
-import ir.msob.jima.core.commons.criteria.BaseCriteria;
+import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
-import ir.msob.jima.core.commons.dto.BaseDto;
+import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.id.BaseIdService;
 import ir.msob.jima.core.commons.security.BaseUser;
 import lombok.SneakyThrows;

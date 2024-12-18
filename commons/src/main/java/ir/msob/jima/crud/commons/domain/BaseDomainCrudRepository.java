@@ -1,6 +1,6 @@
 package ir.msob.jima.crud.commons.domain;
 
-import ir.msob.jima.core.commons.criteria.BaseCriteria;
+import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.repository.BaseQuery;

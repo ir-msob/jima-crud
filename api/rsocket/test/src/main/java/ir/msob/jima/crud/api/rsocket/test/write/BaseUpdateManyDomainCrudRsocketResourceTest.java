@@ -2,9 +2,9 @@ package ir.msob.jima.crud.api.rsocket.test.write;
 
 import ir.msob.jima.core.commons.channel.ChannelMessage;
 import ir.msob.jima.core.commons.channel.message.DtosMessage;
-import ir.msob.jima.core.commons.criteria.BaseCriteria;
+import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
-import ir.msob.jima.core.commons.dto.BaseDto;
+import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;

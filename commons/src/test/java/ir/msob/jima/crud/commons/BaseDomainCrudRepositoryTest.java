@@ -1,6 +1,6 @@
 package ir.msob.jima.crud.commons;
 
-import ir.msob.jima.core.commons.criteria.SampleCriteria;
+import ir.msob.jima.core.commons.domain.SampleCriteria;
 import ir.msob.jima.crud.commons.common.ConcreteBaseDomainCrudRepository;
 import org.junit.jupiter.api.Test;
 

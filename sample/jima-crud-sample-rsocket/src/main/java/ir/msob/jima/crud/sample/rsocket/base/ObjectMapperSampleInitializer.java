@@ -2,9 +2,9 @@ package ir.msob.jima.crud.sample.rsocket.base;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
-import ir.msob.jima.core.commons.dto.BaseDto;
-import ir.msob.jima.core.commons.dto.BaseType;
-import ir.msob.jima.core.commons.dto.ModelType;
+import ir.msob.jima.core.commons.domain.BaseDto;
+import ir.msob.jima.core.commons.shared.BaseType;
+import ir.msob.jima.core.commons.shared.ModelType;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.reflections.Reflections;

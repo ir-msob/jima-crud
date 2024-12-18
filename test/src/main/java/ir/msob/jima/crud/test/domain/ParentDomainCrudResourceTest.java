@@ -1,8 +1,8 @@
 package ir.msob.jima.crud.test.domain;
 
-import ir.msob.jima.core.commons.criteria.BaseCriteria;
+import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
-import ir.msob.jima.core.commons.dto.BaseDto;
+import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.test.BaseCoreResourceTest;
@@ -17,7 +17,7 @@ import java.io.Serializable;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * This interface is designed for testing resources child to CRUD (Create, Read, Update, Delete) operations.
+ * This interface is designed for testing resources childdomain to CRUD (Create, Read, Update, Delete) operations.
  * It defines methods to validate and assert various aspects of CRUD operations.
  *
  * @param <ID>   The type of the entity's ID, which must be comparable and serializable.

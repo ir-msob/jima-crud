@@ -1,8 +1,8 @@
 package ir.msob.jima.crud.api.graphql.restful.test.domain;
 
-import ir.msob.jima.core.commons.criteria.BaseCriteria;
+import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
-import ir.msob.jima.core.commons.dto.BaseDto;
+import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.graphql.restful.test.domain.read.*;
@@ -16,7 +16,7 @@ import java.io.Serializable;
 /**
  * The {@code BaseDomainCrudGraphqlRestResourceTest} interface represents a comprehensive set of GraphQL-specific test methods for performing CRUD operations on entities.
  * It extends multiple GraphQL-specific testing interfaces, each focusing on a specific CRUD operation, including reading, writing, updating, and deleting entities.
- * The interface provides a unified entry point for testing various GraphQL operations child to CRUD functionality.
+ * The interface provides a unified entry point for testing various GraphQL operations childdomain to CRUD functionality.
  *
  * @param <ID>   The type of entity ID.
  * @param <USER> The type of the user (security context).

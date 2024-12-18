@@ -3,9 +3,9 @@ package ir.msob.jima.crud.api.grpc.service.domain;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.google.protobuf.ProtocolStringList;
-import ir.msob.jima.core.commons.criteria.BaseCriteria;
+import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
-import ir.msob.jima.core.commons.dto.BaseDto;
+import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.resource.BaseResource;
 import ir.msob.jima.core.commons.security.BaseUser;
@@ -30,7 +30,7 @@ import java.util.concurrent.ExecutionException;
 /**
  * The {@code ParentDomainCrudGrpcResource} interface defines the base contract for gRPC (Google Remote Procedure Call) services in a CRUD (Create, Read, Update, Delete) context.
  * It extends {@link ir.msob.jima.core.commons.resource.BaseResource} and {@link ir.msob.jima.crud.commons.BaseCrudResource} interfaces,
- * providing methods and utilities child to gRPC operations, as well as CRUD functionality.
+ * providing methods and utilities childdomain to gRPC operations, as well as CRUD functionality.
  *
  * @param <ID>   The type of entity ID.
  * @param <USER> The type of the user (security context).

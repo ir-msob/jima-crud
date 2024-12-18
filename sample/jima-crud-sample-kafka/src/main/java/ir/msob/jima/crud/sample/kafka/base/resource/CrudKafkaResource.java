@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.msob.jima.core.commons.client.BaseAsyncClient;
 import ir.msob.jima.core.commons.channel.ChannelMessage;
 import ir.msob.jima.core.commons.channel.message.*;
-import ir.msob.jima.core.commons.dto.ModelType;
+import ir.msob.jima.core.commons.shared.ModelType;
 import ir.msob.jima.core.commons.security.BaseUserService;
 import ir.msob.jima.core.ral.mongo.commons.query.QueryBuilder;
 import ir.msob.jima.crud.api.kafka.service.domain.BaseCrudKafkaListener;

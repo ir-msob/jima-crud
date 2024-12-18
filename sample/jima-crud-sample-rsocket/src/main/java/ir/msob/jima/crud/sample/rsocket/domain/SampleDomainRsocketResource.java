@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.msob.jima.core.commons.channel.ChannelMessage;
 import ir.msob.jima.core.commons.channel.message.*;
-import ir.msob.jima.core.commons.dto.ModelType;
+import ir.msob.jima.core.commons.shared.ModelType;
 import ir.msob.jima.core.commons.resource.Resource;
 import ir.msob.jima.crud.sample.rsocket.base.Microservices;
 import ir.msob.jima.crud.sample.rsocket.base.resource.CrudRsocketResource;

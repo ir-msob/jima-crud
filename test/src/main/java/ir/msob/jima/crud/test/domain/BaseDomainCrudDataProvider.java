@@ -1,8 +1,8 @@
 package ir.msob.jima.crud.test.domain;
 
-import ir.msob.jima.core.commons.criteria.BaseCriteria;
+import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
-import ir.msob.jima.core.commons.dto.BaseDto;
+import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.repository.BaseQuery;
@@ -16,7 +16,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.ExecutionException;
 
 /**
- * This interface is designed to provide data-child methods for CRUD operations.
+ * This interface is designed to provide data-childdomain methods for CRUD operations.
  * It extends the BaseDataProvider interface, which includes common data provider methods.
  *
  * @param <ID>   The type of the entity's ID, which must be comparable and serializable.

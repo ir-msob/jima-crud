@@ -3,13 +3,13 @@ package ir.msob.jima.crud.service.domain.write;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
-import ir.msob.jima.core.commons.child.auditdomain.AuditDomainAbstract;
-import ir.msob.jima.core.commons.child.auditdomain.AuditDomainActionType;
-import ir.msob.jima.core.commons.child.auditdomain.BaseAuditDomainContainer;
-import ir.msob.jima.core.commons.child.relatedobject.relatedparty.RelatedPartyAbstract;
-import ir.msob.jima.core.commons.criteria.BaseCriteria;
+import ir.msob.jima.core.commons.childdomain.ChildDomainUtil;
+import ir.msob.jima.core.commons.childdomain.auditdomain.AuditDomainAbstract;
+import ir.msob.jima.core.commons.childdomain.auditdomain.AuditDomainActionType;
+import ir.msob.jima.core.commons.childdomain.relatedobject.relatedparty.RelatedPartyAbstract;
+import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
-import ir.msob.jima.core.commons.dto.BaseDto;
+import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.exception.validation.ValidationException;
@@ -211,21 +211,22 @@ public interface ParentWriteDomainCrudService<
      * @param user       A user object.
      */
     default void addAudit(DTO dto, AuditDomainActionType actionType, USER user) {
-        if (dto instanceof BaseAuditDomainContainer auditDomainDto) {
 
-            RelatedPartyAbstract<ID> relatedParty = new RelatedPartyAbstract<>() {
-            };
-            relatedParty.setRelatedId(user.getId());
-            relatedParty.setName(user.getName());
+        RelatedPartyAbstract<ID> relatedParty = new RelatedPartyAbstract<>() {
+        };
+        relatedParty.setRelatedId(user.getId());
+        relatedParty.setName(user.getName());
 
-            AuditDomainAbstract<ID, RelatedPartyAbstract<ID>> auditDomain = new AuditDomainAbstract<>() {
-            };
-            auditDomain.setActionDate(Instant.now());
-            auditDomain.setActionType(actionType.name());
-            auditDomain.setRelatedParty(relatedParty);
+        AuditDomainAbstract<ID, RelatedPartyAbstract<ID>> auditDomain = new AuditDomainAbstract<>() {
+        };
+        auditDomain.setActionDate(Instant.now());
+        auditDomain.setActionType(actionType.name());
+        auditDomain.setRelatedParty(relatedParty);
 
-            auditDomainDto.getAuditDomains().add(auditDomain);
+        if (ChildDomainUtil.hasFunction((Class<AuditDomainAbstract<ID, RelatedPartyAbstract<ID>>>) auditDomain.getClass(), getDtoClass())) {
+            ChildDomainUtil.getFunction((Class<AuditDomainAbstract<ID, RelatedPartyAbstract<ID>>>) auditDomain.getClass(), getDtoClass()).apply(dto).add(auditDomain);
         }
+
     }
 
 }

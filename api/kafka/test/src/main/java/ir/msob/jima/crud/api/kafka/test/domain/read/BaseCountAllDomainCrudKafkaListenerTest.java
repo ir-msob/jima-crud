@@ -1,13 +1,13 @@
 package ir.msob.jima.crud.api.kafka.test.domain.read;
 
 import ir.msob.jima.core.commons.channel.ChannelMessage;
-import ir.msob.jima.core.commons.criteria.BaseCriteria;
+import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
-import ir.msob.jima.core.commons.dto.BaseDto;
-import ir.msob.jima.core.commons.dto.ModelType;
+import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.commons.shared.ModelType;
 import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.kafka.test.domain.ParentDomainCrudKafkaListenerTest;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;

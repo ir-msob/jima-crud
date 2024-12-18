@@ -1,8 +1,8 @@
 package ir.msob.jima.crud.client.domain;
 
 import com.github.fge.jsonpatch.JsonPatch;
-import ir.msob.jima.core.commons.criteria.BaseCriteria;
-import ir.msob.jima.core.commons.dto.BaseDto;
+import ir.msob.jima.core.commons.domain.BaseCriteria;
+import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.crud.client.BaseClient;

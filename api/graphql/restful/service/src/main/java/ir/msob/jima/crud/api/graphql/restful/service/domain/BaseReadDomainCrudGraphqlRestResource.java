@@ -1,8 +1,8 @@
 package ir.msob.jima.crud.api.graphql.restful.service.domain;
 
-import ir.msob.jima.core.commons.criteria.BaseCriteria;
+import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
-import ir.msob.jima.core.commons.dto.BaseDto;
+import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.graphql.restful.service.domain.read.*;
@@ -15,7 +15,7 @@ import java.io.Serializable;
  * The {@code BaseReadDomainCrudGraphqlRestResource} interface extends several GraphQL resource interfaces,
  * providing read-specific GraphQL operations for a CRUD service.
  * It is generic and allows customization for different types such as ID, USER, D, DTO, C, Q, R, and S.
- * This interface combines methods from various read-child GraphQL resource interfaces.
+ * This interface combines methods from various read-childdomain GraphQL resource interfaces.
  *
  * @param <ID>   The type of the resource ID, which should be comparable and serializable.
  * @param <USER> The type of the user associated with the resource, extending {@code BaseUser}.
