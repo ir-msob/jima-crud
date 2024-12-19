@@ -20,7 +20,7 @@ import java.io.Serializable;
 
 /**
  * The {@code BaseDeleteDomainCrudRestResourceTest} interface represents a set of RESTful-specific test methods for deleting an entity.
- * It extends both the {@code BaseDeleteDomainCrudResourceTest} and {@code ParentChildCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
+ * It extends both the {@code BaseDeleteDomainCrudResourceTest} and {@code BaseParentChildCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to delete an entity using RESTful API. The result of the delete operation is the ID of the deleted entity.
  *

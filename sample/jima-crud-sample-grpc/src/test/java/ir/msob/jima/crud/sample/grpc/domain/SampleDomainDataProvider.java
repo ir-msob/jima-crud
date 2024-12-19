@@ -85,8 +85,8 @@ public class SampleDomainDataProvider extends CrudDataProvider<SampleDomain, Sam
      * @param dto the DTO object to update
      */
     @Override
-    public void getUpdateDto(SampleDto dto) {
-        getMandatoryUpdateDto(dto);
+    public void updateDto(SampleDto dto) {
+        updateMandatoryDto(dto);
         dto.setDomainField(UPDATED_STRING);
     }
 
@@ -104,7 +104,7 @@ public class SampleDomainDataProvider extends CrudDataProvider<SampleDomain, Sam
      * @param dto the DTO object to update
      */
     @Override
-    public void getMandatoryUpdateDto(SampleDto dto) {
+    public void updateMandatoryDto(SampleDto dto) {
         dto.setDomainMandatoryField(UPDATED_STRING);
     }
 

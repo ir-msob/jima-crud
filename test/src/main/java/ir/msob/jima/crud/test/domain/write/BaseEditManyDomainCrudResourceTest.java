@@ -71,7 +71,7 @@ public interface BaseEditManyDomainCrudResourceTest<
             return;
 
         DTO savedDto = getDataProvider().saveNew();
-        this.getDataProvider().getUpdateDto(savedDto);
+        this.getDataProvider().updateDto(savedDto);
         Long countBefore = getDataProvider().countDb();
         editManyRequest(savedDto, getDataProvider().getJsonPatch(),
                 dtos -> {
@@ -101,7 +101,7 @@ public interface BaseEditManyDomainCrudResourceTest<
             return;
 
         DTO savedDto = getDataProvider().saveNewMandatory();
-        this.getDataProvider().getMandatoryUpdateDto(savedDto);
+        this.getDataProvider().updateMandatoryDto(savedDto);
         Long countBefore = getDataProvider().countDb();
         editManyRequest(savedDto, getDataProvider().getMandatoryJsonPatch(),
                 dtos -> {

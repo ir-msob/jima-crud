@@ -70,7 +70,7 @@ public interface BaseEditDomainCrudResourceTest<
             return;
 
         DTO savedDto = getDataProvider().saveNew();
-        this.getDataProvider().getUpdateDto(savedDto);
+        this.getDataProvider().updateDto(savedDto);
         Long countBefore = getDataProvider().countDb();
         editRequest(savedDto, getDataProvider().getJsonPatch(), dto -> {
             assertAll(savedDto, dto);
@@ -98,7 +98,7 @@ public interface BaseEditDomainCrudResourceTest<
             return;
 
         DTO savedDto = getDataProvider().saveNewMandatory();
-        this.getDataProvider().getMandatoryUpdateDto(savedDto);
+        this.getDataProvider().updateMandatoryDto(savedDto);
         Long countBefore = getDataProvider().countDb();
         editRequest(savedDto, getDataProvider().getMandatoryJsonPatch(),
                 dto -> {

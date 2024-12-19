@@ -25,7 +25,7 @@ import org.springframework.http.MediaType;
 import java.io.Serializable;
 import java.util.Collection;
 
-public interface ParentChildCrudRestResourceTest<
+public interface BaseParentChildCrudRestResourceTest<
         ID extends Comparable<ID> & Serializable,
         USER extends BaseUser,
 

@@ -95,7 +95,7 @@ public interface BaseCharacteristicCrudResourceTest<
         getChildService().save(savedDto.getId(), child, getChildDomainClass(), getSampleUser())
                 .subscribe(dto -> {
                             CD toUpdate = ChildDomainUtil.getFunction(getChildDomainClass(), getDtoClass()).apply(dto).first();
-                            getChildDataProvider().getUpdateChild(toUpdate);
+                            getChildDataProvider().updateChild(toUpdate);
 
                             updateByKeyRequest(dto.getId()
                                     , toUpdate.getKey()
@@ -110,7 +110,7 @@ public interface BaseCharacteristicCrudResourceTest<
 
     @Override
     default String getElement() {
-        return Elements.CONTACT_MEDIUM;
+        return Elements.CHARACTERISTIC;
     }
 
 }

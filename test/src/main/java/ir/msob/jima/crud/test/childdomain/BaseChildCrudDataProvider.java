@@ -16,7 +16,7 @@ public interface BaseChildCrudDataProvider<
 
     CD getNewChild();
 
-    void getUpdateChild(CD childDomain);
+    void updateChild(CD childDomain);
 
     CS getChildService();
 

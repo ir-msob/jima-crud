@@ -21,7 +21,7 @@ import java.io.Serializable;
 
 /**
  * The {@code BaseGetPageDomainCrudRestResourceTest} interface represents a set of RESTful-specific test methods for retrieving a page of entities.
- * It extends both the {@code BaseGetPageDomainCrudResourceTest} and {@code ParentChildCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
+ * It extends both the {@code BaseGetPageDomainCrudResourceTest} and {@code BaseParentChildCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to retrieve a page of entities using RESTful API. The result of the get operation is a page of DTOs of the retrieved entities.
  *

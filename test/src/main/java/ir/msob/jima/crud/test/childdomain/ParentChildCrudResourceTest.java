@@ -99,7 +99,7 @@ public interface ParentChildCrudResourceTest<
         getChildService().save(savedDto.getId(), child, getChildDomainClass(), getSampleUser())
                 .subscribe(dto -> {
                             CD toUpdate = ChildDomainUtil.getFunction(getChildDomainClass(), getDtoClass()).apply(dto).first();
-                            getChildDataProvider().getUpdateChild(toUpdate);
+                            getChildDataProvider().updateChild(toUpdate);
 
                             updateByIdRequest(dto.getId()
                                     , toUpdate.getId()
@@ -134,7 +134,7 @@ public interface ParentChildCrudResourceTest<
                             }
                             criteria.setId(Filter.eq(toUpdate.getId()));
 
-                            getChildDataProvider().getUpdateChild(toUpdate);
+                            getChildDataProvider().updateChild(toUpdate);
                             updateRequest(dto.getId()
                                     , criteria
                                     , toUpdate
@@ -157,7 +157,7 @@ public interface ParentChildCrudResourceTest<
         getChildService().save(savedDto.getId(), child, getChildDomainClass(), getSampleUser())
                 .subscribe(dto -> {
                             CD toUpdate = ChildDomainUtil.getFunction(getChildDomainClass(), getDtoClass()).apply(dto).first();
-                            getChildDataProvider().getUpdateChild(toUpdate);
+                            getChildDataProvider().updateChild(toUpdate);
                             updateManyRequest(dto.getId()
                                     , Collections.singleton(toUpdate)
                                     , getUpdateAssertable());

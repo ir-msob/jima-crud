@@ -72,7 +72,7 @@ public interface BaseUpdateManyDomainCrudResourceTest<
             return;
 
         DTO savedDto = getDataProvider().saveNew();
-        this.getDataProvider().getUpdateDto(savedDto);
+        this.getDataProvider().updateDto(savedDto);
         Long countBefore = getDataProvider().countDb();
         updateManyRequest(Collections.singleton(savedDto), dtos -> {
             DTO dto = getDataProvider().getObjectMapper().convertValue(dtos.stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());
@@ -102,7 +102,7 @@ public interface BaseUpdateManyDomainCrudResourceTest<
             return;
 
         DTO savedDto = getDataProvider().saveNewMandatory();
-        this.getDataProvider().getMandatoryUpdateDto(savedDto);
+        this.getDataProvider().updateMandatoryDto(savedDto);
         Long countBefore = getDataProvider().countDb();
         updateManyRequest(Collections.singleton(savedDto), dtos -> {
             DTO dto = getDataProvider().getObjectMapper().convertValue(dtos.stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());

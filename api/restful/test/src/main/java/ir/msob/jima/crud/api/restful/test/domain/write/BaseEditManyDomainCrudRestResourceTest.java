@@ -21,7 +21,7 @@ import java.util.Collection;
 
 /**
  * The {@code BaseEditManyDomainCrudRestResourceTest} interface represents a set of RESTful-specific test methods for editing multiple entities.
- * It extends both the {@code BaseEditManyDomainCrudResourceTest} and {@code ParentChildCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
+ * It extends both the {@code BaseEditManyDomainCrudResourceTest} and {@code BaseParentChildCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to edit multiple entities using RESTful API. The result of the edit operation is a collection of DTOs of the edited entities.
  *

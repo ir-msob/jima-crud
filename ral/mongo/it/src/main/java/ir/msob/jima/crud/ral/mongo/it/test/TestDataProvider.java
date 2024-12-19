@@ -77,7 +77,7 @@ public class TestDataProvider extends DomainCrudDataProvider<TestDomain, TestDto
      * @param dto the DTO object to update
      */
     @Override
-    public void getUpdateDto(TestDto dto) {
+    public void updateDto(TestDto dto) {
         dto.setDomainField(UPDATED_STRING);
     }
 
@@ -95,7 +95,7 @@ public class TestDataProvider extends DomainCrudDataProvider<TestDomain, TestDto
      * @param dto the DTO object to update
      */
     @Override
-    public void getMandatoryUpdateDto(TestDto dto) {
+    public void updateMandatoryDto(TestDto dto) {
         dto.setDomainField(UPDATED_STRING);
     }
 

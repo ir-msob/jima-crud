@@ -18,7 +18,7 @@ import java.io.Serializable;
 
 /**
  * The {@code BaseUpdateByIdDomainCrudRestResourceTest} interface represents a set of RESTful-specific test methods for updating an entity by its ID.
- * It extends both the {@code BaseUpdateByIdDomainCrudResourceTest} and {@code ParentChildCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
+ * It extends both the {@code BaseUpdateByIdDomainCrudResourceTest} and {@code BaseParentChildCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to update an entity by its ID using RESTful API. The result of the update operation is the DTO of the updated entity.
  *

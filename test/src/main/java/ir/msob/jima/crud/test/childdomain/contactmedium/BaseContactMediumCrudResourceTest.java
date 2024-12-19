@@ -96,7 +96,7 @@ public interface BaseContactMediumCrudResourceTest<
         getChildService().save(savedDto.getId(), child, getChildDomainClass(), getSampleUser())
                 .subscribe(dto -> {
                             CD toUpdate = ChildDomainUtil.getFunction(getChildDomainClass(), getDtoClass()).apply(dto).first();
-                            getChildDataProvider().getUpdateChild(toUpdate);
+                            getChildDataProvider().updateChild(toUpdate);
 
                             updateByNameRequest(dto.getId()
                                     , toUpdate.getName()
