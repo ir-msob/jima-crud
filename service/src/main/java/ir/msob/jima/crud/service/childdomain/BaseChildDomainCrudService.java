@@ -26,12 +26,23 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Objects;
 
+/**
+ * Base interface for CRUD operations on child domain entities.
+ *
+ * @param <ID>   The type of the identifier.
+ * @param <USER> The type of the user context.
+ * @param <DTO>  The type of the Data Transfer Object.
+ */
 public interface BaseChildDomainCrudService<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
         , DTO extends BaseDto<ID>> {
 
-    // TODO
+    /**
+     * Get the class of the parent DTO.
+     *
+     * @return The class of the parent DTO.
+     */
     default Class<DTO> getParentDtoClass() {
         return (Class<DTO>) GenericTypeUtil.resolveTypeArguments(this.getClass(), BaseChildDomainCrudService.class, 2);
     }
@@ -55,7 +66,18 @@ public interface BaseChildDomainCrudService<
      */
     Mono<DTO> updateDto(ID id, @Valid DTO dto, USER user);
 
-
+    /**
+     * Update a child domain entity by key.
+     *
+     * @param parentId    The id of the parent entity.
+     * @param key         The key of the child domain entity.
+     * @param childDomain The child domain entity to be updated.
+     * @param cdClass     The class of the child domain entity.
+     * @param user        A user context.
+     * @return A Mono that emits the updated DTO entity.
+     * @throws DomainNotFoundException If the domain is not found.
+     * @throws BadRequestException     If the request is invalid.
+     */
     @SneakyThrows
     @MethodStats
     default <CD extends BaseChildDomain<ID>, CC extends BaseChildCriteriaKey<ID, CD>> Mono<DTO> updateByKey(@NotNull ID parentId, @NotBlank String key, CD childDomain, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
@@ -64,6 +86,18 @@ public interface BaseChildDomainCrudService<
         return this.update(parentId, childDomain, criteria, cdClass, user);
     }
 
+    /**
+     * Update a child domain entity by related id.
+     *
+     * @param parentId    The id of the parent entity.
+     * @param relatedId   The related id of the child domain entity.
+     * @param childDomain The child domain entity to be updated.
+     * @param cdClass     The class of the child domain entity.
+     * @param user        A user context.
+     * @return A Mono that emits the updated DTO entity.
+     * @throws DomainNotFoundException If the domain is not found.
+     * @throws BadRequestException     If the request is invalid.
+     */
     @SneakyThrows
     @MethodStats
     default <RID extends Comparable<RID> & Serializable, CD extends BaseChildDomain<ID>, CC extends BaseChildCriteriaRelatedId<ID, RID, CD>> Mono<DTO> updateByRelatedId(@NotNull ID parentId, @NotNull RID relatedId, CD childDomain, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
@@ -72,6 +106,18 @@ public interface BaseChildDomainCrudService<
         return this.update(parentId, childDomain, criteria, cdClass, user);
     }
 
+    /**
+     * Update a child domain entity by name.
+     *
+     * @param parentId    The id of the parent entity.
+     * @param name        The name of the child domain entity.
+     * @param childDomain The child domain entity to be updated.
+     * @param cdClass     The class of the child domain entity.
+     * @param user        A user context.
+     * @return A Mono that emits the updated DTO entity.
+     * @throws DomainNotFoundException If the domain is not found.
+     * @throws BadRequestException     If the request is invalid.
+     */
     @SneakyThrows
     @MethodStats
     default <CD extends BaseChildDomain<ID>, CC extends BaseChildCriteriaName<ID, CD>> Mono<DTO> updateByName(@NotNull ID parentId, @NotBlank String name, CD childDomain, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
@@ -80,6 +126,18 @@ public interface BaseChildDomainCrudService<
         return this.update(parentId, childDomain, criteria, cdClass, user);
     }
 
+    /**
+     * Update a child domain entity by type.
+     *
+     * @param parentId    The id of the parent entity.
+     * @param type        The type of the child domain entity.
+     * @param childDomain The child domain entity to be updated.
+     * @param cdClass     The class of the child domain entity.
+     * @param user        A user context.
+     * @return A Mono that emits the updated DTO entity.
+     * @throws DomainNotFoundException If the domain is not found.
+     * @throws BadRequestException     If the request is invalid.
+     */
     @SneakyThrows
     @MethodStats
     default <CD extends BaseChildDomain<ID>, CC extends BaseChildCriteriaType<ID, CD>> Mono<DTO> updateByType(@NotNull ID parentId, @NotBlank String type, CD childDomain, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
@@ -88,7 +146,18 @@ public interface BaseChildDomainCrudService<
         return this.update(parentId, childDomain, criteria, cdClass, user);
     }
 
-
+    /**
+     * Update a child domain entity by id.
+     *
+     * @param parentId    The id of the parent entity.
+     * @param id          The id of the child domain entity.
+     * @param childDomain The child domain entity to be updated.
+     * @param cdClass     The class of the child domain entity.
+     * @param user        A user context.
+     * @return A Mono that emits the updated DTO entity.
+     * @throws DomainNotFoundException If the domain is not found.
+     * @throws BadRequestException     If the request is invalid.
+     */
     @SneakyThrows
     @MethodStats
     default <CD extends BaseChildDomain<ID>, CC extends BaseChildCriteria<ID, CD>> Mono<DTO> updateById(@NotNull ID parentId, @NotNull ID id, CD childDomain, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
@@ -97,7 +166,18 @@ public interface BaseChildDomainCrudService<
         return this.update(parentId, childDomain, criteria, cdClass, user);
     }
 
-
+    /**
+     * Update a child domain entity based on criteria.
+     *
+     * @param parentId      The id of the parent entity.
+     * @param childDomain   The child domain entity to be updated.
+     * @param childCriteria The criteria to match the child domain entity.
+     * @param cdClass       The class of the child domain entity.
+     * @param user          A user context.
+     * @return A Mono that emits the updated DTO entity.
+     * @throws DomainNotFoundException If the domain is not found.
+     * @throws BadRequestException     If the request is invalid.
+     */
     @MethodStats
     default <CD extends BaseChildDomain<ID>, CC extends BaseChildCriteria<ID, CD>> Mono<DTO> update(@NotNull ID parentId, CD childDomain, @NotNull CC childCriteria, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
         return getDto(parentId, user)
@@ -123,6 +203,17 @@ public interface BaseChildDomainCrudService<
                 .flatMap(updatedDto -> updateDto(parentId, updatedDto, user));
     }
 
+    /**
+     * Update multiple child domain entities.
+     *
+     * @param parentId     The id of the parent entity.
+     * @param childDomains The collection of child domain entities to be updated.
+     * @param cdClass      The class of the child domain entities.
+     * @param user         A user context.
+     * @return A Mono that emits the updated DTO entity.
+     * @throws DomainNotFoundException If the domain is not found.
+     * @throws BadRequestException     If the request is invalid.
+     */
     @MethodStats
     default <CD extends BaseChildDomain<ID>> Mono<DTO> updateMany(@NotNull ID parentId, Collection<CD> childDomains, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
         return getDto(parentId, user)
@@ -148,6 +239,17 @@ public interface BaseChildDomainCrudService<
                 .flatMap(updatedDto -> updateDto(parentId, updatedDto, user));
     }
 
+    /**
+     * Delete a child domain entity by key.
+     *
+     * @param parentId The id of the parent entity.
+     * @param key      The key of the child domain entity.
+     * @param cdClass  The class of the child domain entity.
+     * @param user     A user context.
+     * @return A Mono that emits the updated DTO entity.
+     * @throws DomainNotFoundException If the domain is not found.
+     * @throws BadRequestException     If the request is invalid.
+     */
     @SneakyThrows
     @MethodStats
     default <CD extends BaseChildDomain<ID>, CC extends BaseChildCriteriaKey<ID, CD>> Mono<DTO> deleteByKey(@NotNull ID parentId, @NotBlank String key, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
@@ -156,6 +258,17 @@ public interface BaseChildDomainCrudService<
         return delete(parentId, criteria, cdClass, user);
     }
 
+    /**
+     * Delete a child domain entity by name.
+     *
+     * @param parentId The id of the parent entity.
+     * @param name     The name of the child domain entity.
+     * @param cdClass  The class of the child domain entity.
+     * @param user     A user context.
+     * @return A Mono that emits the updated DTO entity.
+     * @throws DomainNotFoundException If the domain is not found.
+     * @throws BadRequestException     If the request is invalid.
+     */
     @SneakyThrows
     @MethodStats
     default <CD extends BaseChildDomain<ID>, CC extends BaseChildCriteriaName<ID, CD>> Mono<DTO> deleteByName(@NotNull ID parentId, @NotBlank String name, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
@@ -164,6 +277,17 @@ public interface BaseChildDomainCrudService<
         return delete(parentId, criteria, cdClass, user);
     }
 
+    /**
+     * Delete a child domain entity by type.
+     *
+     * @param parentId The id of the parent entity.
+     * @param type     The type of the child domain entity.
+     * @param cdClass  The class of the child domain entity.
+     * @param user     A user context.
+     * @return A Mono that emits the updated DTO entity.
+     * @throws DomainNotFoundException If the domain is not found.
+     * @throws BadRequestException     If the request is invalid.
+     */
     @SneakyThrows
     @MethodStats
     default <CD extends BaseChildDomain<ID>, CC extends BaseChildCriteriaType<ID, CD>> Mono<DTO> deleteByType(@NotNull ID parentId, @NotBlank String type, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
@@ -172,6 +296,17 @@ public interface BaseChildDomainCrudService<
         return delete(parentId, criteria, cdClass, user);
     }
 
+    /**
+     * Delete a child domain entity by id.
+     *
+     * @param parentId The id of the parent entity.
+     * @param id       The id of the child domain entity.
+     * @param cdClass  The class of the child domain entity.
+     * @param user     A user context.
+     * @return A Mono that emits the updated DTO entity.
+     * @throws DomainNotFoundException If the domain is not found.
+     * @throws BadRequestException     If the request is invalid.
+     */
     @SneakyThrows
     @MethodStats
     default <CD extends BaseChildDomain<ID>, CC extends BaseChildCriteria<ID, CD>> Mono<DTO> deleteById(@NotNull ID parentId, @NotNull ID id, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
@@ -180,6 +315,17 @@ public interface BaseChildDomainCrudService<
         return delete(parentId, criteria, cdClass, user);
     }
 
+    /**
+     * Delete a child domain entity by related id.
+     *
+     * @param parentId  The id of the parent entity.
+     * @param relatedId The related id of the child domain entity.
+     * @param cdClass   The class of the child domain entity.
+     * @param user      A user context.
+     * @return A Mono that emits the updated DTO entity.
+     * @throws DomainNotFoundException If the domain is not found.
+     * @throws BadRequestException     If the request is invalid.
+     */
     @SneakyThrows
     @MethodStats
     default <RID extends Comparable<RID> & Serializable, CD extends BaseChildDomain<ID>, CC extends BaseChildCriteriaRelatedId<ID, RID, CD>> Mono<DTO> deleteByRelatedId(@NotNull ID parentId, @NotNull RID relatedId, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
@@ -188,7 +334,17 @@ public interface BaseChildDomainCrudService<
         return delete(parentId, criteria, cdClass, user);
     }
 
-
+    /**
+     * Delete a child domain entity based on criteria.
+     *
+     * @param parentId      The id of the parent entity.
+     * @param childCriteria The criteria to match the child domain entity.
+     * @param cdClass       The class of the child domain entity.
+     * @param user          A user context.
+     * @return A Mono that emits the updated DTO entity.
+     * @throws DomainNotFoundException If the domain is not found.
+     * @throws BadRequestException     If the request is invalid.
+     */
     @MethodStats
     default <CD extends BaseChildDomain<ID>, CC extends BaseChildCriteria<ID, CD>> Mono<DTO> delete(@NotNull ID parentId, @NotNull CC childCriteria, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
         return getDto(parentId, user)
@@ -215,6 +371,17 @@ public interface BaseChildDomainCrudService<
                 .flatMap(updatedDto -> updateDto(parentId, updatedDto, user));
     }
 
+    /**
+     * Deletes multiple child domain entities based on criteria.
+     *
+     * @param parentId      The id of the parent entity.
+     * @param childCriteria The criteria to match the child domain entities.
+     * @param cdClass       The class of the child domain entities.
+     * @param user          A user context.
+     * @return A Mono that emits the updated DTO entity.
+     * @throws DomainNotFoundException If the domain is not found.
+     * @throws BadRequestException     If the request is invalid.
+     */
     @MethodStats
     default <CD extends BaseChildDomain<ID>, CC extends BaseChildCriteria<ID, CD>> Mono<DTO> deleteMany(@NotNull ID parentId, @NotNull CC childCriteria, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
         return getDto(parentId, user)
@@ -237,11 +404,33 @@ public interface BaseChildDomainCrudService<
                 .flatMap(updatedDto -> updateDto(parentId, updatedDto, user));
     }
 
+    /**
+     * Saves a single child domain entity.
+     *
+     * @param parentId    The id of the parent entity.
+     * @param childDomain The child domain entity to be saved.
+     * @param cdClass     The class of the child domain entity.
+     * @param user        A user context.
+     * @return A Mono that emits the updated DTO entity.
+     * @throws DomainNotFoundException If the domain is not found.
+     * @throws BadRequestException     If the request is invalid.
+     */
     @MethodStats
     default <CD extends BaseChildDomain<ID>> Mono<DTO> save(@NotNull ID parentId, @NotNull @Valid CD childDomain, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
         return saveMany(parentId, Collections.singletonList(childDomain), cdClass, user);
     }
 
+    /**
+     * Saves multiple child domain entities.
+     *
+     * @param parentId     The id of the parent entity.
+     * @param childDomains The collection of child domain entities to be saved.
+     * @param cdClass      The class of the child domain entities.
+     * @param user         A user context.
+     * @return A Mono that emits the updated DTO entity.
+     * @throws DomainNotFoundException If the domain is not found.
+     * @throws BadRequestException     If the request is invalid.
+     */
     @MethodStats
     default <CD extends BaseChildDomain<ID>> Mono<DTO> saveMany(@NotNull ID parentId, @NotEmpty Collection<@Valid CD> childDomains, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
         return getDto(parentId, user)
