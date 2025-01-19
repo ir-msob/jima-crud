@@ -41,7 +41,7 @@ public class HeaderInterceptor implements WebGraphQlInterceptor {
     public Mono<WebGraphQlResponse> intercept(WebGraphQlRequest request, Chain chain) {
         List<String> authorizationHeaders = request.getHeaders().getOrDefault(HttpHeaders.AUTHORIZATION, new ArrayList<>());
         if (!authorizationHeaders.isEmpty()) {
-            String firstAuthorizationHeader = authorizationHeaders.get(0);
+            String firstAuthorizationHeader = authorizationHeaders.getFirst();
             Map<?, Object> context = Collections.singletonMap(HttpHeaders.AUTHORIZATION, firstAuthorizationHeader);
             request.configureExecutionInput((executionInput, builder) -> builder.graphQLContext(context).build());
         }
