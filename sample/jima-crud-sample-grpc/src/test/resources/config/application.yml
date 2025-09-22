@@ -1,22 +1,15 @@
-server:
-  port: 8080
-jima:
-  test-container:
-    mongo:
-      image: "mongo:8.0.0-rc11"
-      reuse: true
-    keycloak:
-      image: "quay.io/keycloak/keycloak:25.0"
-      realm: "test-realm"
-      reuse: true
+grpc:
+  server:
+    port: 9090
 
 spring:
   application:
-    name: test-microservice
+    name: test-microservicetes
   profiles:
     active: test
   main:
     allow-bean-definition-overriding: true
+    web-application-type: NONE
   data:
     mongodb:
       uri: mongodb://localhost:27017/test
@@ -24,7 +17,7 @@ spring:
     oauth2:
       resource-server:
         jwt:
-          issuer-uri: http://localhost:8004
+          issuer-uri: http://localhost:8004/realms/test-realm
       client:
         provider:
           service-client:
@@ -38,11 +31,3 @@ spring:
             client-authentication-method: client_secret_basic
             scope:
               - openid
-# Logging
-logging:
-  file:
-    path: log
-  logback:
-    rolling-policy:
-      max-file-size: 5MB
-      max-history: 5

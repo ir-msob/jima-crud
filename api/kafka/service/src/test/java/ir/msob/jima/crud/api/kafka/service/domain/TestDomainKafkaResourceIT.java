@@ -31,7 +31,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @ContextConfiguration
 @Testcontainers
 @CommonsLog
-public class TestDomainRsocketResourceIT extends DomainCrudKafkaResourceTest<TestDomain, TestDto, TestCriteria, TestRepository, TestServiceDomain, TestDataProvider> {
+public class TestDomainKafkaResourceIT extends DomainCrudKafkaResourceTest<TestDomain, TestDto, TestCriteria, TestRepository, TestServiceDomain, TestDataProvider> {
 
     @Autowired
     TestDomainKafkaResourceDomain testDomainRsocketResource;
