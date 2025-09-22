@@ -1,4 +1,4 @@
-package ir.msob.jima.crud.api.restful.service.rest.domain;
+package ir.msob.jima.crud.api.restful.service.domain;
 
 
 import ir.msob.jima.core.commons.resource.Resource;
@@ -7,7 +7,7 @@ import ir.msob.jima.core.ral.mongo.it.Microservices;
 import ir.msob.jima.core.ral.mongo.it.test.TestCriteria;
 import ir.msob.jima.core.ral.mongo.it.test.TestDomain;
 import ir.msob.jima.core.ral.mongo.it.test.TestDto;
-import ir.msob.jima.crud.api.restful.service.rest.domain.base.DomainCrudRestResource;
+import ir.msob.jima.crud.api.restful.service.domain.base.DomainCrudRestResource;
 import ir.msob.jima.crud.ral.mongo.it.test.TestRepository;
 import ir.msob.jima.crud.ral.mongo.it.test.TestServiceDomain;
 import lombok.RequiredArgsConstructor;

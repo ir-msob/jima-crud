@@ -1,4 +1,4 @@
-package ir.msob.jima.crud.api.restful.service.rest;
+package ir.msob.jima.crud.api.restful.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dasniko.testcontainers.keycloak.KeycloakContainer;

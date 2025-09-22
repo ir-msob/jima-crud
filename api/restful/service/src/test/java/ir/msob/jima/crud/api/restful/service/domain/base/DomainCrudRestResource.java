@@ -1,4 +1,4 @@
-package ir.msob.jima.crud.api.restful.service.rest.domain.base;
+package ir.msob.jima.crud.api.restful.service.domain.base;
 
 import ir.msob.jima.core.commons.security.BaseUserService;
 import ir.msob.jima.core.ral.mongo.commons.query.QueryBuilder;

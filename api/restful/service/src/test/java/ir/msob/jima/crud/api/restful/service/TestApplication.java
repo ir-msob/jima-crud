@@ -1,4 +1,4 @@
-package ir.msob.jima.crud.api.restful.service.rest;
+package ir.msob.jima.crud.api.restful.service;
 
 import ir.msob.jima.core.commons.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
