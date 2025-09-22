@@ -1,4 +1,4 @@
-package ir.msob.jima.crud.api.grpc.service;
+package ir.msob.jima.crud.api.rsocket.service;
 
 import ir.msob.jima.core.commons.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,13 +9,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.core.env.Environment;
 
 @SpringBootApplication(scanBasePackages = {Constants.FRAMEWORK_PACKAGE_PREFIX})
-public class TestMicroserviceApplication implements ApplicationRunner {
+public class TestApplication implements ApplicationRunner {
 
     @Autowired
     Environment environment;
 
     public static void main(String[] args) {
-        SpringApplication.run(TestMicroserviceApplication.class, args);
+        SpringApplication.run(TestApplication.class, args);
     }
 
     public void startup() {

@@ -1,4 +1,4 @@
-package ir.msob.jima.crud.api.restful.service.rest;
+package ir.msob.jima.crud.api.graphql.restful.service;
 
 import ir.msob.jima.core.commons.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,13 +9,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.core.env.Environment;
 
 @SpringBootApplication(scanBasePackages = {Constants.FRAMEWORK_PACKAGE_PREFIX})
-public class JimaApplication implements ApplicationRunner {
+public class TestApplication implements ApplicationRunner {
 
     @Autowired
     Environment environment;
 
     public static void main(String[] args) {
-        SpringApplication.run(JimaApplication.class, args);
+        SpringApplication.run(TestApplication.class, args);
     }
 
     public void startup() {

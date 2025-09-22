@@ -1,4 +1,4 @@
-package ir.msob.jima.crud.api.restful.service.rest;
+package ir.msob.jima.crud.api.restful.service.rest.domain;
 
 import ir.msob.jima.core.beans.properties.JimaProperties;
 import ir.msob.jima.core.commons.resource.BaseResource;
@@ -8,7 +8,8 @@ import ir.msob.jima.core.ral.mongo.it.test.TestDomain;
 import ir.msob.jima.core.ral.mongo.it.test.TestDto;
 import ir.msob.jima.core.ral.mongo.test.configuration.MongoContainerConfiguration;
 import ir.msob.jima.core.test.CoreTestData;
-import ir.msob.jima.crud.api.restful.service.rest.base.DomainCrudRestResourceTest;
+import ir.msob.jima.crud.api.restful.service.rest.TestApplication;
+import ir.msob.jima.crud.api.restful.service.rest.domain.base.DomainCrudRestResourceTest;
 import ir.msob.jima.crud.ral.mongo.it.test.TestDataProvider;
 import ir.msob.jima.crud.ral.mongo.it.test.TestRepository;
 import ir.msob.jima.crud.ral.mongo.it.test.TestServiceDomain;
@@ -25,7 +26,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 @AutoConfigureWebTestClient
-@SpringBootTest(classes = {JimaApplication.class, MongoContainerConfiguration.class, KeycloakContainerConfiguration.class}
+@SpringBootTest(classes = {TestApplication.class, MongoContainerConfiguration.class, KeycloakContainerConfiguration.class}
         , webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration
 @Testcontainers

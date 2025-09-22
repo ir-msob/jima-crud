@@ -10,7 +10,7 @@ import ir.msob.jima.core.ral.mongo.it.test.TestDto;
 import ir.msob.jima.core.ral.mongo.test.configuration.MongoContainerConfiguration;
 import ir.msob.jima.core.test.CoreTestData;
 import ir.msob.jima.crud.api.grpc.commons.ReactorCrudServiceGrpc;
-import ir.msob.jima.crud.api.grpc.service.TestMicroserviceApplication;
+import ir.msob.jima.crud.api.grpc.service.TestApplication;
 import ir.msob.jima.crud.api.grpc.service.domain.base.DomainCrudGrpcResourceTest;
 import ir.msob.jima.crud.ral.mongo.it.test.TestDataProvider;
 import ir.msob.jima.crud.ral.mongo.it.test.TestRepository;
@@ -31,7 +31,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.io.IOException;
 
-@SpringJUnitConfig(classes = {TestMicroserviceApplication.class, MongoContainerConfiguration.class, KeycloakContainerConfiguration.class})
+@SpringJUnitConfig(classes = {TestApplication.class, MongoContainerConfiguration.class, KeycloakContainerConfiguration.class})
 @Testcontainers
 @CommonsLog
 @EnableConfigurationProperties

@@ -6,14 +6,12 @@ import ir.msob.jima.core.ral.mongo.it.security.ProjectUser;
 import ir.msob.jima.core.ral.mongo.it.test.TestCriteria;
 import ir.msob.jima.core.ral.mongo.it.test.TestDomain;
 import ir.msob.jima.core.ral.mongo.it.test.TestDto;
-import ir.msob.jima.core.ral.mongo.test.configuration.MongoContainerConfiguration;
 import ir.msob.jima.core.test.CoreTestData;
-import ir.msob.jima.crud.api.graphql.restful.service.JimaApplication;
+import ir.msob.jima.crud.api.graphql.restful.service.TestApplication;
 import ir.msob.jima.crud.api.graphql.restful.service.domain.base.DomainCrudGraphqlRestResourceTest;
 import ir.msob.jima.crud.ral.mongo.it.test.TestDataProvider;
 import ir.msob.jima.crud.ral.mongo.it.test.TestRepository;
 import ir.msob.jima.crud.ral.mongo.it.test.TestServiceDomain;
-import ir.msob.jima.security.ral.keycloak.test.KeycloakContainerConfiguration;
 import lombok.SneakyThrows;
 import lombok.extern.apachecommons.CommonsLog;
 import org.bson.types.ObjectId;
@@ -26,8 +24,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 @AutoConfigureWebTestClient
-@SpringBootTest(classes = {JimaApplication.class, MongoContainerConfiguration.class, KeycloakContainerConfiguration.class}
-        , webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = {TestApplication.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration
 @Testcontainers
 @CommonsLog

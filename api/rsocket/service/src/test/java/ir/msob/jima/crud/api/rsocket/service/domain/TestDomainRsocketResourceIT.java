@@ -11,7 +11,7 @@ import ir.msob.jima.core.ral.mongo.it.test.TestDomain;
 import ir.msob.jima.core.ral.mongo.it.test.TestDto;
 import ir.msob.jima.core.ral.mongo.test.configuration.MongoContainerConfiguration;
 import ir.msob.jima.core.test.CoreTestData;
-import ir.msob.jima.crud.api.rsocket.service.TestMicroserviceApplication;
+import ir.msob.jima.crud.api.rsocket.service.TestApplication;
 import ir.msob.jima.crud.api.rsocket.service.domain.base.DomainCrudRsocketResourceTest;
 import ir.msob.jima.crud.ral.mongo.it.test.TestDataProvider;
 import ir.msob.jima.crud.ral.mongo.it.test.TestRepository;
@@ -30,7 +30,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 
-@SpringBootTest(classes = {TestMicroserviceApplication.class, MongoContainerConfiguration.class, KeycloakContainerConfiguration.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = {TestApplication.class, MongoContainerConfiguration.class, KeycloakContainerConfiguration.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration
 @Testcontainers
 @CommonsLog

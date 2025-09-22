@@ -10,7 +10,7 @@ import ir.msob.jima.core.ral.mongo.it.test.TestDomain;
 import ir.msob.jima.core.ral.mongo.it.test.TestDto;
 import ir.msob.jima.core.ral.mongo.test.configuration.MongoContainerConfiguration;
 import ir.msob.jima.core.test.CoreTestData;
-import ir.msob.jima.crud.api.kafka.service.TestMicroserviceApplication;
+import ir.msob.jima.crud.api.kafka.service.TestApplication;
 import ir.msob.jima.crud.api.kafka.service.domain.base.DomainCrudKafkaResourceTest;
 import ir.msob.jima.crud.ral.mongo.it.test.TestDataProvider;
 import ir.msob.jima.crud.ral.mongo.it.test.TestRepository;
@@ -27,7 +27,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 
-@SpringBootTest(classes = {TestMicroserviceApplication.class, KafkaContainerConfiguration.class, MongoContainerConfiguration.class, KeycloakContainerConfiguration.class})
+@SpringBootTest(classes = {TestApplication.class, KafkaContainerConfiguration.class, MongoContainerConfiguration.class, KeycloakContainerConfiguration.class})
 @ContextConfiguration
 @Testcontainers
 @CommonsLog
