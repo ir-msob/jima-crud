@@ -72,7 +72,7 @@ public interface BaseEditManyDomainCrudRestResourceTest<
                 .exchange()
                 .expectStatus().isEqualTo(OperationsStatus.EDIT_MANY)
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
-                .expectBody(Collection.class)
+                .expectBodyList(getDtoClass())
                 .value(assertable::assertThan);
     }
 }

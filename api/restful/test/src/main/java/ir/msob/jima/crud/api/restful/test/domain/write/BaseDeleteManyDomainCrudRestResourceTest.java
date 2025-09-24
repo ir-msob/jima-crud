@@ -18,6 +18,7 @@ import ir.msob.jima.crud.test.domain.write.BaseDeleteManyDomainCrudResourceTest;
 
 import java.io.Serializable;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * The {@code BaseDeleteManyDomainCrudRestResourceTest} interface represents a set of RESTful-specific test methods for deleting multiple entities.
@@ -70,8 +71,8 @@ public interface BaseDeleteManyDomainCrudRestResourceTest<
                 .exchange()
                 .expectStatus()
                 .isEqualTo(OperationsStatus.DELETE_MANY)
-                .expectBody(Set.class)
-                .value(assertable::assertThan);
+                .expectBodyList(getIdClass())
+                .value(list -> assertable.assertThan(new TreeSet<>(list)));
 
     }
 }

@@ -68,7 +68,7 @@ public interface BaseGetManyDomainCrudRestResourceTest<
                 .exchange()
                 .expectStatus().isEqualTo(OperationsStatus.GET_MANY)
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
-                .expectBody(Collection.class)
+                .expectBodyList(getDtoClass())
                 .value(assertable::assertThan);
 
     }

@@ -70,7 +70,7 @@ public interface BaseSaveManyDomainCrudRestResourceTest<
                 .exchange()
                 .expectStatus().isEqualTo(OperationsStatus.SAVE_MANY)
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
-                .expectBody(Collection.class)
+                .expectBodyList(getDtoClass())
                 .value(assertable::assertThan);
     }
 }
