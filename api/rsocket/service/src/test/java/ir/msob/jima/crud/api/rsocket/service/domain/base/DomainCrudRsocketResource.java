@@ -14,7 +14,6 @@ import ir.msob.jima.core.ral.mongo.it.security.ProjectUser;
 import ir.msob.jima.crud.api.rsocket.service.domain.BaseDomainCrudRsocketResource;
 import ir.msob.jima.crud.ral.mongo.it.base.DomainCrudService;
 import ir.msob.jima.crud.ral.mongo.it.base.MongoDomainCrudRepository;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -32,7 +31,7 @@ public abstract class DomainCrudRsocketResource<
         R extends MongoDomainCrudRepository<D, C>,
         S extends DomainCrudService<D, DTO, C, R>
         > implements
-        BaseDomainCrudRsocketResource<ObjectId, ProjectUser, D, DTO, C, QueryBuilder, R, S> {
+        BaseDomainCrudRsocketResource<String, ProjectUser, D, DTO, C, QueryBuilder, R, S> {
 
     @Autowired
     ProjectUserService projectUserService;
@@ -64,55 +63,55 @@ public abstract class DomainCrudRsocketResource<
     }
 
     @Override
-    public TypeReference<ChannelMessage<ProjectUser, CriteriaMessage<ObjectId, C>>> getCriteriaReferenceType() {
+    public TypeReference<ChannelMessage<ProjectUser, CriteriaMessage<String, C>>> getCriteriaReferenceType() {
         return new TypeReference<>() {
         };
     }
 
     @Override
-    public TypeReference<ChannelMessage<ProjectUser, PageableMessage<ObjectId, C>>> getCriteriaPageReferenceType() {
+    public TypeReference<ChannelMessage<ProjectUser, PageableMessage<String, C>>> getCriteriaPageReferenceType() {
         return new TypeReference<>() {
         };
     }
 
     @Override
-    public TypeReference<ChannelMessage<ProjectUser, JsonPatchMessage<ObjectId, C>>> getEditReferenceType() {
+    public TypeReference<ChannelMessage<ProjectUser, JsonPatchMessage<String, C>>> getEditReferenceType() {
         return new TypeReference<>() {
         };
     }
 
     @Override
-    public TypeReference<ChannelMessage<ProjectUser, DtoMessage<ObjectId, DTO>>> getDtoReferenceType() {
+    public TypeReference<ChannelMessage<ProjectUser, DtoMessage<String, DTO>>> getDtoReferenceType() {
         return new TypeReference<>() {
         };
     }
 
     @Override
-    public TypeReference<ChannelMessage<ProjectUser, IdMessage<ObjectId>>> getIdReferenceType() {
+    public TypeReference<ChannelMessage<ProjectUser, IdMessage<String>>> getIdReferenceType() {
         return new TypeReference<>() {
         };
     }
 
     @Override
-    public TypeReference<ChannelMessage<ProjectUser, IdJsonPatchMessage<ObjectId>>> getIdJsonPatchReferenceType() {
+    public TypeReference<ChannelMessage<ProjectUser, IdJsonPatchMessage<String>>> getIdJsonPatchReferenceType() {
         return new TypeReference<>() {
         };
     }
 
     @Override
-    public TypeReference<ChannelMessage<ProjectUser, PageMessage<ObjectId, DTO>>> getPageReferenceType() {
+    public TypeReference<ChannelMessage<ProjectUser, PageMessage<String, DTO>>> getPageReferenceType() {
         return new TypeReference<>() {
         };
     }
 
     @Override
-    public TypeReference<ChannelMessage<ProjectUser, DtosMessage<ObjectId, DTO>>> getDtosReferenceType() {
+    public TypeReference<ChannelMessage<ProjectUser, DtosMessage<String, DTO>>> getDtosReferenceType() {
         return new TypeReference<>() {
         };
     }
 
     @Override
-    public TypeReference<ChannelMessage<ProjectUser, IdsMessage<ObjectId>>> getIdsReferenceType() {
+    public TypeReference<ChannelMessage<ProjectUser, IdsMessage<String>>> getIdsReferenceType() {
         return new TypeReference<>() {
         };
     }

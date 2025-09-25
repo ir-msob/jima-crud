@@ -2,6 +2,7 @@ package ir.msob.jima.crud.api.restful.service.domain;
 
 import ir.msob.jima.core.beans.properties.JimaProperties;
 import ir.msob.jima.core.commons.resource.BaseResource;
+import ir.msob.jima.core.commons.shared.PageResponse;
 import ir.msob.jima.core.ral.mongo.it.security.ProjectUser;
 import ir.msob.jima.core.ral.mongo.it.test.TestCriteria;
 import ir.msob.jima.core.ral.mongo.it.test.TestDomain;
@@ -20,7 +21,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.ParameterizedTypeReference;
 import org.testcontainers.junit.jupiter.Testcontainers;
+
+import java.lang.reflect.Type;
+import java.util.Collection;
 
 @AutoConfigureWebTestClient
 @SpringBootTest(classes = {TestApplication.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -33,7 +38,7 @@ public class TestDomainRestResourceIT extends DomainCrudRestResourceTest<TestDom
     @SneakyThrows
     @BeforeAll
     public static void beforeAll() {
-        CoreTestData.init(new ObjectId(), new ObjectId());
+        CoreTestData.init(new ObjectId().toString(), new ObjectId().toString());
     }
 
 
@@ -52,7 +57,7 @@ public class TestDomainRestResourceIT extends DomainCrudRestResourceTest<TestDom
     }
 
     @Override
-    public Class<? extends BaseResource<ObjectId, ProjectUser>> getResourceClass() {
+    public Class<? extends BaseResource<String, ProjectUser>> getResourceClass() {
         return TestDomainRestResource.class;
     }
 
@@ -60,4 +65,47 @@ public class TestDomainRestResourceIT extends DomainCrudRestResourceTest<TestDom
     public JimaProperties getJimaProperties() {
         return jimaProperties;
     }
+
+
+    @Override
+    public ParameterizedTypeReference<Collection<TestDto>> getDtosTypeReferenceType() {
+        return new ParameterizedTypeReference<Collection<TestDto>>() {
+            @Override
+            public Type getType() {
+                return super.getType();
+            }
+        };
+    }
+
+    @Override
+    public ParameterizedTypeReference<TestDto> getDtoReferenceType() {
+        return new ParameterizedTypeReference<TestDto>() {
+            @Override
+            public Type getType() {
+                return super.getType();
+            }
+        };
+    }
+
+    @Override
+    public ParameterizedTypeReference<TestCriteria> getCriteriaReferenceType() {
+        return new ParameterizedTypeReference<TestCriteria>() {
+            @Override
+            public Type getType() {
+                return super.getType();
+            }
+        };
+    }
+
+    @Override
+    public ParameterizedTypeReference<PageResponse<TestDto>> getPageReferenceType() {
+        return new ParameterizedTypeReference<PageResponse<TestDto>>() {
+            @Override
+            public Type getType() {
+                return super.getType();
+            }
+        };
+    }
+
+
 }

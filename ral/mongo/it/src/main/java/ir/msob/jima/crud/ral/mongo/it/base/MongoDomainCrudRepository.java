@@ -7,7 +7,6 @@ import ir.msob.jima.core.ral.mongo.it.domain.ProjectDomain;
 import ir.msob.jima.core.ral.mongo.it.security.ProjectUser;
 import ir.msob.jima.crud.ral.mongo.commons.BaseDomainCrudMongoRepository;
 import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 
 /**
@@ -16,8 +15,8 @@ import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
  */
 @RequiredArgsConstructor
 public class MongoDomainCrudRepository<D extends ProjectDomain, C extends ProjectCriteria>
-        implements BaseDomainCrudMongoRepository<ObjectId, ProjectUser, D, C>
-        , BaseMongoRepository<ObjectId, ProjectUser, D> {
+        implements BaseDomainCrudMongoRepository<String, ProjectUser, D, C>
+        , BaseMongoRepository<String, ProjectUser, D> {
 
 
     private final ReactiveMongoTemplate reactiveMongoTemplate;

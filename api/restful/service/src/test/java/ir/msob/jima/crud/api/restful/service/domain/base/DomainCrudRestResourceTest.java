@@ -11,9 +11,12 @@ import ir.msob.jima.crud.api.restful.test.domain.BaseDomainCrudRestResourceTest;
 import ir.msob.jima.crud.ral.mongo.it.base.DomainCrudDataProvider;
 import ir.msob.jima.crud.ral.mongo.it.base.DomainCrudService;
 import ir.msob.jima.crud.ral.mongo.it.base.MongoDomainCrudRepository;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.test.web.reactive.server.WebTestClient;
+
+import java.lang.reflect.Type;
+import java.util.Collection;
 
 
 public abstract class DomainCrudRestResourceTest<
@@ -23,7 +26,7 @@ public abstract class DomainCrudRestResourceTest<
         R extends MongoDomainCrudRepository<D, C>,
         S extends DomainCrudService<D, DTO, C, R>,
         DP extends DomainCrudDataProvider<D, DTO, C, R, S>>
-        implements BaseDomainCrudRestResourceTest<ObjectId, ProjectUser, D, DTO, C, QueryBuilder, R, S, DP> {
+        implements BaseDomainCrudRestResourceTest<String, ProjectUser, D, DTO, C, QueryBuilder, R, S, DP> {
 
     @Autowired
     public WebTestClient webTestClient;
@@ -60,5 +63,15 @@ public abstract class DomainCrudRestResourceTest<
     @Override
     public BaseTokenService getTokenService() {
         return tokenService;
+    }
+
+    @Override
+    public ParameterizedTypeReference<Collection<String>> getIdsReferenceType() {
+        return new ParameterizedTypeReference<Collection<String>>() {
+            @Override
+            public Type getType() {
+                return super.getType();
+            }
+        };
     }
 }

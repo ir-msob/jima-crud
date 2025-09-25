@@ -34,7 +34,7 @@ public class TestDomainGraphqlRestResourceIT extends DomainCrudGraphqlRestResour
     @SneakyThrows
     @BeforeAll
     public static void beforeAll() {
-        CoreTestData.init(new ObjectId(), new ObjectId());
+        CoreTestData.init(new ObjectId().toString(), new ObjectId().toString());
     }
 
     @SneakyThrows
@@ -47,7 +47,7 @@ public class TestDomainGraphqlRestResourceIT extends DomainCrudGraphqlRestResour
 
 
     @Override
-    public Class<? extends BaseResource<ObjectId, ProjectUser>> getResourceClass() {
+    public Class<? extends BaseResource<String, ProjectUser>> getResourceClass() {
         return TestDomainGraphqlRestResourceDomain.class;
     }
 

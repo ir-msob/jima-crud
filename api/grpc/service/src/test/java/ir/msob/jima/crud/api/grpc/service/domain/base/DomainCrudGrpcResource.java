@@ -10,7 +10,6 @@ import ir.msob.jima.core.ral.mongo.it.security.ProjectUser;
 import ir.msob.jima.crud.api.grpc.service.domain.BaseDomainCrudGrpcResource;
 import ir.msob.jima.crud.ral.mongo.it.base.DomainCrudService;
 import ir.msob.jima.crud.ral.mongo.it.base.MongoDomainCrudRepository;
-import org.bson.types.ObjectId;
 
 /**
  * @param <D>
@@ -26,7 +25,7 @@ public abstract class DomainCrudGrpcResource<
         C extends ProjectCriteria,
         R extends MongoDomainCrudRepository<D, C>,
         S extends DomainCrudService<D, DTO, C, R>
-        > extends BaseDomainCrudGrpcResource<ObjectId, ProjectUser, D, DTO, C, QueryBuilder, R, S> {
+        > extends BaseDomainCrudGrpcResource<String, ProjectUser, D, DTO, C, QueryBuilder, R, S> {
 
     private final ProjectUserService projectUserService;
     private final S service;

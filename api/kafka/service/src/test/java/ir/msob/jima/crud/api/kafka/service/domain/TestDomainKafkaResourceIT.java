@@ -41,7 +41,7 @@ public class TestDomainKafkaResourceIT extends DomainCrudKafkaResourceTest<TestD
     @SneakyThrows
     @BeforeAll
     public static void beforeAll() {
-        CoreTestData.init(new ObjectId(), new ObjectId());
+        CoreTestData.init(new ObjectId().toString(), new ObjectId().toString());
 
     }
 
@@ -55,7 +55,7 @@ public class TestDomainKafkaResourceIT extends DomainCrudKafkaResourceTest<TestD
 
 
     @Override
-    public Class<? extends BaseResource<ObjectId, ProjectUser>> getResourceClass() {
+    public Class<? extends BaseResource<String, ProjectUser>> getResourceClass() {
         return TestDomainKafkaResourceDomain.class;
     }
 

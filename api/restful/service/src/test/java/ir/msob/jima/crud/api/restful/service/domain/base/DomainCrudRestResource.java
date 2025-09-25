@@ -9,7 +9,6 @@ import ir.msob.jima.core.ral.mongo.it.security.ProjectUser;
 import ir.msob.jima.crud.api.restful.service.domain.BaseDomainCrudRestResource;
 import ir.msob.jima.crud.ral.mongo.it.base.DomainCrudService;
 import ir.msob.jima.crud.ral.mongo.it.base.MongoDomainCrudRepository;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -27,7 +26,7 @@ public abstract class DomainCrudRestResource<
         R extends MongoDomainCrudRepository<D, C>,
         S extends DomainCrudService<D, DTO, C, R>
         > implements
-        BaseDomainCrudRestResource<ObjectId, ProjectUser, D, DTO, C, QueryBuilder, R, S> {
+        BaseDomainCrudRestResource<String, ProjectUser, D, DTO, C, QueryBuilder, R, S> {
 
     @Autowired
     ProjectUserService projectUserService;

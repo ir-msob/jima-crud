@@ -8,7 +8,6 @@ import ir.msob.jima.core.ral.mongo.it.test.TestDomain;
 import ir.msob.jima.core.ral.mongo.it.test.TestDto;
 import ir.msob.jima.crud.ral.mongo.it.base.DomainCrudService;
 import ir.msob.jima.crud.service.domain.BeforeAfterComponent;
-import org.bson.types.ObjectId;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +35,7 @@ public class TestServiceDomain extends DomainCrudService<TestDomain, TestDto, Te
     }
 
     @Override
-    public Collection<BaseBeforeAfterDomainOperation<ObjectId, ProjectUser, TestDto, TestCriteria>> getBeforeAfterDomainOperations() {
+    public Collection<BaseBeforeAfterDomainOperation<String, ProjectUser, TestDto, TestCriteria>> getBeforeAfterDomainOperations() {
         return Collections.emptyList();
     }
 

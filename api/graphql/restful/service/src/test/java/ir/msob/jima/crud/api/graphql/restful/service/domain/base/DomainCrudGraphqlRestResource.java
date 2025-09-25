@@ -10,7 +10,6 @@ import ir.msob.jima.core.ral.mongo.it.security.ProjectUser;
 import ir.msob.jima.crud.api.graphql.restful.service.domain.BaseDomainCrudGraphqlRestResource;
 import ir.msob.jima.crud.ral.mongo.it.base.DomainCrudService;
 import ir.msob.jima.crud.ral.mongo.it.base.MongoDomainCrudRepository;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -28,7 +27,7 @@ public abstract class DomainCrudGraphqlRestResource<
         R extends MongoDomainCrudRepository<D, C>,
         S extends DomainCrudService<D, DTO, C, R>
         > implements
-        BaseDomainCrudGraphqlRestResource<ObjectId, ProjectUser, D, DTO, C, QueryBuilder, R, S> {
+        BaseDomainCrudGraphqlRestResource<String, ProjectUser, D, DTO, C, QueryBuilder, R, S> {
 
     @Autowired
     ProjectUserService projectUserService;

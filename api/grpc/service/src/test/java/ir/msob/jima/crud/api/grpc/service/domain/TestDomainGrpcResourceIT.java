@@ -52,7 +52,7 @@ public class TestDomainGrpcResourceIT extends DomainCrudGrpcResourceTest<TestDom
     @SneakyThrows
     @BeforeAll
     public static void beforeAll() {
-        CoreTestData.init(new ObjectId(), new ObjectId());
+        CoreTestData.init(new ObjectId().toString(), new ObjectId().toString());
     }
 
     private void registerService() throws IOException {

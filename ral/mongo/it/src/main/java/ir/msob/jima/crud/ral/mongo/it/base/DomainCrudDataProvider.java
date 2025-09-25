@@ -9,7 +9,6 @@ import ir.msob.jima.core.ral.mongo.it.dto.ProjectDto;
 import ir.msob.jima.core.ral.mongo.it.security.ProjectUser;
 import ir.msob.jima.core.ral.mongo.it.security.Roles;
 import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
-import org.bson.types.ObjectId;
 
 import java.util.Collections;
 import java.util.TreeSet;
@@ -20,7 +19,7 @@ public abstract class DomainCrudDataProvider<
         C extends ProjectCriteria,
         R extends MongoDomainCrudRepository<D, C>,
         S extends DomainCrudService<D, DTO, C, R>>
-        implements BaseDomainCrudDataProvider<ObjectId, ProjectUser, D, DTO, C, QueryBuilder, R, S> {
+        implements BaseDomainCrudDataProvider<String, ProjectUser, D, DTO, C, QueryBuilder, R, S> {
 
     public final ProjectUser SAMPLE_USER;
     private final ObjectMapper objectMapper;

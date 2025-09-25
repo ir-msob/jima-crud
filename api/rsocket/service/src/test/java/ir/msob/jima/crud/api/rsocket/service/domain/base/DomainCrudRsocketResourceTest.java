@@ -12,7 +12,6 @@ import ir.msob.jima.crud.api.rsocket.test.BaseDomainCrudRsocketResourceTest;
 import ir.msob.jima.crud.ral.mongo.it.base.DomainCrudDataProvider;
 import ir.msob.jima.crud.ral.mongo.it.base.DomainCrudService;
 import ir.msob.jima.crud.ral.mongo.it.base.MongoDomainCrudRepository;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -23,7 +22,7 @@ public abstract class DomainCrudRsocketResourceTest<
         R extends MongoDomainCrudRepository<D, C>,
         S extends DomainCrudService<D, DTO, C, R>,
         DP extends DomainCrudDataProvider<D, DTO, C, R, S>>
-        implements BaseDomainCrudRsocketResourceTest<ObjectId, ProjectUser, D, DTO, C, QueryBuilder, R, S, DP> {
+        implements BaseDomainCrudRsocketResourceTest<String, ProjectUser, D, DTO, C, QueryBuilder, R, S, DP> {
 
     @Autowired
     DP dataProvider;
