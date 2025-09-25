@@ -27,7 +27,6 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers
 @CommonsLog
 public class TestDomainRestResourceIT extends DomainCrudRestResourceTest<TestDomain, TestDto, TestCriteria, TestRepository, TestServiceDomain, TestDataProvider> {
-
     @Autowired
     JimaProperties jimaProperties;
 
