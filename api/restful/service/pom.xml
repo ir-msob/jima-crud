@@ -45,12 +45,6 @@
         </dependency>
         <dependency>
             <groupId>ir.msob.jima.security</groupId>
-            <artifactId>security-api-restful</artifactId>
-            <version>${jima-security.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>ir.msob.jima.security</groupId>
             <artifactId>security-api-restful-test</artifactId>
             <version>${jima-security.version}</version>
             <scope>test</scope>
