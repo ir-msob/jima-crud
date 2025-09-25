@@ -1,7 +1,9 @@
 package ir.msob.jima.crud.api.graphql.restful.service.domain;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import ir.msob.jima.core.beans.properties.JimaProperties;
 import ir.msob.jima.core.commons.resource.BaseResource;
+import ir.msob.jima.core.commons.shared.PageResponse;
 import ir.msob.jima.core.ral.mongo.it.security.ProjectUser;
 import ir.msob.jima.core.ral.mongo.it.test.TestCriteria;
 import ir.msob.jima.core.ral.mongo.it.test.TestDomain;
@@ -21,6 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.testcontainers.junit.jupiter.Testcontainers;
+
+import java.lang.reflect.Type;
 
 @AutoConfigureWebTestClient
 @SpringBootTest(classes = {TestApplication.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -54,5 +58,15 @@ public class TestDomainGraphqlRestResourceIT extends DomainCrudGraphqlRestResour
     @Override
     public JimaProperties getJimaProperties() {
         return jimaProperties;
+    }
+
+    @Override
+    public TypeReference<PageResponse<TestDto>> getPageResponseReferenceType() {
+        return new TypeReference<PageResponse<TestDto>>() {
+            @Override
+            public Type getType() {
+                return super.getType();
+            }
+        };
     }
 }

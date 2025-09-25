@@ -1,5 +1,6 @@
 package ir.msob.jima.crud.api.graphql.restful.service.domain.base;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.msob.jima.core.commons.id.BaseIdService;
 import ir.msob.jima.core.ral.mongo.commons.query.QueryBuilder;
@@ -13,6 +14,9 @@ import ir.msob.jima.crud.ral.mongo.it.base.DomainCrudService;
 import ir.msob.jima.crud.ral.mongo.it.base.MongoDomainCrudRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.test.tester.GraphQlTester;
+
+import java.lang.reflect.Type;
+import java.util.Collection;
 
 
 public abstract class DomainCrudGraphqlRestResourceTest<
@@ -58,4 +62,13 @@ public abstract class DomainCrudGraphqlRestResourceTest<
         return graphQlTester;
     }
 
+    @Override
+    public TypeReference<Collection<String>> getIdCollectionReferenceType() {
+        return new TypeReference<Collection<String>>() {
+            @Override
+            public Type getType() {
+                return super.getType();
+            }
+        };
+    }
 }

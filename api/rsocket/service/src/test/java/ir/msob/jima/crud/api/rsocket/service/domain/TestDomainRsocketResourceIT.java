@@ -1,10 +1,12 @@
 package ir.msob.jima.crud.api.rsocket.service.domain;
 
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import io.rsocket.transport.netty.client.TcpClientTransport;
 import ir.msob.jima.core.api.rsocket.commons.BaseRSocketRequesterBuilder;
 import ir.msob.jima.core.beans.properties.JimaProperties;
 import ir.msob.jima.core.commons.resource.BaseResource;
+import ir.msob.jima.core.commons.shared.PageResponse;
 import ir.msob.jima.core.ral.mongo.it.security.ProjectUser;
 import ir.msob.jima.core.ral.mongo.it.test.TestCriteria;
 import ir.msob.jima.core.ral.mongo.it.test.TestDomain;
@@ -28,6 +30,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.messaging.rsocket.RSocketRequester;
 import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.junit.jupiter.Testcontainers;
+
+import java.lang.reflect.Type;
 
 
 @SpringBootTest(classes = {TestApplication.class, MongoContainerConfiguration.class, KeycloakContainerConfiguration.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -84,5 +88,15 @@ public class TestDomainRsocketResourceIT extends DomainCrudRsocketResourceTest<T
     @Override
     public JimaProperties getJimaProperties() {
         return jimaProperties;
+    }
+
+    @Override
+    public TypeReference<PageResponse<TestDto>> getPageResponseReferenceType() {
+        return new TypeReference<PageResponse<TestDto>>() {
+            @Override
+            public Type getType() {
+                return super.getType();
+            }
+        };
     }
 }

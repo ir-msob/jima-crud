@@ -21,8 +21,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 
+import java.lang.reflect.Type;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
+import java.util.Collection;
 import java.util.UUID;
 
 
@@ -126,6 +128,16 @@ public abstract class DomainCrudKafkaResourceTest<
     @Override
     public TypeReference<ChannelMessage<ProjectUser, LongMessage>> getLongReferenceType() {
         return new TypeReference<>() {
+        };
+    }
+
+    @Override
+    public TypeReference<Collection<String>> getIdCollectionReferenceType() {
+        return new TypeReference<Collection<String>>() {
+            @Override
+            public Type getType() {
+                return super.getType();
+            }
         };
     }
 

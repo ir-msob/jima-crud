@@ -1,6 +1,7 @@
 package ir.msob.jima.crud.api.grpc.service.domain.base;
 
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.msob.jima.core.ral.mongo.commons.query.QueryBuilder;
 import ir.msob.jima.core.ral.mongo.it.criteria.ProjectCriteria;
@@ -12,6 +13,9 @@ import ir.msob.jima.crud.ral.mongo.it.base.DomainCrudDataProvider;
 import ir.msob.jima.crud.ral.mongo.it.base.DomainCrudService;
 import ir.msob.jima.crud.ral.mongo.it.base.MongoDomainCrudRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.lang.reflect.Type;
+import java.util.Collection;
 
 
 public abstract class DomainCrudGrpcResourceTest<
@@ -45,5 +49,13 @@ public abstract class DomainCrudGrpcResourceTest<
         return objectMapper;
     }
 
-
+    @Override
+    public TypeReference<Collection<String>> getIdCollectionReferenceType() {
+        return new TypeReference<Collection<String>>() {
+            @Override
+            public Type getType() {
+                return super.getType();
+            }
+        };
+    }
 }

@@ -1,9 +1,11 @@
 package ir.msob.jima.crud.api.grpc.service.domain;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import io.grpc.inprocess.InProcessChannelBuilder;
 import io.grpc.inprocess.InProcessServerBuilder;
 import io.grpc.testing.GrpcCleanupRule;
 import ir.msob.jima.core.beans.properties.JimaProperties;
+import ir.msob.jima.core.commons.shared.PageResponse;
 import ir.msob.jima.core.ral.mongo.it.test.TestCriteria;
 import ir.msob.jima.core.ral.mongo.it.test.TestDomain;
 import ir.msob.jima.core.ral.mongo.it.test.TestDto;
@@ -30,6 +32,8 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.Collection;
 
 @SpringJUnitConfig(classes = {TestApplication.class, MongoContainerConfiguration.class, KeycloakContainerConfiguration.class})
 @Testcontainers
@@ -90,4 +94,16 @@ public class TestDomainGrpcResourceIT extends DomainCrudGrpcResourceTest<TestDom
     public JimaProperties getJimaProperties() {
         return jimaProperties;
     }
+
+    @Override
+    public TypeReference<PageResponse<TestDto>> getPageResponseReferenceType() {
+        return new TypeReference<PageResponse<TestDto>>() {
+            @Override
+            public Type getType() {
+                return super.getType();
+            }
+        };
+    }
+
+
 }
