@@ -14,9 +14,7 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
 import ir.msob.jima.crud.test.domain.read.BaseGetPageDomainCrudResourceTest;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 
 import java.io.Serializable;
@@ -73,8 +71,7 @@ public interface BaseGetPageDomainCrudRestResourceTest<
                 .exchange()
                 .expectStatus().isEqualTo(OperationsStatus.GET_PAGE)
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
-                .expectBody(new ParameterizedTypeReference<PageImpl<DTO>>() {})
+                .expectBody(toParamTypeRef(getPageResponseReferenceType()))
                 .value(assertable::assertThan);
-
     }
 }

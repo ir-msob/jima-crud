@@ -1,5 +1,6 @@
 package ir.msob.jima.crud.api.restful.service.domain.base;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.msob.jima.core.commons.security.BaseTokenService;
 import ir.msob.jima.core.ral.mongo.commons.query.QueryBuilder;
@@ -66,8 +67,8 @@ public abstract class DomainCrudRestResourceTest<
     }
 
     @Override
-    public ParameterizedTypeReference<Collection<String>> getIdsReferenceType() {
-        return new ParameterizedTypeReference<Collection<String>>() {
+    public TypeReference<Collection<String>> getIdsReferenceType() {
+        return new TypeReference<Collection<String>>() {
             @Override
             public Type getType() {
                 return super.getType();

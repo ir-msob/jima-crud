@@ -1,5 +1,6 @@
 package ir.msob.jima.crud.api.restful.test.domain.write;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
@@ -15,10 +16,11 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
 import ir.msob.jima.crud.test.domain.write.BaseDeleteManyDomainCrudResourceTest;
+import org.springframework.core.ParameterizedTypeReference;
 
 import java.io.Serializable;
-import java.util.Set;
-import java.util.TreeSet;
+import java.lang.reflect.Type;
+import java.util.*;
 
 /**
  * The {@code BaseDeleteManyDomainCrudRestResourceTest} interface represents a set of RESTful-specific test methods for deleting multiple entities.
@@ -71,8 +73,10 @@ public interface BaseDeleteManyDomainCrudRestResourceTest<
                 .exchange()
                 .expectStatus()
                 .isEqualTo(OperationsStatus.DELETE_MANY)
-                .expectBodyList(getIdClass())
-                .value(list -> assertable.assertThan(new TreeSet<>(list)));
+                .expectBody(toParamTypeRef(getIdsReferenceType()))
+                .value(list -> assertable.assertThan(Set.copyOf(list)));
 
     }
+
+
 }
