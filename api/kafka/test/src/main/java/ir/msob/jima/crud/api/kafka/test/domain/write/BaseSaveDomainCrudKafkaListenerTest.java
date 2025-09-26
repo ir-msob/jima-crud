@@ -80,6 +80,6 @@ public interface BaseSaveDomainCrudKafkaListenerTest<
         String message = getObjectMapper().writeValueAsString(channelMessage);
         getKafkaTemplate().send(topic, message);
 
-        startListener(channelMessage.getCallbacks().getFirst().getChannel(), s -> assertable.assertThan(cast(s, getDtoReferenceType()).getData().getDto()));
+        startListener(channelMessage.getCallbacks().getFirst().getChannel(), s -> assertable.assertThan(cast(s, getChannelMessageDtoReferenceType()).getData().getDto()));
     }
 }

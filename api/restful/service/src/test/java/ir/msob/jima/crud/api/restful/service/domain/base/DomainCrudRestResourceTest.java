@@ -67,7 +67,7 @@ public abstract class DomainCrudRestResourceTest<
     }
 
     @Override
-    public TypeReference<Collection<String>> getIdCollectionReferenceType() {
+    public TypeReference<Collection<String>> getIdsReferenceType() {
         return new TypeReference<Collection<String>>() {
             @Override
             public Type getType() {
@@ -75,4 +75,5 @@ public abstract class DomainCrudRestResourceTest<
             }
         };
     }
+
 }

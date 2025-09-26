@@ -73,7 +73,7 @@ public interface BaseSaveManyDomainCrudKafkaListener<
     @Scope(operation = Operations.SAVE_MANY)
     private void serviceSaveMany(String dto) {
         log.debug("Received message for save many: dto {}", dto);
-        ChannelMessage<USER, DtosMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getDtosReferenceType());
+        ChannelMessage<USER, DtosMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getChannelMessageDtosReferenceType());
         getService().saveMany(message.getData().getDtos(), message.getUser())
                 .subscribe(savedDtos -> sendCallbackDtos(message, savedDtos, OperationsStatus.SAVE_MANY, message.getUser()));
     }

@@ -69,4 +69,24 @@ public class TestDomainGraphqlRestResourceIT extends DomainCrudGraphqlRestResour
             }
         };
     }
+
+    @Override
+    public TypeReference<TestCriteria> getCriteriaReferenceType() {
+        return new TypeReference<TestCriteria>() {
+            @Override
+            public Type getType() {
+                return super.getType();
+            }
+        };
+    }
+
+    @Override
+    public TypeReference<TestDto> getDtoReferenceType() {
+        return new TypeReference<TestDto>() {
+            @Override
+            public Type getType() {
+                return super.getType();
+            }
+        };
+    }
 }

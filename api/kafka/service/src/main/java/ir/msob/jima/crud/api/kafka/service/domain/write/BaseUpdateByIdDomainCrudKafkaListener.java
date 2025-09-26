@@ -73,7 +73,7 @@ public interface BaseUpdateByIdDomainCrudKafkaListener<
     @Scope(operation = Operations.UPDATE_BY_ID)
     private void serviceUpdateById(String dto) {
         log.debug("Received message for update by id: dto {}", dto);
-        ChannelMessage<USER, DtoMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getDtoReferenceType());
+        ChannelMessage<USER, DtoMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getChannelMessageDtoReferenceType());
         getService().update(message.getData().getId(), message.getData().getDto(), message.getUser())
                 .subscribe(updatedDto -> sendCallbackDto(message, updatedDto, OperationsStatus.UPDATE, message.getUser()));
     }

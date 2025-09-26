@@ -73,7 +73,7 @@ public interface BaseGetManyDomainCrudKafkaListener<
     @Scope(operation = Operations.GET_MANY)
     private void serviceGetMany(String dto) {
         log.debug("Received message for get many: dto {}", dto);
-        ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());
+        ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getChannelMessageCriteriaReferenceType());
         getService().getMany(message.getData().getCriteria(), message.getUser())
                 .subscribe(getListDto -> sendCallbackDtos(message, getListDto, OperationsStatus.GET_MANY, message.getUser()));
     }

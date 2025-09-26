@@ -73,7 +73,7 @@ public interface BaseGetByIdDomainCrudKafkaListener<
     @Scope(operation = Operations.GET_BY_ID)
     private void serviceGetById(String dto) {
         log.debug("Received message for get by id: dto {}", dto);
-        ChannelMessage<USER, IdMessage<ID>> message = getObjectMapper().readValue(dto, getIdReferenceType());
+        ChannelMessage<USER, IdMessage<ID>> message = getObjectMapper().readValue(dto, getChannelMessageIdReferenceType());
         getService().getOne(message.getData().getId(), message.getUser())
                 .subscribe(getOneDto -> sendCallbackDto(message, getOneDto, OperationsStatus.GET_BY_ID, message.getUser()));
     }

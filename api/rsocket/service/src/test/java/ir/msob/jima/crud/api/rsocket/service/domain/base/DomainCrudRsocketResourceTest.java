@@ -58,7 +58,7 @@ public abstract class DomainCrudRsocketResourceTest<
     }
 
     @Override
-    public TypeReference<Collection<String>> getIdCollectionReferenceType() {
+    public TypeReference<Collection<String>> getIdsReferenceType() {
         return new TypeReference<Collection<String>>() {
             @Override
             public Type getType() {

@@ -73,7 +73,7 @@ public interface BaseGetOneDomainCrudKafkaListener<
     @Scope(operation = Operations.GET_ONE)
     private void serviceGetOne(String dto) {
         log.debug("Received message for get one: dto {}", dto);
-        ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());
+        ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getChannelMessageCriteriaReferenceType());
         getService().getOne(message.getData().getCriteria(), message.getUser())
                 .subscribe(getOneDto -> sendCallbackDto(message, getOneDto, OperationsStatus.GET_ONE, message.getUser()));
     }

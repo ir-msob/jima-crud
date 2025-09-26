@@ -33,7 +33,6 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.Collection;
 
 @SpringJUnitConfig(classes = {TestApplication.class, MongoContainerConfiguration.class, KeycloakContainerConfiguration.class})
 @Testcontainers
@@ -96,6 +95,26 @@ public class TestDomainGrpcResourceIT extends DomainCrudGrpcResourceTest<TestDom
     }
 
     @Override
+    public TypeReference<TestDto> getDtoReferenceType() {
+        return new TypeReference<TestDto>() {
+            @Override
+            public Type getType() {
+                return super.getType();
+            }
+        };
+    }
+
+    @Override
+    public TypeReference<TestCriteria> getCriteriaReferenceType() {
+        return new TypeReference<TestCriteria>() {
+            @Override
+            public Type getType() {
+                return super.getType();
+            }
+        };
+    }
+
+    @Override
     public TypeReference<PageResponse<TestDto>> getPageResponseReferenceType() {
         return new TypeReference<PageResponse<TestDto>>() {
             @Override
@@ -104,6 +123,4 @@ public class TestDomainGrpcResourceIT extends DomainCrudGrpcResourceTest<TestDom
             }
         };
     }
-
-
 }

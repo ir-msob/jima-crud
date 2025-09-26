@@ -71,7 +71,7 @@ public interface BaseGetPageDomainCrudRestResourceTest<
                 .exchange()
                 .expectStatus().isEqualTo(OperationsStatus.GET_PAGE)
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
-                .expectBody(toParamTypeRef(getPageResponseReferenceType()))
+                .expectBody(cast(getPageResponseReferenceType()))
                 .value(assertable::assertThan);
     }
 }

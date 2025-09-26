@@ -68,7 +68,7 @@ public interface BaseDeleteDomainCrudRsocketResource<
     @Scope(operation = Operations.DELETE)
     default Mono<ID> delete(@Payload String dto, @AuthenticationPrincipal Jwt principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("RSocket request to delete domain, dto {}", dto);
-        ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());
+        ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getChannelMessageCriteriaReferenceType());
 
         USER user = getUser(message.getUser(), principal);
         return this.getService().delete(message.getData().getCriteria(), user);

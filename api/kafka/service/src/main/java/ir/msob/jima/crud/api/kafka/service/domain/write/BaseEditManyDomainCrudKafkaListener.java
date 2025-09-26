@@ -73,7 +73,7 @@ public interface BaseEditManyDomainCrudKafkaListener<
     @Scope(operation = Operations.EDIT_MANY)
     private void serviceEditMany(String dto) {
         log.debug("Received message for edit many: dto {}", dto);
-        ChannelMessage<USER, JsonPatchMessage<ID, C>> message = getObjectMapper().readValue(dto, getEditReferenceType());
+        ChannelMessage<USER, JsonPatchMessage<ID, C>> message = getObjectMapper().readValue(dto, getChannelMessageJsonPatchReferenceType());
         getService().editMany(message.getData().getCriteria(), message.getData().getJsonPatch(), message.getUser())
                 .subscribe(editedDtos -> sendCallbackDtos(message, editedDtos, OperationsStatus.EDIT_MANY, message.getUser()));
     }

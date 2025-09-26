@@ -82,6 +82,6 @@ public interface BaseDeleteByIdDomainCrudKafkaListenerTest<
         String message = getObjectMapper().writeValueAsString(channelMessage);
         getKafkaTemplate().send(topic, message);
 
-        startListener(channelMessage.getCallbacks().getFirst().getChannel(), s -> assertable.assertThan(cast(s, getIdReferenceType()).getData().getId()));
+        startListener(channelMessage.getCallbacks().getFirst().getChannel(), s -> assertable.assertThan(cast(s, getChannelMessageIdReferenceType()).getData().getId()));
     }
 }

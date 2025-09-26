@@ -3,6 +3,7 @@ package ir.msob.jima.crud.api.grpc.service.domain.base;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ir.msob.jima.core.commons.shared.PageResponse;
 import ir.msob.jima.core.ral.mongo.commons.query.QueryBuilder;
 import ir.msob.jima.core.ral.mongo.it.criteria.ProjectCriteria;
 import ir.msob.jima.core.ral.mongo.it.domain.ProjectDomain;
@@ -50,7 +51,7 @@ public abstract class DomainCrudGrpcResourceTest<
     }
 
     @Override
-    public TypeReference<Collection<String>> getIdCollectionReferenceType() {
+    public TypeReference<Collection<String>> getIdsReferenceType() {
         return new TypeReference<Collection<String>>() {
             @Override
             public Type getType() {
@@ -58,4 +59,5 @@ public abstract class DomainCrudGrpcResourceTest<
             }
         };
     }
+
 }

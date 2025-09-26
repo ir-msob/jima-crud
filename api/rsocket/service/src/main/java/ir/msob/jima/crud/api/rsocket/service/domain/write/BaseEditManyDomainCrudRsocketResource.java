@@ -70,7 +70,7 @@ public interface BaseEditManyDomainCrudRsocketResource<
     default Mono<Collection<DTO>> editMany(@Payload String dto, @AuthenticationPrincipal Jwt principal)
             throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("RSocket request to edit many, dto : {}", dto);
-        ChannelMessage<USER, JsonPatchMessage<ID, C>> message = getObjectMapper().readValue(dto, getEditReferenceType());
+        ChannelMessage<USER, JsonPatchMessage<ID, C>> message = getObjectMapper().readValue(dto, getChannelMessageJsonPatchReferenceType());
 
         USER user = getUser(message.getUser(), principal);
         return this.getService().editMany(message.getData().getCriteria(), message.getData().getJsonPatch(), user);

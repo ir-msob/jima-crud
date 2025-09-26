@@ -68,7 +68,7 @@ public interface BaseGetStreamDomainCrudRsocketResource<
     @Scope(operation = Operations.GET_STREAM)
     default Flux<DTO> getStream(@Payload String dto, @AuthenticationPrincipal Jwt principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("RSocket request to get stream domain, dto {} : ", dto);
-        ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());
+        ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getChannelMessageCriteriaReferenceType());
 
         USER user = getUser(message.getUser(), principal);
         return this.getService().getStream(message.getData().getCriteria(), user);

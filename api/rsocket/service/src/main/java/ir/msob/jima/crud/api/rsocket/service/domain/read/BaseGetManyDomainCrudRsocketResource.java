@@ -70,7 +70,7 @@ public interface BaseGetManyDomainCrudRsocketResource<
     @Scope(operation = Operations.GET_MANY)
     default Mono<Collection<DTO>> getMany(@Payload String dto, @AuthenticationPrincipal Jwt principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("RSocket request to get many domain, dto {}", dto);
-        ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());
+        ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getChannelMessageCriteriaReferenceType());
 
         USER user = getUser(message.getUser(), principal);
         return this.getService().getMany(message.getData().getCriteria(), user);

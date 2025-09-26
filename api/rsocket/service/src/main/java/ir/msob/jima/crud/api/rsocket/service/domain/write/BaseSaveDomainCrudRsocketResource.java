@@ -69,7 +69,7 @@ public interface BaseSaveDomainCrudRsocketResource<
     default Mono<DTO> save(@Payload String dto, @AuthenticationPrincipal Jwt principal)
             throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("RSocket request to create new domain, dto : {}", dto);
-        ChannelMessage<USER, DtoMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getDtoReferenceType());
+        ChannelMessage<USER, DtoMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getChannelMessageDtoReferenceType());
 
         USER user = getUser(message.getUser(), principal);
         return this.getService().save(message.getData().getDto(), user);

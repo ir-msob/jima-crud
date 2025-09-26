@@ -70,7 +70,7 @@ public interface BaseGetByIdDomainCrudRsocketResource<
     @Scope(operation = Operations.GET_BY_ID)
     default Mono<DTO> getById(@Payload String dto, @AuthenticationPrincipal Jwt principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("RSocket request to get by id domain, dto {}", dto);
-        ChannelMessage<USER, IdMessage<ID>> message = getObjectMapper().readValue(dto, getIdReferenceType());
+        ChannelMessage<USER, IdMessage<ID>> message = getObjectMapper().readValue(dto, getChannelMessageIdReferenceType());
 
         USER user = getUser(message.getUser(), principal);
         return this.getService().getOne(message.getData().getId(), user);

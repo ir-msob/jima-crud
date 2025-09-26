@@ -69,7 +69,7 @@ public interface BaseUpdateDomainCrudRsocketResource<
     default Mono<DTO> update(@Payload String dto, @AuthenticationPrincipal Jwt principal)
             throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("RSocket request to update new domain, dto : {}", dto);
-        ChannelMessage<USER, DtoMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getDtoReferenceType());
+        ChannelMessage<USER, DtoMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getChannelMessageDtoReferenceType());
 
         USER user = getUser(message.getUser(), principal);
         return this.getService().update(message.getData().getDto(), user);

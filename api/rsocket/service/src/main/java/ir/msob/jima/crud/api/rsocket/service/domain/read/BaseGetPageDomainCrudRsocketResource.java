@@ -69,7 +69,7 @@ public interface BaseGetPageDomainCrudRsocketResource<
     @Scope(operation = Operations.GET_PAGE)
     default Mono<Page<DTO>> getPage(@Payload String dto, @AuthenticationPrincipal Jwt principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("RSocket request to get page domain, dto {}", dto);
-        ChannelMessage<USER, PageableMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaPageReferenceType());
+        ChannelMessage<USER, PageableMessage<ID, C>> message = getObjectMapper().readValue(dto, getChannelMessagePageableReferenceType());
 
         USER user = getUser(message.getUser(), principal);
         return this.getService().getPage(message.getData().getCriteria(), message.getData().getPageable(), user);

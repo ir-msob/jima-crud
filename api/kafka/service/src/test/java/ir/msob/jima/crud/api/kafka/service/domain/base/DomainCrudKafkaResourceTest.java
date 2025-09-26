@@ -21,10 +21,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 
-import java.lang.reflect.Type;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
-import java.util.Collection;
 import java.util.UUID;
 
 
@@ -66,78 +64,68 @@ public abstract class DomainCrudKafkaResourceTest<
     }
 
     @Override
-    public TypeReference<ChannelMessage<ProjectUser, ModelType>> getModelTypeReferenceType() {
+    public TypeReference<ChannelMessage<ProjectUser, ModelType>> getChannelMessageModelTypeReferenceType() {
         return new TypeReference<>() {
         };
     }
 
     @Override
-    public TypeReference<ChannelMessage<ProjectUser, CriteriaMessage<String, C>>> getCriteriaReferenceType() {
+    public TypeReference<ChannelMessage<ProjectUser, CriteriaMessage<String, C>>> getChannelMessageCriteriaReferenceType() {
         return new TypeReference<>() {
         };
     }
 
     @Override
-    public TypeReference<ChannelMessage<ProjectUser, PageableMessage<String, C>>> getCriteriaPageReferenceType() {
+    public TypeReference<ChannelMessage<ProjectUser, PageableMessage<String, C>>> getChannelMessagePageableReferenceType() {
         return new TypeReference<>() {
         };
     }
 
     @Override
-    public TypeReference<ChannelMessage<ProjectUser, JsonPatchMessage<String, C>>> getEditReferenceType() {
+    public TypeReference<ChannelMessage<ProjectUser, PageMessage<String, DTO>>> getChannelMessagePageReferenceType() {
         return new TypeReference<>() {
         };
     }
 
     @Override
-    public TypeReference<ChannelMessage<ProjectUser, DtoMessage<String, DTO>>> getDtoReferenceType() {
+    public TypeReference<ChannelMessage<ProjectUser, JsonPatchMessage<String, C>>> getChannelMessageJsonPatchReferenceType() {
         return new TypeReference<>() {
         };
     }
 
     @Override
-    public TypeReference<ChannelMessage<ProjectUser, IdMessage<String>>> getIdReferenceType() {
+    public TypeReference<ChannelMessage<ProjectUser, DtoMessage<String, DTO>>> getChannelMessageDtoReferenceType() {
         return new TypeReference<>() {
         };
     }
 
     @Override
-    public TypeReference<ChannelMessage<ProjectUser, IdJsonPatchMessage<String>>> getIdJsonPatchReferenceType() {
+    public TypeReference<ChannelMessage<ProjectUser, DtosMessage<String, DTO>>> getChannelMessageDtosReferenceType() {
         return new TypeReference<>() {
         };
     }
 
     @Override
-    public TypeReference<ChannelMessage<ProjectUser, PageMessage<String, DTO>>> getPageReferenceType() {
+    public TypeReference<ChannelMessage<ProjectUser, IdMessage<String>>> getChannelMessageIdReferenceType() {
         return new TypeReference<>() {
         };
     }
 
     @Override
-    public TypeReference<ChannelMessage<ProjectUser, DtosMessage<String, DTO>>> getDtosReferenceType() {
+    public TypeReference<ChannelMessage<ProjectUser, IdsMessage<String>>> getChannelMessageIdsReferenceType() {
         return new TypeReference<>() {
         };
     }
 
     @Override
-    public TypeReference<ChannelMessage<ProjectUser, IdsMessage<String>>> getIdsReferenceType() {
+    public TypeReference<ChannelMessage<ProjectUser, IdJsonPatchMessage<String>>> getChannelMessageIdJsonPatchReferenceType() {
         return new TypeReference<>() {
         };
     }
 
     @Override
-    public TypeReference<ChannelMessage<ProjectUser, LongMessage>> getLongReferenceType() {
+    public TypeReference<ChannelMessage<ProjectUser, LongMessage>> getChannelMessageLongReferenceType() {
         return new TypeReference<>() {
-        };
-    }
-
-    @Override
-    public TypeReference<Collection<String>> getIdCollectionReferenceType() {
-        return new TypeReference<Collection<String>>() {
-            @Override
-            public Type getType() {
-                return super.getType();
-            }
         };
     }
 

@@ -73,7 +73,7 @@ public interface BaseDeleteByIdDomainCrudKafkaListener<
     @Scope(operation = Operations.DELETE_BY_ID)
     private void serviceDeleteById(String dto) {
         log.debug("Received message for delete by id: dto {}", dto);
-        ChannelMessage<USER, IdMessage<ID>> message = getObjectMapper().readValue(dto, getIdReferenceType());
+        ChannelMessage<USER, IdMessage<ID>> message = getObjectMapper().readValue(dto, getChannelMessageIdReferenceType());
         getService().delete(message.getData().getId(), message.getUser())
                 .subscribe(deletedId -> sendCallbackId(message, deletedId, OperationsStatus.DELETE_BY_ID, message.getUser()));
     }

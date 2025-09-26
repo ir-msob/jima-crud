@@ -73,7 +73,7 @@ public interface BaseCountDomainCrudKafkaListener<
     @Scope(operation = Operations.COUNT)
     private void serviceCount(String dto) {
         log.debug("Received message for count: dto {}", dto);
-        ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());
+        ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getChannelMessageCriteriaReferenceType());
         getService().count(message.getData().getCriteria(), message.getUser())
                 .subscribe(count -> sendCallbackCount(message, count, OperationsStatus.COUNT, message.getUser()));
     }

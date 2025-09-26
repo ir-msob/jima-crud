@@ -73,7 +73,7 @@ public interface BaseDeleteManyDomainCrudRestResourceTest<
                 .exchange()
                 .expectStatus()
                 .isEqualTo(OperationsStatus.DELETE_MANY)
-                .expectBody(toParamTypeRef(getIdCollectionReferenceType()))
+                .expectBody(cast(getIdsReferenceType()))
                 .value(list -> assertable.assertThan(Set.copyOf(list)));
 
     }

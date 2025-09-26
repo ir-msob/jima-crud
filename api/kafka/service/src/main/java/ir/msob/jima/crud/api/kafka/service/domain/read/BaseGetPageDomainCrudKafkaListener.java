@@ -74,7 +74,7 @@ public interface BaseGetPageDomainCrudKafkaListener<
     private void serviceGetPage(String dto) {
         log.debug("Received message for get page: dto {}", dto);
         ChannelMessage<USER, PageableMessage<ID, C>> message;
-        message = getObjectMapper().readValue(dto, getCriteriaPageReferenceType());
+        message = getObjectMapper().readValue(dto, getChannelMessagePageableReferenceType());
         getService().getPage(message.getData().getCriteria(), message.getData().getPageable(), message.getUser())
                 .subscribe(page -> sendCallbackPage(message, page, OperationsStatus.GET_PAGE, message.getUser()));
     }

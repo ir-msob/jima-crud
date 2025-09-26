@@ -86,7 +86,7 @@ public interface BaseDeleteManyDomainCrudKafkaListenerTest<
         String message = getObjectMapper().writeValueAsString(channelMessage);
         getKafkaTemplate().send(topic, message);
 
-        startListener(channelMessage.getCallbacks().getFirst().getChannel(), s -> assertable.assertThan(new HashSet<>(cast(s, getIdsReferenceType()).getData().getIds())));
+        startListener(channelMessage.getCallbacks().getFirst().getChannel(), s -> assertable.assertThan(new HashSet<>(cast(s, getChannelMessageIdsReferenceType()).getData().getIds())));
 
     }
 }

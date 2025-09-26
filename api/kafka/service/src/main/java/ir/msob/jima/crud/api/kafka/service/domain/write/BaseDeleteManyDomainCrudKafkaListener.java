@@ -73,7 +73,7 @@ public interface BaseDeleteManyDomainCrudKafkaListener<
     @Scope(operation = Operations.DELETE_MANY)
     private void serviceDeleteMany(String dto) {
         log.debug("Received message for delete many: dto {}", dto);
-        ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getCriteriaReferenceType());
+        ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getChannelMessageCriteriaReferenceType());
         getService().deleteMany(message.getData().getCriteria(), message.getUser())
                 .subscribe(deletedIds -> sendCallbackIds(message, deletedIds, OperationsStatus.DELETE_MANY, message.getUser()));
     }
