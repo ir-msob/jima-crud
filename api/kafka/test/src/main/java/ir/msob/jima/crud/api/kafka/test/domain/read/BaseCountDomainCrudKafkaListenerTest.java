@@ -79,6 +79,6 @@ public interface BaseCountDomainCrudKafkaListenerTest<
         String message = getObjectMapper().writeValueAsString(channelMessage);
         getKafkaTemplate().send(topic, message);
 
-        startListener(channelMessage.getCallbacks().getFirst().getChannel(), s -> assertable.assertThan(cast(s, getLongReferenceType()).getData().getResult()));
+        startListener(channelMessage.getCallbacks().getFirst().getChannel(), s -> assertable.assertThan(cast(s, getChannelMessageLongReferenceType()).getData().getResult()));
     }
 }
