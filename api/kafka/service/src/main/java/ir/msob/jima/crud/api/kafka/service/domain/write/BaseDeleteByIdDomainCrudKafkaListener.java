@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.listener.MessageListener;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 
@@ -71,7 +72,8 @@ public interface BaseDeleteByIdDomainCrudKafkaListener<
     @SneakyThrows
     @CallbackError("dto")
     @Scope(operation = Operations.DELETE_BY_ID)
-    private void serviceDeleteById(String dto) {
+    @Transactional
+    default void serviceDeleteById(String dto) {
         log.debug("Received message for delete by id: dto {}", dto);
         ChannelMessage<USER, IdMessage<ID>> message = getObjectMapper().readValue(dto, getChannelMessageIdReferenceType());
         getService().delete(message.getData().getId(), message.getUser())

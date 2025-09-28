@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.listener.MessageListener;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 
@@ -71,7 +72,8 @@ public interface BaseSaveDomainCrudKafkaListener<
     @SneakyThrows
     @CallbackError("dto")
     @Scope(operation = Operations.SAVE)
-    private void serviceSave(String dto) {
+    @Transactional
+    default void serviceSave(String dto) {
         log.debug("Received message for save: dto {}", dto);
         ChannelMessage<USER, DtoMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getChannelMessageDtoReferenceType());
         getService().save(message.getData().getDto(), message.getUser())

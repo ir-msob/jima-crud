@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.listener.MessageListener;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 
@@ -71,7 +72,8 @@ public interface BaseGetByIdDomainCrudKafkaListener<
     @SneakyThrows
     @CallbackError("dto")
     @Scope(operation = Operations.GET_BY_ID)
-    private void serviceGetById(String dto) {
+    @Transactional
+    default void serviceGetById(String dto) {
         log.debug("Received message for get by id: dto {}", dto);
         ChannelMessage<USER, IdMessage<ID>> message = getObjectMapper().readValue(dto, getChannelMessageIdReferenceType());
         getService().getOne(message.getData().getId(), message.getUser())

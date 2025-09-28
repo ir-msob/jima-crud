@@ -2,6 +2,7 @@ package ir.msob.jima.crud.api.kafka.test.domain.read;
 
 import ir.msob.jima.core.commons.channel.ChannelMessage;
 import ir.msob.jima.core.commons.channel.message.CriteriaMessage;
+import ir.msob.jima.core.commons.channel.message.PageableMessage;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
@@ -20,6 +21,7 @@ import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
 import ir.msob.jima.crud.test.domain.read.BaseGetPageDomainCrudResourceTest;
 import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.io.Serializable;
 
@@ -71,10 +73,11 @@ public interface BaseGetPageDomainCrudKafkaListenerTest<
         // Expect the body to be of type Page
         // Return the response body
         String topic = prepareTopic(Operations.GET_PAGE);
-        CriteriaMessage<ID, C> data = new CriteriaMessage<>();
+        PageableMessage<ID, C> data = new PageableMessage<>();
         data.setCriteria(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getId()));
+        data.setPageable(PageRequest.of(0,Integer.MAX_VALUE));
 
-        ChannelMessage<USER, CriteriaMessage<ID, C>> channelMessage = ChannelMessage.<USER, CriteriaMessage<ID, C>>builder()
+        ChannelMessage<USER, PageableMessage<ID, C>> channelMessage = ChannelMessage.<USER, PageableMessage<ID, C>>builder()
                 .user(getSampleUser())
                 .data(data)
                 .callback(ChannelMessage.<USER, ModelType>builder()

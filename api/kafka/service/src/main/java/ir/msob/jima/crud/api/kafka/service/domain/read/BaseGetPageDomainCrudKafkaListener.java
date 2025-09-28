@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.listener.MessageListener;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 
@@ -71,7 +72,8 @@ public interface BaseGetPageDomainCrudKafkaListener<
     @SneakyThrows
     @CallbackError("dto")
     @Scope(operation = Operations.GET_PAGE)
-    private void serviceGetPage(String dto) {
+    @Transactional
+    default void serviceGetPage(String dto) {
         log.debug("Received message for get page: dto {}", dto);
         ChannelMessage<USER, PageableMessage<ID, C>> message;
         message = getObjectMapper().readValue(dto, getChannelMessagePageableReferenceType());

@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.listener.MessageListener;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 
@@ -71,7 +72,8 @@ public interface BaseEditDomainCrudKafkaListener<
     @SneakyThrows
     @CallbackError("dto")
     @Scope(operation = Operations.EDIT)
-    private void serviceEdit(String dto) {
+    @Transactional
+    default void serviceEdit(String dto) {
         log.debug("Received message for edit: dto {}", dto);
         ChannelMessage<USER, JsonPatchMessage<ID, C>> message = getObjectMapper().readValue(dto, getChannelMessageJsonPatchReferenceType());
         getService().edit(message.getData().getCriteria(), message.getData().getJsonPatch(), message.getUser())

@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.listener.MessageListener;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 
@@ -71,7 +72,8 @@ public interface BaseCountAllDomainCrudKafkaListener<
     @SneakyThrows
     @CallbackError("dto")
     @Scope(operation = Operations.COUNT_ALL)
-    private void serviceCountAll(String dto) {
+    @Transactional
+    default void serviceCountAll(String dto) {
         log.debug("Received message for count all: dto {}", dto);
         ChannelMessage<USER, ModelType> message = getObjectMapper().readValue(dto, getChannelMessageModelTypeReferenceType());
         getService().countAll(message.getUser())

@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.listener.MessageListener;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 
@@ -74,7 +75,8 @@ public interface BaseUpdateManyDomainCrudKafkaListener<
     @SneakyThrows
     @CallbackError("dto")
     @Scope(operation = Operations.UPDATE_MANY)
-    private void serviceUpdateMany(String dto) {
+    @Transactional
+    default void serviceUpdateMany(String dto) {
         log.debug("Received message for update many: dto {}", dto);
         // Parse the message from the JSON string
         ChannelMessage<USER, DtosMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getChannelMessageDtosReferenceType());
