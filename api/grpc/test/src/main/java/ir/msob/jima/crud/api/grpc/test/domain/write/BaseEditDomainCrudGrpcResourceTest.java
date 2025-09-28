@@ -16,7 +16,6 @@ import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
 import ir.msob.jima.crud.test.domain.write.BaseEditDomainCrudResourceTest;
 import lombok.SneakyThrows;
-import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 
@@ -66,9 +65,7 @@ public interface BaseEditDomainCrudGrpcResourceTest<
                 .setJsonPatch(convertToString(jsonPatch))
                 .build();
         // Execute the gRPC request with the created CriteriaJsonPatchMsg and extract the result from the response
-        DtoMsg res = getReactorCrudServiceStub().edit(Mono.just(msg))
-                .toFuture()
-                .get();
+        DtoMsg res = getCrudServiceBlockingStub().edit(msg);
         // Convert the result to the DTO type
         assertable.assertThan(convertToDto(res.getDto()));
     }

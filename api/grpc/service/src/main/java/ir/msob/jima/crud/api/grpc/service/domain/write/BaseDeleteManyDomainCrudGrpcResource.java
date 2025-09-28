@@ -1,5 +1,6 @@
 package ir.msob.jima.crud.api.grpc.service.domain.write;
 
+import io.grpc.stub.StreamObserver;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
@@ -15,7 +16,6 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 
@@ -44,34 +44,20 @@ public interface BaseDeleteManyDomainCrudGrpcResource<
 
     Logger log = LoggerFactory.getLogger(BaseDeleteManyDomainCrudGrpcResource.class);
 
-    /**
-     * Handles a request to delete multiple entities based on a given criteria.
-     *
-     * @param request The request, which contains the criteria.
-     * @return A Mono that emits the IDs of the deleted entities.
-     */
-    @Override
-    @MethodStats
-    @Scope(operation = Operations.DELETE_MANY)
-    default Mono<IdsMsg> deleteMany(Mono<CriteriaMsg> request) {
-        return request.flatMap(this::deleteMany);
-    }
 
-    /**
-     * Handles a request to delete multiple entities based on a given criteria.
-     *
-     * @param request The request, which contains the criteria.
-     * @return A Mono that emits the IDs of the deleted entities.
-     */
-    @Override
     @MethodStats
     @Scope(operation = Operations.DELETE_MANY)
-    default Mono<IdsMsg> deleteMany(CriteriaMsg request) {
+    @Override
+    default void deleteMany(CriteriaMsg request, StreamObserver<IdsMsg> responseObserver) {
         log.debug("Request to delete many: dto {}", request);
-        return getService().deleteMany(convertToCriteria(request.getCriteria()), getUser())
+        getService().deleteMany(convertToCriteria(request.getCriteria()), getUser())
                 .map(result -> IdsMsg.newBuilder()
                         .addAllIds(convertToStrings(result))
-                        .build());
+                        .build())
+                .subscribe(
+                        responseObserver::onNext,
+                        responseObserver::onError,
+                        responseObserver::onCompleted
+                );
     }
-
 }

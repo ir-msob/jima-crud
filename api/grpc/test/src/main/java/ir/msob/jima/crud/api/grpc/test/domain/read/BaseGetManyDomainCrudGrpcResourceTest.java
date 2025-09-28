@@ -14,7 +14,6 @@ import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
 import ir.msob.jima.crud.test.domain.read.BaseGetManyDomainCrudResourceTest;
 import lombok.SneakyThrows;
-import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -64,9 +63,7 @@ public interface BaseGetManyDomainCrudGrpcResourceTest<
                 .setCriteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getId())))
                 .build();
         // Execute the gRPC request with the created CriteriaMsg and extract the result from the response
-        Collection<DTO> dtos = getReactorCrudServiceStub().getMany(Mono.just(msg))
-                .toFuture()
-                .get()
+        Collection<DTO> dtos = getCrudServiceBlockingStub().getMany(msg)
                 .getDtosList()
                 .stream()
                 .map(this::convertToDto)

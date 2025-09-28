@@ -14,7 +14,6 @@ import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
 import ir.msob.jima.crud.test.domain.read.BaseCountAllDomainCrudResourceTest;
 import lombok.SneakyThrows;
-import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 
@@ -57,10 +56,7 @@ public interface BaseCountAllDomainCrudGrpcResourceTest<
     @Override
     default void countAllRequest(Assertable<Long> assertable) {
         // Execute the gRPC request to count all entities and extract the result from the response
-        getReactorCrudServiceStub().countAll(Mono.just(Empty.newBuilder().build()))
-                .map(CountMsg::getCount)
-                .doOnSuccess(assertable::assertThan)
-                .toFuture()
-                .get();
+        CountMsg countMsg = getCrudServiceBlockingStub().countAll(Empty.newBuilder().build());
+        assertable.assertThan(countMsg.getCount());
     }
 }

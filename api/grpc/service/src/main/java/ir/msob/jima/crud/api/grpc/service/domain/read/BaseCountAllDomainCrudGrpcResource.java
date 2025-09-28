@@ -1,6 +1,7 @@
 package ir.msob.jima.crud.api.grpc.service.domain.read;
 
 import com.google.protobuf.Empty;
+import io.grpc.stub.StreamObserver;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
@@ -15,7 +16,6 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 
@@ -44,34 +44,20 @@ public interface BaseCountAllDomainCrudGrpcResource<
 
     Logger log = LoggerFactory.getLogger(BaseCountAllDomainCrudGrpcResource.class);
 
-    /**
-     * Handles a request to count all entities.
-     *
-     * @param request The request, which is expected to be empty.
-     * @return A Mono that emits the count of all entities.
-     */
-    @Override
-    @MethodStats
-    @Scope(operation = Operations.COUNT_ALL)
-    default Mono<CountMsg> countAll(Mono<Empty> request) {
-        return request.flatMap(this::countAll);
-    }
 
-    /**
-     * Handles a request to count all entities.
-     *
-     * @param request The request, which is expected to be empty.
-     * @return A Mono that emits the count of all entities.
-     */
-    @Override
     @MethodStats
     @Scope(operation = Operations.COUNT_ALL)
-    default Mono<CountMsg> countAll(Empty request) {
+    @Override
+    default void countAll(Empty request, StreamObserver<CountMsg> responseObserver) {
         log.debug("Request to count all: dto {}", request);
-        return getService().countAll(getUser())
+        getService().countAll(getUser())
                 .map(result -> CountMsg.newBuilder()
                         .setCount(result)
-                        .build());
+                        .build())
+                .subscribe(
+                        responseObserver::onNext,
+                        responseObserver::onError,
+                        responseObserver::onCompleted
+                );
     }
-
 }

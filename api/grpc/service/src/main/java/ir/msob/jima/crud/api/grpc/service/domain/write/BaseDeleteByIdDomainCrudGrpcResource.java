@@ -1,5 +1,6 @@
 package ir.msob.jima.crud.api.grpc.service.domain.write;
 
+import io.grpc.stub.StreamObserver;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
@@ -14,7 +15,6 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 
@@ -43,34 +43,20 @@ public interface BaseDeleteByIdDomainCrudGrpcResource<
 
     Logger log = LoggerFactory.getLogger(BaseDeleteByIdDomainCrudGrpcResource.class);
 
-    /**
-     * Handles a request to delete an entity by its ID.
-     *
-     * @param request The request, which contains the ID of the entity.
-     * @return A Mono that emits the ID of the deleted entity.
-     */
-    @Override
-    @MethodStats
-    @Scope(operation = Operations.DELETE_BY_ID)
-    default Mono<IdMsg> deleteById(Mono<IdMsg> request) {
-        return request.flatMap(this::deleteById);
-    }
 
-    /**
-     * Handles a request to delete an entity by its ID.
-     *
-     * @param request The request, which contains the ID of the entity.
-     * @return A Mono that emits the ID of the deleted entity.
-     */
-    @Override
     @MethodStats
     @Scope(operation = Operations.DELETE_BY_ID)
-    default Mono<IdMsg> deleteById(IdMsg request) {
+    @Override
+    default void deleteById(IdMsg request, StreamObserver<IdMsg> responseObserver) {
         log.debug("Request to delete by id: dto {}", request);
-        return getService().delete(convertToId(request.getId()), getUser())
+        getService().delete(convertToId(request.getId()), getUser())
                 .map(result -> IdMsg.newBuilder()
                         .setId(convertToString(result))
-                        .build());
+                        .build())
+                .subscribe(
+                        responseObserver::onNext,
+                        responseObserver::onError,
+                        responseObserver::onCompleted
+                );
     }
-
 }

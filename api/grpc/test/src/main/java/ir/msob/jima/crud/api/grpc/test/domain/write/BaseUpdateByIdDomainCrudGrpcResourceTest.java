@@ -13,7 +13,6 @@ import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
 import ir.msob.jima.crud.test.domain.write.BaseUpdateByIdDomainCrudResourceTest;
 import lombok.SneakyThrows;
-import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 
@@ -63,9 +62,7 @@ public interface BaseUpdateByIdDomainCrudGrpcResourceTest<
                 .setDto(convertToString(dto))
                 .build();
         // Execute the gRPC request with the created DtoMsg and extract the result from the response
-        DtoMsg res = getReactorCrudServiceStub().updateById(Mono.just(msg))
-                .toFuture()
-                .get();
+        DtoMsg res = getCrudServiceBlockingStub().updateById(msg);
         // Convert the result to the DTO type
         assertable.assertThan(convertToDto(res.getDto()));
     }

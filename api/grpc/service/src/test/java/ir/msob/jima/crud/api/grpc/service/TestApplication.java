@@ -7,10 +7,8 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.core.env.Environment;
-import org.springframework.web.reactive.config.EnableWebFlux;
 
 @SpringBootApplication(scanBasePackages = {Constants.FRAMEWORK_PACKAGE_PREFIX})
-@EnableWebFlux
 public class TestApplication implements ApplicationRunner {
 
     @Autowired

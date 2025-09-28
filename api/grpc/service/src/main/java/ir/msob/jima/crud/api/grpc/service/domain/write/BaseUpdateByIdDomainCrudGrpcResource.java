@@ -1,5 +1,6 @@
 package ir.msob.jima.crud.api.grpc.service.domain.write;
 
+import io.grpc.stub.StreamObserver;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
@@ -14,7 +15,6 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 
@@ -43,34 +43,20 @@ public interface BaseUpdateByIdDomainCrudGrpcResource<
 
     Logger log = LoggerFactory.getLogger(BaseUpdateByIdDomainCrudGrpcResource.class);
 
-    /**
-     * Handles a request to update an entity by its ID.
-     *
-     * @param request The request, which contains the ID of the entity and the updated entity data.
-     * @return A Mono that emits the updated entity.
-     */
-    @Override
-    @MethodStats
-    @Scope(operation = Operations.UPDATE_BY_ID)
-    default Mono<DtoMsg> updateById(Mono<DtoMsg> request) {
-        return request.flatMap(this::updateById);
-    }
 
-    /**
-     * Handles a request to update an entity by its ID.
-     *
-     * @param request The request, which contains the ID of the entity and the updated entity data.
-     * @return A Mono that emits the updated entity.
-     */
-    @Override
     @MethodStats
     @Scope(operation = Operations.UPDATE_BY_ID)
-    default Mono<DtoMsg> updateById(DtoMsg request) {
+    @Override
+    default void updateById(DtoMsg request, StreamObserver<DtoMsg> responseObserver) {
         log.debug("Request to update by id: dto {}", request);
-        return getService().update(convertToId(request.getId()), convertToDto(request.getDto()), getUser())
+        getService().update(convertToId(request.getId()), convertToDto(request.getDto()), getUser())
                 .map(result -> DtoMsg.newBuilder()
                         .setDto(convertToString(result))
-                        .build());
+                        .build())
+                .subscribe(
+                        responseObserver::onNext,
+                        responseObserver::onError,
+                        responseObserver::onCompleted
+                );
     }
-
 }

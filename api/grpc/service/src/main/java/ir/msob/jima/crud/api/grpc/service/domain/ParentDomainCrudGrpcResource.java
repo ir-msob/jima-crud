@@ -2,7 +2,6 @@ package ir.msob.jima.crud.api.grpc.service.domain;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
-import com.google.protobuf.ProtocolStringList;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
@@ -10,7 +9,7 @@ import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.resource.BaseResource;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.security.BaseUserService;
-import ir.msob.jima.crud.api.grpc.commons.ReactorCrudServiceGrpc;
+import ir.msob.jima.crud.api.grpc.commons.CrudServiceGrpc;
 import ir.msob.jima.crud.commons.BaseCrudResource;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
@@ -52,7 +51,7 @@ public interface ParentDomainCrudGrpcResource<
         Q extends BaseQuery,
         R extends BaseDomainCrudRepository<ID, USER, D, C, Q>,
         S extends BaseDomainCrudService<ID, USER, D, DTO, C, Q, R>>
-        extends BaseResource<ID, USER>, BaseCrudResource, ReactorCrudServiceGrpc.CrudServiceImplBase {
+        extends BaseResource<ID, USER>, BaseCrudResource, CrudServiceGrpc.CrudServiceI {
 
     /**
      * Returns the ObjectMapper instance.
@@ -107,7 +106,7 @@ public interface ParentDomainCrudGrpcResource<
      * @param dtos The list of ProtocolStringList to be converted.
      * @return A collection of DTOs.
      */
-    default Collection<DTO> convertToDtos(ProtocolStringList dtos) {
+    default Collection<DTO> convertToDtos(com.google.protobuf.ProtocolStringList dtos) {
         return dtos.stream()
                 .map(this::convertToDto)
                 .toList();

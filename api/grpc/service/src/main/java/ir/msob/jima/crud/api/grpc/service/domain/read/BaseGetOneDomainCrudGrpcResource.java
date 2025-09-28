@@ -1,5 +1,6 @@
 package ir.msob.jima.crud.api.grpc.service.domain.read;
 
+import io.grpc.stub.StreamObserver;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
@@ -15,7 +16,6 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 
@@ -44,34 +44,19 @@ public interface BaseGetOneDomainCrudGrpcResource<
 
     Logger log = LoggerFactory.getLogger(BaseGetOneDomainCrudGrpcResource.class);
 
-    /**
-     * Handles a request to get a single entity based on a given criteria.
-     *
-     * @param request The request, which contains the criteria.
-     * @return A Mono that emits the entity that matches the criteria.
-     */
-    @Override
     @MethodStats
     @Scope(operation = Operations.GET_ONE)
-    default Mono<DtoMsg> getOne(Mono<CriteriaMsg> request) {
-        return request.flatMap(this::getOne);
-    }
-
-    /**
-     * Handles a request to get a single entity based on a given criteria.
-     *
-     * @param request The request, which contains the criteria.
-     * @return A Mono that emits the entity that matches the criteria.
-     */
     @Override
-    @MethodStats
-    @Scope(operation = Operations.GET_ONE)
-    default Mono<DtoMsg> getOne(CriteriaMsg request) {
+    default void getOne(CriteriaMsg request, StreamObserver<DtoMsg> responseObserver) {
         log.debug("Request to get one: dto {}", request);
-        return getService().getOne(convertToCriteria(request.getCriteria()), getUser())
+        getService().getOne(convertToCriteria(request.getCriteria()), getUser())
                 .map(result -> DtoMsg.newBuilder()
                         .setDto(convertToString(result))
-                        .build());
+                        .build())
+                .subscribe(
+                        responseObserver::onNext,
+                        responseObserver::onError,
+                        responseObserver::onCompleted
+                );
     }
-
 }

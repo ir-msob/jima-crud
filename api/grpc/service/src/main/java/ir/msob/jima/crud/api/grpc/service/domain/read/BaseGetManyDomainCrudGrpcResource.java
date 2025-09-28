@@ -1,5 +1,6 @@
 package ir.msob.jima.crud.api.grpc.service.domain.read;
 
+import io.grpc.stub.StreamObserver;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
@@ -15,7 +16,6 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 
@@ -44,34 +44,20 @@ public interface BaseGetManyDomainCrudGrpcResource<
 
     Logger log = LoggerFactory.getLogger(BaseGetManyDomainCrudGrpcResource.class);
 
-    /**
-     * Handles a request to get multiple entities based on a given criteria.
-     *
-     * @param request The request, which contains the criteria.
-     * @return A Mono that emits the entities that match the criteria.
-     */
-    @Override
-    @MethodStats
-    @Scope(operation = Operations.GET_MANY)
-    default Mono<DtosMsg> getMany(Mono<CriteriaMsg> request) {
-        return request.flatMap(this::getMany);
-    }
 
-    /**
-     * Handles a request to get multiple entities based on a given criteria.
-     *
-     * @param request The request, which contains the criteria.
-     * @return A Mono that emits the entities that match the criteria.
-     */
-    @Override
     @MethodStats
     @Scope(operation = Operations.GET_MANY)
-    default Mono<DtosMsg> getMany(CriteriaMsg request) {
+    @Override
+    default void getMany(CriteriaMsg request, StreamObserver<DtosMsg> responseObserver) {
         log.debug("Request to get many: dto {}", request);
-        return getService().getMany(convertToCriteria(request.getCriteria()), getUser())
+        getService().getMany(convertToCriteria(request.getCriteria()), getUser())
                 .map(result -> DtosMsg.newBuilder()
                         .addAllDtos(convertToStrings(result))
-                        .build());
+                        .build())
+                .subscribe(
+                        responseObserver::onNext,
+                        responseObserver::onError,
+                        responseObserver::onCompleted
+                );
     }
-
 }

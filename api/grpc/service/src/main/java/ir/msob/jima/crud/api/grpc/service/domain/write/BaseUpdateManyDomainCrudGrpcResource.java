@@ -1,5 +1,6 @@
 package ir.msob.jima.crud.api.grpc.service.domain.write;
 
+import io.grpc.stub.StreamObserver;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
@@ -14,7 +15,6 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 
@@ -43,34 +43,20 @@ public interface BaseUpdateManyDomainCrudGrpcResource<
 
     Logger log = LoggerFactory.getLogger(BaseUpdateManyDomainCrudGrpcResource.class);
 
-    /**
-     * Handles a request to update multiple entities.
-     *
-     * @param request The request, which contains the entities to be updated.
-     * @return A Mono that emits the updated entities.
-     */
-    @Override
-    @MethodStats
-    @Scope(operation = Operations.UPDATE_MANY)
-    default Mono<DtosMsg> updateMany(Mono<DtosMsg> request) {
-        return request.flatMap(this::updateMany);
-    }
 
-    /**
-     * Handles a request to update multiple entities.
-     *
-     * @param request The request, which contains the entities to be updated.
-     * @return A Mono that emits the updated entities.
-     */
-    @Override
     @MethodStats
     @Scope(operation = Operations.UPDATE_MANY)
-    default Mono<DtosMsg> updateMany(DtosMsg request) {
+    @Override
+    default void updateMany(DtosMsg request, StreamObserver<DtosMsg> responseObserver) {
         log.debug("Request to update many: dto {}", request);
-        return getService().updateMany(convertToDtos(request.getDtosList()), getUser())
+        getService().updateMany(convertToDtos(request.getDtosList()), getUser())
                 .map(result -> DtosMsg.newBuilder()
                         .addAllDtos(convertToStrings(result))
-                        .build());
+                        .build())
+                .subscribe(
+                        responseObserver::onNext,
+                        responseObserver::onError,
+                        responseObserver::onCompleted
+                );
     }
-
 }

@@ -13,7 +13,6 @@ import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
 import ir.msob.jima.crud.test.domain.write.BaseSaveManyDomainCrudResourceTest;
 import lombok.SneakyThrows;
-import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -62,9 +61,7 @@ public interface BaseSaveManyDomainCrudGrpcResourceTest<
                 .addAllDtos(convertToStrings(dtos))
                 .build();
         // Execute the gRPC request with the created DtosMsg and extract the result from the response
-        Collection<DTO> res = getReactorCrudServiceStub().saveMany(Mono.just(msg))
-                .toFuture()
-                .get()
+        Collection<DTO> res = getCrudServiceBlockingStub().saveMany(msg)
                 .getDtosList()
                 .stream()
                 .map(this::convertToDto)

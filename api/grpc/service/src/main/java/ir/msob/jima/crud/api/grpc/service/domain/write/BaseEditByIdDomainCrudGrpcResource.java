@@ -1,5 +1,6 @@
 package ir.msob.jima.crud.api.grpc.service.domain.write;
 
+import io.grpc.stub.StreamObserver;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
@@ -15,7 +16,6 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 
@@ -44,34 +44,19 @@ public interface BaseEditByIdDomainCrudGrpcResource<
 
     Logger log = LoggerFactory.getLogger(BaseEditByIdDomainCrudGrpcResource.class);
 
-    /**
-     * Handles a request to edit an entity by its ID.
-     *
-     * @param request The request, which contains the ID of the entity and the JSON patch to apply.
-     * @return A Mono that emits the edited entity.
-     */
-    @Override
     @MethodStats
     @Scope(operation = Operations.EDIT_BY_ID)
-    default Mono<DtoMsg> editById(Mono<IdJsonPatchMsg> request) {
-        return request.flatMap(this::editById);
-    }
-
-    /**
-     * Handles a request to edit an entity by its ID.
-     *
-     * @param request The request, which contains the ID of the entity and the JSON patch to apply.
-     * @return A Mono that emits the edited entity.
-     */
     @Override
-    @MethodStats
-    @Scope(operation = Operations.EDIT_BY_ID)
-    default Mono<DtoMsg> editById(IdJsonPatchMsg request) {
+    default void editById(IdJsonPatchMsg request, StreamObserver<DtoMsg> responseObserver) {
         log.debug("Request to edit by id: dto {}", request);
-        return getService().edit(convertToId(request.getId()), convertToJsonPatch(request.getJsonPatch()), getUser())
+        getService().edit(convertToId(request.getId()), convertToJsonPatch(request.getJsonPatch()), getUser())
                 .map(result -> DtoMsg.newBuilder()
                         .setDto(convertToString(result))
-                        .build());
+                        .build())
+                .subscribe(
+                        responseObserver::onNext,
+                        responseObserver::onError,
+                        responseObserver::onCompleted
+                );
     }
-
 }

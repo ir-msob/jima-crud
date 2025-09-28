@@ -15,7 +15,6 @@ import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
 import ir.msob.jima.crud.test.domain.read.BaseCountDomainCrudResourceTest;
 import lombok.SneakyThrows;
-import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 
@@ -64,10 +63,7 @@ public interface BaseCountDomainCrudGrpcResourceTest<
                 .setCriteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getId())))
                 .build();
         // Execute the gRPC request with the created CriteriaMsg and extract the result from the response
-        getReactorCrudServiceStub().count(Mono.just(msg))
-                .map(CountMsg::getCount)
-                .doOnSuccess(assertable::assertThan)
-                .toFuture()
-                .get();
+        CountMsg countMsg = getCrudServiceBlockingStub().count(msg);
+        assertable.assertThan(countMsg.getCount());
     }
 }

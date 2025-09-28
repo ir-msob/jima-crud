@@ -19,7 +19,6 @@ import ir.msob.jima.crud.test.domain.read.BaseGetPageDomainCrudResourceTest;
 import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 
@@ -71,9 +70,7 @@ public interface BaseGetPageDomainCrudGrpcResourceTest<
                 .setPageable(convertToString(PageRequest.of(0, 10)))
                 .build();
         // Execute the gRPC request with the created CriteriaPageableMsg and extract the result from the response
-        PageMsg res = getReactorCrudServiceStub().getPage(Mono.just(msg))
-                .toFuture()
-                .get();
+        PageMsg res = getCrudServiceBlockingStub().getPage(msg);
         // Convert the result to the Page type
         assertable.assertThan(convertToPage(res.getPage()));
     }

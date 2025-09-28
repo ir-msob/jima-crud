@@ -1,5 +1,6 @@
 package ir.msob.jima.crud.api.grpc.service.domain.read;
 
+import io.grpc.stub.StreamObserver;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
@@ -15,7 +16,6 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 
@@ -44,34 +44,19 @@ public interface BaseGetPageDomainCrudGrpcResource<
 
     Logger log = LoggerFactory.getLogger(BaseGetPageDomainCrudGrpcResource.class);
 
-    /**
-     * Handles a request to get a page of entities based on a given criteria.
-     *
-     * @param request The request, which contains the criteria and the details of the page.
-     * @return A Mono that emits the page of entities that match the criteria.
-     */
-    @Override
     @MethodStats
     @Scope(operation = Operations.GET_PAGE)
-    default Mono<PageMsg> getPage(Mono<CriteriaPageableMsg> request) {
-        return request.flatMap(this::getPage);
-    }
-
-    /**
-     * Handles a request to get a page of entities based on a given criteria.
-     *
-     * @param request The request, which contains the criteria and the details of the page.
-     * @return A Mono that emits the page of entities that match the criteria.
-     */
     @Override
-    @MethodStats
-    @Scope(operation = Operations.GET_PAGE)
-    default Mono<PageMsg> getPage(CriteriaPageableMsg request) {
+    default void getPage(CriteriaPageableMsg request, StreamObserver<PageMsg> responseObserver) {
         log.debug("Request to get page: dto {}", request);
-        return getService().getPage(convertToCriteria(request.getCriteria()), convertToPageable(request.getPageable()), getUser())
+        getService().getPage(convertToCriteria(request.getCriteria()), convertToPageable(request.getPageable()), getUser())
                 .map(result -> PageMsg.newBuilder()
                         .setPage(convertToString(result))
-                        .build());
+                        .build())
+                .subscribe(
+                        responseObserver::onNext,
+                        responseObserver::onError,
+                        responseObserver::onCompleted
+                );
     }
-
 }

@@ -1,5 +1,6 @@
 package ir.msob.jima.crud.api.grpc.service.domain.write;
 
+import io.grpc.stub.StreamObserver;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
@@ -15,7 +16,6 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 
@@ -44,34 +44,20 @@ public interface BaseEditManyDomainCrudGrpcResource<
 
     Logger log = LoggerFactory.getLogger(BaseEditManyDomainCrudGrpcResource.class);
 
-    /**
-     * Handles a request to edit multiple entities based on a given criteria.
-     *
-     * @param request The request, which contains the criteria and the JSON patch to apply.
-     * @return A Mono that emits the edited entities.
-     */
-    @Override
-    @MethodStats
-    @Scope(operation = Operations.EDIT_MANY)
-    default Mono<DtosMsg> editMany(Mono<CriteriaJsonPatchMsg> request) {
-        return request.flatMap(this::editMany);
-    }
 
-    /**
-     * Handles a request to edit multiple entities based on a given criteria.
-     *
-     * @param request The request, which contains the criteria and the JSON patch to apply.
-     * @return A Mono that emits the edited entities.
-     */
-    @Override
     @MethodStats
     @Scope(operation = Operations.EDIT_MANY)
-    default Mono<DtosMsg> editMany(CriteriaJsonPatchMsg request) {
+    @Override
+    default void editMany(CriteriaJsonPatchMsg request, StreamObserver<DtosMsg> responseObserver) {
         log.debug("Request to edit many: dto {}", request);
-        return getService().editMany(convertToCriteria(request.getCriteria()), convertToJsonPatch(request.getJsonPatch()), getUser())
+        getService().editMany(convertToCriteria(request.getCriteria()), convertToJsonPatch(request.getJsonPatch()), getUser())
                 .map(result -> DtosMsg.newBuilder()
                         .addAllDtos(convertToStrings(result))
-                        .build());
+                        .build())
+                .subscribe(
+                        responseObserver::onNext,
+                        responseObserver::onError,
+                        responseObserver::onCompleted
+                );
     }
-
 }

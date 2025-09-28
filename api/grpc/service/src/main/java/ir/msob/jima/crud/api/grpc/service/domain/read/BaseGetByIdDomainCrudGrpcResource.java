@@ -1,5 +1,6 @@
 package ir.msob.jima.crud.api.grpc.service.domain.read;
 
+import io.grpc.stub.StreamObserver;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
@@ -15,7 +16,6 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 
@@ -44,34 +44,20 @@ public interface BaseGetByIdDomainCrudGrpcResource<
 
     Logger log = LoggerFactory.getLogger(BaseGetByIdDomainCrudGrpcResource.class);
 
-    /**
-     * Handles a request to get an entity by its ID.
-     *
-     * @param request The request, which contains the ID of the entity.
-     * @return A Mono that emits the entity.
-     */
-    @Override
-    @MethodStats
-    @Scope(operation = Operations.GET_BY_ID)
-    default Mono<DtoMsg> getById(Mono<IdMsg> request) {
-        return request.flatMap(this::getById);
-    }
 
-    /**
-     * Handles a request to get an entity by its ID.
-     *
-     * @param request The request, which contains the ID of the entity.
-     * @return A Mono that emits the entity.
-     */
-    @Override
     @MethodStats
     @Scope(operation = Operations.GET_BY_ID)
-    default Mono<DtoMsg> getById(IdMsg request) {
+    @Override
+    default void getById(IdMsg request, StreamObserver<DtoMsg> responseObserver) {
         log.debug("Request to get by id: dto {}", request);
-        return getService().getOne(convertToId(request.getId()), getUser())
+        getService().getOne(convertToId(request.getId()), getUser())
                 .map(result -> DtoMsg.newBuilder()
                         .setDto(convertToString(result))
-                        .build());
+                        .build())
+                .subscribe(
+                        responseObserver::onNext,
+                        responseObserver::onError,
+                        responseObserver::onCompleted
+                );
     }
-
 }

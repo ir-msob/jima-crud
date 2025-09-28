@@ -15,7 +15,6 @@ import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
 import ir.msob.jima.crud.test.domain.write.BaseDeleteByIdDomainCrudResourceTest;
 import lombok.SneakyThrows;
-import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 
@@ -66,9 +65,7 @@ public interface BaseDeleteByIdDomainCrudGrpcResourceTest<
                 .setId(convertToString(savedDto.getId()))
                 .build();
         // Execute the gRPC request with the created IdMsg and extract the result from the response
-        IdMsg res = getReactorCrudServiceStub().deleteById(Mono.just(msg))
-                .toFuture()
-                .get();
+        IdMsg res = getCrudServiceBlockingStub().deleteById(msg);
         // Convert the result to the ID type
         assertable.assertThan(convertToId(res.getId()));
     }

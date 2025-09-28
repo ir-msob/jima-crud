@@ -3,81 +3,71 @@ syntax = "proto3";
 package ir.msob.jima.crud.api.grpc.commons;
 
 import "google/protobuf/empty.proto";
-import "google/protobuf/any.proto";
-
 
 option java_multiple_files = true;
 option java_package = "ir.msob.jima.crud.api.grpc.commons";
-
+option java_outer_classname = "CrudServiceProto";
 
 service CrudService {
-  rpc countAll(google.protobuf.Empty) returns (CountMsg) {
-  }
-  rpc count(CriteriaMsg) returns (CountMsg) {
-  }
-  rpc getMany(CriteriaMsg) returns (DtosMsg) {
-  }
-  rpc getOne(CriteriaMsg) returns (DtoMsg) {
-  }
-  rpc getById(IdMsg) returns (DtoMsg) {
-  }
-  rpc getPage(CriteriaPageableMsg) returns (PageMsg) {
-  }
-  rpc deleteMany(CriteriaMsg) returns (IdsMsg) {
-  }
-  rpc deleteById(IdMsg) returns (IdMsg) {
-  }
-  rpc delete(CriteriaMsg) returns (IdMsg) {
-  }
-  rpc editMany(CriteriaJsonPatchMsg) returns (DtosMsg) {
-  }
-  rpc editById(IdJsonPatchMsg) returns (DtoMsg) {
-  }
-  rpc edit(CriteriaJsonPatchMsg) returns (DtoMsg) {
-  }
-  rpc saveMany(DtosMsg) returns (DtosMsg) {
-  }
-  rpc save(DtoMsg) returns (DtoMsg) {
-  }
-  rpc updateMany(DtosMsg) returns (DtosMsg) {
-  }
-  rpc updateById(DtoMsg) returns (DtoMsg) {
-  }
-  rpc update(DtoMsg) returns (DtoMsg) {
-  }
+  rpc countAll(google.protobuf.Empty) returns (CountMsg);
+  rpc count(CriteriaMsg) returns (CountMsg);
+  rpc getMany(CriteriaMsg) returns (DtosMsg);
+  rpc getOne(CriteriaMsg) returns (DtoMsg);
+  rpc getById(IdMsg) returns (DtoMsg);
+  rpc getPage(CriteriaPageableMsg) returns (PageMsg);
+  rpc deleteMany(CriteriaMsg) returns (IdsMsg);
+  rpc deleteById(IdMsg) returns (IdMsg);
+  rpc delete(CriteriaMsg) returns (IdMsg);
+  rpc editMany(CriteriaJsonPatchMsg) returns (DtosMsg);
+  rpc editById(IdJsonPatchMsg) returns (DtoMsg);
+  rpc edit(CriteriaJsonPatchMsg) returns (DtoMsg);
+  rpc saveMany(DtosMsg) returns (DtosMsg);
+  rpc save(DtoMsg) returns (DtoMsg);
+  rpc updateMany(DtosMsg) returns (DtosMsg);
+  rpc updateById(DtoMsg) returns (DtoMsg);
+  rpc update(DtoMsg) returns (DtoMsg);
 }
 
 message CriteriaPageableMsg {
   string criteria = 1;
   string pageable = 2;
 }
+
 message CriteriaMsg {
   string criteria = 1;
 }
+
 message CriteriaJsonPatchMsg {
   string criteria = 1;
   string jsonPatch = 2;
 }
+
 message IdJsonPatchMsg {
   string id = 1;
   string jsonPatch = 2;
 }
+
 message DtosMsg {
   repeated string dtos = 1;
 }
+
 message DtoMsg {
   string id = 1;
   string dto = 2;
 }
+
 message CountMsg {
   int64 count = 1;
 }
+
 message PageMsg {
   string page = 1;
 }
+
 message IdsMsg {
   repeated string ids = 1;
 }
+
 message IdMsg {
   string id = 1;
 }

@@ -1,5 +1,6 @@
 package ir.msob.jima.crud.api.grpc.service.domain.write;
 
+import io.grpc.stub.StreamObserver;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
@@ -14,7 +15,6 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 
@@ -43,34 +43,20 @@ public interface BaseUpdateDomainCrudGrpcResource<
 
     Logger log = LoggerFactory.getLogger(BaseUpdateDomainCrudGrpcResource.class);
 
-    /**
-     * Handles a request to update an entity.
-     *
-     * @param request The request, which contains the entity to be updated.
-     * @return A Mono that emits the updated entity.
-     */
-    @Override
-    @MethodStats
-    @Scope(operation = Operations.UPDATE)
-    default Mono<DtoMsg> update(Mono<DtoMsg> request) {
-        return request.flatMap(this::update);
-    }
 
-    /**
-     * Handles a request to update an entity.
-     *
-     * @param request The request, which contains the entity to be updated.
-     * @return A Mono that emits the updated entity.
-     */
-    @Override
     @MethodStats
     @Scope(operation = Operations.UPDATE)
-    default Mono<DtoMsg> update(DtoMsg request) {
+    @Override
+    default void update(DtoMsg request, StreamObserver<DtoMsg> responseObserver) {
         log.debug("Request to update: dto {}", request);
-        return getService().update(convertToDto(request.getDto()), getUser())
+        getService().update(convertToDto(request.getDto()), getUser())
                 .map(result -> DtoMsg.newBuilder()
                         .setDto(convertToString(result))
-                        .build());
+                        .build())
+                .subscribe(
+                        responseObserver::onNext,
+                        responseObserver::onError,
+                        responseObserver::onCompleted
+                );
     }
-
 }

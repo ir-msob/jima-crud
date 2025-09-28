@@ -1,5 +1,6 @@
 package ir.msob.jima.crud.api.grpc.service.domain.write;
 
+import io.grpc.stub.StreamObserver;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
@@ -14,7 +15,6 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 
@@ -43,34 +43,20 @@ public interface BaseSaveManyDomainCrudGrpcResource<
 
     Logger log = LoggerFactory.getLogger(BaseSaveManyDomainCrudGrpcResource.class);
 
-    /**
-     * Handles a request to save multiple entities.
-     *
-     * @param request The request, which contains the entities to be saved.
-     * @return A Mono that emits the saved entities.
-     */
-    @Override
-    @MethodStats
-    @Scope(operation = Operations.SAVE_MANY)
-    default Mono<DtosMsg> saveMany(Mono<DtosMsg> request) {
-        return request.flatMap(this::saveMany);
-    }
 
-    /**
-     * Handles a request to save multiple entities.
-     *
-     * @param request The request, which contains the entities to be saved.
-     * @return A Mono that emits the saved entities.
-     */
-    @Override
     @MethodStats
     @Scope(operation = Operations.SAVE_MANY)
-    default Mono<DtosMsg> saveMany(DtosMsg request) {
+    @Override
+    default void saveMany(DtosMsg request, StreamObserver<DtosMsg> responseObserver) {
         log.debug("Request to save many: dto {}", request);
-        return getService().saveMany(convertToDtos(request.getDtosList()), getUser())
+        getService().saveMany(convertToDtos(request.getDtosList()), getUser())
                 .map(result -> DtosMsg.newBuilder()
                         .addAllDtos(convertToStrings(result))
-                        .build());
+                        .build())
+                .subscribe(
+                        responseObserver::onNext,
+                        responseObserver::onError,
+                        responseObserver::onCompleted
+                );
     }
-
 }

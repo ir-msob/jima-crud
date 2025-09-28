@@ -1,5 +1,6 @@
 package ir.msob.jima.crud.api.grpc.service.domain.read;
 
+import io.grpc.stub.StreamObserver;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
@@ -15,7 +16,6 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 
@@ -44,34 +44,20 @@ public interface BaseCountDomainCrudGrpcResource<
 
     Logger log = LoggerFactory.getLogger(BaseCountDomainCrudGrpcResource.class);
 
-    /**
-     * Handles a request to count entities that match a given criteria.
-     *
-     * @param request The request, which contains the criteria.
-     * @return A Mono that emits the count of entities that match the criteria.
-     */
-    @Override
-    @MethodStats
-    @Scope(operation = Operations.COUNT)
-    default Mono<CountMsg> count(Mono<CriteriaMsg> request) {
-        return request.flatMap(this::count);
-    }
 
-    /**
-     * Handles a request to count entities that match a given criteria.
-     *
-     * @param request The request, which contains the criteria.
-     * @return A Mono that emits the count of entities that match the criteria.
-     */
-    @Override
     @MethodStats
     @Scope(operation = Operations.COUNT)
-    default Mono<CountMsg> count(CriteriaMsg request) {
+    @Override
+    default void count(CriteriaMsg request, StreamObserver<CountMsg> responseObserver) {
         log.debug("Request to count: dto {}", request);
-        return getService().count(convertToCriteria(request.getCriteria()), getUser())
+        getService().count(convertToCriteria(request.getCriteria()), getUser())
                 .map(result -> CountMsg.newBuilder()
                         .setCount(result)
-                        .build());
+                        .build())
+                .subscribe(
+                        responseObserver::onNext,
+                        responseObserver::onError,
+                        responseObserver::onCompleted
+                );
     }
-
 }

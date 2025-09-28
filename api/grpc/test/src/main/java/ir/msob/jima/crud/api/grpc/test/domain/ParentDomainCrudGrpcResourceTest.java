@@ -8,7 +8,7 @@ import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.crud.api.grpc.commons.ReactorCrudServiceGrpc;
+import ir.msob.jima.crud.api.grpc.commons.CrudServiceGrpc;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
@@ -54,7 +54,7 @@ public interface ParentDomainCrudGrpcResourceTest<
      *
      * @return The gRPC stub for the CRUD service.
      */
-    ReactorCrudServiceGrpc.ReactorCrudServiceStub getReactorCrudServiceStub();
+    CrudServiceGrpc.CrudServiceBlockingStub getCrudServiceBlockingStub();
 
     /**
      * Returns the ObjectMapper for JSON processing.

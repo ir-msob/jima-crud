@@ -8,7 +8,7 @@ import ir.msob.jima.crud.api.grpc.service.domain.base.DomainCrudGrpcResource;
 import ir.msob.jima.crud.api.grpc.service.domain.base.ProjectUserService;
 import ir.msob.jima.crud.ral.mongo.it.test.TestRepository;
 import ir.msob.jima.crud.ral.mongo.it.test.TestServiceDomain;
-import net.devh.boot.grpc.server.service.GrpcService;
+import org.springframework.grpc.server.service.GrpcService;
 
 @GrpcService
 public class TestDomainGrpcResourceDomain extends DomainCrudGrpcResource<TestDomain, TestDto, TestCriteria, TestRepository, TestServiceDomain> {

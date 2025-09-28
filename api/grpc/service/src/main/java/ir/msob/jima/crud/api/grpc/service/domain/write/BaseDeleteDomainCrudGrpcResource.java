@@ -1,5 +1,6 @@
 package ir.msob.jima.crud.api.grpc.service.domain.write;
 
+import io.grpc.stub.StreamObserver;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
@@ -15,7 +16,6 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 
@@ -44,34 +44,20 @@ public interface BaseDeleteDomainCrudGrpcResource<
 
     Logger log = LoggerFactory.getLogger(BaseDeleteDomainCrudGrpcResource.class);
 
-    /**
-     * Handles a request to delete an entity based on a given criteria.
-     *
-     * @param request The request, which contains the criteria.
-     * @return A Mono that emits the ID of the deleted entity.
-     */
-    @Override
-    @MethodStats
-    @Scope(operation = Operations.DELETE)
-    default Mono<IdMsg> delete(Mono<CriteriaMsg> request) {
-        return request.flatMap(this::delete);
-    }
 
-    /**
-     * Handles a request to delete an entity based on a given criteria.
-     *
-     * @param request The request, which contains the criteria.
-     * @return A Mono that emits the ID of the deleted entity.
-     */
-    @Override
     @MethodStats
     @Scope(operation = Operations.DELETE)
-    default Mono<IdMsg> delete(CriteriaMsg request) {
+    @Override
+    default void delete(CriteriaMsg request, StreamObserver<IdMsg> responseObserver) {
         log.debug("Request to delete: dto {}", request);
-        return getService().delete(convertToCriteria(request.getCriteria()), getUser())
+        getService().delete(convertToCriteria(request.getCriteria()), getUser())
                 .map(result -> IdMsg.newBuilder()
                         .setId(convertToString(result))
-                        .build());
+                        .build())
+                .subscribe(
+                        responseObserver::onNext,
+                        responseObserver::onError,
+                        responseObserver::onCompleted
+                );
     }
-
 }
