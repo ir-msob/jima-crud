@@ -3,9 +3,11 @@ package ir.msob.jima.crud.api.grpc.service.domain.base;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.grpc.ManagedChannel;
 import io.grpc.Metadata;
 import io.grpc.inprocess.InProcessChannelBuilder;
 import io.grpc.inprocess.InProcessServerBuilder;
+import io.grpc.stub.MetadataUtils;
 import io.grpc.testing.GrpcCleanupRule;
 import ir.msob.jima.core.beans.properties.JimaProperties;
 import ir.msob.jima.core.commons.security.BaseTokenService;
@@ -21,6 +23,7 @@ import ir.msob.jima.crud.ral.mongo.it.base.DomainCrudDataProvider;
 import ir.msob.jima.crud.ral.mongo.it.base.DomainCrudService;
 import ir.msob.jima.crud.ral.mongo.it.base.MongoDomainCrudRepository;
 import ir.msob.jima.security.api.grpc.oauth2.AuthenticatingServerInterceptor;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Rule;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -40,6 +43,8 @@ public abstract class DomainCrudGrpcResourceTest<
 
     @Rule
     public final GrpcCleanupRule grpcCleanupRule = new GrpcCleanupRule();
+    protected ManagedChannel channel;
+
     @Autowired
     BaseTokenService tokenService;
     @Autowired
@@ -50,7 +55,7 @@ public abstract class DomainCrudGrpcResourceTest<
     ObjectMapper objectMapper;
     @Autowired
     JimaProperties jimaProperties;
-    private CrudServiceGrpc.CrudServiceBlockingStub crudServiceBlockingStub;
+    protected CrudServiceGrpc.CrudServiceBlockingStub crudServiceBlockingStub;
 
     @Override
     public ProjectUser getSampleUser() {
@@ -97,21 +102,32 @@ public abstract class DomainCrudGrpcResourceTest<
                 .build()
                 .start());
 
-        String token = tokenService.getToken();
-        Metadata metadata = new Metadata();
-        metadata.put(Metadata.Key.of("authorization", Metadata.ASCII_STRING_MARSHALLER), "Bearer " + token);
+        channel = grpcCleanupRule.register(InProcessChannelBuilder
+                .forName(serverName)
+                .directExecutor()
+                .build());
 
-        var interceptor = io.grpc.stub.MetadataUtils.newAttachHeadersInterceptor(metadata);
+        String token = tokenService.getToken();
+        Metadata metadata = prepareMetadata(token);
 
         crudServiceBlockingStub = CrudServiceGrpc
-                .newBlockingStub(grpcCleanupRule.register(
-                        InProcessChannelBuilder.forName(serverName).directExecutor().build()
-                ))
-                .withInterceptors(interceptor);
+                .newBlockingStub(channel)
+                .withInterceptors(MetadataUtils.newAttachHeadersInterceptor(metadata));
 
     }
 
-
     protected abstract TestDomainGrpcResourceDomain getResource();
 
+    protected void channelShutdownNow() {
+        if (channel != null && !channel.isShutdown()) {
+            channel.shutdownNow();
+        }
+    }
+
+
+    private static @NotNull Metadata prepareMetadata(String token) {
+        Metadata metadata = new Metadata();
+        metadata.put(Metadata.Key.of("authorization", Metadata.ASCII_STRING_MARSHALLER), "Bearer " + token);
+        return metadata;
+    }
 }

@@ -16,6 +16,7 @@ import ir.msob.jima.security.ral.keycloak.test.KeycloakContainerConfiguration;
 import lombok.SneakyThrows;
 import lombok.extern.apachecommons.CommonsLog;
 import org.bson.types.ObjectId;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,11 @@ public class TestDomainGrpcResourceIT extends DomainCrudGrpcResourceTest<TestDom
         getDataProvider().createNewDto();
         getDataProvider().createMandatoryNewDto();
         registerStub();
+    }
+
+    @AfterEach
+    public void afterEach() {
+        channelShutdownNow();
     }
 
     @Override
