@@ -149,7 +149,7 @@ public interface BaseDomainCrudDataProvider<
      * @param savedDto the DTO before deletion
      */
     default void assertDelete(ID id, DTO savedDto) {
-        // Implement delete assertions
+        assertThat(id).isEqualTo(savedDto.getId());
     }
 
     /**
