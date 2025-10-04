@@ -10,23 +10,26 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.test.BaseCoreDataProvider;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
+import lombok.SneakyThrows;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.ExecutionException;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
- * This interface is designed to provide data-childdomain methods for CRUD operations.
- * It extends the BaseDataProvider interface, which includes common data provider methods.
+ * Generic data provider interface for CRUD operations on domain entities.
+ * It extends {@link BaseCoreDataProvider} and adds CRUD-specific utility methods.
  *
- * @param <ID>   The type of the entity's ID, which must be comparable and serializable.
- * @param <USER> The type of the user object, typically representing the user performing CRUD operations.
- * @param <D>    The type of the domain entity being operated on.
- * @param <DTO>  The type of the data transfer object for the entity.
+ * @param <ID>   The type of entity ID, must be {@link Comparable} and {@link Serializable}.
+ * @param <USER> The type of the user performing the operation.
+ * @param <D>    The type of the domain entity.
+ * @param <DTO>  The type of the Data Transfer Object (DTO).
  * @param <C>    The type of criteria used for filtering entities.
- * @param <Q>    The type of query object used in data retrieval.
- * @param <R>    The type of the repository used for CRUD operations.
- * @param <S>    The type of the service used for CRUD operations.
+ * @param <Q>    The type of query object for data retrieval.
+ * @param <R>    The type of repository used for CRUD operations.
+ * @param <S>    The type of service used for CRUD operations.
  */
 public interface BaseDomainCrudDataProvider<
         ID extends Comparable<ID> & Serializable,
@@ -40,73 +43,123 @@ public interface BaseDomainCrudDataProvider<
         extends BaseCoreDataProvider<ID, USER, D, DTO, C, R, S> {
 
     /**
-     * This method performs cleanup operations by deleting all entities in the repository.
-     *
-     * @throws BadRequestException       If there is a bad request.
-     * @throws DomainNotFoundException   If the domain is not found.
-     * @throws ExecutionException        If an execution exception occurs.
-     * @throws InterruptedException      If the operation is interrupted.
-     * @throws NoSuchMethodException     If a specific method is not found.
-     * @throws InstantiationException    If an instance cannot be created.
-     * @throws IllegalAccessException    If there is illegal access to a method or field.
-     * @throws InvocationTargetException If an invocation target exception occurs.
+     * Deletes all entities from the repository.
      */
-    default void cleanups() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        getService().deleteAll(getSampleUser())
-                .toFuture()
-                .get();
+    default void cleanups() throws BadRequestException, DomainNotFoundException, ExecutionException,
+            InterruptedException, NoSuchMethodException, InstantiationException,
+            IllegalAccessException, InvocationTargetException {
+        getService().deleteAll(getSampleUser()).toFuture().get();
     }
 
     /**
-     * This method counts the number of entities in the database.
+     * Counts the total number of entities in the repository.
      *
-     * @return The count of entities in the database.
-     * @throws BadRequestException       If there is a bad request.
-     * @throws DomainNotFoundException   If the domain is not found.
-     * @throws ExecutionException        If an execution exception occurs.
-     * @throws InterruptedException      If the operation is interrupted.
-     * @throws InvocationTargetException If an invocation target exception occurs.
-     * @throws NoSuchMethodException     If a specific method is not found.
-     * @throws InstantiationException    If an instance cannot be created.
-     * @throws IllegalAccessException    If there is illegal access to a method or field.
+     * @return the total entity count
      */
-    default Long countDb() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        return getService()
-                .countAll(getSampleUser())
-                .toFuture()
-                .get();
+    default Long countDb() throws BadRequestException, DomainNotFoundException, ExecutionException,
+            InterruptedException, InvocationTargetException, NoSuchMethodException,
+            InstantiationException, IllegalAccessException {
+        return getService().countAll(getSampleUser()).toFuture().get();
     }
 
     /**
-     * This method saves a new data transfer object (DTO) in the database.
+     * Saves a new DTO in the repository.
      *
-     * @return The DTO that was saved.
-     * @throws BadRequestException     If there is a bad request.
-     * @throws DomainNotFoundException If the domain is not found.
-     * @throws ExecutionException      If an execution exception occurs.
-     * @throws InterruptedException    If the operation is interrupted.
+     * @return the saved DTO
      */
-    default DTO saveNew() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException {
-        return getService()
-                .save(getNewDto(), getSampleUser())
-                .toFuture()
-                .get();
+    default DTO saveNew() throws BadRequestException, DomainNotFoundException,
+            ExecutionException, InterruptedException {
+        return getService().save(getNewDto(), getSampleUser()).toFuture().get();
     }
 
     /**
-     * This method saves a new mandatory data transfer object (DTO) in the database.
-     * The "mandatory" nature of the DTO may imply that certain fields must be provided.
+     * Saves a new DTO with mandatory fields in the repository.
      *
-     * @return The DTO that was saved.
-     * @throws BadRequestException     If there is a bad request.
-     * @throws DomainNotFoundException If the domain is not found.
-     * @throws ExecutionException      If an execution exception occurs.
-     * @throws InterruptedException    If the operation is interrupted.
+     * @return the saved DTO
      */
-    default DTO saveNewMandatory() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException {
-        return getService()
-                .save(getMandatoryNewDto(), getSampleUser())
-                .toFuture()
-                .get();
+    default DTO saveNewMandatory() throws BadRequestException, DomainNotFoundException,
+            ExecutionException, InterruptedException {
+        return getService().save(getMandatoryNewDto(), getSampleUser()).toFuture().get();
+    }
+
+    /**
+     * Asserts the correctness of the save operation.
+     *
+     * @param dto       the DTO before saving
+     * @param savedDto  the DTO after saving
+     */
+    default void assertSave(DTO dto, DTO savedDto) {
+        // Implement save assertions
+    }
+
+    /**
+     * Asserts the correctness of the save operation for mandatory fields.
+     *
+     * @param dto       the DTO before saving
+     * @param savedDto  the DTO after saving
+     */
+    default void assertMandatorySave(DTO dto, DTO savedDto) {
+        // Implement mandatory save assertions
+    }
+
+    /**
+     * Asserts the correctness of the update operation.
+     *
+     * @param dto        the DTO before update
+     * @param updatedDto the DTO after update
+     */
+    default void assertUpdate(DTO dto, DTO updatedDto) {
+        // Implement update assertions
+    }
+
+    /**
+     * Asserts the correctness of the update operation for mandatory fields.
+     *
+     * @param dto        the DTO before update
+     * @param updatedDto the DTO after update
+     */
+    default void assertMandatoryUpdate(DTO dto, DTO updatedDto) {
+        // Implement mandatory update assertions
+    }
+
+    /**
+     * Asserts the correctness of the retrieval operation.
+     *
+     * @param before the DTO before retrieval
+     * @param after  the DTO after retrieval
+     */
+    default void assertGet(DTO before, DTO after) {
+        // Implement get assertions
+    }
+
+    /**
+     * Asserts the correctness of the retrieval operation for mandatory fields.
+     *
+     * @param before the DTO before retrieval
+     * @param after  the DTO after retrieval
+     */
+    default void assertMandatoryGet(DTO before, DTO after) {
+        // Implement get assertions
+    }
+
+    /**
+     * Asserts the correctness of the delete operation.
+     *
+     * @param id         the ID of the deleted entity
+     * @param savedDto the DTO before deletion
+     */
+    default void assertDelete(ID id, DTO savedDto) {
+        // Implement delete assertions
+    }
+
+    /**
+     * Asserts that the repository contains the expected number of entities.
+     *
+     * @param expectedCount the expected count
+     */
+    @SneakyThrows
+    default void assertCount(Long expectedCount) {
+        Long currentCount = countDb();
+        assertThat(currentCount).isEqualTo(expectedCount);
     }
 }

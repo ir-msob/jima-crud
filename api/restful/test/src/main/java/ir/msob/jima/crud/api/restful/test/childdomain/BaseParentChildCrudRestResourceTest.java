@@ -2,7 +2,6 @@ package ir.msob.jima.crud.api.restful.test.childdomain;
 
 import ir.msob.jima.core.api.restful.test.BaseCoreRestResourceTest;
 import ir.msob.jima.core.commons.childdomain.BaseChildDomain;
-import ir.msob.jima.core.commons.childdomain.BaseChildDomainAbstract;
 import ir.msob.jima.core.commons.childdomain.criteria.BaseChildCriteriaAbstract;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;

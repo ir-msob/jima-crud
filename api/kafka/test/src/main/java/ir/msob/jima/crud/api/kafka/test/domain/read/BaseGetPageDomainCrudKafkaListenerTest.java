@@ -1,7 +1,6 @@
 package ir.msob.jima.crud.api.kafka.test.domain.read;
 
 import ir.msob.jima.core.commons.channel.ChannelMessage;
-import ir.msob.jima.core.commons.channel.message.CriteriaMessage;
 import ir.msob.jima.core.commons.channel.message.PageableMessage;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
@@ -75,7 +74,7 @@ public interface BaseGetPageDomainCrudKafkaListenerTest<
         String topic = prepareTopic(Operations.GET_PAGE);
         PageableMessage<ID, C> data = new PageableMessage<>();
         data.setCriteria(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getId()));
-        data.setPageable(PageRequest.of(0,Integer.MAX_VALUE));
+        data.setPageable(PageRequest.of(0, Integer.MAX_VALUE));
 
         ChannelMessage<USER, PageableMessage<ID, C>> channelMessage = ChannelMessage.<USER, PageableMessage<ID, C>>builder()
                 .user(getSampleUser())

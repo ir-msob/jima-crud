@@ -72,11 +72,8 @@ public interface BaseUpdateDomainCrudResourceTest<
         DTO savedDto = getDataProvider().saveNew();
         this.getDataProvider().updateDto(savedDto);
         Long countBefore = getDataProvider().countDb();
-        updateRequest(savedDto, dto -> {
-            assertAll(savedDto, dto);
-            assertUpdate(savedDto, dto);
-        });
-        assertCount(countBefore);
+        updateRequest(savedDto, updatedDto -> getDataProvider().assertUpdate(savedDto, updatedDto));
+        getDataProvider().assertCount(countBefore);
     }
 
     /**
@@ -100,11 +97,8 @@ public interface BaseUpdateDomainCrudResourceTest<
         DTO savedDto = getDataProvider().saveNewMandatory();
         this.getDataProvider().updateMandatoryDto(savedDto);
         Long countBefore = getDataProvider().countDb();
-        updateRequest(savedDto, dto -> {
-            assertMandatory(savedDto, dto);
-            assertUpdate(savedDto, dto);
-        });
-        assertCount(countBefore);
+        updateRequest(savedDto, updatedDto -> getDataProvider().assertMandatoryUpdate(savedDto, updatedDto));
+        getDataProvider().assertCount(countBefore);
     }
 
     /**

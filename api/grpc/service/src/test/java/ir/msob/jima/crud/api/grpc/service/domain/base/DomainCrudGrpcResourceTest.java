@@ -44,7 +44,7 @@ public abstract class DomainCrudGrpcResourceTest<
     @Rule
     public final GrpcCleanupRule grpcCleanupRule = new GrpcCleanupRule();
     protected ManagedChannel channel;
-
+    protected CrudServiceGrpc.CrudServiceBlockingStub crudServiceBlockingStub;
     @Autowired
     BaseTokenService tokenService;
     @Autowired
@@ -55,7 +55,12 @@ public abstract class DomainCrudGrpcResourceTest<
     ObjectMapper objectMapper;
     @Autowired
     JimaProperties jimaProperties;
-    protected CrudServiceGrpc.CrudServiceBlockingStub crudServiceBlockingStub;
+
+    private static @NotNull Metadata prepareMetadata(String token) {
+        Metadata metadata = new Metadata();
+        metadata.put(Metadata.Key.of("authorization", Metadata.ASCII_STRING_MARSHALLER), "Bearer " + token);
+        return metadata;
+    }
 
     @Override
     public ProjectUser getSampleUser() {
@@ -122,12 +127,5 @@ public abstract class DomainCrudGrpcResourceTest<
         if (channel != null && !channel.isShutdown()) {
             channel.shutdownNow();
         }
-    }
-
-
-    private static @NotNull Metadata prepareMetadata(String token) {
-        Metadata metadata = new Metadata();
-        metadata.put(Metadata.Key.of("authorization", Metadata.ASCII_STRING_MARSHALLER), "Bearer " + token);
-        return metadata;
     }
 }

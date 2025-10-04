@@ -70,10 +70,9 @@ public interface BaseSaveDomainCrudResourceTest<
             return;
 
         Long countBefore = getDataProvider().countDb();
-        saveRequest(this.getDataProvider().getNewDto(), dto -> {
-            assertAll(this.getDataProvider().getNewDto(), dto);
-            assertSave(this.getDataProvider().getNewDto(), dto);
-            assertCount(countBefore + 1);
+        saveRequest(this.getDataProvider().getNewDto(), savedDto -> {
+            getDataProvider().assertSave(this.getDataProvider().getNewDto(), savedDto);
+            getDataProvider().assertCount(countBefore + 1);
         });
     }
 
@@ -97,10 +96,9 @@ public interface BaseSaveDomainCrudResourceTest<
 
         Long countBefore = getDataProvider().countDb();
         saveRequest(this.getDataProvider().getMandatoryNewDto(),
-                dto -> {
-                    assertMandatory(this.getDataProvider().getMandatoryNewDto(), dto);
-                    assertSave(this.getDataProvider().getMandatoryNewDto(), dto);
-                    assertCount(countBefore + 1);
+                savedDto -> {
+                    getDataProvider().assertMandatorySave(this.getDataProvider().getMandatoryNewDto(), savedDto);
+                    getDataProvider().assertCount(countBefore + 1);
                 });
     }
 

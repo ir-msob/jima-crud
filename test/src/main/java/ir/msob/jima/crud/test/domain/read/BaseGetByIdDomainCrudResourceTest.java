@@ -68,11 +68,8 @@ public interface BaseGetByIdDomainCrudResourceTest<
             return;
         DTO savedDto = getDataProvider().saveNew();
         Long countBefore = getDataProvider().countDb();
-        getByIdRequest(savedDto, dto -> {
-            assertAll(this.getDataProvider().getNewDto(), dto);
-            assertGet(savedDto, dto);
-        });
-        assertCount(countBefore);
+        getByIdRequest(savedDto, dto -> getDataProvider().assertGet(getDataProvider().getNewDto(), dto));
+        getDataProvider().assertCount(countBefore);
     }
 
     /**
@@ -94,11 +91,8 @@ public interface BaseGetByIdDomainCrudResourceTest<
             return;
         DTO savedDto = getDataProvider().saveNewMandatory();
         Long countBefore = getDataProvider().countDb();
-        getByIdRequest(savedDto, dto -> {
-            assertMandatory(this.getDataProvider().getMandatoryNewDto(), dto);
-            assertGet(savedDto, dto);
-        });
-        assertCount(countBefore);
+        getByIdRequest(savedDto, dto -> getDataProvider().assertMandatoryGet(this.getDataProvider().getMandatoryNewDto(), dto));
+        getDataProvider().assertCount(countBefore);
     }
 
     void getByIdRequest(DTO savedDto, Assertable<DTO> assertable);

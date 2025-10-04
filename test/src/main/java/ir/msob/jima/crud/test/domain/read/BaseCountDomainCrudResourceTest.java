@@ -71,7 +71,7 @@ public interface BaseCountDomainCrudResourceTest<
         DTO savedDto = getDataProvider().saveNew();
         Long countBefore = getDataProvider().countDb();
         this.countRequest(savedDto, count -> Assertions.assertThat(count).isEqualTo(1));
-        assertCount(countBefore);
+        getDataProvider().assertCount(countBefore);
     }
 
     /**
@@ -94,7 +94,7 @@ public interface BaseCountDomainCrudResourceTest<
         DTO savedDto = getDataProvider().saveNewMandatory();
         Long countBefore = getDataProvider().countDb();
         this.countRequest(savedDto, count -> Assertions.assertThat(count).isEqualTo(1));
-        assertCount(countBefore);
+        getDataProvider().assertCount(countBefore);
     }
 
     void countRequest(DTO savedDto, Assertable<Long> assertable);

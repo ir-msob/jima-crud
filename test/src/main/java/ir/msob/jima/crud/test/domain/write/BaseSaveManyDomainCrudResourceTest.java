@@ -73,11 +73,10 @@ public interface BaseSaveManyDomainCrudResourceTest<
 
         Long countBefore = getDataProvider().countDb();
         saveManyRequest(Collections.singleton(this.getDataProvider().getNewDto()),
-                dtos -> {
-                    DTO dto = getDataProvider().getObjectMapper().convertValue(dtos.stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());
-                    assertAll(this.getDataProvider().getNewDto(), dto);
-                    assertSave(this.getDataProvider().getNewDto(), dto);
-                    assertCount(countBefore + 1);
+                savedDtos -> {
+                    DTO savedDto = getDataProvider().getObjectMapper().convertValue(savedDtos.stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());
+                    getDataProvider().assertSave(this.getDataProvider().getNewDto(), savedDto);
+                    getDataProvider().assertCount(countBefore + 1);
                 });
     }
 
@@ -101,11 +100,10 @@ public interface BaseSaveManyDomainCrudResourceTest<
 
         Long countBefore = getDataProvider().countDb();
         saveManyRequest(Collections.singleton(this.getDataProvider().getMandatoryNewDto()),
-                dtos -> {
-                    DTO dto = getDataProvider().getObjectMapper().convertValue(dtos.stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());
-                    assertMandatory(this.getDataProvider().getMandatoryNewDto(), dto);
-                    assertSave(this.getDataProvider().getMandatoryNewDto(), dto);
-                    assertCount(countBefore + 1);
+                savedDtos -> {
+                    DTO savedDto = getDataProvider().getObjectMapper().convertValue(savedDtos.stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());
+                    getDataProvider().assertMandatorySave(this.getDataProvider().getMandatoryNewDto(), savedDto);
+                    getDataProvider().assertCount(countBefore + 1);
                 });
     }
 

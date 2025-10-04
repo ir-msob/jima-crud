@@ -72,11 +72,8 @@ public interface BaseEditDomainCrudResourceTest<
         DTO savedDto = getDataProvider().saveNew();
         this.getDataProvider().updateDto(savedDto);
         Long countBefore = getDataProvider().countDb();
-        editRequest(savedDto, getDataProvider().getJsonPatch(), dto -> {
-            assertAll(savedDto, dto);
-            assertUpdate(savedDto, dto);
-        });
-        assertCount(countBefore);
+        editRequest(savedDto, getDataProvider().getJsonPatch(), updatedDto -> getDataProvider().assertUpdate(savedDto, updatedDto));
+        getDataProvider().assertCount(countBefore);
     }
 
     /**
@@ -101,11 +98,8 @@ public interface BaseEditDomainCrudResourceTest<
         this.getDataProvider().updateMandatoryDto(savedDto);
         Long countBefore = getDataProvider().countDb();
         editRequest(savedDto, getDataProvider().getMandatoryJsonPatch(),
-                dto -> {
-                    assertMandatory(savedDto, dto);
-                    assertUpdate(savedDto, dto);
-                });
-        assertCount(countBefore);
+                updatedDto -> getDataProvider().assertMandatoryUpdate(savedDto, updatedDto));
+        getDataProvider().assertCount(countBefore);
 
     }
 

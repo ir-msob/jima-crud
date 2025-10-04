@@ -72,7 +72,7 @@ public interface BaseCountAllDomainCrudResourceTest<
         getDataProvider().saveNew();
         Long countBefore = getDataProvider().countDb();
         this.countAllRequest(count -> assertEquals(1, count));
-        assertCount(countBefore);
+        getDataProvider().assertCount(countBefore);
 
     }
 
@@ -96,7 +96,7 @@ public interface BaseCountAllDomainCrudResourceTest<
         getDataProvider().saveNewMandatory();
         Long countBefore = getDataProvider().countDb();
         this.countAllRequest(count -> assertEquals(1, count));
-        assertCount(countBefore);
+        getDataProvider().assertCount(countBefore);
     }
 
 

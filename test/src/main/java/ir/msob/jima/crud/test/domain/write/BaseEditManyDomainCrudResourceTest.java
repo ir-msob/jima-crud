@@ -74,12 +74,11 @@ public interface BaseEditManyDomainCrudResourceTest<
         this.getDataProvider().updateDto(savedDto);
         Long countBefore = getDataProvider().countDb();
         editManyRequest(savedDto, getDataProvider().getJsonPatch(),
-                dtos -> {
-                    DTO dto = getDataProvider().getObjectMapper().convertValue(dtos.stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());
-                    assertAll(savedDto, dto);
-                    assertUpdate(savedDto, dto);
+                updatedDtos -> {
+                    DTO updatedDto = getDataProvider().getObjectMapper().convertValue(updatedDtos.stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());
+                    getDataProvider().assertUpdate(savedDto, updatedDto);
                 });
-        assertCount(countBefore);
+        getDataProvider().assertCount(countBefore);
     }
 
     /**
@@ -104,12 +103,11 @@ public interface BaseEditManyDomainCrudResourceTest<
         this.getDataProvider().updateMandatoryDto(savedDto);
         Long countBefore = getDataProvider().countDb();
         editManyRequest(savedDto, getDataProvider().getMandatoryJsonPatch(),
-                dtos -> {
-                    DTO dto = getDataProvider().getObjectMapper().convertValue(dtos.stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());
-                    assertMandatory(savedDto, dto);
-                    assertUpdate(savedDto, dto);
+                updatedDtos -> {
+                    DTO updatedDto = getDataProvider().getObjectMapper().convertValue(updatedDtos.stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());
+                    getDataProvider().assertMandatoryUpdate(savedDto, updatedDto);
                 });
-        assertCount(countBefore);
+        getDataProvider().assertCount(countBefore);
     }
 
     /**

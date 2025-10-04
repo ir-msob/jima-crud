@@ -72,8 +72,8 @@ public interface BaseDeleteByIdDomainCrudResourceTest<
         Long countBefore = getDataProvider().countDb();
         deleteByIdRequest(savedDto, id -> {
             assertThat(id).matches(id::equals);
-            assertCount(countBefore - 1);
-            assertDelete(savedDto);
+            getDataProvider().assertCount(countBefore - 1);
+            getDataProvider().assertDelete(id, savedDto);
         });
     }
 
@@ -98,8 +98,8 @@ public interface BaseDeleteByIdDomainCrudResourceTest<
         Long countBefore = getDataProvider().countDb();
         deleteByIdRequest(savedDto, id -> {
             assertThat(id).matches(id::equals);
-            assertCount(countBefore - 1);
-            assertDelete(savedDto);
+            getDataProvider().assertCount(countBefore - 1);
+            getDataProvider().assertDelete(id, savedDto);
         });
     }
 

@@ -72,10 +72,9 @@ public interface BaseGetManyDomainCrudResourceTest<
         getManyRequest(savedDto, dtos -> {
             if (dtos == null) throw new DomainNotFoundException();
             DTO dto = getDataProvider().getObjectMapper().convertValue(dtos.stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());
-            assertAll(this.getDataProvider().getNewDto(), dto);
-            assertGet(savedDto, dto);
+            getDataProvider().assertGet(getDataProvider().getNewDto(), dto);
         });
-        assertCount(countBefore);
+        getDataProvider().assertCount(countBefore);
     }
 
     /**
@@ -100,10 +99,9 @@ public interface BaseGetManyDomainCrudResourceTest<
         getManyRequest(savedDto, dtos -> {
             if (dtos == null) throw new DomainNotFoundException();
             DTO dto = getDataProvider().getObjectMapper().convertValue(dtos.stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());
-            assertMandatory(this.getDataProvider().getMandatoryNewDto(), dto);
-            assertGet(savedDto, dto);
+            getDataProvider().assertMandatoryGet(this.getDataProvider().getMandatoryNewDto(), dto);
         });
-        assertCount(countBefore);
+        getDataProvider().assertCount(countBefore);
     }
 
 

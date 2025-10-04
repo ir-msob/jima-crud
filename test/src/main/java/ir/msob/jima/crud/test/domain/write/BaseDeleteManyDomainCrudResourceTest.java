@@ -76,8 +76,8 @@ public interface BaseDeleteManyDomainCrudResourceTest<
         deleteManyRequest(savedDto, ids -> {
             assertEquals(1, ids.size());
             assertThat(ids.stream().map(Object::toString).toList()).contains(savedDto.getId().toString());
-            assertCount(countBefore - 1);
-            assertDelete(savedDto);
+            getDataProvider().assertCount(countBefore - 1);
+            getDataProvider().assertDelete(ids.stream().findFirst().orElse(null), savedDto);
         });
     }
 
@@ -103,8 +103,8 @@ public interface BaseDeleteManyDomainCrudResourceTest<
         deleteManyRequest(savedDto, ids -> {
             assertEquals(1, ids.size());
             assertThat(ids.stream().map(Object::toString).toList()).contains(savedDto.getId().toString());
-            assertCount(countBefore - 1);
-            assertDelete(savedDto);
+            getDataProvider().assertCount(countBefore - 1);
+            getDataProvider().assertDelete(ids.stream().findFirst().orElse(null), savedDto);
         });
     }
 

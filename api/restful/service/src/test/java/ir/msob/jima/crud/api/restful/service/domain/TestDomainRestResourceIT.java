@@ -78,7 +78,7 @@ public class TestDomainRestResourceIT extends DomainCrudRestResourceTest<TestDom
 
     @Override
     public TypeReference<TestCriteria> getCriteriaReferenceType() {
-         return new TypeReference<TestCriteria>() {
+        return new TypeReference<TestCriteria>() {
             @Override
             public Type getType() {
                 return super.getType();
@@ -88,7 +88,7 @@ public class TestDomainRestResourceIT extends DomainCrudRestResourceTest<TestDom
 
     @Override
     public TypeReference<TestDto> getDtoReferenceType() {
-         return new TypeReference<TestDto>() {
+        return new TypeReference<TestDto>() {
             @Override
             public Type getType() {
                 return super.getType();
