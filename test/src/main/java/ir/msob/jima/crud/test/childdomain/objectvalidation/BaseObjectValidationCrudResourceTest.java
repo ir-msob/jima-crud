@@ -23,7 +23,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.junit.jupiter.api.Test;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.annotation.Rollback;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
@@ -67,7 +67,7 @@ public interface BaseObjectValidationCrudResourceTest<
 
 
     @Test
-    @Transactional
+    @Rollback
     default void deleteByName() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         if (ignoreTest(getElement(), Operations.DELETE_BY_NAME))
             return;
@@ -86,7 +86,7 @@ public interface BaseObjectValidationCrudResourceTest<
 
 
     @Test
-    @Transactional
+    @Rollback
     default void updateByName() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         if (ignoreTest(getElement(), Operations.UPDATE_BY_NAME))
             return;

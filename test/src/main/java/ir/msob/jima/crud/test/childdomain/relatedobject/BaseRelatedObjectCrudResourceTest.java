@@ -1,8 +1,8 @@
 package ir.msob.jima.crud.test.childdomain.relatedobject;
 
 import ir.msob.jima.core.commons.childdomain.ChildDomainUtil;
-import ir.msob.jima.core.commons.childdomain.relatedobject.RelatedObjectAbstract;
-import ir.msob.jima.core.commons.childdomain.relatedobject.RelatedObjectCriteriaAbstract;
+import ir.msob.jima.core.commons.childdomain.relatedobject.BaseRelatedObject;
+import ir.msob.jima.core.commons.childdomain.relatedobject.BaseRelatedObjectCriteriaAbstract;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
@@ -21,7 +21,7 @@ import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.junit.jupiter.api.Test;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.annotation.Rollback;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
@@ -49,8 +49,8 @@ public interface BaseRelatedObjectCrudResourceTest<
         RID extends Comparable<RID> & Serializable,
         USER extends BaseUser,
 
-        CD extends RelatedObjectAbstract<ID, RID>,
-        CC extends RelatedObjectCriteriaAbstract<ID, RID, CD>,
+        CD extends BaseRelatedObject<ID, RID>,
+        CC extends BaseRelatedObjectCriteriaAbstract<ID, RID, CD>,
 
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
@@ -66,7 +66,7 @@ public interface BaseRelatedObjectCrudResourceTest<
 
 
     @Test
-    @Transactional
+    @Rollback
     default void deleteByRelatedId() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         if (ignoreTest(getElement(), Operations.UPDATE_BY_RELATED_ID))
             return;
@@ -85,7 +85,7 @@ public interface BaseRelatedObjectCrudResourceTest<
 
 
     @Test
-    @Transactional
+    @Rollback
     default void updateByRelatedId() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         if (ignoreTest(getElement(), Operations.UPDATE_BY_RELATED_ID))
             return;

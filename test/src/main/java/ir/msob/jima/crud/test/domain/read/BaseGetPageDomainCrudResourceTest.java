@@ -16,7 +16,7 @@ import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
 import ir.msob.jima.crud.test.domain.ParentDomainCrudResourceTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.annotation.Rollback;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
@@ -64,7 +64,7 @@ public interface BaseGetPageDomainCrudResourceTest<
      * @throws IllegalAccessException    If an illegal access exception occurs.
      */
     @Test
-    @Transactional
+    @Rollback
     default void getPage() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         if (ignoreTest(Operations.GET_PAGE))
             return;
@@ -92,7 +92,7 @@ public interface BaseGetPageDomainCrudResourceTest<
      * @throws IllegalAccessException    If an illegal access exception occurs.
      */
     @Test
-    @Transactional
+    @Rollback
     default void getPageMandatory() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         if (ignoreTest(Operations.GET_PAGE))
             return;

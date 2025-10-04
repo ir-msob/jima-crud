@@ -25,7 +25,7 @@ import jakarta.validation.constraints.NotNull;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.annotation.Rollback;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
@@ -89,7 +89,7 @@ public interface ParentChildCrudResourceTest<
 
 
     @Test
-    @Transactional
+    @Rollback
     default void updateById() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         if (ignoreTest(getElement(), Operations.UPDATE_BY_ID))
             return;
@@ -115,7 +115,7 @@ public interface ParentChildCrudResourceTest<
 
 
     @Test
-    @Transactional
+    @Rollback
     default void update() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         if (ignoreTest(getElement(), Operations.UPDATE))
             return;
@@ -147,7 +147,7 @@ public interface ParentChildCrudResourceTest<
 
 
     @Test
-    @Transactional
+    @Rollback
     default void updateMany() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         if (ignoreTest(getElement(), Operations.UPDATE_MANY))
             return;
@@ -180,7 +180,7 @@ public interface ParentChildCrudResourceTest<
      * @throws IllegalAccessException    If an illegal access exception occurs.
      */
     @Test
-    @Transactional
+    @Rollback
     default void deleteById() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         if (ignoreTest(getElement(), Operations.DELETE_BY_ID))
             return;
@@ -198,7 +198,7 @@ public interface ParentChildCrudResourceTest<
     void deleteByIdRequest(ID parentId, ID id, Assertable<DTO> assertable);
 
     @Test
-    @Transactional
+    @Rollback
     default void delete() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         if (ignoreTest(getElement(), Operations.DELETE))
             return;
@@ -228,7 +228,7 @@ public interface ParentChildCrudResourceTest<
 
 
     @Test
-    @Transactional
+    @Rollback
     default void deleteMany() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         if (ignoreTest(getElement(), Operations.DELETE_MANY))
             return;
@@ -260,7 +260,7 @@ public interface ParentChildCrudResourceTest<
 
 
     @Test
-    @Transactional
+    @Rollback
     default void save() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         if (ignoreTest(getElement(), Operations.SAVE))
             return;
@@ -273,7 +273,7 @@ public interface ParentChildCrudResourceTest<
     void saveRequest(@NotNull ID parentId, @NotNull @Valid CD child, Assertable<DTO> assertable);
 
     @Test
-    @Transactional
+    @Rollback
     default void saveMany() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         if (ignoreTest(getElement(), Operations.SAVE_MANY))
             return;

@@ -15,7 +15,7 @@ import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
 import ir.msob.jima.crud.test.domain.ParentDomainCrudResourceTest;
 import org.junit.jupiter.api.Test;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.annotation.Rollback;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
@@ -66,7 +66,7 @@ public interface BaseSaveManyDomainCrudResourceTest<
      * @throws IllegalAccessException    If an illegal access exception occurs.
      */
     @Test
-    @Transactional
+    @Rollback
     default void saveMany() throws ExecutionException, InterruptedException, BadRequestException, DomainNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         if (ignoreTest(Operations.SAVE_MANY))
             return;
@@ -94,7 +94,7 @@ public interface BaseSaveManyDomainCrudResourceTest<
      * @throws IllegalAccessException    If an illegal access exception occurs.
      */
     @Test
-    @Transactional
+    @Rollback
     default void saveManyMandatory() throws ExecutionException, InterruptedException, BadRequestException, DomainNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         if (ignoreTest(Operations.SAVE_MANY))
             return;

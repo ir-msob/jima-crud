@@ -16,7 +16,7 @@ import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
 import ir.msob.jima.crud.test.domain.ParentDomainCrudResourceTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.annotation.Rollback;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
@@ -64,7 +64,7 @@ public interface BaseCountDomainCrudResourceTest<
      * @throws IllegalAccessException    If an illegal access exception occurs.
      */
     @Test
-    @Transactional
+    @Rollback
     default void count() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         if (ignoreTest(Operations.COUNT))
             return;
@@ -87,7 +87,7 @@ public interface BaseCountDomainCrudResourceTest<
      * @throws IllegalAccessException    If an illegal access exception occurs.
      */
     @Test
-    @Transactional
+    @Rollback
     default void countMandatory() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         if (ignoreTest(Operations.COUNT))
             return;

@@ -1,6 +1,7 @@
 package ir.msob.jima.crud.api.restful.test.childdomain;
 
 import ir.msob.jima.core.api.restful.test.BaseCoreRestResourceTest;
+import ir.msob.jima.core.commons.childdomain.BaseChildDomain;
 import ir.msob.jima.core.commons.childdomain.BaseChildDomainAbstract;
 import ir.msob.jima.core.commons.childdomain.criteria.BaseChildCriteriaAbstract;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
@@ -29,7 +30,7 @@ public interface BaseParentChildCrudRestResourceTest<
         ID extends Comparable<ID> & Serializable,
         USER extends BaseUser,
 
-        CD extends BaseChildDomainAbstract<ID>,
+        CD extends BaseChildDomain<ID>,
         CC extends BaseChildCriteriaAbstract<ID, CD>,
 
         D extends BaseDomain<ID>,

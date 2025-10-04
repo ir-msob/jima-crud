@@ -23,7 +23,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.junit.jupiter.api.Test;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.annotation.Rollback;
 
 import java.io.Serializable;
 import java.util.concurrent.ExecutionException;
@@ -66,7 +66,7 @@ public interface BaseCharacteristicCrudResourceTest<
 
 
     @Test
-    @Transactional
+    @Rollback
     default void deleteByKey() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException {
         if (ignoreTest(getElement(), Operations.DELETE_BY_KEY))
             return;
@@ -85,7 +85,7 @@ public interface BaseCharacteristicCrudResourceTest<
 
 
     @Test
-    @Transactional
+    @Rollback
     default void updateByKey() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException {
         if (ignoreTest(getElement(), Operations.UPDATE_BY_KEY))
             return;
