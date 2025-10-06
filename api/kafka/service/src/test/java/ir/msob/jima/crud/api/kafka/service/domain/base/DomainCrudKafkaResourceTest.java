@@ -21,8 +21,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 
@@ -132,11 +130,6 @@ public abstract class DomainCrudKafkaResourceTest<
     @Override
     public ConsumerFactory<String, String> getConsumerFactory() {
         return consumerFactory;
-    }
-
-    @Override
-    public Duration getSleepDuration() {
-        return Duration.of(1, ChronoUnit.SECONDS);
     }
 
     @Override
