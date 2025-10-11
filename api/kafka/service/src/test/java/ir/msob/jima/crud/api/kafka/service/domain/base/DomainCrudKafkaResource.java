@@ -7,7 +7,6 @@ import ir.msob.jima.core.commons.channel.message.*;
 import ir.msob.jima.core.commons.client.BaseAsyncClient;
 import ir.msob.jima.core.commons.security.BaseUserService;
 import ir.msob.jima.core.commons.shared.ModelType;
-import ir.msob.jima.core.ral.mongo.commons.query.QueryBuilder;
 import ir.msob.jima.core.ral.mongo.it.criteria.ProjectCriteria;
 import ir.msob.jima.core.ral.mongo.it.domain.ProjectDomain;
 import ir.msob.jima.core.ral.mongo.it.dto.ProjectDto;
@@ -31,10 +30,10 @@ public abstract class DomainCrudKafkaResource<
         D extends ProjectDomain,
         DTO extends ProjectDto,
         C extends ProjectCriteria,
-        R extends MongoDomainCrudRepository<D, C>,
+        R extends MongoDomainCrudRepository<D>,
         S extends DomainCrudService<D, DTO, C, R>
         > implements
-        BaseDomainCrudKafkaListener<String, ProjectUser, D, DTO, C, QueryBuilder, R, S> {
+        BaseDomainCrudKafkaListener<String, ProjectUser, D, DTO, C, R, S> {
 
     @Autowired
     ProjectUserService projectUserService;

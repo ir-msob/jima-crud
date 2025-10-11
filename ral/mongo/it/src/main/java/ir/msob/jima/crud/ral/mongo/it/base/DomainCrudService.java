@@ -1,7 +1,6 @@
 package ir.msob.jima.crud.ral.mongo.it.base;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ir.msob.jima.core.ral.mongo.commons.query.QueryBuilder;
 import ir.msob.jima.core.ral.mongo.it.criteria.ProjectCriteria;
 import ir.msob.jima.core.ral.mongo.it.domain.ProjectDomain;
 import ir.msob.jima.core.ral.mongo.it.dto.ProjectDto;
@@ -17,9 +16,8 @@ public abstract class DomainCrudService<
         D extends ProjectDomain,
         DTO extends ProjectDto,
         C extends ProjectCriteria,
-        R extends MongoDomainCrudRepository<D, C>
-        >
-        implements BaseDomainCrudService<String, ProjectUser, D, DTO, C, QueryBuilder, R> {
+        R extends MongoDomainCrudRepository<D>>
+        implements BaseDomainCrudService<String, ProjectUser, D, DTO, C, R> {
 
     private final BeforeAfterComponent beforeAfterComponent;
     private final ObjectMapper objectMapper;

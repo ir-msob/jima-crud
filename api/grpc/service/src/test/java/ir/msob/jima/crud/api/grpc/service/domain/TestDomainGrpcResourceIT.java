@@ -32,7 +32,7 @@ import java.lang.reflect.Type;
 @CommonsLog
 @EnableConfigurationProperties
 @SpringBootTest
-public class TestDomainGrpcResourceIT extends DomainCrudGrpcResourceTest<TestDomain, TestDto, TestCriteria, TestRepository, TestServiceDomain, TestDataProvider> {
+class TestDomainGrpcResourceIT extends DomainCrudGrpcResourceTest<TestDomain, TestDto, TestCriteria, TestRepository, TestServiceDomain, TestDataProvider> {
 
 
     @Autowired
@@ -41,14 +41,14 @@ public class TestDomainGrpcResourceIT extends DomainCrudGrpcResourceTest<TestDom
 
     @SneakyThrows
     @BeforeAll
-    public static void beforeAll() {
+    static void beforeAll() {
         CoreTestData.init(new ObjectId().toString(), new ObjectId().toString());
     }
 
 
     @SneakyThrows
     @BeforeEach
-    public void beforeEach() {
+    void beforeEach() {
         getDataProvider().cleanups();
         getDataProvider().createNewDto();
         getDataProvider().createMandatoryNewDto();
@@ -56,7 +56,7 @@ public class TestDomainGrpcResourceIT extends DomainCrudGrpcResourceTest<TestDom
     }
 
     @AfterEach
-    public void afterEach() {
+    void afterEach() {
         channelShutdownNow();
     }
 

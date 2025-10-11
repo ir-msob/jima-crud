@@ -1,5 +1,6 @@
 package ir.msob.jima.crud.api.kafka.service.domain.read;
 
+import ir.msob.jima.core.api.kafka.commons.KafkaListenerUtil;
 import ir.msob.jima.core.commons.callback.CallbackError;
 import ir.msob.jima.core.commons.channel.ChannelMessage;
 import ir.msob.jima.core.commons.channel.message.PageableMessage;
@@ -9,9 +10,9 @@ import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
-import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.crud.api.kafka.client.ChannelUtil;
 import ir.msob.jima.crud.api.kafka.service.domain.ParentDomainCrudKafkaListener;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
@@ -19,8 +20,6 @@ import jakarta.annotation.PostConstruct;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.kafka.listener.ContainerProperties;
-import org.springframework.kafka.listener.MessageListener;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
@@ -33,7 +32,6 @@ import java.io.Serializable;
  * @param <D>    The type of the Domain, which must extend BaseDomain.
  * @param <DTO>  The type of the DTO, which must extend BaseDto.
  * @param <C>    The type of the Criteria, which must extend BaseCriteria.
- * @param <Q>    The type of the Query, which must extend BaseQuery.
  * @param <R>    The type of the Repository, which must extend BaseDomainCrudRepository.
  * @param <S>    The type of the Service, which must extend BaseDomainCrudService.
  */
@@ -43,10 +41,9 @@ public interface BaseGetPageDomainCrudKafkaListener<
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        Q extends BaseQuery,
-        R extends BaseDomainCrudRepository<ID, USER, D, C, Q>,
-        S extends BaseDomainCrudService<ID, USER, D, DTO, C, Q, R>
-        > extends ParentDomainCrudKafkaListener<ID, USER, D, DTO, C, Q, R, S> {
+        R extends BaseDomainCrudRepository<ID, D>,
+        S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>
+        > extends ParentDomainCrudKafkaListener<ID, USER, D, DTO, C, R, S> {
 
     Logger log = LoggerFactory.getLogger(BaseGetPageDomainCrudKafkaListener.class);
 
@@ -55,12 +52,11 @@ public interface BaseGetPageDomainCrudKafkaListener<
      */
     @Scope(operation = Operations.GET_PAGE)
     @PostConstruct
-    default void getPage() {
-        String operation = Operations.GET_PAGE;
-
-        ContainerProperties containerProperties = createContainerProperties(operation);
-        containerProperties.setMessageListener((MessageListener<String, String>) dto -> serviceGetPage(dto.value()));
-        startContainer(containerProperties, operation);
+    default void startGetPage() {
+        KafkaListenerUtil.startListener(getKafkaConsumerFactory(),
+                ChannelUtil.getChannel(getDtoClass(), Operations.GET_PAGE),
+                getGroupId(),
+                this::getPage);
     }
 
     /**
@@ -73,7 +69,7 @@ public interface BaseGetPageDomainCrudKafkaListener<
     @CallbackError("dto")
     @Scope(operation = Operations.GET_PAGE)
     @Transactional
-    default void serviceGetPage(String dto) {
+    default void getPage(String dto) {
         log.debug("Received message for get page: dto {}", dto);
         ChannelMessage<USER, PageableMessage<ID, C>> message;
         message = getObjectMapper().readValue(dto, getChannelMessagePageableReferenceType());

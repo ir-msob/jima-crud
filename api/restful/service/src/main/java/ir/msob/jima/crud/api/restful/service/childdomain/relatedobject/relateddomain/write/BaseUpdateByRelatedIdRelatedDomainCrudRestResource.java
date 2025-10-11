@@ -37,7 +37,7 @@ public interface BaseUpdateByRelatedIdRelatedDomainCrudRestResource<
         , CC extends RelatedDomainCriteriaAbstract<ID, CD>
         , DTO extends BaseDto<ID>
         , CS extends BaseChildDomainCrudService<ID, USER, DTO>> extends
-        ParentRelatedObjectCrudRestResource<ID, ID, USER, CD, CC, DTO, CS> {
+        ParentRelatedObjectCrudRestResource<ID, ID, USER, CD, DTO, CS> {
 
     Logger log = LoggerFactory.getLogger(BaseUpdateByRelatedIdRelatedDomainCrudRestResource.class);
 

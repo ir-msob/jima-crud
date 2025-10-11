@@ -10,7 +10,6 @@ import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
-import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.rsocket.service.domain.ParentDomainCrudRsocketResource;
@@ -42,11 +41,10 @@ public interface BaseEditByIdDomainCrudRsocketResource<
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        Q extends BaseQuery,
-        R extends BaseDomainCrudRepository<ID, USER, D, C, Q>,
+        R extends BaseDomainCrudRepository<ID, D>,
 
-        S extends BaseEditDomainCrudService<ID, USER, D, DTO, C, Q, R>
-        > extends ParentDomainCrudRsocketResource<ID, USER, D, DTO, C, Q, R, S> {
+        S extends BaseEditDomainCrudService<ID, USER, D, DTO, C, R>
+        > extends ParentDomainCrudRsocketResource<ID, USER, D, DTO, C, R, S> {
 
     Logger log = LoggerFactory.getLogger(BaseEditByIdDomainCrudRsocketResource.class);
 

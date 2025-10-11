@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
-import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.grpc.service.domain.read.*;
 import ir.msob.jima.crud.api.grpc.service.domain.write.*;
@@ -24,7 +23,6 @@ import java.io.Serializable;
  * @param <D>    The type of the domain entity.
  * @param <DTO>  The type of the data transfer object (DTO) for the entity.
  * @param <C>    The type of criteria used for querying entities.
- * @param <Q>    The type of query used for retrieving entities.
  * @param <R>    The type of CRUD repository used for database operations.
  * @param <S>    The type of CRUD service providing business logic.
  * @see ParentDomainCrudGrpcResource
@@ -36,27 +34,26 @@ public abstract class BaseDomainCrudGrpcResource<
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        Q extends BaseQuery,
-        R extends BaseDomainCrudRepository<ID, USER, D, C, Q>,
-        S extends BaseDomainCrudService<ID, USER, D, DTO, C, Q, R>
+        R extends BaseDomainCrudRepository<ID, D>,
+        S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>
         > implements
-        BaseCountAllDomainCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S>,
-        BaseCountDomainCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S>,
-        BaseGetManyDomainCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S>,
-        BaseGetByIdDomainCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S>,
-        BaseGetOneDomainCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S>,
-        BaseGetPageDomainCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S>,
-        BaseDeleteByIdDomainCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S>,
-        BaseDeleteDomainCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S>,
-        BaseDeleteManyDomainCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S>,
-        BaseEditByIdDomainCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S>,
-        BaseEditDomainCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S>,
-        BaseEditManyDomainCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S>,
-        BaseSaveDomainCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S>,
-        BaseSaveManyDomainCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S>,
-        BaseUpdateByIdDomainCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S>,
-        BaseUpdateDomainCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S>,
-        BaseUpdateManyDomainCrudGrpcResource<ID, USER, D, DTO, C, Q, R, S> {
+        BaseCountAllDomainCrudGrpcResource<ID, USER, D, DTO, C, R, S>,
+        BaseCountDomainCrudGrpcResource<ID, USER, D, DTO, C, R, S>,
+        BaseGetManyDomainCrudGrpcResource<ID, USER, D, DTO, C, R, S>,
+        BaseGetByIdDomainCrudGrpcResource<ID, USER, D, DTO, C, R, S>,
+        BaseGetOneDomainCrudGrpcResource<ID, USER, D, DTO, C, R, S>,
+        BaseGetPageDomainCrudGrpcResource<ID, USER, D, DTO, C, R, S>,
+        BaseDeleteByIdDomainCrudGrpcResource<ID, USER, D, DTO, C, R, S>,
+        BaseDeleteDomainCrudGrpcResource<ID, USER, D, DTO, C, R, S>,
+        BaseDeleteManyDomainCrudGrpcResource<ID, USER, D, DTO, C, R, S>,
+        BaseEditByIdDomainCrudGrpcResource<ID, USER, D, DTO, C, R, S>,
+        BaseEditDomainCrudGrpcResource<ID, USER, D, DTO, C, R, S>,
+        BaseEditManyDomainCrudGrpcResource<ID, USER, D, DTO, C, R, S>,
+        BaseSaveDomainCrudGrpcResource<ID, USER, D, DTO, C, R, S>,
+        BaseSaveManyDomainCrudGrpcResource<ID, USER, D, DTO, C, R, S>,
+        BaseUpdateByIdDomainCrudGrpcResource<ID, USER, D, DTO, C, R, S>,
+        BaseUpdateDomainCrudGrpcResource<ID, USER, D, DTO, C, R, S>,
+        BaseUpdateManyDomainCrudGrpcResource<ID, USER, D, DTO, C, R, S> {
 
     private final ObjectMapper objectMapper;
 

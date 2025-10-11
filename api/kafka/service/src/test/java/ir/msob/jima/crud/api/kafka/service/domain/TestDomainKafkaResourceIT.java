@@ -36,7 +36,7 @@ import java.util.Collection;
 @ContextConfiguration
 @Testcontainers
 @CommonsLog
-public class TestDomainKafkaResourceIT extends DomainCrudKafkaResourceTest<TestDomain, TestDto, TestCriteria, TestRepository, TestServiceDomain, TestDataProvider> {
+class TestDomainKafkaResourceIT extends DomainCrudKafkaResourceTest<TestDomain, TestDto, TestCriteria, TestRepository, TestServiceDomain, TestDataProvider> {
 
     @Autowired
     TestDomainKafkaResourceDomain testDomainRsocketResource;
@@ -45,14 +45,14 @@ public class TestDomainKafkaResourceIT extends DomainCrudKafkaResourceTest<TestD
 
     @SneakyThrows
     @BeforeAll
-    public static void beforeAll() {
+    static void beforeAll() {
         CoreTestData.init(new ObjectId().toString(), new ObjectId().toString());
 
     }
 
     @SneakyThrows
     @BeforeEach
-    public void beforeEach() {
+    void beforeEach() {
         getDataProvider().cleanups();
         TestDataProvider.createNewDto();
         TestDataProvider.createMandatoryNewDto();

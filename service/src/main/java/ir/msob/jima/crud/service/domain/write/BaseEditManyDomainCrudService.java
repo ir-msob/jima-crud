@@ -8,7 +8,6 @@ import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.exception.validation.ValidationException;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
-import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
@@ -30,10 +29,9 @@ import java.util.Collection;
  * @param <D>    The type of the entity (domain) to be updated.
  * @param <DTO>  The type of data transfer object that represents the entity.
  * @param <C>    The type of criteria used for filtering entities.
- * @param <Q>    The type of query used for database operations.
  * @param <R>    The type of repository used for CRUD operations.
  */
-public interface BaseEditManyDomainCrudService<ID extends Comparable<ID> & Serializable, USER extends BaseUser, D extends BaseDomain<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>, Q extends BaseQuery, R extends BaseDomainCrudRepository<ID, USER, D, C, Q>> extends ParentWriteDomainCrudService<ID, USER, D, DTO, C, Q, R> {
+public interface BaseEditManyDomainCrudService<ID extends Comparable<ID> & Serializable, USER extends BaseUser, D extends BaseDomain<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>, R extends BaseDomainCrudRepository<ID, D>> extends ParentWriteDomainCrudService<ID, USER, D, DTO, C, R> {
     Logger log = LoggerFactory.getLogger(BaseEditManyDomainCrudService.class);
 
     /**
@@ -50,7 +48,7 @@ public interface BaseEditManyDomainCrudService<ID extends Comparable<ID> & Seria
     @Transactional
     @MethodStats
     default Mono<Collection<DTO>> editMany(Collection<ID> ids, JsonPatch jsonPatch, USER user) throws BadRequestException, DomainNotFoundException {
-        return this.editMany(CriteriaUtil.idCriteria(getCriteriaClass(), ids), jsonPatch, user);
+        return this.doEditMany(CriteriaUtil.idCriteria(getCriteriaClass(), ids), jsonPatch, user);
     }
 
     /**
@@ -69,6 +67,10 @@ public interface BaseEditManyDomainCrudService<ID extends Comparable<ID> & Seria
     default Mono<Collection<DTO>> editMany(C criteria, JsonPatch jsonPatch, USER user) throws BadRequestException, DomainNotFoundException {
         log.debug("EditMany, jsonPatch: {}, criteria: {}, user {}", jsonPatch, criteria, user);
 
+        return this.doEditMany(criteria, jsonPatch, user);
+    }
+
+    private Mono<Collection<DTO>> doEditMany(C criteria, JsonPatch jsonPatch, USER user) throws BadRequestException, DomainNotFoundException {
         return getMany(criteria, user).flatMap(dtos -> {
             Collection<DTO> previousDtos = dtos.stream()
                     .map(SerializationUtils::clone)

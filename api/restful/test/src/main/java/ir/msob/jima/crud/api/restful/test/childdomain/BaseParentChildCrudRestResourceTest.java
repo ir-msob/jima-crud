@@ -9,7 +9,6 @@ import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.element.BaseElementAbstract;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
-import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
@@ -35,15 +34,13 @@ public interface BaseParentChildCrudRestResourceTest<
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        Q extends BaseQuery,
-        R extends BaseDomainCrudRepository<ID, USER, D, C, Q>,
-        S extends BaseDomainCrudService<ID, USER, D, DTO, C, Q, R>,
-        DP extends BaseDomainCrudDataProvider<ID, USER, D, DTO, C, Q, R, S>,
-
+        R extends BaseDomainCrudRepository<ID, D>,
+        S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>,
+        DP extends BaseDomainCrudDataProvider<ID, USER, D, DTO, C, R, S>,
         CS extends BaseChildDomainCrudService<ID, USER, DTO>,
         CDP extends BaseChildCrudDataProvider<ID, USER, CD, DTO, CS>>
         extends BaseCoreRestResourceTest<ID, USER, D, DTO, C>
-        , ParentChildCrudResourceTest<ID, USER, CD, CC, D, DTO, C, Q, R, S, DP, CS, CDP> {
+        , ParentChildCrudResourceTest<ID, USER, CD, CC, D, DTO, C, R, S, DP, CS, CDP> {
 
     String getBaseUri();
 

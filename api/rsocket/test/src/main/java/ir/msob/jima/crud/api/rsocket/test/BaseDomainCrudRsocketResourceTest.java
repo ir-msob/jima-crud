@@ -3,7 +3,6 @@ package ir.msob.jima.crud.api.rsocket.test;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
-import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.rsocket.test.read.*;
 import ir.msob.jima.crud.api.rsocket.test.write.*;
@@ -22,7 +21,6 @@ import java.io.Serializable;
  * @param <D>    the type of the domain object, which extends BaseDomain
  * @param <DTO>  the type of the DTO object, which extends BaseDto
  * @param <C>    the type of the criteria object, which extends BaseCriteria
- * @param <Q>    the type of the query object, which extends BaseQuery
  * @param <R>    the type of the repository object, which extends BaseDomainCrudRepository
  * @param <S>    the type of the service object, which extends BaseDomainCrudService
  * @param <DP>   the type of the data provider object, which extends BaseDomainCrudDataProvider
@@ -33,22 +31,21 @@ public interface BaseDomainCrudRsocketResourceTest<
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        Q extends BaseQuery,
-        R extends BaseDomainCrudRepository<ID, USER, D, C, Q>,
-        S extends BaseDomainCrudService<ID, USER, D, DTO, C, Q, R>,
-        DP extends BaseDomainCrudDataProvider<ID, USER, D, DTO, C, Q, R, S>>
+        R extends BaseDomainCrudRepository<ID, D>,
+        S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>,
+        DP extends BaseDomainCrudDataProvider<ID, USER, D, DTO, C, R, S>>
         extends
-        BaseCountAllDomainCrudRsocketResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>,
-        BaseCountDomainCrudRsocketResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>,
-        BaseGetManyDomainCrudRsocketResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>,
-        BaseGetOneDomainCrudRsocketResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>,
-        BaseGetPageDomainCrudRsocketResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>,
-        BaseDeleteDomainCrudRsocketResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>,
-        BaseDeleteManyDomainCrudRsocketResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>,
-        BaseEditManyDomainCrudRsocketResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>,
-        BaseEditDomainCrudRsocketResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>,
-        BaseSaveManyDomainCrudRsocketResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>,
-        BaseSaveDomainCrudRsocketResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>,
-        BaseUpdateManyDomainCrudRsocketResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>,
-        BaseUpdateDomainCrudRsocketResourceTest<ID, USER, D, DTO, C, Q, R, S, DP> {
+        BaseCountAllDomainCrudRsocketResourceTest<ID, USER, D, DTO, C, R, S, DP>,
+        BaseCountDomainCrudRsocketResourceTest<ID, USER, D, DTO, C, R, S, DP>,
+        BaseGetManyDomainCrudRsocketResourceTest<ID, USER, D, DTO, C, R, S, DP>,
+        BaseGetOneDomainCrudRsocketResourceTest<ID, USER, D, DTO, C, R, S, DP>,
+        BaseGetPageDomainCrudRsocketResourceTest<ID, USER, D, DTO, C, R, S, DP>,
+        BaseDeleteDomainCrudRsocketResourceTest<ID, USER, D, DTO, C, R, S, DP>,
+        BaseDeleteManyDomainCrudRsocketResourceTest<ID, USER, D, DTO, C, R, S, DP>,
+        BaseEditManyDomainCrudRsocketResourceTest<ID, USER, D, DTO, C, R, S, DP>,
+        BaseEditDomainCrudRsocketResourceTest<ID, USER, D, DTO, C, R, S, DP>,
+        BaseSaveManyDomainCrudRsocketResourceTest<ID, USER, D, DTO, C, R, S, DP>,
+        BaseSaveDomainCrudRsocketResourceTest<ID, USER, D, DTO, C, R, S, DP>,
+        BaseUpdateManyDomainCrudRsocketResourceTest<ID, USER, D, DTO, C, R, S, DP>,
+        BaseUpdateDomainCrudRsocketResourceTest<ID, USER, D, DTO, C, R, S, DP> {
 }

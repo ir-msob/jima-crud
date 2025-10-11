@@ -5,7 +5,6 @@ import com.github.fge.jsonpatch.JsonPatch;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
-import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.resource.BaseResource;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.security.BaseUserService;
@@ -22,16 +21,15 @@ import java.util.List;
 /**
  * The {@code ParentDomainCrudGraphqlRestResource} interface defines a set of common methods for GraphQL-based CRUD operations.
  * It extends {@code BaseResource<ID, USER>} and implements {@code BaseCrudResource}.
- * This interface is generic, allowing customization for different types such as ID, USER, D, DTO, C, Q, R, and S.
+ * This interface is generic, allowing customization for different types such as ID, USER, D, DTO, C, R, and S.
  *
  * @param <ID>   The type of the resource ID, which should be comparable and serializable.
  * @param <USER> The type of the user associated with the resource, extending {@code BaseUser}.
  * @param <D>    The type of the resource domain, extending {@code BaseDomain<ID>}.
  * @param <DTO>  The type of the data transfer object associated with the resource, extending {@code BaseDto<ID>}.
  * @param <C>    The type of criteria associated with the resource, extending {@code BaseCriteria<ID, USER>}.
- * @param <Q>    The type of the query associated with the resource, extending {@code BaseQuery}.
- * @param <R>    The type of the CRUD repository associated with the resource, extending {@code BaseDomainCrudRepository<ID, USER, D, C, Q>}.
- * @param <S>    The type of the CRUD service associated with the resource, extending {@code BaseDomainCrudService<ID, USER, D, DTO, C, Q, R>}.
+ * @param <R>    The type of the CRUD repository associated with the resource, extending {@code BaseDomainCrudRepository<ID, USER, D, C>}.
+ * @param <S>    The type of the CRUD service associated with the resource, extending {@code BaseDomainCrudService<ID, USER, D, DTO, C, R>}.
  * @see BaseResource
  * @see BaseCrudResource
  */
@@ -40,9 +38,8 @@ public interface ParentDomainCrudGraphqlRestResource<ID extends Comparable<ID> &
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        Q extends BaseQuery,
-        R extends BaseDomainCrudRepository<ID, USER, D, C, Q>,
-        S extends BaseDomainCrudService<ID, USER, D, DTO, C, Q, R>>
+        R extends BaseDomainCrudRepository<ID, D>,
+        S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>>
         extends BaseResource<ID, USER>, BaseCrudResource {
 
     /**

@@ -26,10 +26,9 @@ import java.io.Serializable;
  * @param <D>    The type of the entity (domain) to be deleted.
  * @param <DTO>  The type of data transfer object that represents the entity.
  * @param <C>    The type of criteria used for filtering entities.
- * @param <Q>    The type of query used for database operations.
  * @param <R>    The type of repository used for CRUD operations.
  */
-public interface BaseDeleteDomainCrudService<ID extends Comparable<ID> & Serializable, USER extends BaseUser, D extends BaseDomain<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>, Q extends BaseQuery, R extends BaseDomainCrudRepository<ID, USER, D, C, Q>> extends ParentWriteDomainCrudService<ID, USER, D, DTO, C, Q, R> {
+public interface BaseDeleteDomainCrudService<ID extends Comparable<ID> & Serializable, USER extends BaseUser, D extends BaseDomain<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>, R extends BaseDomainCrudRepository<ID, D>> extends ParentWriteDomainCrudService<ID, USER, D, DTO, C, R> {
     Logger log = LoggerFactory.getLogger(BaseDeleteDomainCrudService.class);
 
     /**
@@ -45,7 +44,7 @@ public interface BaseDeleteDomainCrudService<ID extends Comparable<ID> & Seriali
     @Transactional
     @MethodStats
     default Mono<ID> delete(ID id, USER user) throws DomainNotFoundException, BadRequestException {
-        return this.delete(CriteriaUtil.idCriteria(getCriteriaClass(), id), user);
+        return this.doDelete(CriteriaUtil.idCriteria(getCriteriaClass(), id), user);
     }
 
     /**
@@ -63,6 +62,10 @@ public interface BaseDeleteDomainCrudService<ID extends Comparable<ID> & Seriali
     default Mono<ID> delete(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
         log.debug("Delete, criteria: {}, user: {}", criteria, user);
 
+        return doDelete(criteria, user);
+    }
+
+    private Mono<ID> doDelete(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
         getBeforeAfterComponent().beforeDelete(criteria, user, getBeforeAfterDomainOperations());
 
         return getOne(criteria, user)
@@ -70,8 +73,8 @@ public interface BaseDeleteDomainCrudService<ID extends Comparable<ID> & Seriali
                 .flatMap(dto -> this.preDelete(criteria, user).thenReturn(dto))
                 .flatMap(dto -> {
                     C criteriaId = CriteriaUtil.idCriteria(getCriteriaClass(), dto.getId());
-                    Q baseQuery = this.getRepository().generateQuery(criteriaId);
-                    baseQuery = this.getRepository().criteria(baseQuery, criteriaId, user);
+                    BaseQuery baseQuery = this.getRepository().getQueryBuilder().build(criteriaId);
+
                     return this.getRepository().removeOne(baseQuery).thenReturn(dto);
                 })
                 .flatMap(dto -> this.postDelete(dto, criteria, user).thenReturn(dto))

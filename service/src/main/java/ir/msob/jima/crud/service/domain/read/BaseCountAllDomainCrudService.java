@@ -6,7 +6,6 @@ import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
-import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import jakarta.validation.constraints.NotNull;
@@ -30,8 +29,8 @@ import java.io.Serializable;
  */
 public interface BaseCountAllDomainCrudService<ID extends Comparable<ID> & Serializable, USER extends BaseUser,
         D extends BaseDomain<ID>, DTO extends BaseDto<ID>,
-        C extends BaseCriteria<ID>, Q extends BaseQuery,
-        R extends BaseDomainCrudRepository<ID, USER, D, C, Q>> extends ParentReadDomainCrudService<ID, USER, D, DTO, C, Q, R> {
+        C extends BaseCriteria<ID>,
+        R extends BaseDomainCrudRepository<ID, D>> extends ParentReadDomainCrudService<ID, USER, D, DTO, C, R> {
 
     Logger log = LoggerFactory.getLogger(BaseCountAllDomainCrudService.class);
 

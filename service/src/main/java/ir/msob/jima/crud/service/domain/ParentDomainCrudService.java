@@ -8,9 +8,7 @@ import ir.msob.jima.core.commons.operation.BaseBeforeAfterDomainOperation;
 import ir.msob.jima.core.commons.repository.BaseRepository;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.service.BaseService;
-import ir.msob.jima.core.commons.util.GenericTypeUtil;
 import jakarta.validation.Valid;
-import lombok.SneakyThrows;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -34,42 +32,8 @@ public interface ParentDomainCrudService<
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        R extends BaseRepository<ID, USER, D>>
-        extends BaseService<ID, USER, D, R> {
-    /**
-     * Get the repository instance associated with the service.
-     *
-     * @return The repository instance.
-     */
-    R getRepository();
-
-    /**
-     * Get the class of DTO associated with the service.
-     *
-     * @return The class representing the DTO.
-     */
-    default Class<DTO> getDtoClass() {
-        return (Class<DTO>) GenericTypeUtil.resolveTypeArguments(getClass(), ParentDomainCrudService.class, 3);
-    }
-
-    /**
-     * Get the class of criteria associated with the service.
-     *
-     * @return The class representing the criteria.
-     */
-    default Class<C> getCriteriaClass() {
-        return (Class<C>) GenericTypeUtil.resolveTypeArguments(getClass(), ParentDomainCrudService.class, 4);
-    }
-
-    /**
-     * Create a new instance of the criteria class.
-     *
-     * @return A new instance of the criteria class.
-     */
-    @SneakyThrows
-    default C newCriteriaClass() {
-        return getCriteriaClass().getDeclaredConstructor().newInstance();
-    }
+        R extends BaseRepository<ID, D>>
+        extends BaseService<ID, USER, D, DTO, C, R> {
 
     /**
      * Get one DTO entity based on criteria.
@@ -161,24 +125,6 @@ public interface ParentDomainCrudService<
     default Mono<Collection<DTO>> updateMany(Collection<DTO> oldDtos, Collection<@Valid DTO> dtos, USER user) {
         return Mono.empty();
     }
-
-    /**
-     * Convert a domain entity to a DTO entity.
-     *
-     * @param domain The domain entity to convert.
-     * @param user   A user context.
-     * @return The converted DTO entity.
-     */
-    DTO toDto(D domain, USER user);
-
-    /**
-     * Convert a DTO entity to a domain entity.
-     *
-     * @param dto  The DTO entity to convert.
-     * @param user A user context.
-     * @return The converted domain entity.
-     */
-    D toDomain(DTO dto, USER user);
 
     /**
      * Get the before/after component for the service.

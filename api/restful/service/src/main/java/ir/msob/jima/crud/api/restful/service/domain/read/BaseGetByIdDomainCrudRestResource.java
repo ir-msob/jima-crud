@@ -11,7 +11,6 @@ import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundExceptio
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
-import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.domain.ParentDomainCrudRestResource;
@@ -36,7 +35,6 @@ import java.security.Principal;
  * @param <DTO>  the type of the DTO of the domain
  * @param <USER> the type of the user
  * @param <C>    the type of the criteria for the domain
- * @param <Q>    the type of the query for the domain
  * @param <R>    the type of the repository for the domain
  * @param <S>    the type of the service for the domain
  * @author Yaqub Abdi
@@ -47,10 +45,9 @@ public interface BaseGetByIdDomainCrudRestResource<
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        Q extends BaseQuery,
-        R extends BaseDomainCrudRepository<ID, USER, D, C, Q>,
-        S extends BaseGetOneDomainCrudService<ID, USER, D, DTO, C, Q, R>
-        > extends ParentDomainCrudRestResource<ID, USER, D, DTO, C, Q, R, S> {
+        R extends BaseDomainCrudRepository<ID, D>,
+        S extends BaseGetOneDomainCrudService<ID, USER, D, DTO, C, R>
+        > extends ParentDomainCrudRestResource<ID, USER, D, DTO, C, R, S> {
 
     Logger log = LoggerFactory.getLogger(BaseGetByIdDomainCrudRestResource.class);
 

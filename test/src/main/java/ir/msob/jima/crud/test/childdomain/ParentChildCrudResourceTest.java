@@ -8,9 +8,9 @@ import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.exception.runtime.CommonRuntimeException;
 import ir.msob.jima.core.commons.filter.Filter;
 import ir.msob.jima.core.commons.operation.Operations;
-import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.GenericTypeUtil;
 import ir.msob.jima.core.test.Assertable;
@@ -42,7 +42,6 @@ import java.util.concurrent.ExecutionException;
  * @param <D>    The type of the domain entity being operated on.
  * @param <DTO>  The type of the data transfer object for the entity.
  * @param <C>    The type of criteria used for filtering entities.
- * @param <Q>    The type of query object used in data retrieval.
  * @param <R>    The type of the repository used for CRUD operations.
  * @param <S>    The type of the service used for CRUD operations.
  * @param <DP>   The type of data provider used for CRUD operations.
@@ -56,10 +55,9 @@ public interface ParentChildCrudResourceTest<
         , D extends BaseDomain<ID>
         , DTO extends BaseDto<ID>
         , C extends BaseCriteria<ID>
-        , Q extends BaseQuery
-        , R extends BaseDomainCrudRepository<ID, USER, D, C, Q>
-        , S extends BaseDomainCrudService<ID, USER, D, DTO, C, Q, R>
-        , DP extends BaseDomainCrudDataProvider<ID, USER, D, DTO, C, Q, R, S>
+        , R extends BaseDomainCrudRepository<ID, D>
+        , S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>
+        , DP extends BaseDomainCrudDataProvider<ID, USER, D, DTO, C, R, S>
 
         , CS extends BaseChildDomainCrudService<ID, USER, DTO>
         , CDP extends BaseChildCrudDataProvider<ID, USER, CD, DTO, CS>>
@@ -130,7 +128,7 @@ public interface ParentChildCrudResourceTest<
                                 criteria = getChildCriteriaClass().getConstructor().newInstance();
                             } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
                                      NoSuchMethodException e) {
-                                throw new RuntimeException(e);
+                                throw new CommonRuntimeException(e);
                             }
                             criteria.setId(Filter.eq(toUpdate.getId()));
 
@@ -213,7 +211,7 @@ public interface ParentChildCrudResourceTest<
                                 criteria = getChildCriteriaClass().getConstructor().newInstance();
                             } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
                                      NoSuchMethodException e) {
-                                throw new RuntimeException(e);
+                                throw new CommonRuntimeException(e);
                             }
                             criteria.setId(Filter.eq(toUpdate.getId()));
 
@@ -243,7 +241,7 @@ public interface ParentChildCrudResourceTest<
                                 criteria = getChildCriteriaClass().getConstructor().newInstance();
                             } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
                                      NoSuchMethodException e) {
-                                throw new RuntimeException(e);
+                                throw new CommonRuntimeException(e);
                             }
                             criteria.setId(Filter.eq(toUpdate.getId()));
 

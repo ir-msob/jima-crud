@@ -28,10 +28,9 @@ import java.util.Collection;
  * @param <D>    The type of the entity (domain) to be deleted.
  * @param <DTO>  The type of data transfer object that represents the entity.
  * @param <C>    The type of criteria used for filtering entities.
- * @param <Q>    The type of query used for database operations.
  * @param <R>    The type of repository used for CRUD operations.
  */
-public interface BaseDeleteAllDomainCrudService<ID extends Comparable<ID> & Serializable, USER extends BaseUser, D extends BaseDomain<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>, Q extends BaseQuery, R extends BaseDomainCrudRepository<ID, USER, D, C, Q>> extends ParentWriteDomainCrudService<ID, USER, D, DTO, C, Q, R> {
+public interface BaseDeleteAllDomainCrudService<ID extends Comparable<ID> & Serializable, USER extends BaseUser, D extends BaseDomain<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>, R extends BaseDomainCrudRepository<ID, D>> extends ParentWriteDomainCrudService<ID, USER, D, DTO, C, R> {
     Logger log = LoggerFactory.getLogger(BaseDeleteAllDomainCrudService.class);
 
     /**
@@ -55,8 +54,8 @@ public interface BaseDeleteAllDomainCrudService<ID extends Comparable<ID> & Seri
                 .flatMap(dto -> this.preDelete(criteria, user).thenReturn(dto))
                 .flatMap(dto -> {
                     C criteriaId = CriteriaUtil.idCriteria(getCriteriaClass(), dto.getId());
-                    Q baseQuery = this.getRepository().generateQuery(criteriaId);
-                    baseQuery = this.getRepository().criteria(baseQuery, criteriaId, user);
+                    BaseQuery baseQuery = this.getRepository().getQueryBuilder().build(criteriaId);
+
                     return this.getRepository().removeOne(baseQuery).thenReturn(dto);
                 })
                 .flatMap(dto -> this.postDelete(dto, criteria, user).thenReturn(dto))

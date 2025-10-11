@@ -21,12 +21,12 @@ public interface BaseRelatedIntegrationCrudRestResource<
         , BaseDeleteByRelatedIdRelatedIntegrationCrudRestResource<ID, USER, CD, CC, DTO, CS>
         , BaseDeleteRelatedIntegrationCrudRestResource<ID, USER, CD, CC, DTO, CS>
         , BaseDeleteManyRelatedIntegrationCrudRestResource<ID, USER, CD, CC, DTO, CS>
-        , BaseSaveRelatedIntegrationCrudRestResource<ID, USER, CD, CC, DTO, CS>
-        , BaseSaveManyRelatedIntegrationCrudRestResource<ID, USER, CD, CC, DTO, CS>
+        , BaseSaveRelatedIntegrationCrudRestResource<ID, USER, CD, DTO, CS>
+        , BaseSaveManyRelatedIntegrationCrudRestResource<ID, USER, CD, DTO, CS>
         , BaseUpdateByIdRelatedIntegrationCrudRestResource<ID, USER, CD, CC, DTO, CS>
         , BaseUpdateByRelatedIdRelatedIntegrationCrudRestResource<ID, USER, CD, CC, DTO, CS>
         , BaseUpdateRelatedIntegrationCrudRestResource<ID, USER, CD, CC, DTO, CS>
-        , BaseUpdateManyRelatedIntegrationCrudRestResource<ID, USER, CD, CC, DTO, CS> {
+        , BaseUpdateManyRelatedIntegrationCrudRestResource<ID, USER, CD, DTO, CS> {
 
 
 }

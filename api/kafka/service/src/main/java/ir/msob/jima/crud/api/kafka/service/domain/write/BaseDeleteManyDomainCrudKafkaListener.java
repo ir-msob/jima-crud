@@ -1,5 +1,6 @@
 package ir.msob.jima.crud.api.kafka.service.domain.write;
 
+import ir.msob.jima.core.api.kafka.commons.KafkaListenerUtil;
 import ir.msob.jima.core.commons.callback.CallbackError;
 import ir.msob.jima.core.commons.channel.ChannelMessage;
 import ir.msob.jima.core.commons.channel.message.CriteriaMessage;
@@ -9,9 +10,9 @@ import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
-import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.crud.api.kafka.client.ChannelUtil;
 import ir.msob.jima.crud.api.kafka.service.domain.ParentDomainCrudKafkaListener;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
@@ -19,8 +20,6 @@ import jakarta.annotation.PostConstruct;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.kafka.listener.ContainerProperties;
-import org.springframework.kafka.listener.MessageListener;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
@@ -33,7 +32,6 @@ import java.io.Serializable;
  * @param <D>    The type of the Domain, which must extend BaseDomain.
  * @param <DTO>  The type of the DTO, which must extend BaseDto.
  * @param <C>    The type of the Criteria, which must extend BaseCriteria.
- * @param <Q>    The type of the Query, which must extend BaseQuery.
  * @param <R>    The type of the Repository, which must extend BaseDomainCrudRepository.
  * @param <S>    The type of the Service, which must extend BaseDomainCrudService.
  */
@@ -43,10 +41,9 @@ public interface BaseDeleteManyDomainCrudKafkaListener<
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        Q extends BaseQuery,
-        R extends BaseDomainCrudRepository<ID, USER, D, C, Q>,
-        S extends BaseDomainCrudService<ID, USER, D, DTO, C, Q, R>
-        > extends ParentDomainCrudKafkaListener<ID, USER, D, DTO, C, Q, R, S> {
+        R extends BaseDomainCrudRepository<ID, D>,
+        S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>
+        > extends ParentDomainCrudKafkaListener<ID, USER, D, DTO, C, R, S> {
 
     Logger log = LoggerFactory.getLogger(BaseDeleteManyDomainCrudKafkaListener.class);
 
@@ -55,12 +52,11 @@ public interface BaseDeleteManyDomainCrudKafkaListener<
      */
     @Scope(operation = Operations.DELETE_MANY)
     @PostConstruct
-    default void deleteMany() {
-        String operation = Operations.DELETE_MANY;
-
-        ContainerProperties containerProperties = createContainerProperties(operation);
-        containerProperties.setMessageListener((MessageListener<String, String>) dto -> serviceDeleteMany(dto.value()));
-        startContainer(containerProperties, operation);
+    default void startDeleteMany() {
+        KafkaListenerUtil.startListener(getKafkaConsumerFactory(),
+                ChannelUtil.getChannel(getDtoClass(), Operations.DELETE_MANY),
+                getGroupId(),
+                this::deleteMany);
     }
 
     /**
@@ -73,7 +69,7 @@ public interface BaseDeleteManyDomainCrudKafkaListener<
     @CallbackError("dto")
     @Scope(operation = Operations.DELETE_MANY)
     @Transactional
-    default void serviceDeleteMany(String dto) {
+    default void deleteMany(String dto) {
         log.debug("Received message for delete many: dto {}", dto);
         ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getChannelMessageCriteriaReferenceType());
         getService().deleteMany(message.getData().getCriteria(), message.getUser())

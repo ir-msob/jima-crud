@@ -5,7 +5,6 @@ import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
-import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.test.BaseCoreDataProvider;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
@@ -27,7 +26,6 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @param <D>    The type of the domain entity.
  * @param <DTO>  The type of the Data Transfer Object (DTO).
  * @param <C>    The type of criteria used for filtering entities.
- * @param <Q>    The type of query object for data retrieval.
  * @param <R>    The type of repository used for CRUD operations.
  * @param <S>    The type of service used for CRUD operations.
  */
@@ -37,9 +35,8 @@ public interface BaseDomainCrudDataProvider<
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        Q extends BaseQuery,
-        R extends BaseDomainCrudRepository<ID, USER, D, C, Q>,
-        S extends BaseDomainCrudService<ID, USER, D, DTO, C, Q, R>>
+        R extends BaseDomainCrudRepository<ID, D>,
+        S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>>
         extends BaseCoreDataProvider<ID, USER, D, DTO, C, R, S> {
 
     /**
@@ -85,8 +82,8 @@ public interface BaseDomainCrudDataProvider<
     /**
      * Asserts the correctness of the save operation.
      *
-     * @param dto       the DTO before saving
-     * @param savedDto  the DTO after saving
+     * @param dto      the DTO before saving
+     * @param savedDto the DTO after saving
      */
     default void assertSave(DTO dto, DTO savedDto) {
         // Implement save assertions
@@ -95,8 +92,8 @@ public interface BaseDomainCrudDataProvider<
     /**
      * Asserts the correctness of the save operation for mandatory fields.
      *
-     * @param dto       the DTO before saving
-     * @param savedDto  the DTO after saving
+     * @param dto      the DTO before saving
+     * @param savedDto the DTO after saving
      */
     default void assertMandatorySave(DTO dto, DTO savedDto) {
         // Implement mandatory save assertions
@@ -145,7 +142,7 @@ public interface BaseDomainCrudDataProvider<
     /**
      * Asserts the correctness of the delete operation.
      *
-     * @param id         the ID of the deleted entity
+     * @param id       the ID of the deleted entity
      * @param savedDto the DTO before deletion
      */
     default void assertDelete(ID id, DTO savedDto) {

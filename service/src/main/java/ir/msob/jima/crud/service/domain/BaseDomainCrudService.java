@@ -3,7 +3,6 @@ package ir.msob.jima.crud.service.domain;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
-import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.read.*;
@@ -29,22 +28,21 @@ public interface BaseDomainCrudService<
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        Q extends BaseQuery,
-        R extends BaseDomainCrudRepository<ID, USER, D, C, Q>
+        R extends BaseDomainCrudRepository<ID, D>
         > extends
-        BaseCountDomainCrudService<ID, USER, D, DTO, C, Q, R>,
-        BaseCountAllDomainCrudService<ID, USER, D, DTO, C, Q, R>,
-        BaseGetOneDomainCrudService<ID, USER, D, DTO, C, Q, R>,
-        BaseGetPageDomainCrudService<ID, USER, D, DTO, C, Q, R>,
-        BaseGetManyDomainCrudService<ID, USER, D, DTO, C, Q, R>,
-        BaseGetStreamDomainCrudService<ID, USER, D, DTO, C, Q, R>,
-        BaseSaveDomainCrudService<ID, USER, D, DTO, C, Q, R>,
-        BaseSaveManyDomainCrudService<ID, USER, D, DTO, C, Q, R>,
-        BaseUpdateDomainCrudService<ID, USER, D, DTO, C, Q, R>,
-        BaseUpdateManyDomainCrudService<ID, USER, D, DTO, C, Q, R>,
-        BaseEditDomainCrudService<ID, USER, D, DTO, C, Q, R>,
-        BaseEditManyDomainCrudService<ID, USER, D, DTO, C, Q, R>,
-        BaseDeleteAllDomainCrudService<ID, USER, D, DTO, C, Q, R>,
-        BaseDeleteDomainCrudService<ID, USER, D, DTO, C, Q, R>,
-        BaseDeleteManyDomainCrudService<ID, USER, D, DTO, C, Q, R> {
+        BaseCountDomainCrudService<ID, USER, D, DTO, C, R>,
+        BaseCountAllDomainCrudService<ID, USER, D, DTO, C, R>,
+        BaseGetOneDomainCrudService<ID, USER, D, DTO, C, R>,
+        BaseGetPageDomainCrudService<ID, USER, D, DTO, C, R>,
+        BaseGetManyDomainCrudService<ID, USER, D, DTO, C, R>,
+        BaseGetStreamDomainCrudService<ID, USER, D, DTO, C, R>,
+        BaseSaveDomainCrudService<ID, USER, D, DTO, C, R>,
+        BaseSaveManyDomainCrudService<ID, USER, D, DTO, C, R>,
+        BaseUpdateDomainCrudService<ID, USER, D, DTO, C, R>,
+        BaseUpdateManyDomainCrudService<ID, USER, D, DTO, C, R>,
+        BaseEditDomainCrudService<ID, USER, D, DTO, C, R>,
+        BaseEditManyDomainCrudService<ID, USER, D, DTO, C, R>,
+        BaseDeleteAllDomainCrudService<ID, USER, D, DTO, C, R>,
+        BaseDeleteDomainCrudService<ID, USER, D, DTO, C, R>,
+        BaseDeleteManyDomainCrudService<ID, USER, D, DTO, C, R> {
 }

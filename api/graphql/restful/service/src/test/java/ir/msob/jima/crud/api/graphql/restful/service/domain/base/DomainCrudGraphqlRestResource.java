@@ -2,7 +2,6 @@ package ir.msob.jima.crud.api.graphql.restful.service.domain.base;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.msob.jima.core.commons.security.BaseUserService;
-import ir.msob.jima.core.ral.mongo.commons.query.QueryBuilder;
 import ir.msob.jima.core.ral.mongo.it.criteria.ProjectCriteria;
 import ir.msob.jima.core.ral.mongo.it.domain.ProjectDomain;
 import ir.msob.jima.core.ral.mongo.it.dto.ProjectDto;
@@ -24,10 +23,10 @@ public abstract class DomainCrudGraphqlRestResource<
         D extends ProjectDomain,
         DTO extends ProjectDto,
         C extends ProjectCriteria,
-        R extends MongoDomainCrudRepository<D, C>,
+        R extends MongoDomainCrudRepository<D>,
         S extends DomainCrudService<D, DTO, C, R>
         > implements
-        BaseDomainCrudGraphqlRestResource<String, ProjectUser, D, DTO, C, QueryBuilder, R, S> {
+        BaseDomainCrudGraphqlRestResource<String, ProjectUser, D, DTO, C, R, S> {
 
     @Autowired
     ProjectUserService projectUserService;

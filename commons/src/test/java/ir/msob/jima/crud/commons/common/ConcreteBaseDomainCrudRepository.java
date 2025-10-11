@@ -1,10 +1,9 @@
 package ir.msob.jima.crud.commons.common;
 
-import ir.msob.jima.core.commons.domain.SampleCriteria;
 import ir.msob.jima.core.commons.domain.SampleDomain;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.repository.BaseQuery;
-import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.commons.repository.BaseQueryBuilder;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +12,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.Collection;
 
-public class ConcreteBaseDomainCrudRepository implements BaseDomainCrudRepository<String, BaseUser, SampleDomain<String>, SampleCriteria<String>, BaseQuery> {
+public class ConcreteBaseDomainCrudRepository implements BaseDomainCrudRepository<String, SampleDomain<String>> {
     @Override
     public Mono<SampleDomain<String>> insertOne(SampleDomain<String> domain) {
         return null;
@@ -75,12 +74,7 @@ public class ConcreteBaseDomainCrudRepository implements BaseDomainCrudRepositor
     }
 
     @Override
-    public BaseQuery generateQuery(SampleCriteria<String> criteria) {
-        return null;
-    }
-
-    @Override
-    public BaseQuery generateQuery(SampleCriteria<String> criteria, Pageable pageable) {
+    public BaseQueryBuilder getQueryBuilder() {
         return null;
     }
 }

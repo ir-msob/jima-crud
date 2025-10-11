@@ -3,7 +3,6 @@ package ir.msob.jima.crud.api.restful.service.domain.base;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.msob.jima.core.commons.security.BaseTokenService;
-import ir.msob.jima.core.ral.mongo.commons.query.QueryBuilder;
 import ir.msob.jima.core.ral.mongo.it.criteria.ProjectCriteria;
 import ir.msob.jima.core.ral.mongo.it.domain.ProjectDomain;
 import ir.msob.jima.core.ral.mongo.it.dto.ProjectDto;
@@ -23,10 +22,10 @@ public abstract class DomainCrudRestResourceTest<
         D extends ProjectDomain,
         DTO extends ProjectDto,
         C extends ProjectCriteria,
-        R extends MongoDomainCrudRepository<D, C>,
+        R extends MongoDomainCrudRepository<D>,
         S extends DomainCrudService<D, DTO, C, R>,
         DP extends DomainCrudDataProvider<D, DTO, C, R, S>>
-        implements BaseDomainCrudRestResourceTest<String, ProjectUser, D, DTO, C, QueryBuilder, R, S, DP> {
+        implements BaseDomainCrudRestResourceTest<String, ProjectUser, D, DTO, C, R, S, DP> {
 
     @Autowired
     public WebTestClient webTestClient;

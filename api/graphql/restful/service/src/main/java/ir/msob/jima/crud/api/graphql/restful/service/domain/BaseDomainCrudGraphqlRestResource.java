@@ -3,7 +3,6 @@ package ir.msob.jima.crud.api.graphql.restful.service.domain;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
-import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
@@ -15,11 +14,10 @@ public interface BaseDomainCrudGraphqlRestResource<ID extends Comparable<ID> & S
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        Q extends BaseQuery,
-        R extends BaseDomainCrudRepository<ID, USER, D, C, Q>,
-        S extends BaseDomainCrudService<ID, USER, D, DTO, C, Q, R>>
-        extends BaseReadDomainCrudGraphqlRestResource<ID, USER, D, DTO, C, Q, R, S>
-        , BaseWriteDomainCrudGraphqlRestResource<ID, USER, D, DTO, C, Q, R, S> {
+        R extends BaseDomainCrudRepository<ID, D>,
+        S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>>
+        extends BaseReadDomainCrudGraphqlRestResource<ID, USER, D, DTO, C, R, S>
+        , BaseWriteDomainCrudGraphqlRestResource<ID, USER, D, DTO, C, R, S> {
 
 
 }

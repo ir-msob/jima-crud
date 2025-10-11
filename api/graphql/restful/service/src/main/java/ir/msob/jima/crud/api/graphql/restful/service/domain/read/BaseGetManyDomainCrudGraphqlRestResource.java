@@ -7,7 +7,6 @@ import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
-import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.CriteriaInput;
@@ -29,16 +28,15 @@ import java.io.Serializable;
  * The {@code BaseGetManyDomainCrudGraphqlRestResource} interface defines GraphQL queries for retrieving multiple entities
  * based on specified criteria. It extends the {@code ParentDomainCrudGraphqlRestResource} interface and provides a method for
  * fetching multiple entities with optional criteria input. The interface is generic, allowing customization
- * for different types such as ID, USER, D, DTO, C, Q, R, and S.
+ * for different types such as ID, USER, D, DTO, C, R, and S.
  *
  * @param <ID>   The type of the resource ID, which should be comparable and serializable.
  * @param <USER> The type of the user associated with the resource, extending {@code BaseUser}.
  * @param <D>    The type of the resource domain, extending {@code BaseDomain<ID>}.
  * @param <DTO>  The type of the data transfer object associated with the resource, extending {@code BaseDto<ID>}.
  * @param <C>    The type of criteria associated with the resource, extending {@code BaseCriteria<ID, USER>}.
- * @param <Q>    The type of the query associated with the resource, extending {@code BaseQuery}.
- * @param <R>    The type of the CRUD repository associated with the resource, extending {@code BaseDomainCrudRepository<ID, USER, D, C, Q>}.
- * @param <S>    The type of the CRUD service associated with the resource, extending {@code BaseDomainCrudService<ID, USER, D, DTO, C, Q, R>}.
+ * @param <R>    The type of the CRUD repository associated with the resource, extending {@code BaseDomainCrudRepository<ID, USER, D, C>}.
+ * @param <S>    The type of the CRUD service associated with the resource, extending {@code BaseDomainCrudService<ID, USER, D, DTO, C, R>}.
  * @see ParentDomainCrudGraphqlRestResource
  */
 public interface BaseGetManyDomainCrudGraphqlRestResource<
@@ -47,10 +45,9 @@ public interface BaseGetManyDomainCrudGraphqlRestResource<
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        Q extends BaseQuery,
-        R extends BaseDomainCrudRepository<ID, USER, D, C, Q>,
-        S extends BaseDomainCrudService<ID, USER, D, DTO, C, Q, R>
-        > extends ParentDomainCrudGraphqlRestResource<ID, USER, D, DTO, C, Q, R, S> {
+        R extends BaseDomainCrudRepository<ID, D>,
+        S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>
+        > extends ParentDomainCrudGraphqlRestResource<ID, USER, D, DTO, C, R, S> {
     Logger log = LoggerFactory.getLogger(BaseGetManyDomainCrudGraphqlRestResource.class);
 
     /**

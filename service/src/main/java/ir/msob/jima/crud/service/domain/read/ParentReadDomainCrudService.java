@@ -3,14 +3,11 @@ package ir.msob.jima.crud.service.domain.read;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
-import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.ParentDomainCrudService;
-import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.Collection;
 
 /**
  * This interface defines a parent service for reading entities based on specific criteria.
@@ -26,33 +23,8 @@ import java.util.Collection;
  */
 public interface ParentReadDomainCrudService<ID extends Comparable<ID> & Serializable, USER extends BaseUser,
         D extends BaseDomain<ID>, DTO extends BaseDto<ID>,
-        C extends BaseCriteria<ID>, Q extends BaseQuery,
-        R extends BaseDomainCrudRepository<ID, USER, D, C, Q>> extends ParentDomainCrudService<ID, USER, D, DTO, C, R> {
+        C extends BaseCriteria<ID>,
+        R extends BaseDomainCrudRepository<ID, D>> extends ParentDomainCrudService<ID, USER, D, DTO, C, R> {
 
-    /**
-     * This method is executed before the get service. It can be overridden to provide custom behavior.
-     * By default, it does nothing and returns an empty Mono.
-     *
-     * @param criteria The criteria used for filtering entities.
-     * @param user     A user associated with the operation.
-     * @return A Mono indicating the completion of the pre-get operation.
-     */
-    default Mono<Void> preGet(C criteria, USER user) {
-        return Mono.empty();
-    }
-
-    /**
-     * This method is executed after the get service. It can be overridden to provide custom behavior.
-     * By default, it does nothing and returns an empty Mono.
-     *
-     * @param ids      A collection of entity IDs that were retrieved.
-     * @param dtos     A collection of DTO entities corresponding to the retrieved domains.
-     * @param criteria The criteria used for filtering entities.
-     * @param user     A user associated with the operation.
-     * @return A Mono indicating the completion of the post-get operation.
-     */
-    default Mono<Void> postGet(Collection<ID> ids, Collection<DTO> dtos, C criteria, USER user) {
-        return Mono.empty();
-    }
 
 }

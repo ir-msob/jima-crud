@@ -36,7 +36,7 @@ public class DomainCrudKafkaAsyncClient implements BaseCrudAsyncClient {
 
     public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DATA extends ModelType, DTO extends BaseDto<ID>> void send(ChannelMessage<USER, DATA> message, Class<DTO> dtoClass, String operation, USER user) {
         String channel = createChannel(dtoClass, operation);
-        asyncClient.send(message, channel, user);
+        asyncClient.send(channel, message, user);
     }
 
     @MethodStats
@@ -216,6 +216,7 @@ public class DomainCrudKafkaAsyncClient implements BaseCrudAsyncClient {
 
     public <ID extends Comparable<ID> & Serializable, USER extends BaseUser> ChannelMessage<USER, IdMessage<ID>> createChannelMessage(IdMessage<ID> data, Map<String, Serializable> metadata, String callback) {
         return ChannelMessage.<USER, IdMessage<ID>>builder()
+                .key(data.getId() != null ? String.valueOf(data.getId()) : null)
                 .metadata(metadata)
                 .data(data)
                 .callback(ChannelMessage.<USER, ModelType>builder().channel(callback).build())
@@ -241,6 +242,7 @@ public class DomainCrudKafkaAsyncClient implements BaseCrudAsyncClient {
 
     public <ID extends Comparable<ID> & Serializable, USER extends BaseUser> ChannelMessage<USER, IdJsonPatchMessage<ID>> createChannelMessage(IdJsonPatchMessage<ID> data, Map<String, Serializable> metadata, String callback) {
         return ChannelMessage.<USER, IdJsonPatchMessage<ID>>builder()
+                .key(data.getId() != null ? String.valueOf(data.getId()) : null)
                 .metadata(metadata)
                 .data(data)
                 .callback(ChannelMessage.<USER, ModelType>builder().channel(callback).build())
@@ -257,6 +259,7 @@ public class DomainCrudKafkaAsyncClient implements BaseCrudAsyncClient {
 
     public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> ChannelMessage<USER, DtoMessage<ID, DTO>> createChannelMessage(DtoMessage<ID, DTO> data, Map<String, Serializable> metadata, String callback) {
         return ChannelMessage.<USER, DtoMessage<ID, DTO>>builder()
+                .key(data.getId() != null ? String.valueOf(data.getId()) : null)
                 .metadata(metadata)
                 .data(data)
                 .callback(ChannelMessage.<USER, ModelType>builder().channel(callback).build())

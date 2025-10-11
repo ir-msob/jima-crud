@@ -27,13 +27,12 @@ import java.util.Collections;
  * @param <D>    The type of the domain entities.
  * @param <DTO>  The type of the DTO (Data Transfer Object) entities.
  * @param <C>    The type of the criteria used for filtering entities.
- * @param <Q>    The type of the query used for filtering entities.
  * @param <R>    The type of the CRUD repository used for data access.
  */
 public interface BaseGetStreamDomainCrudService<ID extends Comparable<ID> & Serializable, USER extends BaseUser,
         D extends BaseDomain<ID>, DTO extends BaseDto<ID>,
-        C extends BaseCriteria<ID>, Q extends BaseQuery,
-        R extends BaseDomainCrudRepository<ID, USER, D, C, Q>> extends ParentReadDomainCrudService<ID, USER, D, DTO, C, Q, R> {
+        C extends BaseCriteria<ID>,
+        R extends BaseDomainCrudRepository<ID, D>> extends ParentReadDomainCrudService<ID, USER, D, DTO, C, R> {
 
     /**
      * The logger for this service class.
@@ -52,7 +51,7 @@ public interface BaseGetStreamDomainCrudService<ID extends Comparable<ID> & Seri
     @Transactional(readOnly = true)
     @MethodStats
     default Flux<DTO> getStream(Collection<ID> ids, USER user) throws DomainNotFoundException, BadRequestException {
-        return this.getStream(CriteriaUtil.idCriteria(getCriteriaClass(), ids), user);
+        return this.doGetStream(CriteriaUtil.idCriteria(getCriteriaClass(), ids), user);
     }
 
     /**
@@ -70,9 +69,12 @@ public interface BaseGetStreamDomainCrudService<ID extends Comparable<ID> & Seri
     default Flux<DTO> getStream(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
         log.debug("GetStream, criteria: {}, user: {}", criteria, user);
 
+        return this.doGetStream(criteria, user);
+    }
+
+    private Flux<DTO> doGetStream(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
         getBeforeAfterComponent().beforeGet(criteria, user, getBeforeAfterDomainOperations());
-        Q baseQuery = this.getRepository().generateQuery(criteria);
-        baseQuery = this.getRepository().criteria(baseQuery, criteria, user);
+        BaseQuery baseQuery = this.getRepository().getQueryBuilder().build(criteria);
 
         return this.preGet(criteria, user)
                 .thenMany(this.getRepository().getMany(baseQuery))

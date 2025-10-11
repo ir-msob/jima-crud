@@ -1,11 +1,9 @@
 package ir.msob.jima.crud.ral.mongo.commons;
 
-import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
-import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.core.ral.mongo.commons.query.QueryBuilder;
-import ir.msob.jima.core.ral.mongo.commons.query.QueryGenerator;
+import ir.msob.jima.core.commons.repository.BaseQuery;
+import ir.msob.jima.core.ral.mongo.commons.query.MongoQuery;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -23,12 +21,10 @@ import java.util.Collections;
  * This interface represents a base repository for CRUD operations on MongoDB.
  * It extends the BaseDomainCrudRepository interface and provides methods for inserting, updating, getting, and removing documents.
  *
- * @param <USER> The type of the user.
- * @param <D>    The type of the domain.
- * @param <C>    The type of criteria used for querying.
+ * @param <D> The type of the domain.
  */
-public interface BaseDomainCrudMongoRepository<ID extends Comparable<ID> & Serializable, USER extends BaseUser, D extends BaseDomain<ID>, C extends BaseCriteria<ID>>
-        extends BaseDomainCrudRepository<ID, USER, D, C, QueryBuilder> {
+public interface BaseDomainCrudMongoRepository<ID extends Comparable<ID> & Serializable, D extends BaseDomain<ID>>
+        extends BaseDomainCrudRepository<ID, D> {
 
     /**
      * Get the ReactiveMongoTemplate instance.
@@ -88,32 +84,34 @@ public interface BaseDomainCrudMongoRepository<ID extends Comparable<ID> & Seria
     /**
      * Get a single domain from the database based on the provided query.
      *
-     * @param queryBuilder the query to execute.
+     * @param baseQuery the query to execute.
      * @return a Mono emitting the found domain.
      */
     @Override
     @MethodStats
-    default Mono<D> getOne(QueryBuilder queryBuilder) {
-        return this.getReactiveMongoTemplate().findOne(queryBuilder.getQuery(), getDomainClass());
+    default Mono<D> getOne(BaseQuery baseQuery) {
+        MongoQuery mongoQuery = (MongoQuery) baseQuery;
+        return this.getReactiveMongoTemplate().findOne(mongoQuery.getQuery(), getDomainClass());
     }
 
     /**
      * Get a page of domains from the database based on the provided query and pageable.
      *
-     * @param queryBuilder the query to execute.
-     * @param pageable     the pageable to apply.
+     * @param baseQuery the query to execute.
+     * @param pageable  the pageable to apply.
      * @return a Mono emitting a Page of found domains.
      */
     @Override
     @MethodStats
-    default Mono<Page<D>> getPage(QueryBuilder queryBuilder, Pageable pageable) {
-        return this.getReactiveMongoTemplate().count(queryBuilder.getQuery(), getDomainClass())
+    default Mono<Page<D>> getPage(BaseQuery baseQuery, Pageable pageable) {
+        MongoQuery mongoQuery = (MongoQuery) baseQuery;
+        return this.getReactiveMongoTemplate().count(mongoQuery.getQuery(), getDomainClass())
                 .flatMap(count -> {
                     if (count == 0L) {
                         return Mono.just(new PageImpl<>(Collections.emptyList(), pageable, 0L));
                     } else {
-                        queryBuilder.with(pageable);
-                        return this.getReactiveMongoTemplate().find(queryBuilder.getQuery(), getDomainClass())
+                        baseQuery.with(pageable);
+                        return this.getReactiveMongoTemplate().find(mongoQuery.getQuery(), getDomainClass())
                                 .collectList()
                                 .map(list -> new PageImpl<>(list, pageable, count));
                     }
@@ -123,37 +121,40 @@ public interface BaseDomainCrudMongoRepository<ID extends Comparable<ID> & Seria
     /**
      * Get multiple domains from the database based on the provided query.
      *
-     * @param queryBuilder the query to execute.
+     * @param baseQuery the query to execute.
      * @return a Flux emitting the found domains.
      */
     @Override
     @MethodStats
-    default Flux<D> getMany(QueryBuilder queryBuilder) {
-        return this.getReactiveMongoTemplate().find(queryBuilder.getQuery(), getDomainClass());
+    default Flux<D> getMany(BaseQuery baseQuery) {
+        MongoQuery mongoQuery = (MongoQuery) baseQuery;
+        return this.getReactiveMongoTemplate().find(mongoQuery.getQuery(), getDomainClass());
     }
 
     /**
      * Remove a single domain from the database based on the provided query.
      *
-     * @param queryBuilder the query to execute.
+     * @param baseQuery the query to execute.
      * @return a Mono emitting the removed domain.
      */
     @Override
     @MethodStats
-    default Mono<D> removeOne(QueryBuilder queryBuilder) {
-        return this.getReactiveMongoTemplate().findAndRemove(queryBuilder.getQuery(), getDomainClass());
+    default Mono<D> removeOne(BaseQuery baseQuery) {
+        MongoQuery mongoQuery = (MongoQuery) baseQuery;
+        return this.getReactiveMongoTemplate().findAndRemove(mongoQuery.getQuery(), getDomainClass());
     }
 
     /**
      * Remove multiple domains from the database based on the provided query.
      *
-     * @param queryBuilder the query to execute.
+     * @param baseQuery the query to execute.
      * @return a Flux emitting the removed domains.
      */
     @Override
     @MethodStats
-    default Flux<D> removeMany(QueryBuilder queryBuilder) {
-        return this.getReactiveMongoTemplate().findAllAndRemove(queryBuilder.getQuery(), getDomainClass());
+    default Flux<D> removeMany(BaseQuery baseQuery) {
+        MongoQuery mongoQuery = (MongoQuery) baseQuery;
+        return this.getReactiveMongoTemplate().findAllAndRemove(mongoQuery.getQuery(), getDomainClass());
     }
 
     /**
@@ -170,13 +171,14 @@ public interface BaseDomainCrudMongoRepository<ID extends Comparable<ID> & Seria
     /**
      * Count the number of domains in the database that match the provided query.
      *
-     * @param queryBuilder the query to execute.
+     * @param baseQuery the query to execute.
      * @return a Mono emitting the count.
      */
-    @Override
+//    @Override
     @MethodStats
-    default Mono<Long> count(QueryBuilder queryBuilder) {
-        return this.getReactiveMongoTemplate().count(queryBuilder.getQuery(), getDomainClass());
+    default Mono<Long> count(BaseQuery baseQuery) {
+        MongoQuery mongoQuery = (MongoQuery) baseQuery;
+        return this.getReactiveMongoTemplate().count(mongoQuery.getQuery(), getDomainClass());
     }
 
     /**
@@ -187,48 +189,7 @@ public interface BaseDomainCrudMongoRepository<ID extends Comparable<ID> & Seria
     @Override
     @MethodStats
     default Mono<Long> countAll() {
-        return this.getReactiveMongoTemplate().count(new QueryBuilder().getQuery(), getDomainClass());
+        return this.getReactiveMongoTemplate().count(new MongoQuery().getQuery(), getDomainClass());
     }
 
-    /**
-     * Generate a query based on the provided criteria.
-     *
-     * @param criteria the criteria to use for generating the query.
-     * @return the generated query.
-     */
-    @Override
-    @MethodStats
-    default QueryBuilder generateQuery(C criteria) {
-        return new QueryGenerator<ID, C>().generateQuery(criteria, null);
-    }
-
-    /**
-     * Generate a query based on the provided criteria and pageable.
-     *
-     * @param criteria the criteria to use for generating the query.
-     * @param pageable the pageable to apply.
-     * @return the generated query.
-     */
-    @Override
-    default QueryBuilder generateQuery(C criteria, Pageable pageable) {
-        return new QueryGenerator<ID, C>().generateQuery(criteria, pageable);
-    }
-
-    /**
-     * Create a new QueryBuilder instance for building a query.
-     *
-     * @return the new QueryBuilder instance.
-     */
-    default QueryBuilder query() {
-        return QueryBuilder.builder();
-    }
-
-    /**
-     * Create a new QueryBuilder instance for building an aggregation.
-     *
-     * @return the new QueryBuilder instance.
-     */
-    default QueryBuilder agg() {
-        return QueryBuilder.builder();
-    }
 }

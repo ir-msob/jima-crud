@@ -5,7 +5,6 @@ import com.github.fge.jsonpatch.JsonPatch;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
-import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.resource.BaseResource;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.security.BaseUserService;
@@ -36,7 +35,6 @@ import java.util.concurrent.ExecutionException;
  * @param <D>    The type of the domain entity.
  * @param <DTO>  The type of the data transfer object (DTO) for the entity.
  * @param <C>    The type of criteria used for querying entities.
- * @param <Q>    The type of query used for retrieving entities.
  * @param <R>    The type of CRUD repository used for database operations.
  * @param <S>    The type of CRUD service providing business logic.
  * @see ir.msob.jima.core.commons.resource.BaseResource
@@ -48,9 +46,8 @@ public interface ParentDomainCrudGrpcResource<
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        Q extends BaseQuery,
-        R extends BaseDomainCrudRepository<ID, USER, D, C, Q>,
-        S extends BaseDomainCrudService<ID, USER, D, DTO, C, Q, R>>
+        R extends BaseDomainCrudRepository<ID, D>,
+        S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>>
         extends BaseResource<ID, USER>, BaseCrudResource, CrudServiceGrpc.CrudServiceI {
 
     /**

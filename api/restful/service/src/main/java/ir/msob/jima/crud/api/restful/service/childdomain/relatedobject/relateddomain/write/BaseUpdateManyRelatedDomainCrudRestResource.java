@@ -3,7 +3,6 @@ package ir.msob.jima.crud.api.restful.service.childdomain.relatedobject.relatedd
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import ir.msob.jima.core.commons.childdomain.relatedobject.relateddomain.RelatedDomainAbstract;
-import ir.msob.jima.core.commons.childdomain.relatedobject.relateddomain.RelatedDomainCriteriaAbstract;
 import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.element.Elements;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
@@ -35,10 +34,9 @@ public interface BaseUpdateManyRelatedDomainCrudRestResource<
         ID extends Comparable<ID> & Serializable
         , USER extends BaseUser
         , CD extends RelatedDomainAbstract<ID>
-        , CC extends RelatedDomainCriteriaAbstract<ID, CD>
         , DTO extends BaseDto<ID>
         , CS extends BaseChildDomainCrudService<ID, USER, DTO>> extends
-        ParentRelatedObjectCrudRestResource<ID, ID, USER, CD, CC, DTO, CS> {
+        ParentRelatedObjectCrudRestResource<ID, ID, USER, CD, DTO, CS> {
 
     Logger log = LoggerFactory.getLogger(BaseUpdateManyRelatedDomainCrudRestResource.class);
 

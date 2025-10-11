@@ -21,11 +21,11 @@ public interface BaseRelatedProcessCrudRestResource<
         , BaseDeleteByRelatedIdRelatedProcessCrudRestResource<ID, USER, CD, CC, DTO, CS>
         , BaseDeleteRelatedProcessCrudRestResource<ID, USER, CD, CC, DTO, CS>
         , BaseDeleteManyRelatedProcessCrudRestResource<ID, USER, CD, CC, DTO, CS>
-        , BaseSaveRelatedProcessCrudRestResource<ID, USER, CD, CC, DTO, CS>
-        , BaseSaveManyRelatedProcessCrudRestResource<ID, USER, CD, CC, DTO, CS>
+        , BaseSaveRelatedProcessCrudRestResource<ID, USER, CD, DTO, CS>
+        , BaseSaveManyRelatedProcessCrudRestResource<ID, USER, CD, DTO, CS>
         , BaseUpdateByIdRelatedProcessCrudRestResource<ID, USER, CD, CC, DTO, CS>
         , BaseUpdateByRelatedIdRelatedProcessCrudRestResource<ID, USER, CD, CC, DTO, CS>
         , BaseUpdateRelatedProcessCrudRestResource<ID, USER, CD, CC, DTO, CS>
-        , BaseUpdateManyRelatedProcessCrudRestResource<ID, USER, CD, CC, DTO, CS> {
+        , BaseUpdateManyRelatedProcessCrudRestResource<ID, USER, CD, DTO, CS> {
 
 }

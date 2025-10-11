@@ -37,7 +37,7 @@ public interface BaseUpdateRelatedIntegrationCrudRestResource<
         , CC extends RelatedIntegrationCriteriaAbstract<ID, CD>
         , DTO extends BaseDto<ID>
         , CS extends BaseChildDomainCrudService<ID, USER, DTO>> extends
-        ParentRelatedObjectCrudRestResource<ID, String, USER, CD, CC, DTO, CS> {
+        ParentRelatedObjectCrudRestResource<ID, String, USER, CD, DTO, CS> {
 
     Logger log = LoggerFactory.getLogger(BaseUpdateRelatedIntegrationCrudRestResource.class);
 

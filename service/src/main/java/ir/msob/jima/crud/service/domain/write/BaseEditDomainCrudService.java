@@ -7,7 +7,6 @@ import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
-import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
@@ -28,10 +27,9 @@ import java.io.Serializable;
  * @param <D>    The type of the entity (domain) to be updated.
  * @param <DTO>  The type of data transfer object that represents the entity.
  * @param <C>    The type of criteria used for filtering entities.
- * @param <Q>    The type of query used for database operations.
  * @param <R>    The type of repository used for CRUD operations.
  */
-public interface BaseEditDomainCrudService<ID extends Comparable<ID> & Serializable, USER extends BaseUser, D extends BaseDomain<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>, Q extends BaseQuery, R extends BaseDomainCrudRepository<ID, USER, D, C, Q>> extends ParentWriteDomainCrudService<ID, USER, D, DTO, C, Q, R> {
+public interface BaseEditDomainCrudService<ID extends Comparable<ID> & Serializable, USER extends BaseUser, D extends BaseDomain<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>, R extends BaseDomainCrudRepository<ID, D>> extends ParentWriteDomainCrudService<ID, USER, D, DTO, C, R> {
     Logger log = LoggerFactory.getLogger(BaseEditDomainCrudService.class);
 
     /**
@@ -48,7 +46,7 @@ public interface BaseEditDomainCrudService<ID extends Comparable<ID> & Serializa
     @Transactional
     @MethodStats
     default Mono<DTO> edit(ID id, JsonPatch jsonPatch, USER user) throws BadRequestException, DomainNotFoundException {
-        return this.edit(CriteriaUtil.idCriteria(getCriteriaClass(), id), jsonPatch, user);
+        return this.doEdit(CriteriaUtil.idCriteria(getCriteriaClass(), id), jsonPatch, user);
     }
 
     /**
@@ -67,6 +65,10 @@ public interface BaseEditDomainCrudService<ID extends Comparable<ID> & Serializa
     default Mono<DTO> edit(C criteria, JsonPatch jsonPatch, USER user) throws BadRequestException, DomainNotFoundException {
         log.debug("Edit, jsonPatch: {}, criteria: {}, user {}", jsonPatch, criteria, user);
 
+        return this.doEdit(criteria, jsonPatch, user);
+    }
+
+    private Mono<DTO> doEdit(C criteria, JsonPatch jsonPatch, USER user) throws BadRequestException, DomainNotFoundException {
         return getOne(criteria, user).flatMap(dto -> {
             DTO previousDto = SerializationUtils.clone(dto);
             return update(previousDto, applyJsonPatch(jsonPatch, dto, getObjectMapper()), user);

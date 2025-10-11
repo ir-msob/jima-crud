@@ -38,7 +38,7 @@ import java.lang.reflect.Type;
 @ContextConfiguration
 @Testcontainers
 @CommonsLog
-public class TestDomainRsocketResourceIT extends DomainCrudRsocketResourceTest<TestDomain, TestDto, TestCriteria, TestRepository, TestServiceDomain, TestDataProvider> {
+class TestDomainRsocketResourceIT extends DomainCrudRsocketResourceTest<TestDomain, TestDto, TestCriteria, TestRepository, TestServiceDomain, TestDataProvider> {
 
     @Autowired
     TestDomainRsocketResource testDomainRsocketResource;
@@ -55,14 +55,14 @@ public class TestDomainRsocketResourceIT extends DomainCrudRsocketResourceTest<T
 
     @SneakyThrows
     @BeforeAll
-    public static void beforeAll() {
+    static void beforeAll() {
         CoreTestData.init(new ObjectId().toString(), new ObjectId().toString());
 
     }
 
     @SneakyThrows
     @BeforeEach
-    public void beforeEach() {
+    void beforeEach() {
         getDataProvider().cleanups();
         getDataProvider().createNewDto();
         getDataProvider().createMandatoryNewDto();

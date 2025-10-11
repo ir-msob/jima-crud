@@ -1,7 +1,6 @@
 package ir.msob.jima.crud.api.restful.service.childdomain.relatedobject;
 
 import ir.msob.jima.core.commons.childdomain.relatedobject.BaseRelatedObject;
-import ir.msob.jima.core.commons.childdomain.relatedobject.BaseRelatedObjectCriteriaAbstract;
 import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.childdomain.ParentChildCrudRestResource;
@@ -14,7 +13,6 @@ public interface ParentRelatedObjectCrudRestResource<
         , RID extends Comparable<RID> & Serializable
         , USER extends BaseUser
         , CD extends BaseRelatedObject<ID, RID>
-        , CC extends BaseRelatedObjectCriteriaAbstract<ID, RID, CD>
         , DTO extends BaseDto<ID>
         , CS extends BaseChildDomainCrudService<ID, USER, DTO>>
         extends ParentChildCrudRestResource<ID, USER, CD, DTO, CS> {

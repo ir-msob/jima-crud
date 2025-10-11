@@ -5,7 +5,6 @@ import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
-import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.core.test.Assertable;
@@ -31,7 +30,6 @@ import java.io.Serializable;
  * @param <D>    The type of the domain entity.
  * @param <DTO>  The type of the data transfer object (DTO) for the entity.
  * @param <C>    The type of criteria used for querying entities.
- * @param <Q>    The type of query used for retrieving entities.
  * @param <R>    The type of the CRUD repository.
  * @param <S>    The type of the CRUD service.
  * @param <DP>   The type of data provider for CRUD testing.
@@ -44,12 +42,11 @@ public interface BaseDeleteDomainCrudGrpcResourceTest<
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        Q extends BaseQuery,
-        R extends BaseDomainCrudRepository<ID, USER, D, C, Q>,
-        S extends BaseDomainCrudService<ID, USER, D, DTO, C, Q, R>,
-        DP extends BaseDomainCrudDataProvider<ID, USER, D, DTO, C, Q, R, S>>
-        extends BaseDeleteDomainCrudResourceTest<ID, USER, D, DTO, C, Q, R, S, DP>,
-        ParentDomainCrudGrpcResourceTest<ID, USER, D, DTO, C, Q, R, S, DP> {
+        R extends BaseDomainCrudRepository<ID, D>,
+        S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>,
+        DP extends BaseDomainCrudDataProvider<ID, USER, D, DTO, C, R, S>>
+        extends BaseDeleteDomainCrudResourceTest<ID, USER, D, DTO, C, R, S, DP>,
+        ParentDomainCrudGrpcResourceTest<ID, USER, D, DTO, C, R, S, DP> {
 
     /**
      * Executes a gRPC request to delete an entity based on a given criteria and extracts the result from the response.

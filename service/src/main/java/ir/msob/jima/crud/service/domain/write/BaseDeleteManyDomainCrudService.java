@@ -28,10 +28,9 @@ import java.util.Collection;
  * @param <D>    The type of the entity (domain) to be deleted.
  * @param <DTO>  The type of data transfer object that represents the entity.
  * @param <C>    The type of criteria used for filtering entities.
- * @param <Q>    The type of query used for database operations.
  * @param <R>    The type of repository used for CRUD operations.
  */
-public interface BaseDeleteManyDomainCrudService<ID extends Comparable<ID> & Serializable, USER extends BaseUser, D extends BaseDomain<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>, Q extends BaseQuery, R extends BaseDomainCrudRepository<ID, USER, D, C, Q>> extends ParentWriteDomainCrudService<ID, USER, D, DTO, C, Q, R> {
+public interface BaseDeleteManyDomainCrudService<ID extends Comparable<ID> & Serializable, USER extends BaseUser, D extends BaseDomain<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>, R extends BaseDomainCrudRepository<ID, D>> extends ParentWriteDomainCrudService<ID, USER, D, DTO, C, R> {
     Logger log = LoggerFactory.getLogger(BaseDeleteManyDomainCrudService.class);
 
     /**
@@ -47,7 +46,7 @@ public interface BaseDeleteManyDomainCrudService<ID extends Comparable<ID> & Ser
     @Transactional
     @MethodStats
     default Mono<Collection<ID>> deleteMany(Collection<ID> ids, USER user) throws DomainNotFoundException, BadRequestException {
-        return this.deleteMany(CriteriaUtil.idCriteria(getCriteriaClass(), ids), user);
+        return this.doDeleteMany(CriteriaUtil.idCriteria(getCriteriaClass(), ids), user);
     }
 
     /**
@@ -65,6 +64,10 @@ public interface BaseDeleteManyDomainCrudService<ID extends Comparable<ID> & Ser
     default Mono<Collection<ID>> deleteMany(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
         log.debug("DeleteMany, criteria: {}, user: {}", criteria, user);
 
+        return this.doDeleteMany(criteria, user);
+    }
+
+    private Mono<Collection<ID>> doDeleteMany(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
         getBeforeAfterComponent().beforeDelete(criteria, user, getBeforeAfterDomainOperations());
 
         return getStream(criteria, user)
@@ -72,8 +75,8 @@ public interface BaseDeleteManyDomainCrudService<ID extends Comparable<ID> & Ser
                 .flatMap(dto -> this.preDelete(criteria, user).thenReturn(dto))
                 .flatMap(dto -> {
                     C criteriaId = CriteriaUtil.idCriteria(getCriteriaClass(), dto.getId());
-                    Q baseQuery = this.getRepository().generateQuery(criteriaId);
-                    baseQuery = this.getRepository().criteria(baseQuery, criteriaId, user);
+                    BaseQuery baseQuery = this.getRepository().getQueryBuilder().build(criteriaId);
+
                     return this.getRepository().removeOne(baseQuery).thenReturn(dto);
                 })
                 .flatMap(dto -> this.postDelete(dto, criteria, user).thenReturn(dto))

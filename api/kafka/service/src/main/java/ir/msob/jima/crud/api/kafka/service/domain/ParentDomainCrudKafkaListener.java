@@ -7,16 +7,13 @@ import ir.msob.jima.core.commons.channel.message.*;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
-import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.shared.ModelType;
 import ir.msob.jima.core.commons.util.GenericTypeUtil;
-import ir.msob.jima.crud.api.kafka.client.ChannelUtil;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
-import org.springframework.kafka.listener.ContainerProperties;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -29,7 +26,6 @@ import java.util.Collection;
  * @param <D>    The type of the Domain, which must extend BaseDomain.
  * @param <DTO>  The type of the DTO, which must extend BaseDto.
  * @param <C>    The type of the Criteria, which must extend BaseCriteria.
- * @param <Q>    The type of the Query, which must extend BaseQuery.
  * @param <R>    The type of the Repository, which must extend BaseDomainCrudRepository.
  * @param <S>    The type of the Service, which must extend BaseDomainCrudService.
  */
@@ -39,31 +35,10 @@ public interface ParentDomainCrudKafkaListener<
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        Q extends BaseQuery,
-        R extends BaseDomainCrudRepository<ID, USER, D, C, Q>,
-        S extends BaseDomainCrudService<ID, USER, D, DTO, C, Q, R>>
+        R extends BaseDomainCrudRepository<ID, D>,
+        S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>>
         extends BaseKafkaListener<ID, USER>,
         BaseChannelTypeReference<ID, USER, DTO, C> {
-
-    /**
-     * Creates container properties for the Kafka listener.
-     *
-     * @param operation The operation for which the container properties are being created.
-     * @return The created container properties.
-     */
-    default ContainerProperties createContainerProperties(String operation) {
-        return createKafkaContainerProperties(ChannelUtil.getChannel(getDtoClass(), operation));
-    }
-
-    /**
-     * Starts the Kafka listener container.
-     *
-     * @param containerProperties The container properties for the Kafka listener.
-     * @param operation           The operation for which the container is being started.
-     */
-    default void startContainer(ContainerProperties containerProperties, String operation) {
-        startKafkaContainer(containerProperties, ChannelUtil.getChannel(getDtoClass(), operation));
-    }
 
     /**
      * Returns the service that handles the CRUD operations.
@@ -86,7 +61,7 @@ public interface ParentDomainCrudKafkaListener<
             DtosMessage<ID, DTO> data = new DtosMessage<>();
             data.setDtos(dtos);
             for (ChannelMessage<USER, ? extends ModelType> callback : message.getCallbacks()) {
-                getAsyncClient().send(prepareChannelMessage(callback, data, status, user), callback.getChannel(), user);
+                getAsyncClient().send(callback.getChannel(), prepareChannelMessage(callback, data, status, user), user);
             }
         }
     }
@@ -105,7 +80,7 @@ public interface ParentDomainCrudKafkaListener<
             DtoMessage<ID, DTO> data = new DtoMessage<>();
             data.setDto(dto);
             for (ChannelMessage<USER, ? extends ModelType> callback : message.getCallbacks()) {
-                getAsyncClient().send(prepareChannelMessage(callback, data, status, user), callback.getChannel(), user);
+                getAsyncClient().send(callback.getChannel(), prepareChannelMessage(callback, data, status, user), user);
             }
         }
     }
@@ -124,7 +99,7 @@ public interface ParentDomainCrudKafkaListener<
             IdsMessage<ID> data = new IdsMessage<>();
             data.setIds(ids);
             for (ChannelMessage<USER, ? extends ModelType> callback : message.getCallbacks()) {
-                getAsyncClient().send(prepareChannelMessage(callback, data, status, user), callback.getChannel(), user);
+                getAsyncClient().send(callback.getChannel(), prepareChannelMessage(callback, data, status, user), user);
             }
         }
     }
@@ -143,7 +118,7 @@ public interface ParentDomainCrudKafkaListener<
             IdMessage<ID> data = new IdMessage<>();
             data.setId(id);
             for (ChannelMessage<USER, ? extends ModelType> callback : message.getCallbacks()) {
-                getAsyncClient().send(prepareChannelMessage(callback, data, status, user), callback.getChannel(), user);
+                getAsyncClient().send(callback.getChannel(), prepareChannelMessage(callback, data, status, user), user);
             }
         }
     }
@@ -162,7 +137,7 @@ public interface ParentDomainCrudKafkaListener<
             LongMessage data = new LongMessage();
             data.setResult(count);
             for (ChannelMessage<USER, ? extends ModelType> callback : message.getCallbacks()) {
-                getAsyncClient().send(prepareChannelMessage(callback, data, status, user), callback.getChannel(), user);
+                getAsyncClient().send(callback.getChannel(), prepareChannelMessage(callback, data, status, user), user);
             }
         }
     }
@@ -181,7 +156,7 @@ public interface ParentDomainCrudKafkaListener<
             LongMessage data = new LongMessage();
             data.setResult(count);
             for (ChannelMessage<USER, ? extends ModelType> callback : message.getCallbacks()) {
-                getAsyncClient().send(prepareChannelMessage(callback, data, status, user), callback.getChannel(), user);
+                getAsyncClient().send(callback.getChannel(), prepareChannelMessage(callback, data, status, user), user);
             }
         }
     }
@@ -200,7 +175,7 @@ public interface ParentDomainCrudKafkaListener<
             PageMessage<ID, DTO> data = new PageMessage<>();
             data.setPage(page);
             for (ChannelMessage<USER, ? extends ModelType> callback : message.getCallbacks()) {
-                getAsyncClient().send(prepareChannelMessage(callback, data, status, user), callback.getChannel(), user);
+                getAsyncClient().send(callback.getChannel(), prepareChannelMessage(callback, data, status, user), user);
             }
         }
     }

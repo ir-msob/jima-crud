@@ -21,12 +21,12 @@ public interface BaseRelatedDomainCrudRestResource<
         , BaseDeleteByRelatedIdRelatedDomainCrudRestResource<ID, USER, CD, CC, DTO, CS>
         , BaseDeleteRelatedDomainCrudRestResource<ID, USER, CD, CC, DTO, CS>
         , BaseDeleteManyRelatedDomainCrudRestResource<ID, USER, CD, CC, DTO, CS>
-        , BaseSaveRelatedDomainCrudRestResource<ID, USER, CD, CC, DTO, CS>
-        , BaseSaveManyRelatedDomainCrudRestResource<ID, USER, CD, CC, DTO, CS>
+        , BaseSaveRelatedDomainCrudRestResource<ID, USER, CD, DTO, CS>
+        , BaseSaveManyRelatedDomainCrudRestResource<ID, USER, CD, DTO, CS>
         , BaseUpdateByIdRelatedDomainCrudRestResource<ID, USER, CD, CC, DTO, CS>
         , BaseUpdateByRelatedIdRelatedDomainCrudRestResource<ID, USER, CD, CC, DTO, CS>
         , BaseUpdateRelatedDomainCrudRestResource<ID, USER, CD, CC, DTO, CS>
-        , BaseUpdateManyRelatedDomainCrudRestResource<ID, USER, CD, CC, DTO, CS> {
+        , BaseUpdateManyRelatedDomainCrudRestResource<ID, USER, CD, DTO, CS> {
 
 
 }

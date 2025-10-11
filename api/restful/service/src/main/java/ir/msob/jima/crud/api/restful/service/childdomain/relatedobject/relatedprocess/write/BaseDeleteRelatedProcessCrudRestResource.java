@@ -35,7 +35,7 @@ public interface BaseDeleteRelatedProcessCrudRestResource<
         , CC extends RelatedProcessCriteriaAbstract<ID, CD>
         , DTO extends BaseDto<ID>
         , CS extends BaseChildDomainCrudService<ID, USER, DTO>> extends
-        ParentRelatedObjectCrudRestResource<ID, String, USER, CD, CC, DTO, CS> {
+        ParentRelatedObjectCrudRestResource<ID, String, USER, CD, DTO, CS> {
 
     Logger log = LoggerFactory.getLogger(BaseDeleteRelatedProcessCrudRestResource.class);
 

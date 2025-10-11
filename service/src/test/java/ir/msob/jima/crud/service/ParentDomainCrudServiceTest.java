@@ -41,7 +41,7 @@ class ParentDomainCrudServiceTest {
     }
 
     @Test
-    void testNewCriteriaClass() throws Exception {
+    void testNewCriteriaClass() {
 
         // Call the newCriteriaClass method
         SampleCriteria<String> criteria = service.newCriteriaClass();

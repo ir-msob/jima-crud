@@ -29,13 +29,12 @@ import java.util.List;
  * @param <D>    The type of the domain entities.
  * @param <DTO>  The type of the DTO (Data Transfer Object) entities.
  * @param <C>    The type of the criteria used for filtering entities.
- * @param <Q>    The type of the query used for filtering entities.
  * @param <R>    The type of the CRUD repository used for data access.
  */
 public interface BaseGetPageDomainCrudService<ID extends Comparable<ID> & Serializable, USER extends BaseUser,
         D extends BaseDomain<ID>, DTO extends BaseDto<ID>,
-        C extends BaseCriteria<ID>, Q extends BaseQuery,
-        R extends BaseDomainCrudRepository<ID, USER, D, C, Q>> extends ParentReadDomainCrudService<ID, USER, D, DTO, C, Q, R> {
+        C extends BaseCriteria<ID>,
+        R extends BaseDomainCrudRepository<ID, D>> extends ParentReadDomainCrudService<ID, USER, D, DTO, C, R> {
 
     /**
      * The logger for this service class.
@@ -54,7 +53,7 @@ public interface BaseGetPageDomainCrudService<ID extends Comparable<ID> & Serial
     @Transactional(readOnly = true)
     @MethodStats
     default Mono<Page<DTO>> getPage(Pageable pageable, USER user) throws DomainNotFoundException, BadRequestException {
-        return this.getPage(newCriteriaClass(), pageable, user);
+        return this.doGetPage(newCriteriaClass(), pageable, user);
     }
 
     /**
@@ -72,9 +71,13 @@ public interface BaseGetPageDomainCrudService<ID extends Comparable<ID> & Serial
     default Mono<Page<DTO>> getPage(C criteria, Pageable pageable, USER user) throws DomainNotFoundException, BadRequestException {
         log.debug("GetPage, criteria: {}, user: {}", criteria, user);
 
+        return this.doGetPage(criteria, pageable, user);
+    }
+
+    private Mono<Page<DTO>> doGetPage(C criteria, Pageable pageable, USER user) throws DomainNotFoundException, BadRequestException {
         getBeforeAfterComponent().beforeGet(criteria, user, getBeforeAfterDomainOperations());
-        Q baseQuery = this.getRepository().generateQuery(criteria, pageable);
-        baseQuery = this.getRepository().criteria(baseQuery, criteria, user);
+
+        BaseQuery baseQuery = this.getRepository().getQueryBuilder().build(criteria, pageable);
 
         return this.preGet(criteria, user)
                 .then(this.getRepository().getPage(baseQuery, pageable))

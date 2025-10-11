@@ -4,7 +4,6 @@ import ir.msob.jima.core.api.restful.commons.rest.BaseRestResource;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
-import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.commons.BaseCrudResource;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
@@ -21,7 +20,6 @@ import java.io.Serializable;
  * @param <D>    the type of the domain
  * @param <DTO>  the type of the DTO
  * @param <C>    the type of the criteria
- * @param <Q>    the type of the query
  * @param <R>    the type of the repository
  * @param <S>    the type of the service
  * @author Yaqub Abdi
@@ -32,8 +30,7 @@ public interface ParentDomainCrudRestResource<
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        Q extends BaseQuery,
-        R extends BaseDomainCrudRepository<ID, USER, D, C, Q>,
+        R extends BaseDomainCrudRepository<ID, D>,
         S extends ParentDomainCrudService<ID, USER, D, DTO, C, R>>
         extends BaseRestResource<ID, USER>,
         BaseCrudResource {

@@ -3,7 +3,6 @@ package ir.msob.jima.crud.api.kafka.service.domain;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
-import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.kafka.service.domain.read.*;
 import ir.msob.jima.crud.api.kafka.service.domain.write.*;
@@ -23,7 +22,6 @@ import java.io.Serializable;
  * @param <D>    The type of the Domain, which must extend BaseDomain.
  * @param <DTO>  The type of the DTO, which must extend BaseDto.
  * @param <C>    The type of the Criteria, which must extend BaseCriteria.
- * @param <Q>    The type of the Query, which must extend BaseQuery.
  * @param <R>    The type of the Repository, which must extend BaseDomainCrudRepository.
  * @param <S>    The type of the Service, which must extend BaseDomainCrudService.
  */
@@ -33,27 +31,26 @@ public interface BaseDomainCrudKafkaListener<
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        Q extends BaseQuery,
-        R extends BaseDomainCrudRepository<ID, USER, D, C, Q>,
-        S extends BaseDomainCrudService<ID, USER, D, DTO, C, Q, R>
+        R extends BaseDomainCrudRepository<ID, D>,
+        S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>
         > extends
-        BaseDeleteByIdDomainCrudKafkaListener<ID, USER, D, DTO, C, Q, R, S>,
-        BaseDeleteDomainCrudKafkaListener<ID, USER, D, DTO, C, Q, R, S>,
-        BaseDeleteManyDomainCrudKafkaListener<ID, USER, D, DTO, C, Q, R, S>,
-        BaseEditByIdDomainCrudKafkaListener<ID, USER, D, DTO, C, Q, R, S>,
-        BaseEditDomainCrudKafkaListener<ID, USER, D, DTO, C, Q, R, S>,
-        BaseEditManyDomainCrudKafkaListener<ID, USER, D, DTO, C, Q, R, S>,
-        BaseSaveDomainCrudKafkaListener<ID, USER, D, DTO, C, Q, R, S>,
-        BaseSaveManyDomainCrudKafkaListener<ID, USER, D, DTO, C, Q, R, S>,
-        BaseUpdateByIdDomainCrudKafkaListener<ID, USER, D, DTO, C, Q, R, S>,
-        BaseUpdateDomainCrudKafkaListener<ID, USER, D, DTO, C, Q, R, S>,
-        BaseUpdateManyDomainCrudKafkaListener<ID, USER, D, DTO, C, Q, R, S>,
+        BaseDeleteByIdDomainCrudKafkaListener<ID, USER, D, DTO, C, R, S>,
+        BaseDeleteDomainCrudKafkaListener<ID, USER, D, DTO, C, R, S>,
+        BaseDeleteManyDomainCrudKafkaListener<ID, USER, D, DTO, C, R, S>,
+        BaseEditByIdDomainCrudKafkaListener<ID, USER, D, DTO, C, R, S>,
+        BaseEditDomainCrudKafkaListener<ID, USER, D, DTO, C, R, S>,
+        BaseEditManyDomainCrudKafkaListener<ID, USER, D, DTO, C, R, S>,
+        BaseSaveDomainCrudKafkaListener<ID, USER, D, DTO, C, R, S>,
+        BaseSaveManyDomainCrudKafkaListener<ID, USER, D, DTO, C, R, S>,
+        BaseUpdateByIdDomainCrudKafkaListener<ID, USER, D, DTO, C, R, S>,
+        BaseUpdateDomainCrudKafkaListener<ID, USER, D, DTO, C, R, S>,
+        BaseUpdateManyDomainCrudKafkaListener<ID, USER, D, DTO, C, R, S>,
 
-        BaseCountAllDomainCrudKafkaListener<ID, USER, D, DTO, C, Q, R, S>,
-        BaseCountDomainCrudKafkaListener<ID, USER, D, DTO, C, Q, R, S>,
-        BaseGetManyDomainCrudKafkaListener<ID, USER, D, DTO, C, Q, R, S>,
-        BaseGetByIdDomainCrudKafkaListener<ID, USER, D, DTO, C, Q, R, S>,
-        BaseGetOneDomainCrudKafkaListener<ID, USER, D, DTO, C, Q, R, S>,
-        BaseGetPageDomainCrudKafkaListener<ID, USER, D, DTO, C, Q, R, S> {
+        BaseCountAllDomainCrudKafkaListener<ID, USER, D, DTO, C, R, S>,
+        BaseCountDomainCrudKafkaListener<ID, USER, D, DTO, C, R, S>,
+        BaseGetManyDomainCrudKafkaListener<ID, USER, D, DTO, C, R, S>,
+        BaseGetByIdDomainCrudKafkaListener<ID, USER, D, DTO, C, R, S>,
+        BaseGetOneDomainCrudKafkaListener<ID, USER, D, DTO, C, R, S>,
+        BaseGetPageDomainCrudKafkaListener<ID, USER, D, DTO, C, R, S> {
 
 }

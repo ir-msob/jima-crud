@@ -3,7 +3,6 @@ package ir.msob.jima.crud.test.domain;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
-import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.test.BaseCoreResourceTest;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
@@ -22,7 +21,6 @@ import java.io.Serializable;
  * @param <D>    The type of the domain entity being operated on.
  * @param <DTO>  The type of the data transfer object for the entity.
  * @param <C>    The type of criteria used for filtering entities.
- * @param <Q>    The type of query object used in data retrieval.
  * @param <R>    The type of the repository used for CRUD operations.
  * @param <S>    The type of the service used for CRUD operations.
  * @param <DP>   The type of data provider used for CRUD operations.
@@ -33,10 +31,9 @@ public interface ParentDomainCrudResourceTest<
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        Q extends BaseQuery,
-        R extends BaseDomainCrudRepository<ID, USER, D, C, Q>,
-        S extends BaseDomainCrudService<ID, USER, D, DTO, C, Q, R>,
-        DP extends BaseDomainCrudDataProvider<ID, USER, D, DTO, C, Q, R, S>>
+        R extends BaseDomainCrudRepository<ID, D>,
+        S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>,
+        DP extends BaseDomainCrudDataProvider<ID, USER, D, DTO, C, R, S>>
         extends BaseCoreResourceTest<ID, USER, D, DTO, C> {
 
     Logger log = LoggerFactory.getLogger(ParentDomainCrudResourceTest.class);

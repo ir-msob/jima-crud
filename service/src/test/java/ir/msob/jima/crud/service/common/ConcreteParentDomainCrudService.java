@@ -18,13 +18,11 @@ public class ConcreteParentDomainCrudService implements
                 SampleDomain<String>,
                 SampleDto<String>,
                 SampleCriteria<String>,
-                BaseRepository<String,
-                        BaseUser,
-                        SampleDomain<String>>> {
+                BaseRepository<String, SampleDomain<String>>> {
 
 
     @Override
-    public BaseRepository<String, BaseUser, SampleDomain<String>> getRepository() {
+    public BaseRepository<String, SampleDomain<String>> getRepository() {
         return null;
     }
 

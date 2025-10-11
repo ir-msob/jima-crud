@@ -8,7 +8,6 @@ import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.exception.validation.ValidationException;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
-import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import jakarta.validation.Valid;
@@ -28,10 +27,9 @@ import java.io.Serializable;
  * @param <D>    The type of the entity (domain) to be updated.
  * @param <DTO>  The type of data transfer object that represents the entity.
  * @param <C>    The type of criteria used for filtering entities.
- * @param <Q>    The type of query used for database operations.
  * @param <R>    The type of repository used for CRUD operations.
  */
-public interface BaseUpdateDomainCrudService<ID extends Comparable<ID> & Serializable, USER extends BaseUser, D extends BaseDomain<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>, Q extends BaseQuery, R extends BaseDomainCrudRepository<ID, USER, D, C, Q>> extends ParentWriteDomainCrudService<ID, USER, D, DTO, C, Q, R> {
+public interface BaseUpdateDomainCrudService<ID extends Comparable<ID> & Serializable, USER extends BaseUser, D extends BaseDomain<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>, R extends BaseDomainCrudRepository<ID, D>> extends ParentWriteDomainCrudService<ID, USER, D, DTO, C, R> {
     Logger log = LoggerFactory.getLogger(BaseUpdateDomainCrudService.class);
 
     /**
@@ -50,7 +48,7 @@ public interface BaseUpdateDomainCrudService<ID extends Comparable<ID> & Seriali
     @MethodStats
     default Mono<DTO> update(ID id, @Valid DTO dto, USER user) {
         dto.setId(id);
-        return update(dto, user);
+        return doUpdate(dto, user);
     }
 
     /**
@@ -67,8 +65,12 @@ public interface BaseUpdateDomainCrudService<ID extends Comparable<ID> & Seriali
     @Transactional
     @MethodStats
     default Mono<DTO> update(@Valid DTO dto, USER user) {
+        return doUpdate(dto, user);
+    }
+
+    private Mono<DTO> doUpdate(@Valid DTO dto, USER user) {
         return getOneById(dto.getId(), user)
-                .flatMap(previousDto -> this.update(previousDto, dto, user));
+                .flatMap(previousDto -> this.doUpdate(previousDto, dto, user));
     }
 
     /**
@@ -87,8 +89,10 @@ public interface BaseUpdateDomainCrudService<ID extends Comparable<ID> & Seriali
     @Transactional
     @MethodStats
     default Mono<DTO> update(DTO previousDto, @Valid DTO dto, USER user) throws BadRequestException, ValidationException, DomainNotFoundException {
-        log.debug("Update, user {}", user);
+        return doUpdate(previousDto, dto, user);
+    }
 
+    private Mono<DTO> doUpdate(DTO previousDto, @Valid DTO dto, USER user) throws BadRequestException, ValidationException, DomainNotFoundException {
         D domain = toDomain(dto, user);
 
         getBeforeAfterComponent().beforeUpdate(previousDto, dto, user, getBeforeAfterDomainOperations());
@@ -96,7 +100,7 @@ public interface BaseUpdateDomainCrudService<ID extends Comparable<ID> & Seriali
         return this.preUpdate(dto, user)
                 .doOnSuccess(unused -> addAudit(dto, AuditDomainActionType.UPDATE, user))
                 .then(this.getRepository().updateOne(domain))
-                .doOnSuccess(updatedDomain -> this.postUpdate(dto, updatedDomain, user))
+                .flatMap(updatedDomain -> this.postUpdate(dto, updatedDomain, user).thenReturn(updatedDomain))
                 .flatMap(updatedDomain -> getOneById(updatedDomain.getId(), user))
                 .doOnSuccess(updatedDto ->
                         getBeforeAfterComponent().afterUpdate(previousDto, updatedDto, user, getBeforeAfterDomainOperations()));

@@ -27,13 +27,12 @@ import java.util.Collection;
  * @param <D>    The type of the domain entities.
  * @param <DTO>  The type of the DTO (Data Transfer Object) entities.
  * @param <C>    The type of the criteria used for filtering entities.
- * @param <Q>    The type of the query used for filtering entities.
  * @param <R>    The type of the CRUD repository used for data access.
  */
 public interface BaseGetManyDomainCrudService<ID extends Comparable<ID> & Serializable, USER extends BaseUser,
         D extends BaseDomain<ID>, DTO extends BaseDto<ID>,
-        C extends BaseCriteria<ID>, Q extends BaseQuery,
-        R extends BaseDomainCrudRepository<ID, USER, D, C, Q>> extends ParentReadDomainCrudService<ID, USER, D, DTO, C, Q, R> {
+        C extends BaseCriteria<ID>,
+        R extends BaseDomainCrudRepository<ID, D>> extends ParentReadDomainCrudService<ID, USER, D, DTO, C, R> {
 
     /**
      * The logger for this service class.
@@ -56,7 +55,7 @@ public interface BaseGetManyDomainCrudService<ID extends Comparable<ID> & Serial
     @Transactional(readOnly = true)
     @MethodStats
     default Mono<Collection<DTO>> getMany(Collection<ID> ids, USER user) throws DomainNotFoundException, BadRequestException, InvocationTargetException, NoSuchMethodException, IllegalAccessException, InstantiationException {
-        return this.getMany(CriteriaUtil.idCriteria(getCriteriaClass(), ids), user);
+        return this.doGetMany(CriteriaUtil.idCriteria(getCriteriaClass(), ids), user);
     }
 
     /**
@@ -74,9 +73,12 @@ public interface BaseGetManyDomainCrudService<ID extends Comparable<ID> & Serial
     default Mono<Collection<DTO>> getMany(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
         log.debug("GetMany, criteria: {}, user: {}", criteria, user);
 
+        return this.doGetMany(criteria, user);
+    }
+
+    private Mono<Collection<DTO>> doGetMany(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
         getBeforeAfterComponent().beforeGet(criteria, user, getBeforeAfterDomainOperations());
-        Q baseQuery = this.getRepository().generateQuery(criteria);
-        baseQuery = this.getRepository().criteria(baseQuery, criteria, user);
+        BaseQuery baseQuery = this.getRepository().getQueryBuilder().build(criteria);
 
         return this.preGet(criteria, user)
                 .thenMany(this.getRepository().getMany(baseQuery))

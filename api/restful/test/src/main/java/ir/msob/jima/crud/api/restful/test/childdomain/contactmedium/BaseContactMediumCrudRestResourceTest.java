@@ -6,7 +6,6 @@ import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
-import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.restful.test.childdomain.BaseParentChildCrudRestResourceTest;
@@ -35,7 +34,6 @@ import java.io.Serializable;
  * @param <D>    The type of the domain entity.
  * @param <DTO>  The type of the data transfer object (DTO) for the entity.
  * @param <C>    The type of criteria used for querying entities.
- * @param <Q>    The type of query used for retrieving entities.
  * @param <R>    The type of the CRUD repository.
  * @param <S>    The type of the CRUD service.
  * @param <DP>   The type of data provider for CRUD testing.
@@ -52,15 +50,13 @@ public interface BaseContactMediumCrudRestResourceTest<
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        Q extends BaseQuery,
-        R extends BaseDomainCrudRepository<ID, USER, D, C, Q>,
-        S extends BaseDomainCrudService<ID, USER, D, DTO, C, Q, R>,
-        DP extends BaseDomainCrudDataProvider<ID, USER, D, DTO, C, Q, R, S>,
-
+        R extends BaseDomainCrudRepository<ID, D>,
+        S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>,
+        DP extends BaseDomainCrudDataProvider<ID, USER, D, DTO, C, R, S>,
         CS extends BaseChildDomainCrudService<ID, USER, DTO>,
         CDP extends BaseChildCrudDataProvider<ID, USER, CD, DTO, CS>>
-        extends BaseContactMediumCrudResourceTest<ID, USER, CD, CC, D, DTO, C, Q, R, S, DP, CS, CDP>,
-        BaseParentChildCrudRestResourceTest<ID, USER, CD, CC, D, DTO, C, Q, R, S, DP, CS, CDP> {
+        extends BaseContactMediumCrudResourceTest<ID, USER, CD, CC, D, DTO, C, R, S, DP, CS, CDP>,
+        BaseParentChildCrudRestResourceTest<ID, USER, CD, CC, D, DTO, C, R, S, DP, CS, CDP> {
 
     @Override
     default void deleteByNameRequest(ID parentId, String name, Assertable<DTO> assertable) {

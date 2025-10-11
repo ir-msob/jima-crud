@@ -1,12 +1,9 @@
 package ir.msob.jima.crud.commons.domain;
 
-import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.repository.BaseRepository;
-import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.core.commons.util.GenericTypeUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import reactor.core.publisher.Flux;
@@ -18,15 +15,12 @@ import java.util.Collection;
 /**
  * This interface defines CRUD repository methods for domain entities.
  *
- * @param <ID>   The type of entity ID.
- * @param <D>    The type of domain entity.
- * @param <USER> The type of the user context.
- * @param <C>    The type of criteria.
- * @param <Q>    The type of query.
+ * @param <ID> The type of entity ID.
+ * @param <D>  The type of domain entity.
  * @author Yaqub Abdi
  */
-public interface BaseDomainCrudRepository<ID extends Comparable<ID> & Serializable, USER extends BaseUser, D extends BaseDomain<ID>, C extends BaseCriteria<ID>, Q extends BaseQuery>
-        extends BaseRepository<ID, USER, D> {
+public interface BaseDomainCrudRepository<ID extends Comparable<ID> & Serializable, D extends BaseDomain<ID>>
+        extends BaseRepository<ID, D> {
 
     /**
      * Save a domain entity.
@@ -69,7 +63,7 @@ public interface BaseDomainCrudRepository<ID extends Comparable<ID> & Serializab
      * @return A Mono that emits the found domain entity.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    Mono<D> getOne(Q query) throws DomainNotFoundException;
+    Mono<D> getOne(BaseQuery query) throws DomainNotFoundException;
 
     /**
      * Get a page of domain entities that match a query.
@@ -79,7 +73,7 @@ public interface BaseDomainCrudRepository<ID extends Comparable<ID> & Serializab
      * @return A Mono that emits a Page containing domain entities.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    Mono<Page<D>> getPage(Q query, Pageable pageable) throws DomainNotFoundException;
+    Mono<Page<D>> getPage(BaseQuery query, Pageable pageable) throws DomainNotFoundException;
 
     /**
      * Get a list of domain entities that match a query.
@@ -88,7 +82,7 @@ public interface BaseDomainCrudRepository<ID extends Comparable<ID> & Serializab
      * @return A Flux that emits a list of domain entities.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    Flux<D> getMany(Q query) throws DomainNotFoundException;
+    Flux<D> getMany(BaseQuery query) throws DomainNotFoundException;
 
     /**
      * Remove one domain entity that matches a query.
@@ -97,7 +91,7 @@ public interface BaseDomainCrudRepository<ID extends Comparable<ID> & Serializab
      * @return A Mono that emits the removed domain entity.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    Mono<D> removeOne(Q query) throws DomainNotFoundException;
+    Mono<D> removeOne(BaseQuery query) throws DomainNotFoundException;
 
     /**
      * Remove multiple domain entities that match a query.
@@ -106,7 +100,7 @@ public interface BaseDomainCrudRepository<ID extends Comparable<ID> & Serializab
      * @return A Flux that emits the removed domain entities.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    Flux<D> removeMany(Q query) throws DomainNotFoundException;
+    Flux<D> removeMany(BaseQuery query) throws DomainNotFoundException;
 
     /**
      * Remove all domain entities.
@@ -123,7 +117,7 @@ public interface BaseDomainCrudRepository<ID extends Comparable<ID> & Serializab
      * @return A Mono that emits the count of matching domain entities.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    Mono<Long> count(Q query) throws DomainNotFoundException;
+    Mono<Long> count(BaseQuery query) throws DomainNotFoundException;
 
     /**
      * Get the number of all records.
@@ -133,41 +127,5 @@ public interface BaseDomainCrudRepository<ID extends Comparable<ID> & Serializab
      */
     Mono<Long> countAll() throws DomainNotFoundException;
 
-    /**
-     * Generate a query from a criteria object.
-     *
-     * @param criteria The criteria object used to generate the query.
-     * @return The generated query.
-     */
-    Q generateQuery(C criteria);
 
-    /**
-     * Generate a query from a criteria object with pagination information.
-     *
-     * @param criteria The criteria object used to generate the query.
-     * @param pageable Pageable information for pagination.
-     * @return The generated query with pagination details.
-     */
-    Q generateQuery(C criteria, Pageable pageable);
-
-    /**
-     * Provide default criteria for a query.
-     *
-     * @param query    The query to be extended with criteria.
-     * @param criteria The criteria object used for extending the query.
-     * @param user     A user context.
-     * @return The extended query with criteria.
-     */
-    default Q criteria(Q query, C criteria, USER user) {
-        return query;
-    }
-
-    /**
-     * Get the class of the criteria.
-     *
-     * @return The class representing the criteria.
-     */
-    default Class<C> getCriteriaClass() {
-        return (Class<C>) GenericTypeUtil.resolveTypeArguments(getClass(), BaseDomainCrudRepository.class, 3);
-    }
 }

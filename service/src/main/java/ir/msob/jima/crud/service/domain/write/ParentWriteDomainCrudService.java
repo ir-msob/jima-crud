@@ -13,7 +13,6 @@ import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.exception.validation.ValidationException;
-import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
@@ -43,8 +42,7 @@ public interface ParentWriteDomainCrudService<
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        Q extends BaseQuery,
-        R extends BaseDomainCrudRepository<ID, USER, D, C, Q>>
+        R extends BaseDomainCrudRepository<ID, D>>
         extends ParentDomainCrudService<ID, USER, D, DTO, C, R> {
 
     /**
@@ -105,28 +103,6 @@ public interface ParentWriteDomainCrudService<
         return (DTO) objectMapper.treeToValue(patched, dto.getClass());
     }
 
-    /**
-     * Performs actions before saving entities.
-     *
-     * @param dto  The DTO to be saved.
-     * @param user A user object.
-     * @return A Mono that emits void.
-     */
-    default Mono<Void> preSave(DTO dto, USER user) {
-        return Mono.empty();
-    }
-
-    /**
-     * Performs actions after saving entities.
-     *
-     * @param dto         The DTO that was saved.
-     * @param savedDomain The saved domain.
-     * @param user        A user object.
-     * @return A Mono that emits void.
-     */
-    default Mono<Void> postSave(DTO dto, D savedDomain, USER user) {
-        return Mono.empty();
-    }
 
     /**
      * Saves a DTO.
@@ -157,51 +133,6 @@ public interface ParentWriteDomainCrudService<
         return Mono.empty();
     }
 
-    /**
-     * Performs actions before updating entities.
-     *
-     * @param dto  The DTO to be updated.
-     * @param user A user object.
-     * @return A Mono that emits void.
-     */
-    default Mono<Void> preUpdate(DTO dto, USER user) {
-        return Mono.empty();
-    }
-
-    /**
-     * Performs actions after updating entities.
-     *
-     * @param dto           The DTO that was updated.
-     * @param updatedDomain The updated domain.
-     * @param user          A user object.
-     * @return A Mono that emits void.
-     */
-    default Mono<Void> postUpdate(DTO dto, D updatedDomain, USER user) {
-        return Mono.empty();
-    }
-
-    /**
-     * Performs actions before deleting entities based on criteria.
-     *
-     * @param criteria The criteria used for deleting entities.
-     * @param user     A user object.
-     * @return A Mono that emits void.
-     */
-    default Mono<Void> preDelete(C criteria, USER user) {
-        return Mono.empty();
-    }
-
-    /**
-     * Performs actions after deleting entities based on criteria.
-     *
-     * @param dto      The DTO of the entity that was deleted.
-     * @param criteria The criteria used for deleting entities.
-     * @param user     A user object.
-     * @return A Mono that emits void.
-     */
-    default Mono<Void> postDelete(DTO dto, C criteria, USER user) {
-        return Mono.empty();
-    }
 
     /**
      * Adds audit information to a DTO.

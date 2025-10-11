@@ -21,11 +21,11 @@ public interface BaseRelatedPartyCrudRestResource<
         , BaseDeleteByRelatedIdRelatedPartyCrudRestResource<ID, USER, CD, CC, DTO, CS>
         , BaseDeleteRelatedPartyCrudRestResource<ID, USER, CD, CC, DTO, CS>
         , BaseDeleteManyRelatedPartyCrudRestResource<ID, USER, CD, CC, DTO, CS>
-        , BaseSaveRelatedPartyCrudRestResource<ID, USER, CD, CC, DTO, CS>
-        , BaseSaveManyRelatedPartyCrudRestResource<ID, USER, CD, CC, DTO, CS>
+        , BaseSaveRelatedPartyCrudRestResource<ID, USER, CD, DTO, CS>
+        , BaseSaveManyRelatedPartyCrudRestResource<ID, USER, CD, DTO, CS>
         , BaseUpdateByIdRelatedPartyCrudRestResource<ID, USER, CD, CC, DTO, CS>
         , BaseUpdateByRelatedIdRelatedPartyCrudRestResource<ID, USER, CD, CC, DTO, CS>
         , BaseUpdateRelatedPartyCrudRestResource<ID, USER, CD, CC, DTO, CS>
-        , BaseUpdateManyRelatedPartyCrudRestResource<ID, USER, CD, CC, DTO, CS> {
+        , BaseUpdateManyRelatedPartyCrudRestResource<ID, USER, CD, DTO, CS> {
 
 }
