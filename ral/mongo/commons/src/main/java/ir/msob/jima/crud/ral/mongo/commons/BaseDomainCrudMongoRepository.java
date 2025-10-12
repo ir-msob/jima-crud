@@ -110,7 +110,7 @@ public interface BaseDomainCrudMongoRepository<ID extends Comparable<ID> & Seria
                     if (count == 0L) {
                         return Mono.just(new PageImpl<>(Collections.emptyList(), pageable, 0L));
                     } else {
-                        baseQuery.with(pageable);
+                        mongoQuery.with(pageable);
                         return this.getReactiveMongoTemplate().find(mongoQuery.getQuery(), getDomainClass())
                                 .collectList()
                                 .map(list -> new PageImpl<>(list, pageable, count));
