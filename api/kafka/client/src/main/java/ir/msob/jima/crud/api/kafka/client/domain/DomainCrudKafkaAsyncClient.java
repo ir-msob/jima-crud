@@ -114,6 +114,15 @@ public class DomainCrudKafkaAsyncClient implements BaseCrudAsyncClient {
     @MethodStats
     @SneakyThrows
     @Override
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> void save(Class<DTO> dtoClass, DTO dto, USER user) {
+        DtoMessage<ID, DTO> data = createMessage(dto);
+        ChannelMessage<USER, DtoMessage<ID, DTO>> channelMessage = createChannelMessage(data);
+        send(channelMessage, dtoClass, Operations.SAVE, user);
+    }
+
+    @MethodStats
+    @SneakyThrows
+    @Override
     public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> void saveMany(Class<DTO> dtoClass, List<DTO> dtos, Map<String, Serializable> metadata, String callback, USER user) {
         DtosMessage<ID, DTO> data = createMessage(dtos);
         ChannelMessage<USER, DtosMessage<ID, DTO>> channelMessage = createChannelMessage(data, metadata, callback);
@@ -263,6 +272,13 @@ public class DomainCrudKafkaAsyncClient implements BaseCrudAsyncClient {
                 .metadata(metadata)
                 .data(data)
                 .callback(ChannelMessage.<USER, ModelType>builder().channel(callback).build())
+                .build();
+    }
+
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> ChannelMessage<USER, DtoMessage<ID, DTO>> createChannelMessage(DtoMessage<ID, DTO> data) {
+        return ChannelMessage.<USER, DtoMessage<ID, DTO>>builder()
+                .key(data.getId() != null ? String.valueOf(data.getId()) : null)
+                .data(data)
                 .build();
     }
 

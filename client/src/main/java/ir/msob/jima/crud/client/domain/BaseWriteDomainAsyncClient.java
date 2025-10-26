@@ -179,6 +179,18 @@ public interface BaseWriteDomainAsyncClient extends BaseClient {
     <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> void save(Class<DTO> dtoClass, DTO dto, Map<String, Serializable> metadata, String callback, USER user);
 
     /**
+     * Asynchronously create or save a single data item.
+     *
+     * @param <ID>     The type of the entity's ID, which must be comparable and serializable.
+     * @param <USER>   The type of the user object, typically representing the user making the request.
+     * @param <DTO>    The type of the data transfer object for the entity.
+     * @param dtoClass The class representing the data transfer object.
+     * @param dto      The data transfer object to be created or saved.
+     * @param user     A user object associated with the request.
+     */
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>> void save(Class<DTO> dtoClass, DTO dto, USER user);
+
+    /**
      * Asynchronously create or save multiple data items.
      *
      * @param <ID>     The type of the entity's ID, which must be comparable and serializable.
