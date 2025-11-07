@@ -9,6 +9,7 @@ import ir.msob.jima.core.commons.channel.message.*;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.domain.DomainInfo;
+import ir.msob.jima.core.commons.domain.DtoInfo;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.security.BaseUser;
@@ -48,8 +49,9 @@ public class DomainCrudRsocketClient implements BaseCrudClient {
      * @return the prepared route
      */
     public static <ID extends Comparable<ID> & Serializable, DTO extends BaseDto<ID>> String prepareRoute(Class<DTO> dtoClass, String operation) {
+        DtoInfo dtoInfo = DtoInfo.info.getAnnotation(dtoClass);
         DomainInfo domainInfo = DomainInfo.info.getAnnotation(dtoClass);
-        return String.format("api.%s.%s.%s", domainInfo.version(), domainInfo.domainName(), operation);
+        return String.format("api.%s.%s.%s", dtoInfo.version(), domainInfo.domainName(), operation);
     }
 
     /**
@@ -59,7 +61,7 @@ public class DomainCrudRsocketClient implements BaseCrudClient {
      * @return the prepared application name
      */
     private <ID extends Comparable<ID> & Serializable, DTO extends BaseDto<ID>> String prepareApplicationName(Class<DTO> dtoClass) {
-        return DomainInfo.info.getAnnotation(dtoClass).serviceName();
+        return DtoInfo.info.getAnnotation(dtoClass).serviceName();
     }
 
     /**

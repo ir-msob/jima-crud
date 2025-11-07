@@ -1,24 +1,40 @@
 package ir.msob.jima.crud.api.restful.client;
 
 import ir.msob.jima.core.commons.domain.DomainInfo;
+import ir.msob.jima.core.commons.domain.DtoInfo;
 
 /**
- * The RestUtil class provides utility methods for generating RESTful URIs based on a DomainInfo.
- * It is designed to work with the MSOB Framework for CRUD operations.
- *
- * <p>Instances of this class cannot be created as it consists of only static utility methods.
+ * Utility class for generating RESTful URIs for CRUD operations
+ * based on {@link DomainInfo} and {@link DtoInfo}.
+ * <p>
+ * This class is part of the MSOB Framework and provides static helper methods
+ * for constructing standardized API endpoints.
+ * </p>
+ * <p>
+ * Instances of this class cannot be created as it contains only static methods.
+ * </p>
  */
 public class RestUtil {
+
+    // Private constructor to prevent instantiation
     private RestUtil() {
     }
 
     /**
-     * Generates a RESTful URI for a given DomainInfo.
+     * Generates a RESTful URI for a given combination of DTO and domain.
+     * <p>
+     * The returned URI follows the format: <code>/api/{version}/{domainName}</code>.
+     * </p>
      *
-     * @param domainInfo The DomainInfo for which the URI is generated.
-     * @return A formatted URI string in the "/api/{version}/{domainUri}" format.
+     * @param dtoInfo    the {@link DtoInfo} containing the version information; must not be null
+     * @param domainInfo the {@link DomainInfo} containing the domain name; must not be null
+     * @return a formatted URI string
+     * @throws IllegalArgumentException if either {@code dtoInfo} or {@code domainInfo} is null
      */
-    public static String uri(DomainInfo domainInfo) {
-        return String.format("/api/%s/%s", domainInfo.version(), domainInfo.domainName());
+    public static String uri(DtoInfo dtoInfo, DomainInfo domainInfo) {
+        if (dtoInfo == null || domainInfo == null) {
+            throw new IllegalArgumentException("dtoInfo and domainInfo must not be null");
+        }
+        return String.format("/api/%s/%s", dtoInfo.version(), domainInfo.domainName());
     }
 }

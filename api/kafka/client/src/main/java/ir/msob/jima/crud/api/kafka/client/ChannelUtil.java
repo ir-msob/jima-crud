@@ -1,6 +1,7 @@
 package ir.msob.jima.crud.api.kafka.client;
 
 import ir.msob.jima.core.commons.domain.DomainInfo;
+import ir.msob.jima.core.commons.domain.DtoInfo;
 
 public class ChannelUtil {
     private ChannelUtil() {
@@ -25,11 +26,13 @@ public class ChannelUtil {
 
     public static String getChannel(Class<?> clazz, String operation) {
         DomainInfo domainInfo = DomainInfo.info.getAnnotation(clazz);
-        return ChannelUtil.getChannel(domainInfo.serviceName(), domainInfo.version(), domainInfo.domainName(), operation);
+        DtoInfo dtoInfo = DtoInfo.info.getAnnotation(clazz);
+        return ChannelUtil.getChannel(dtoInfo.serviceName(), dtoInfo.version(), domainInfo.domainName(), operation);
     }
 
     public static String getBaseChannel(Class<?> clazz) {
         DomainInfo domainInfo = DomainInfo.info.getAnnotation(clazz);
-        return ChannelUtil.getChannel(domainInfo.serviceName(), domainInfo.version(), domainInfo.domainName());
+        DtoInfo dtoInfo = DtoInfo.info.getAnnotation(clazz);
+        return ChannelUtil.getChannel(dtoInfo.serviceName(), dtoInfo.version(), domainInfo.domainName());
     }
 }

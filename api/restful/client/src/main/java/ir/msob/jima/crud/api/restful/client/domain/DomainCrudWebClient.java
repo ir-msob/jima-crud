@@ -8,6 +8,7 @@ import ir.msob.jima.core.beans.properties.JimaProperties;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.domain.DomainInfo;
+import ir.msob.jima.core.commons.domain.DtoInfo;
 import ir.msob.jima.core.commons.exception.runtime.CommonRuntimeException;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
@@ -50,12 +51,12 @@ public class DomainCrudWebClient implements BaseCrudClient, BaseWebClient {
     private final WebClient webClient;
     private final JimaProperties jimaProperties;
 
-    private static String getUri(String suffix, DomainInfo domainInfo) {
+    private static String getUri(String suffix, DtoInfo dtoInfo, DomainInfo domainInfo) {
         String uri;
         if (Strings.isNotBlank(suffix))
-            uri = String.format("%s/%s", RestUtil.uri(domainInfo), suffix);
+            uri = String.format("%s/%s", RestUtil.uri(dtoInfo, domainInfo), suffix);
         else
-            uri = RestUtil.uri(domainInfo);
+            uri = RestUtil.uri(dtoInfo, domainInfo);
         return uri;
     }
 
@@ -488,10 +489,11 @@ public class DomainCrudWebClient implements BaseCrudClient, BaseWebClient {
     @SneakyThrows
     public <ID extends Comparable<ID> & Serializable, DTO extends BaseDto<ID>> URI getUriWithId(UriBuilder builder, Class<DTO> dtoClass, String suffix) {
         BaseDto<ID> baseDto = dtoClass.getDeclaredConstructor().newInstance();
+        DtoInfo dtoInfo = DtoInfo.info.getAnnotation(baseDto.getClass());
         DomainInfo domainInfo = DomainInfo.info.getAnnotation(baseDto.getClass());
         return builder
-                .host(domainInfo.serviceName())
-                .path(String.format("%s/%s", RestUtil.uri(domainInfo), suffix))
+                .host(dtoInfo.serviceName())
+                .path(String.format("%s/%s", RestUtil.uri(dtoInfo, domainInfo), suffix))
                 .build();
 
     }
@@ -510,9 +512,10 @@ public class DomainCrudWebClient implements BaseCrudClient, BaseWebClient {
     public <ID extends Comparable<ID> & Serializable, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> URI getUriWithCriteria(UriBuilder builder, Class<DTO> dtoClass, String suffix, C criteria, Pageable pageable) {
         BaseDto<ID> baseDto = dtoClass.getDeclaredConstructor().newInstance();
         DomainInfo domainInfo = DomainInfo.info.getAnnotation(baseDto.getClass());
+        DtoInfo dtoInfo = DtoInfo.info.getAnnotation(baseDto.getClass());
         return builder
-                .host(domainInfo.serviceName())
-                .path(getUri(suffix, domainInfo))
+                .host(dtoInfo.serviceName())
+                .path(getUri(suffix, dtoInfo, domainInfo))
                 .queryParams(objectToParam.convert(criteria, pageable))
                 .build();
 
@@ -530,9 +533,10 @@ public class DomainCrudWebClient implements BaseCrudClient, BaseWebClient {
     public <ID extends Comparable<ID> & Serializable, DTO extends BaseDto<ID>> URI getUriWithCriteria(UriBuilder builder, Class<DTO> dtoClass, String suffix) {
         BaseDto<ID> baseDto = dtoClass.getDeclaredConstructor().newInstance();
         DomainInfo domainInfo = DomainInfo.info.getAnnotation(baseDto.getClass());
+        DtoInfo dtoInfo = DtoInfo.info.getAnnotation(baseDto.getClass());
         return builder
-                .host(domainInfo.serviceName())
-                .path(getUri(suffix, domainInfo))
+                .host(dtoInfo.serviceName())
+                .path(getUri(suffix, dtoInfo, domainInfo))
                 .build();
     }
 
