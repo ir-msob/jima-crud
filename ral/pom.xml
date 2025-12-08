@@ -14,5 +14,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>mongo</module>
+        <module>sql</module>
     </modules>
 </project>

@@ -14,7 +14,7 @@ public class TestApplication implements ApplicationRunner {
     @Autowired
     Environment environment;
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         SpringApplication.run(TestApplication.class, args);
     }
 

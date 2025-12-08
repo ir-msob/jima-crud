@@ -2,10 +2,10 @@ package ir.msob.jima.crud.api.graphql.restful.service.domain.base;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.msob.jima.core.commons.security.BaseUserService;
-import ir.msob.jima.core.ral.mongo.it.criteria.ProjectCriteria;
-import ir.msob.jima.core.ral.mongo.it.domain.ProjectDomain;
-import ir.msob.jima.core.ral.mongo.it.dto.ProjectDto;
-import ir.msob.jima.core.ral.mongo.it.security.ProjectUser;
+import ir.msob.jima.core.it.criteria.ProjectCriteria;
+import ir.msob.jima.core.it.domain.ProjectDomain;
+import ir.msob.jima.core.it.dto.ProjectDto;
+import ir.msob.jima.core.it.security.ProjectUser;
 import ir.msob.jima.crud.api.graphql.restful.service.domain.BaseDomainCrudGraphqlRestResource;
 import ir.msob.jima.crud.ral.mongo.it.base.DomainCrudService;
 import ir.msob.jima.crud.ral.mongo.it.base.MongoDomainCrudRepository;

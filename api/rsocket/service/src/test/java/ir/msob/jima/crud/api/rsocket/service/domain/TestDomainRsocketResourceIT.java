@@ -7,7 +7,7 @@ import ir.msob.jima.core.api.rsocket.commons.BaseRSocketRequesterBuilder;
 import ir.msob.jima.core.beans.properties.JimaProperties;
 import ir.msob.jima.core.commons.resource.BaseResource;
 import ir.msob.jima.core.commons.shared.PageResponse;
-import ir.msob.jima.core.ral.mongo.it.security.ProjectUser;
+import ir.msob.jima.core.it.security.ProjectUser;
 import ir.msob.jima.core.ral.mongo.it.test.TestCriteria;
 import ir.msob.jima.core.ral.mongo.it.test.TestDomain;
 import ir.msob.jima.core.ral.mongo.it.test.TestDto;

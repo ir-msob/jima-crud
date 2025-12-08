@@ -2,7 +2,7 @@ package ir.msob.jima.crud.ral.mongo.it.test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.msob.jima.core.commons.operation.BaseBeforeAfterDomainOperation;
-import ir.msob.jima.core.ral.mongo.it.security.ProjectUser;
+import ir.msob.jima.core.it.security.ProjectUser;
 import ir.msob.jima.core.ral.mongo.it.test.TestCriteria;
 import ir.msob.jima.core.ral.mongo.it.test.TestDomain;
 import ir.msob.jima.core.ral.mongo.it.test.TestDto;

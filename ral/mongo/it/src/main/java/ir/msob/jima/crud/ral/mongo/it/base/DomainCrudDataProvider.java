@@ -2,11 +2,11 @@ package ir.msob.jima.crud.ral.mongo.it.base;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.msob.jima.core.commons.id.BaseIdService;
-import ir.msob.jima.core.ral.mongo.it.criteria.ProjectCriteria;
-import ir.msob.jima.core.ral.mongo.it.domain.ProjectDomain;
-import ir.msob.jima.core.ral.mongo.it.dto.ProjectDto;
-import ir.msob.jima.core.ral.mongo.it.security.ProjectUser;
-import ir.msob.jima.core.ral.mongo.it.security.Roles;
+import ir.msob.jima.core.it.criteria.ProjectCriteria;
+import ir.msob.jima.core.it.domain.ProjectDomain;
+import ir.msob.jima.core.it.dto.ProjectDto;
+import ir.msob.jima.core.it.security.ProjectUser;
+import ir.msob.jima.core.it.security.Roles;
 import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
 
 import java.util.Collections;
