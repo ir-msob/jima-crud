@@ -99,5 +99,10 @@
             <artifactId>spring-grpc-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-testing</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>

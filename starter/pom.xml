@@ -25,5 +25,8 @@
         <module>graphql-restful-test</module>
         <module>mongo</module>
         <module>mongo-test</module>
+        <module>sql</module>
+        <module>postgre-test</module>
+
     </modules>
 </project>

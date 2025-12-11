@@ -53,15 +53,16 @@ public interface BaseDomainCrudSqlRepository<ID extends Comparable<ID> & Seriali
     @Override
     @MethodStats
     default Mono<D> getOne(ir.msob.jima.core.commons.repository.BaseQuery baseQuery) {
-        var sqlQuery = (SqlQuery) baseQuery;
-        return this.getR2dbcEntityTemplate().select(getDomainClass()).matching(sqlQuery.getQuery()).one();
+        var sqlQuery = (SqlQuery<?>) baseQuery;
+        Query q = sqlQuery.toQuery();
+        return this.getR2dbcEntityTemplate().select(getDomainClass()).matching(q).one();
     }
 
     @Override
     @MethodStats
     default Mono<Page<D>> getPage(ir.msob.jima.core.commons.repository.BaseQuery baseQuery, Pageable pageable) {
-        var sqlQuery = (SqlQuery) baseQuery;
-        Query q = sqlQuery.getQuery();
+        var sqlQuery = (SqlQuery<?>) baseQuery;
+        Query q = sqlQuery.toQuery();
         return this.getR2dbcEntityTemplate().count(q, getDomainClass())
                 .flatMap(count -> {
                     if (count == 0L) {
@@ -76,16 +77,19 @@ public interface BaseDomainCrudSqlRepository<ID extends Comparable<ID> & Seriali
     @Override
     @MethodStats
     default Flux<D> getMany(ir.msob.jima.core.commons.repository.BaseQuery baseQuery) {
-        var sqlQuery = (SqlQuery) baseQuery;
-        return this.getR2dbcEntityTemplate().select(getDomainClass()).matching(sqlQuery.getQuery()).all();
+        var sqlQuery = (SqlQuery<?>) baseQuery;
+        Query q = sqlQuery.toQuery();
+        return this.getR2dbcEntityTemplate().select(getDomainClass()).matching(q).all();
     }
 
     @Override
     @MethodStats
     default Mono<D> removeOne(ir.msob.jima.core.commons.repository.BaseQuery baseQuery) {
-        var sqlQuery = (SqlQuery) baseQuery;
-        return this.getR2dbcEntityTemplate().select(getDomainClass()).matching(sqlQuery.getQuery()).one()
-                .flatMap(entity -> this.getR2dbcEntityTemplate().delete(Query.query(Criteria.where(getIdName()).is(entity.getId())), getDomainClass())
+        var sqlQuery = (SqlQuery<?>) baseQuery;
+        Query q = sqlQuery.toQuery();
+        return this.getR2dbcEntityTemplate().select(getDomainClass()).matching(q).one()
+                .flatMap(entity -> this.getR2dbcEntityTemplate()
+                        .delete(Query.query(Criteria.where(getIdName()).is(entity.getId())), getDomainClass())
                         .thenReturn(entity));
     }
 
@@ -97,17 +101,18 @@ public interface BaseDomainCrudSqlRepository<ID extends Comparable<ID> & Seriali
     @Override
     @MethodStats
     default Flux<D> removeMany(ir.msob.jima.core.commons.repository.BaseQuery baseQuery) {
-        var sqlQuery = (SqlQuery) baseQuery;
+        var sqlQuery = (SqlQuery<?>) baseQuery;
+        Query q = sqlQuery.toQuery();
 
         return this.getR2dbcEntityTemplate()
                 .select(getDomainClass())
-                .matching(sqlQuery.getQuery())
+                .matching(q)
                 .all()                          // Flux<D>
                 .collectList()                  // Mono<List<D>>
                 .flatMapMany(list ->
                         this.getR2dbcEntityTemplate()
                                 .delete(getDomainClass())
-                                .matching(sqlQuery.getQuery())
+                                .matching(q)
                                 .all()          // Mono<Long>
                                 .thenMany(Flux.fromIterable(list)) // ✔ Flux<D>
                 );
@@ -124,8 +129,8 @@ public interface BaseDomainCrudSqlRepository<ID extends Comparable<ID> & Seriali
 
     @MethodStats
     default Mono<Long> count(ir.msob.jima.core.commons.repository.BaseQuery baseQuery) {
-        var sqlQuery = (SqlQuery) baseQuery;
-        return this.getR2dbcEntityTemplate().count(sqlQuery.getQuery(), getDomainClass());
+        var sqlQuery = (SqlQuery<?>) baseQuery;
+        return this.getR2dbcEntityTemplate().count(sqlQuery.toQuery(), getDomainClass());
     }
 
     @Override

@@ -5,6 +5,7 @@ import ir.msob.jima.core.commons.repository.BaseQueryBuilder;
 import ir.msob.jima.core.it.domain.ProjectDomain;
 import ir.msob.jima.core.ral.sql.commons.BaseSqlRepository;
 import ir.msob.jima.crud.ral.sql.commons.BaseDomainCrudSqlRepository;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 
@@ -15,16 +16,10 @@ import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 public abstract class SqlDomainCrudRepository<D extends ProjectDomain>
         implements BaseDomainCrudSqlRepository<String, D>
         , BaseSqlRepository<String, D> {
+
+    @Getter
     private final R2dbcEntityTemplate r2dbcEntityTemplate;
+    @Getter
     private final BaseQueryBuilder queryBuilder;
 
-    @Override
-    public R2dbcEntityTemplate getR2dbcEntityTemplate() {
-        return r2dbcEntityTemplate;
-    }
-
-    @Override
-    public BaseQueryBuilder getQueryBuilder() {
-        return queryBuilder;
-    }
 }
