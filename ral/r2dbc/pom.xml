@@ -4,17 +4,16 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>ir.msob.jima.crud</groupId>
-        <artifactId>crud-parent</artifactId>
+        <artifactId>crud-ral</artifactId>
         <version>${jima-crud.version}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>crud-ral</artifactId>
-    <name>ral</name>
-    <description>ral</description>
+    <artifactId>crud-ral-r2dbc</artifactId>
+    <name>r2dbc</name>
+    <description>r2dbc</description>
     <packaging>pom</packaging>
     <modules>
-        <module>mongo</module>
-        <module>jpa</module>
-        <module>r2dbc</module>
+        <module>commons</module>
+        <module>it</module>
     </modules>
 </project>
