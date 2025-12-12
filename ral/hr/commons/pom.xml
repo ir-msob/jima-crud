@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>ir.msob.jima.crud</groupId>
-        <artifactId>crud-ral-jpa</artifactId>
+        <artifactId>crud-ral-hr</artifactId>
         <version>${jima-crud.version}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>crud-ral-jpa-commons</artifactId>
+    <artifactId>crud-ral-hr-commons</artifactId>
     <name>commons</name>
     <description>commons</description>
     <packaging>jar</packaging>
@@ -16,7 +16,7 @@
         <!-- MSob -->
         <dependency>
             <groupId>ir.msob.jima.core</groupId>
-            <artifactId>core-ral-jpa-commons</artifactId>
+            <artifactId>core-ral-hr-commons</artifactId>
             <version>${jima-commons.version}</version>
         </dependency>
         <dependency>
@@ -26,8 +26,8 @@
         </dependency>
         <!-- SQL -->
         <dependency>
-            <groupId>jakarta.transaction</groupId>
-            <artifactId>jakarta.transaction-api</artifactId>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-r2dbc</artifactId>
         </dependency>
     </dependencies>
 </project>

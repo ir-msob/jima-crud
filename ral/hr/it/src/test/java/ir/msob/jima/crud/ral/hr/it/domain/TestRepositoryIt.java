@@ -1,26 +1,24 @@
-package ir.msob.jima.crud.ral.jpa.it.domain;
+package ir.msob.jima.crud.ral.hr.it.domain;
 
-import ir.msob.jima.core.ral.jpa.commons.query.JpaQuery;
-import ir.msob.jima.core.ral.jpa.it.test.TestDomain;
-import ir.msob.jima.crud.ral.jpa.it.TestApplication;
-import ir.msob.jima.crud.ral.jpa.it.TestBeanConfiguration;
-import ir.msob.jima.crud.ral.jpa.it.test.TestRepository;
+import ir.msob.jima.core.ral.hr.commons.query.R2dbcQuery;
+import ir.msob.jima.core.ral.hr.it.test.TestDomain;
+import ir.msob.jima.crud.ral.hr.it.TestApplication;
+import ir.msob.jima.crud.ral.hr.it.TestBeanConfiguration;
+import ir.msob.jima.crud.ral.hr.it.test.TestRepository;
 import lombok.extern.apachecommons.CommonsLog;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.relational.core.query.Criteria;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 @SpringBootTest(classes = {TestApplication.class, TestBeanConfiguration.class})
 @Testcontainers
@@ -43,13 +41,17 @@ public class TestRepositoryIt {
 
     @DynamicPropertySource
     static void registerProperties(DynamicPropertyRegistry registry) {
-        // Use JDBC datasource properties for JPA / Hibernate
-        registry.add("spring.datasource.url", POSTGRESQL_CONTAINER::getJdbcUrl);
-        registry.add("spring.datasource.username", POSTGRESQL_CONTAINER::getUsername);
-        registry.add("spring.datasource.password", POSTGRESQL_CONTAINER::getPassword);
-        registry.add("spring.datasource.driver-class-name", () -> "org.postgresql.Driver");
+        registry.add("spring.r2dbc.url", () ->
+                String.format("r2dbc:postgresql://%s:%d/%s",
+                        POSTGRESQL_CONTAINER.getHost(),
+                        POSTGRESQL_CONTAINER.getMappedPort(5432),
+                        POSTGRESQL_CONTAINER.getDatabaseName()
+                )
+        );
+        registry.add("spring.r2dbc.username", POSTGRESQL_CONTAINER::getUsername);
+        registry.add("spring.r2dbc.password", POSTGRESQL_CONTAINER::getPassword);
 
-        // let Hibernate create/drop schema for tests
+        // Hibernate/JPA properties can be left if needed for other beans
         registry.add("spring.jpa.hibernate.ddl-auto", () -> "create-drop");
     }
 
@@ -59,14 +61,11 @@ public class TestRepositoryIt {
         return d;
     }
 
-    @Transactional
     @BeforeEach
-    void cleanDatabase() throws ExecutionException, InterruptedException {
-        // removeAll() is implemented on your reactive-wrapped JPA repo
-        testRepository.removeAll().collectList().toFuture().get();
+    void cleanDatabase() {
+        testRepository.removeAll().collectList().block();
     }
 
-    @Transactional
     @Test
     @Order(1)
     void testInsertAndFindById() {
@@ -79,7 +78,6 @@ public class TestRepositoryIt {
         Assertions.assertEquals(saved.getDomainField(), fetched.getDomainField());
     }
 
-    @Transactional
     @Test
     @Order(2)
     void testUpdateOne() {
@@ -92,42 +90,37 @@ public class TestRepositoryIt {
         Assertions.assertEquals("UPDATED_FIELD", updated.getDomainField());
     }
 
-    @Transactional
     @Test
     @Order(3)
     void testGetOne() {
         TestDomain saved = testRepository.insertOne(newDomain()).block();
 
-        Specification<TestDomain> specById = (root, cq, cb) -> cb.equal(root.get("id"), saved.getId());
-
-        JpaQuery<TestDomain> query = new JpaQuery<TestDomain>()
-                .where(specById);
+        R2dbcQuery<TestDomain> query = new R2dbcQuery<TestDomain>()
+                .where(Criteria.where("id").is(saved.getId()));
 
         TestDomain found = testRepository.getOne(query).block();
         Assertions.assertNotNull(found);
         Assertions.assertEquals(saved.getId(), found.getId());
     }
 
-    @Transactional
     @Test
     @Order(4)
     void testGetMany() {
         testRepository.insertOne(newDomain()).block();
         testRepository.insertOne(newDomain()).block();
 
-        JpaQuery<TestDomain> q = new JpaQuery<>();
+        R2dbcQuery<TestDomain> q = new R2dbcQuery<>();
 
         List<TestDomain> list = testRepository.getMany(q).collectList().block();
         Assertions.assertTrue(list.size() >= 2);
     }
 
-    @Transactional
     @Test
     @Order(5)
     void testGetPage() {
         for (int i = 0; i < 5; i++) testRepository.insertOne(newDomain()).block();
 
-        JpaQuery<TestDomain> q = new JpaQuery<TestDomain>()
+        R2dbcQuery<TestDomain> q = new R2dbcQuery<TestDomain>()
                 .with(PageRequest.of(0, 2, Sort.by("id")));
 
         var page = testRepository.getPage(q, PageRequest.of(0, 2)).block();
@@ -137,16 +130,13 @@ public class TestRepositoryIt {
         Assertions.assertTrue(page.getTotalElements() >= 5L);
     }
 
-    @Transactional
     @Test
     @Order(6)
     void testRemoveOne() {
         TestDomain d = testRepository.insertOne(newDomain()).block();
 
-        Specification<TestDomain> specById = (root, cq, cb) -> cb.equal(root.get("id"), d.getId());
-
-        JpaQuery<TestDomain> q = new JpaQuery<TestDomain>()
-                .where(specById);
+        R2dbcQuery<TestDomain> q = new R2dbcQuery<TestDomain>()
+                .where(Criteria.where("id").is(d.getId()));
 
         TestDomain removed = testRepository.removeOne(q).block();
         Assertions.assertNotNull(removed);
@@ -155,14 +145,13 @@ public class TestRepositoryIt {
         Assertions.assertNull(after);
     }
 
-    @Transactional
     @Test
     @Order(7)
     void testRemoveMany() {
         testRepository.insertOne(newDomain()).block();
         testRepository.insertOne(newDomain()).block();
 
-        JpaQuery<TestDomain> q = new JpaQuery<>(); // ALL
+        R2dbcQuery<TestDomain> q = new R2dbcQuery<>(); // ALL
 
         List<TestDomain> removed = testRepository.removeMany(q).collectList().block();
         Assertions.assertTrue(removed.size() >= 2);
@@ -171,19 +160,17 @@ public class TestRepositoryIt {
         Assertions.assertEquals(0L, count);
     }
 
-    @Transactional
     @Test
     @Order(8)
     void testCount() {
         testRepository.insertOne(newDomain()).block();
         testRepository.insertOne(newDomain()).block();
 
-        JpaQuery<TestDomain> q = new JpaQuery<>();
+        R2dbcQuery<TestDomain> q = new R2dbcQuery<>();
         Long count = testRepository.count(q).block();
         Assertions.assertEquals(2L, count);
     }
 
-    @Transactional
     @Test
     @Order(9)
     void testCountAll() {

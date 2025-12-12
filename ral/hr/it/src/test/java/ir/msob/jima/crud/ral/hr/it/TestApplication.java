@@ -1,4 +1,4 @@
-package ir.msob.jima.crud.ral.r2dbc.it;
+package ir.msob.jima.crud.ral.hr.it;
 
 import ir.msob.jima.core.commons.Constants;
 import org.springframework.beans.factory.annotation.Autowired;

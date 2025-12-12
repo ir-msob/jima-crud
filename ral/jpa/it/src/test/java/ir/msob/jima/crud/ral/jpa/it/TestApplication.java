@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.core.env.Environment;
 
-@EntityScan("ir.msob.jima.core.ral.sql.it.test")
+@EntityScan("ir.msob.jima.core.ral.jpa.it.test")
 @SpringBootApplication(scanBasePackages = {Constants.FRAMEWORK_PACKAGE_PREFIX})
 public class TestApplication implements ApplicationRunner {
 
