@@ -1,7 +1,10 @@
 package ir.msob.jima.crud.api.restful.service.domain.read;
 
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
@@ -27,8 +30,7 @@ import java.io.Serializable;
 import java.security.Principal;
 
 /**
- * This interface provides a RESTful API for retrieving a stream of domains based on a given criteria.
- * It extends the ParentDomainCrudRestResource interface and provides a default implementation for the getStream method.
+ * RESTful API for retrieving a stream of domains based on criteria.
  *
  * @param <ID>   the type of the ID of the domain
  * @param <USER> the type of the user
@@ -37,7 +39,6 @@ import java.security.Principal;
  * @param <C>    the type of the criteria
  * @param <R>    the type of the repository
  * @param <S>    the type of the service
- * @author Yaqub Abdi
  */
 public interface BaseGetStreamDomainCrudRestResource<
         ID extends Comparable<ID> & Serializable,
@@ -48,27 +49,19 @@ public interface BaseGetStreamDomainCrudRestResource<
         R extends BaseDomainCrudRepository<ID, D>,
         S extends BaseGetStreamDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudRestResource<ID, USER, D, DTO, C, R, S> {
+
     Logger log = LoggerFactory.getLogger(BaseGetStreamDomainCrudRestResource.class);
 
-    /**
-     * This method provides a RESTful API for retrieving a stream of domains based on a given criteria.
-     * It validates the operation, retrieves the user, and then calls the service to get the stream of domains.
-     * It returns a ResponseEntity with the Flux of DTOs.
-     *
-     * @param criteria          the criteria to get the stream of domains
-     * @param serverWebExchange the ServerWebExchange object
-     * @param principal         the Principal object
-     * @return a ResponseEntity with the Flux of DTOs
-     * @throws BadRequestException     if the validation operation is incorrect
-     * @throws DomainNotFoundException if the domain is not found
-     */
     @GetMapping(Operations.GET_STREAM)
-    @ApiResponses(value = {@ApiResponse(code = 200, message = "Return a domain or null"),
-            @ApiResponse(code = 400, message = "If the validation operation is incorrect throws BadRequestException otherwise nothing", response = BadRequestResponse.class)})
+    @Operation(summary = "Get stream of domains by criteria", description = "Returns a Flux of domain DTOs matching the given criteria")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Returns a stream of matching domain DTOs", content = @Content(schema = @Schema(implementation = BaseDto.class))),
+            @ApiResponse(responseCode = "400", description = "If validation fails, throws BadRequestException", content = @Content(schema = @Schema(implementation = BadRequestResponse.class)))
+    })
     @MethodStats
     @Scope(operation = Operations.GET_STREAM)
     default ResponseEntity<Flux<DTO>> getStream(C criteria, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
-        log.debug("REST request to get stream domain, criteria {} : ", criteria);
+        log.debug("REST request to get stream of domains with criteria: {}", criteria);
 
         USER user = getUser(serverWebExchange, principal);
         Flux<DTO> res = this.getService().getStream(criteria, user);

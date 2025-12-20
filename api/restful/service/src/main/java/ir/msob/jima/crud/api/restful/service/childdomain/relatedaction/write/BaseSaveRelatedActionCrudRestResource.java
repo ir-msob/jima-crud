@@ -1,7 +1,10 @@
 package ir.msob.jima.crud.api.restful.service.childdomain.relatedaction.write;
 
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import ir.msob.jima.core.commons.childdomain.relatedaction.RelatedActionAbstract;
 import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.element.Elements;
@@ -28,31 +31,43 @@ import reactor.core.publisher.Mono;
 import java.io.Serializable;
 import java.security.Principal;
 
-
 public interface BaseSaveRelatedActionCrudRestResource<
-        ID extends Comparable<ID> & Serializable
-        , USER extends BaseUser
-        , CD extends RelatedActionAbstract<ID>
-        , DTO extends BaseDto<ID>
-        , CS extends BaseChildDomainCrudService<ID, USER, DTO>
+        ID extends Comparable<ID> & Serializable,
+        USER extends BaseUser,
+        CD extends RelatedActionAbstract<ID>,
+        DTO extends BaseDto<ID>,
+        CS extends BaseChildDomainCrudService<ID, USER, DTO>
         > extends ParentChildCrudRestResource<ID, USER, CD, DTO, CS> {
 
     Logger log = LoggerFactory.getLogger(BaseSaveRelatedActionCrudRestResource.class);
 
-
-    @PostMapping("{parentId}/related-action")
+    @PostMapping("{parentId}/related-action/" + Operations.SAVE)
+    @Operation(
+            summary = "Save related action",
+            description = "Saves a single related action under the specified parent domain"
+    )
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Return id of deleted domain or null"),
-            @ApiResponse(code = 400, message = "Bad request", response = BadRequestResponse.class),
-            @ApiResponse(code = 404, message = "Domain not found", response = DomainNotFoundException.class)
+            @ApiResponse(responseCode = "200", description = "Return DTO of saved domain or null", content = @Content(schema = @Schema(implementation = BaseDto.class))),
+            @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(implementation = BadRequestResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Domain not found", content = @Content(schema = @Schema(implementation = DomainNotFoundException.class)))
     })
     @MethodStats
     @Scope(element = Elements.RELATED_ACTION, operation = Operations.SAVE)
-    default ResponseEntity<Mono<DTO>> save(@PathVariable("parentId") ID parentId, @RequestBody @Valid CD childDomain, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
-        log.debug("REST request to save childdomain action, parentId {}, childDomain {}", parentId, childDomain);
+    default ResponseEntity<Mono<DTO>> save(
+            @PathVariable("parentId") ID parentId,
+            @RequestBody @Valid CD childDomain,
+            ServerWebExchange serverWebExchange,
+            Principal principal
+    ) throws BadRequestException, DomainNotFoundException {
+
+        log.debug(
+                "REST request to save related action, parentId {}, childDomain {}",
+                parentId, childDomain
+        );
 
         USER user = getUser(serverWebExchange, principal);
-        return ResponseEntity.status(OperationsStatus.SAVE).body(getChildService().save(parentId, childDomain, getChildDomainClass(), user));
+        return ResponseEntity.status(OperationsStatus.SAVE)
+                .body(getChildService().save(parentId, childDomain, getChildDomainClass(), user));
     }
 
 }

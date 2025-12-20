@@ -1,7 +1,9 @@
 package ir.msob.jima.crud.api.restful.service.childdomain.relatedobject.relatedintegration.write;
 
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import ir.msob.jima.core.commons.childdomain.relatedobject.relatedintegration.RelatedIntegrationAbstract;
 import ir.msob.jima.core.commons.childdomain.relatedobject.relatedintegration.RelatedIntegrationCriteriaAbstract;
 import ir.msob.jima.core.commons.domain.BaseDto;
@@ -27,33 +29,37 @@ import reactor.core.publisher.Mono;
 import java.io.Serializable;
 import java.security.Principal;
 
-
 public interface BaseDeleteByRelatedIdRelatedIntegrationCrudRestResource<
-        ID extends Comparable<ID> & Serializable
-        , USER extends BaseUser
-        , CD extends RelatedIntegrationAbstract<ID>
-        , CC extends RelatedIntegrationCriteriaAbstract<ID, CD>
-        , DTO extends BaseDto<ID>
-        , CS extends BaseChildDomainCrudService<ID, USER, DTO>> extends
-        ParentRelatedObjectCrudRestResource<ID, String, USER, CD, DTO, CS> {
+        ID extends Comparable<ID> & Serializable,
+        USER extends BaseUser,
+        CD extends RelatedIntegrationAbstract<ID>,
+        CC extends RelatedIntegrationCriteriaAbstract<ID, CD>,
+        DTO extends BaseDto<ID>,
+        CS extends BaseChildDomainCrudService<ID, USER, DTO>
+        > extends ParentRelatedObjectCrudRestResource<ID, String, USER, CD, DTO, CS> {
 
     Logger log = LoggerFactory.getLogger(BaseDeleteByRelatedIdRelatedIntegrationCrudRestResource.class);
 
-
     @DeleteMapping("{parentId}/related-integration/related-id/{relatedId}")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Return id of deleted domain or null"),
-            @ApiResponse(code = 400, message = "Bad request", response = BadRequestResponse.class),
-            @ApiResponse(code = 404, message = "Domain not found", response = DomainNotFoundException.class)
+            @ApiResponse(responseCode = "200", description = "Return DTO of deleted integration or null", content = @Content(schema = @Schema(implementation = BaseDto.class))),
+            @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(implementation = BadRequestResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Domain not found", content = @Content(schema = @Schema(implementation = DomainNotFoundException.class)))
     })
     @MethodStats
     @Scope(element = Elements.RELATED_INTEGRATION, operation = Operations.DELETE_BY_RELATED_ID)
-    default ResponseEntity<Mono<DTO>> deleteByRelatedId(@PathVariable("parentId") ID parentId, @PathVariable("relatedId") String relatedId, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
-        log.debug("REST request to delete childdomain integration by relatedId, parentId {}, id {}", parentId, relatedId);
+    default ResponseEntity<Mono<DTO>> deleteByRelatedId(
+            @PathVariable("parentId") ID parentId,
+            @PathVariable("relatedId") String relatedId,
+            ServerWebExchange serverWebExchange,
+            Principal principal
+    ) throws BadRequestException, DomainNotFoundException {
+
+        log.debug("REST request to delete related integration by relatedId, parentId {}, relatedId {}", parentId, relatedId);
 
         USER user = getUser(serverWebExchange, principal);
-        return ResponseEntity.status(OperationsStatus.DELETE_BY_RELATED_ID).body(getChildService().<String, CD, CC>deleteByRelatedId(parentId, relatedId, getChildDomainClass(), user));
-
+        return ResponseEntity.status(OperationsStatus.DELETE_BY_RELATED_ID)
+                .body(getChildService().<String, CD, CC>deleteByRelatedId(parentId, relatedId, getChildDomainClass(), user));
     }
 
 }

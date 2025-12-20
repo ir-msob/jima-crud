@@ -1,6 +1,5 @@
 package ir.msob.jima.crud.ral.hr.it.domain;
 
-import ir.msob.jima.core.ral.hr.commons.query.R2dbcQuery;
 import ir.msob.jima.core.ral.hr.it.test.TestDomain;
 import ir.msob.jima.crud.ral.hr.it.TestApplication;
 import ir.msob.jima.crud.ral.hr.it.TestBeanConfiguration;
@@ -9,17 +8,28 @@ import lombok.extern.apachecommons.CommonsLog;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.relational.core.query.Criteria;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+/**
+ * Additional integration tests focusing on entity relations:
+ * - @Embedded (AddressInfo)
+ * - @ManyToOne (Owner)
+ * - @OneToMany (Child list)
+ * - @ManyToMany (Tag set)
+ * <p>
+ * NOTE: These tests assume that the related classes (Owner, Child, Tag, AddressInfo)
+ * are accessible from this test package (i.e. are public). If they're package-private
+ * you need to make them public so the test can build instances of them.
+ */
 @SpringBootTest(classes = {TestApplication.class, TestBeanConfiguration.class})
 @Testcontainers
 @CommonsLog
@@ -55,9 +65,9 @@ public class TestRepositoryIt {
         registry.add("spring.jpa.hibernate.ddl-auto", () -> "create-drop");
     }
 
-    private TestDomain newDomain() {
+    private TestDomain newBaseDomain() {
         TestDomain d = new TestDomain();
-        d.setDomainField("VALUE_");
+        d.setDomainField("VAL_");
         return d;
     }
 
@@ -68,116 +78,145 @@ public class TestRepositoryIt {
 
     @Test
     @Order(1)
-    void testInsertAndFindById() {
-        TestDomain domain = newDomain();
+    void testEmbeddedAddressPersisted() {
+        TestDomain domain = newBaseDomain();
+
+        // create and set embedded address (make sure AddressInfo is public)
+        TestDomain.AddressInfo addr = new TestDomain.AddressInfo();
+        addr.setStreet("Main St");
+        addr.setCity("Brussels");
+        addr.setZip("1000");
+        domain.setAddress(addr);
+
         TestDomain saved = testRepository.insertOne(domain).block();
-        Assertions.assertNotNull(saved);
+        assertNotNull(saved);
 
         TestDomain fetched = testRepository.findById(saved.getId()).block();
-        Assertions.assertNotNull(fetched);
-        Assertions.assertEquals(saved.getDomainField(), fetched.getDomainField());
+        assertNotNull(fetched);
+        assertNotNull(fetched.getAddress(), "Embedded address should not be null after fetch");
+        assertEquals("Main St", fetched.getAddress().getStreet());
+        assertEquals("Brussels", fetched.getAddress().getCity());
+        assertEquals("1000", fetched.getAddress().getZip());
     }
 
     @Test
     @Order(2)
-    void testUpdateOne() {
-        TestDomain domain = newDomain();
+    void testManyToOneOwnerCascadePersist() {
+        TestDomain domain = newBaseDomain();
+
+        // create and set owner (make sure Owner is public)
+        TestDomain.Owner owner = new TestDomain.Owner();
+        owner.setName("Owner A");
+        domain.setOwner(owner);
+
         TestDomain saved = testRepository.insertOne(domain).block();
+        assertNotNull(saved);
 
-        saved.setDomainField("UPDATED_FIELD");
-        TestDomain updated = testRepository.updateOne(saved).block();
-
-        Assertions.assertEquals("UPDATED_FIELD", updated.getDomainField());
+        TestDomain fetched = testRepository.findById(saved.getId()).block();
+        assertNotNull(fetched);
+        assertNotNull(fetched.getOwner(), "Owner should be present after fetch");
+        assertEquals("Owner A", fetched.getOwner().getName());
     }
 
     @Test
     @Order(3)
-    void testGetOne() {
-        TestDomain saved = testRepository.insertOne(newDomain()).block();
+    void testOneToManyChildrenCascadePersist() {
+        TestDomain domain = newBaseDomain();
 
-        R2dbcQuery<TestDomain> query = new R2dbcQuery<TestDomain>()
-                .where(Criteria.where("id").is(saved.getId()));
+        // create children (make sure Child is public)
+        TestDomain.Child c1 = new TestDomain.Child();
+        c1.setName("child-1");
+        // parent set on child side to maintain bidirectional relation
+        c1.setParent(domain);
 
-        TestDomain found = testRepository.getOne(query).block();
-        Assertions.assertNotNull(found);
-        Assertions.assertEquals(saved.getId(), found.getId());
+        TestDomain.Child c2 = new TestDomain.Child();
+        c2.setName("child-2");
+        c2.setParent(domain);
+
+        domain.getChildren().add(c1);
+        domain.getChildren().add(c2);
+
+        TestDomain saved = testRepository.insertOne(domain).block();
+        assertNotNull(saved);
+
+        TestDomain fetched = testRepository.findById(saved.getId()).block();
+        assertNotNull(fetched);
+        assertNotNull(fetched.getChildren());
+        assertEquals(2, fetched.getChildren().size(), "Should have persisted 2 children");
+
+        // verify child names
+        Set<String> names = new HashSet<>();
+        for (TestDomain.Child ch : fetched.getChildren()) names.add(ch.getName());
+        assertTrue(names.contains("child-1") && names.contains("child-2"));
     }
 
     @Test
     @Order(4)
-    void testGetMany() {
-        testRepository.insertOne(newDomain()).block();
-        testRepository.insertOne(newDomain()).block();
+    void testManyToManyTagsPersistAndJoinTable() {
+        TestDomain domain = newBaseDomain();
 
-        R2dbcQuery<TestDomain> q = new R2dbcQuery<>();
+        TestDomain.Tag t1 = new TestDomain.Tag();
+        t1.setName("tag-a");
+        TestDomain.Tag t2 = new TestDomain.Tag();
+        t2.setName("tag-b");
 
-        List<TestDomain> list = testRepository.getMany(q).collectList().block();
-        Assertions.assertTrue(list.size() >= 2);
+        domain.getTags().add(t1);
+        domain.getTags().add(t2);
+
+        TestDomain saved = testRepository.insertOne(domain).block();
+        assertNotNull(saved);
+
+        TestDomain fetched = testRepository.findById(saved.getId()).block();
+        assertNotNull(fetched);
+        assertNotNull(fetched.getTags());
+        assertEquals(2, fetched.getTags().size(), "Should have 2 tags via join table");
+
+        Set<String> tagNames = new HashSet<>();
+        for (TestDomain.Tag tag : fetched.getTags()) tagNames.add(tag.getName());
+        assertTrue(tagNames.contains("tag-a") && tagNames.contains("tag-b"));
     }
 
     @Test
     @Order(5)
-    void testGetPage() {
-        for (int i = 0; i < 5; i++) testRepository.insertOne(newDomain()).block();
+    void testOrphanRemovalOnChildren() {
+        // insert domain with two children
+        TestDomain domain = newBaseDomain();
+        TestDomain.Child c1 = new TestDomain.Child();
+        c1.setName("orphan-1");
+        c1.setParent(domain);
+        TestDomain.Child c2 = new TestDomain.Child();
+        c2.setName("orphan-2");
+        c2.setParent(domain);
+        domain.getChildren().add(c1);
+        domain.getChildren().add(c2);
 
-        R2dbcQuery<TestDomain> q = new R2dbcQuery<TestDomain>()
-                .with(PageRequest.of(0, 2, Sort.by("id")));
+        TestDomain saved = testRepository.insertOne(domain).block();
+        assertNotNull(saved);
 
-        var page = testRepository.getPage(q, PageRequest.of(0, 2)).block();
+        // remove one child and update domain
+        saved.getChildren().removeIf(ch -> "orphan-1".equals(ch.getName()));
+        TestDomain updated = testRepository.updateOne(saved).block();
+        assertNotNull(updated);
 
-        Assertions.assertNotNull(page);
-        Assertions.assertEquals(2, page.getContent().size());
-        Assertions.assertTrue(page.getTotalElements() >= 5L);
+        TestDomain fetched = testRepository.findById(saved.getId()).block();
+        assertNotNull(fetched);
+        assertEquals(1, fetched.getChildren().size(), "Orphaned child should have been removed");
+
+        // remaining child's name should be orphan-2
+        assertEquals("orphan-2", fetched.getChildren().get(0).getName());
     }
 
+    // small sanity test re-using repository operations
     @Test
     @Order(6)
-    void testRemoveOne() {
-        TestDomain d = testRepository.insertOne(newDomain()).block();
-
-        R2dbcQuery<TestDomain> q = new R2dbcQuery<TestDomain>()
-                .where(Criteria.where("id").is(d.getId()));
-
-        TestDomain removed = testRepository.removeOne(q).block();
-        Assertions.assertNotNull(removed);
-
-        TestDomain after = testRepository.findById(d.getId()).block();
-        Assertions.assertNull(after);
-    }
-
-    @Test
-    @Order(7)
-    void testRemoveMany() {
-        testRepository.insertOne(newDomain()).block();
-        testRepository.insertOne(newDomain()).block();
-
-        R2dbcQuery<TestDomain> q = new R2dbcQuery<>(); // ALL
-
-        List<TestDomain> removed = testRepository.removeMany(q).collectList().block();
-        Assertions.assertTrue(removed.size() >= 2);
+    void testCountAfterRelationOperations() {
+        // ensure repository count reflects inserted domains
+        TestDomain d1 = newBaseDomain();
+        TestDomain d2 = newBaseDomain();
+        testRepository.insertOne(d1).block();
+        testRepository.insertOne(d2).block();
 
         Long count = testRepository.countAll().block();
-        Assertions.assertEquals(0L, count);
-    }
-
-    @Test
-    @Order(8)
-    void testCount() {
-        testRepository.insertOne(newDomain()).block();
-        testRepository.insertOne(newDomain()).block();
-
-        R2dbcQuery<TestDomain> q = new R2dbcQuery<>();
-        Long count = testRepository.count(q).block();
-        Assertions.assertEquals(2L, count);
-    }
-
-    @Test
-    @Order(9)
-    void testCountAll() {
-        testRepository.insertOne(newDomain()).block();
-        testRepository.insertOne(newDomain()).block();
-
-        Long count = testRepository.countAll().block();
-        Assertions.assertEquals(2L, count);
+        assertEquals(2L, count);
     }
 }

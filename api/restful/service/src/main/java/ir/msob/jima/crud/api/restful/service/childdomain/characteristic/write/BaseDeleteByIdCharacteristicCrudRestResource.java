@@ -1,7 +1,10 @@
 package ir.msob.jima.crud.api.restful.service.childdomain.characteristic.write;
 
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import ir.msob.jima.core.commons.childdomain.characteristic.Characteristic;
 import ir.msob.jima.core.commons.childdomain.characteristic.CharacteristicCriteria;
 import ir.msob.jima.core.commons.domain.BaseDto;
@@ -39,10 +42,26 @@ public interface BaseDeleteByIdCharacteristicCrudRestResource<
     Logger log = LoggerFactory.getLogger(BaseDeleteByIdCharacteristicCrudRestResource.class);
 
     @DeleteMapping("{parentId}/characteristic/{id}")
+    @Operation(
+            summary = "Delete characteristic by id",
+            description = "Deletes a characteristic by its id and returns the deleted DTO"
+    )
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Return id of deleted domain or null"),
-            @ApiResponse(code = 400, message = "Bad request", response = BadRequestResponse.class),
-            @ApiResponse(code = 404, message = "Domain not found", response = DomainNotFoundException.class)
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Return id of deleted domain or null",
+                    content = @Content(schema = @Schema(implementation = BaseDto.class))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Bad request",
+                    content = @Content(schema = @Schema(implementation = BadRequestResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Domain not found",
+                    content = @Content(schema = @Schema(implementation = DomainNotFoundException.class))
+            )
     })
     @MethodStats
     @Scope(element = Elements.CHARACTERISTIC, operation = Operations.DELETE_BY_ID)

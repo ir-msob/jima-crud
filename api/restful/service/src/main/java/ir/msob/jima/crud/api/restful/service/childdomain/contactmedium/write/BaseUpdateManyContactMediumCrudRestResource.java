@@ -1,7 +1,10 @@
 package ir.msob.jima.crud.api.restful.service.childdomain.contactmedium.write;
 
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import ir.msob.jima.core.commons.childdomain.contactmedium.ContactMediumAbstract;
 import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.element.Elements;
@@ -29,31 +32,38 @@ import java.io.Serializable;
 import java.security.Principal;
 import java.util.Collection;
 
-
 public interface BaseUpdateManyContactMediumCrudRestResource<
-        ID extends Comparable<ID> & Serializable
-        , USER extends BaseUser
-        , CD extends ContactMediumAbstract<ID>
-        , DTO extends BaseDto<ID>
-        , CS extends BaseChildDomainCrudService<ID, USER, DTO>
+        ID extends Comparable<ID> & Serializable,
+        USER extends BaseUser,
+        CD extends ContactMediumAbstract<ID>,
+        DTO extends BaseDto<ID>,
+        CS extends BaseChildDomainCrudService<ID, USER, DTO>
         > extends ParentChildCrudRestResource<ID, USER, CD, DTO, CS> {
 
     Logger log = LoggerFactory.getLogger(BaseUpdateManyContactMediumCrudRestResource.class);
 
-
     @PutMapping("{parentId}/contact-medium/" + Operations.UPDATE_MANY)
+    @Operation(
+            summary = "Update multiple contact mediums",
+            description = "Updates multiple contact mediums under the specified parent domain"
+    )
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Return id of deleted domain or null"),
-            @ApiResponse(code = 400, message = "Bad request", response = BadRequestResponse.class),
-            @ApiResponse(code = 404, message = "Domain not found", response = DomainNotFoundException.class)
+            @ApiResponse(responseCode = "200", description = "Return updated domain DTOs or null", content = @Content(schema = @Schema(implementation = BaseDto.class))),
+            @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(implementation = BadRequestResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Domain not found", content = @Content(schema = @Schema(implementation = DomainNotFoundException.class)))
     })
     @MethodStats
     @Scope(element = Elements.CONTACT_MEDIUM, operation = Operations.UPDATE_MANY)
-    default ResponseEntity<Mono<DTO>> updateMany(@PathVariable("parentId") ID parentId, @RequestBody Collection<@Valid CD> childDomains, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
-        log.debug("REST request to update many contact medium, parentId {}, childDomains {}", parentId, childDomains);
+    default ResponseEntity<Mono<DTO>> updateMany(
+            @PathVariable("parentId") ID parentId,
+            @RequestBody Collection<@Valid CD> childDomains,
+            ServerWebExchange serverWebExchange,
+            Principal principal
+    ) throws BadRequestException, DomainNotFoundException {
+        log.debug("REST request to update many contact mediums, parentId {}, childDomains {}", parentId, childDomains);
 
         USER user = getUser(serverWebExchange, principal);
-        return ResponseEntity.status(OperationsStatus.UPDATE_MANY).body(getChildService().updateMany(parentId, childDomains, getChildDomainClass(), user));
+        return ResponseEntity.status(OperationsStatus.UPDATE_MANY)
+                .body(getChildService().updateMany(parentId, childDomains, getChildDomainClass(), user));
     }
-
 }

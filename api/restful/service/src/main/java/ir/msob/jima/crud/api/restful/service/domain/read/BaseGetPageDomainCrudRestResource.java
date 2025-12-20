@@ -1,7 +1,10 @@
 package ir.msob.jima.crud.api.restful.service.domain.read;
 
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
@@ -30,8 +33,7 @@ import java.io.Serializable;
 import java.security.Principal;
 
 /**
- * This interface provides a RESTful API for retrieving a page of domains based on a given criteria.
- * It extends the ParentDomainCrudRestResource interface and provides a default implementation for the getPage method.
+ * RESTful API for retrieving a page of domains based on criteria.
  *
  * @param <ID>   the type of the ID of the domain
  * @param <USER> the type of the user
@@ -40,7 +42,6 @@ import java.security.Principal;
  * @param <C>    the type of the criteria
  * @param <R>    the type of the repository
  * @param <S>    the type of the service
- * @author Yaqub Abdi
  */
 public interface BaseGetPageDomainCrudRestResource<
         ID extends Comparable<ID> & Serializable,
@@ -51,29 +52,19 @@ public interface BaseGetPageDomainCrudRestResource<
         R extends BaseDomainCrudRepository<ID, D>,
         S extends BaseGetPageDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudRestResource<ID, USER, D, DTO, C, R, S> {
+
     Logger log = LoggerFactory.getLogger(BaseGetPageDomainCrudRestResource.class);
 
-    /**
-     * This method provides a RESTful API for retrieving a page of domains based on a given criteria.
-     * It validates the operation, retrieves the user, and then calls the service to get the page of domains.
-     * It returns a ResponseEntity with the page of DTOs.
-     *
-     * @param criteria          the criteria to get the page of domains
-     * @param page              the page number to retrieve
-     * @param size              the size of the page to retrieve
-     * @param serverWebExchange the ServerWebExchange object
-     * @param principal         the Principal object
-     * @return a ResponseEntity with the page of DTOs
-     * @throws BadRequestException     if the validation operation is incorrect
-     * @throws DomainNotFoundException if the domain is not found
-     */
-    @GetMapping
-    @ApiResponses(value = {@ApiResponse(code = 200, message = "Return a domain or null"),
-            @ApiResponse(code = 400, message = "If the validation operation is incorrect throws BadRequestException otherwise nothing", response = BadRequestResponse.class)})
+    @GetMapping(Operations.GET_PAGE)
+    @Operation(summary = "Get page of domains by criteria", description = "Returns a page of domain DTOs matching the given criteria")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Returns a page of matching domain DTOs", content = @Content(schema = @Schema(implementation = BaseDto.class))),
+            @ApiResponse(responseCode = "400", description = "If validation fails, throws BadRequestException", content = @Content(schema = @Schema(implementation = BadRequestResponse.class)))
+    })
     @MethodStats
     @Scope(operation = Operations.GET_PAGE)
     default ResponseEntity<Mono<Page<DTO>>> getPage(C criteria, @RequestParam("page") int page, @RequestParam("size") int size, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
-        log.debug("REST request to get page domain, criteria {} : ", criteria);
+        log.debug("REST request to get page of domains with criteria: {}", criteria);
 
         USER user = getUser(serverWebExchange, principal);
         Mono<Page<DTO>> res = this.getService().getPage(criteria, PageRequest.of(page, size), user);

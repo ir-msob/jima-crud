@@ -1,8 +1,11 @@
 package ir.msob.jima.crud.api.restful.service.domain.write;
 
 import com.github.fge.jsonpatch.JsonPatch;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
@@ -30,8 +33,7 @@ import java.io.Serializable;
 import java.security.Principal;
 
 /**
- * This interface provides a RESTful API for editing a domain based on a given criteria.
- * It extends the ParentDomainCrudRestResource interface and provides a default implementation for the edit method.
+ * RESTful API for editing a domain based on a given criteria.
  *
  * @param <ID>   the type of the ID of the domain
  * @param <USER> the type of the user
@@ -40,7 +42,6 @@ import java.security.Principal;
  * @param <C>    the type of the criteria
  * @param <R>    the type of the repository
  * @param <S>    the type of the service
- * @author Yaqub Abdi
  */
 public interface BaseEditDomainCrudRestResource<
         ID extends Comparable<ID> & Serializable,
@@ -51,31 +52,21 @@ public interface BaseEditDomainCrudRestResource<
         R extends BaseDomainCrudRepository<ID, D>,
         S extends BaseEditDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudRestResource<ID, USER, D, DTO, C, R, S> {
+
     Logger log = LoggerFactory.getLogger(BaseEditDomainCrudRestResource.class);
 
-    /**
-     * This method provides a RESTful API for editing a domain based on a given criteria.
-     * It validates the operation, retrieves the user, and then calls the service to edit the domain.
-     * It returns a ResponseEntity with the edited DTO.
-     *
-     * @param dto               the JsonPatch object containing the changes to apply to the domain
-     * @param criteria          the criteria to edit the domain
-     * @param serverWebExchange the ServerWebExchange object
-     * @param principal         the Principal object
-     * @return a ResponseEntity with the edited DTO
-     * @throws BadRequestException     if the validation operation is incorrect
-     * @throws DomainNotFoundException if the domain is not found
-     */
     @PatchMapping(Operations.EDIT)
+    @Operation(summary = "Edit a domain based on criteria", description = "Edits one or multiple domains partially using JSON Patch based on given criteria")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "If the domain was successfully updated return domain otherwise return exception", response = Boolean.class),
-            @ApiResponse(code = 400, message = "If the validation operation is incorrect throws BadRequestException otherwise nothing", response = BadRequestResponse.class),
-            @ApiResponse(code = 409, message = "If the check operation is false throws ConflictException otherwise nothing", response = ConflictResponse.class)})
+            @ApiResponse(responseCode = "200", description = "If the domain was successfully updated, returns the updated domain", content = @Content(schema = @Schema(implementation = BaseDto.class))),
+            @ApiResponse(responseCode = "400", description = "If validation fails, throws BadRequestException", content = @Content(schema = @Schema(implementation = BadRequestResponse.class))),
+            @ApiResponse(responseCode = "409", description = "If conflict occurs, throws ConflictException", content = @Content(schema = @Schema(implementation = ConflictResponse.class)))
+    })
     @MethodStats
     @Scope(operation = Operations.EDIT)
     default ResponseEntity<Mono<DTO>> edit(@RequestBody JsonPatch dto, C criteria, ServerWebExchange serverWebExchange, Principal principal)
             throws BadRequestException, DomainNotFoundException {
-        log.debug("REST request to edit new domain, dto : {}, criteria : {}", dto, criteria);
+        log.debug("REST request to edit domain, dto: {}, criteria: {}", dto, criteria);
 
         USER user = getUser(serverWebExchange, principal);
         Mono<DTO> res = this.getService().edit(criteria, dto, user);

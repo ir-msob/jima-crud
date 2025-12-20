@@ -1,8 +1,11 @@
 package ir.msob.jima.crud.api.restful.service.domain.write;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
@@ -31,8 +34,7 @@ import java.security.Principal;
 import java.util.Collection;
 
 /**
- * This interface provides a RESTful API for saving multiple domains based on a given DTO.
- * It extends the ParentDomainCrudRestResource interface and provides a default implementation for the saveMany method.
+ * RESTful API for saving multiple domains based on a given DTO.
  *
  * @param <ID>   the type of the ID of the domain
  * @param <USER> the type of the user
@@ -41,7 +43,6 @@ import java.util.Collection;
  * @param <C>    the type of the criteria
  * @param <R>    the type of the repository
  * @param <S>    the type of the service
- * @author Yaqub Abdi
  */
 public interface BaseSaveManyDomainCrudRestResource<
         ID extends Comparable<ID> & Serializable,
@@ -52,30 +53,21 @@ public interface BaseSaveManyDomainCrudRestResource<
         R extends BaseDomainCrudRepository<ID, D>,
         S extends BaseSaveManyDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudRestResource<ID, USER, D, DTO, C, R, S> {
+
     Logger log = LoggerFactory.getLogger(BaseSaveManyDomainCrudRestResource.class);
 
-    /**
-     * This method provides a RESTful API for saving multiple domains based on a given DTO.
-     * It validates the operation, retrieves the user, and then calls the service to save the domains.
-     * It returns a ResponseEntity with the saved DTOs.
-     *
-     * @param dtos              the DTOs to save the domains
-     * @param serverWebExchange the ServerWebExchange object
-     * @param principal         the Principal object
-     * @return a ResponseEntity with the saved DTOs
-     * @throws BadRequestException     if the validation operation is incorrect
-     * @throws DomainNotFoundException if the domain is not found
-     */
     @PostMapping(Operations.SAVE_MANY)
+    @Operation(summary = "Save multiple domains", description = "Creates multiple new domains using the provided DTOs")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "If the domain was successfully created return true otherwise return false", response = Boolean.class),
-            @ApiResponse(code = 400, message = "If the validation operation is incorrect throws BadRequestException otherwise nothing", response = BadRequestResponse.class),
-            @ApiResponse(code = 409, message = "If the check operation is false throws ConflictException otherwise nothing", response = ConflictResponse.class)})
+            @ApiResponse(responseCode = "200", description = "If the domains were successfully created, returns the saved DTOs", content = @Content(schema = @Schema(implementation = BaseDto.class))),
+            @ApiResponse(responseCode = "400", description = "If validation fails, throws BadRequestException", content = @Content(schema = @Schema(implementation = BadRequestResponse.class))),
+            @ApiResponse(responseCode = "409", description = "If conflict occurs, throws ConflictException", content = @Content(schema = @Schema(implementation = ConflictResponse.class)))
+    })
     @MethodStats
     @Scope(operation = Operations.SAVE_MANY)
     default ResponseEntity<Mono<Collection<DTO>>> saveMany(@RequestBody Collection<DTO> dtos, ServerWebExchange serverWebExchange, Principal principal)
-            throws BadRequestException, DomainNotFoundException, JsonProcessingException {
-        log.debug("REST request to create many new domain, dtos : {}", dtos);
+            throws BadRequestException, DomainNotFoundException {
+        log.debug("REST request to save many new domains, dtos: {}", dtos);
 
         USER user = getUser(serverWebExchange, principal);
         Mono<Collection<DTO>> res = this.getService().saveMany(dtos, user);

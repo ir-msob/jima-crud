@@ -1,7 +1,10 @@
 package ir.msob.jima.crud.api.restful.service.domain.read;
 
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
@@ -28,8 +31,7 @@ import java.security.Principal;
 import java.util.Collection;
 
 /**
- * This interface provides a RESTful API for retrieving multiple domains based on a given criteria.
- * It extends the ParentDomainCrudRestResource interface and provides a default implementation for the getMany method.
+ * RESTful API for retrieving multiple domains based on criteria.
  *
  * @param <ID>   the type of the ID of the domain
  * @param <USER> the type of the user
@@ -38,7 +40,6 @@ import java.util.Collection;
  * @param <C>    the type of the criteria
  * @param <R>    the type of the repository
  * @param <S>    the type of the service
- * @author Yaqub Abdi
  */
 public interface BaseGetManyDomainCrudRestResource<
         ID extends Comparable<ID> & Serializable,
@@ -49,27 +50,19 @@ public interface BaseGetManyDomainCrudRestResource<
         R extends BaseDomainCrudRepository<ID, D>,
         S extends BaseGetManyDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudRestResource<ID, USER, D, DTO, C, R, S> {
+
     Logger log = LoggerFactory.getLogger(BaseGetManyDomainCrudRestResource.class);
 
-    /**
-     * This method provides a RESTful API for retrieving multiple domains based on a given criteria.
-     * It validates the operation, retrieves the user, and then calls the service to get the domains.
-     * It returns a ResponseEntity with the collection of DTOs.
-     *
-     * @param criteria          the criteria to get the domains
-     * @param serverWebExchange the ServerWebExchange object
-     * @param principal         the Principal object
-     * @return a ResponseEntity with the collection of DTOs
-     * @throws BadRequestException     if the validation operation is incorrect
-     * @throws DomainNotFoundException if the domain is not found
-     */
     @GetMapping(Operations.GET_MANY)
-    @ApiResponses(value = {@ApiResponse(code = 200, message = "Return a domain or null"),
-            @ApiResponse(code = 400, message = "If the validation operation is incorrect throws BadRequestException otherwise nothing", response = BadRequestResponse.class)})
+    @Operation(summary = "Get multiple domains by criteria", description = "Returns a collection of domain DTOs matching the given criteria")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Returns the collection of matching domain DTOs", content = @Content(schema = @Schema(implementation = BaseDto.class))),
+            @ApiResponse(responseCode = "400", description = "If validation fails, throws BadRequestException", content = @Content(schema = @Schema(implementation = BadRequestResponse.class)))
+    })
     @MethodStats
     @Scope(operation = Operations.GET_MANY)
     default ResponseEntity<Mono<Collection<DTO>>> getMany(C criteria, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
-        log.debug("REST request to get many domain, criteria {} : ", criteria);
+        log.debug("REST request to get many domains with criteria: {}", criteria);
 
         USER user = getUser(serverWebExchange, principal);
         Mono<Collection<DTO>> res = this.getService().getMany(criteria, user);

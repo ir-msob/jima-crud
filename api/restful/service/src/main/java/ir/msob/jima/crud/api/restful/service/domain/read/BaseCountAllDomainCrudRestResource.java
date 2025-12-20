@@ -1,7 +1,10 @@
 package ir.msob.jima.crud.api.restful.service.domain.read;
 
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
@@ -27,8 +30,7 @@ import java.io.Serializable;
 import java.security.Principal;
 
 /**
- * This interface provides a RESTful API for counting all domains.
- * It extends the ParentDomainCrudRestResource interface and provides a default implementation for the countAll method.
+ * RESTful API for counting all domains.
  *
  * @param <ID>   the type of the ID of the domain
  * @param <USER> the type of the user
@@ -37,7 +39,6 @@ import java.security.Principal;
  * @param <C>    the type of the criteria
  * @param <R>    the type of the repository
  * @param <S>    the type of the service
- * @author Yaqub Abdi
  */
 public interface BaseCountAllDomainCrudRestResource<
         ID extends Comparable<ID> & Serializable,
@@ -51,25 +52,16 @@ public interface BaseCountAllDomainCrudRestResource<
 
     Logger log = LoggerFactory.getLogger(BaseCountAllDomainCrudRestResource.class);
 
-    /**
-     * This method provides a RESTful API for counting all domains.
-     * It validates the operation, retrieves the user, and then calls the service to count all domains.
-     * It returns a ResponseEntity with the count of all domains.
-     *
-     * @param serverWebExchange the ServerWebExchange object
-     * @param principal         the Principal object
-     * @return a ResponseEntity with the count of all domains
-     * @throws BadRequestException     if the validation operation is incorrect
-     * @throws DomainNotFoundException if the domain is not found
-     */
     @GetMapping(Operations.COUNT_ALL)
+    @Operation(summary = "Count all domains", description = "Returns the count of all domain records")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "If domain(s) already count return true otherwise return false", response = Long.class),
-            @ApiResponse(code = 400, message = "If the validation operation is incorrect throws BadRequestException otherwise nothing", response = BadRequestResponse.class)})
+            @ApiResponse(responseCode = "200", description = "If domain(s) exist returns the count", content = @Content(schema = @Schema(implementation = Long.class))),
+            @ApiResponse(responseCode = "400", description = "If validation fails, throws BadRequestException", content = @Content(schema = @Schema(implementation = BadRequestResponse.class)))
+    })
     @MethodStats
     @Scope(operation = Operations.COUNT_ALL)
     default ResponseEntity<Mono<Long>> countAll(ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
-        log.debug("REST request to count all");
+        log.debug("REST request to count all domains");
 
         USER user = getUser(serverWebExchange, principal);
         Mono<Long> res = this.getService().countAll(user);

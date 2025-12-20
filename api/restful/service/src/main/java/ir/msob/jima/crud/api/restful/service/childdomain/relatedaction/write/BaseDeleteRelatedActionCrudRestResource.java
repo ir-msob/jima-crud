@@ -1,7 +1,10 @@
 package ir.msob.jima.crud.api.restful.service.childdomain.relatedaction.write;
 
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import ir.msob.jima.core.commons.childdomain.relatedaction.RelatedActionAbstract;
 import ir.msob.jima.core.commons.childdomain.relatedaction.RelatedActionCriteriaAbstract;
 import ir.msob.jima.core.commons.domain.BaseDto;
@@ -27,33 +30,44 @@ import reactor.core.publisher.Mono;
 import java.io.Serializable;
 import java.security.Principal;
 
-
 public interface BaseDeleteRelatedActionCrudRestResource<
-        ID extends Comparable<ID> & Serializable
-        , USER extends BaseUser
-        , CD extends RelatedActionAbstract<ID>
-        , CC extends RelatedActionCriteriaAbstract<ID, CD>
-        , DTO extends BaseDto<ID>
-        , CS extends BaseChildDomainCrudService<ID, USER, DTO>
+        ID extends Comparable<ID> & Serializable,
+        USER extends BaseUser,
+        CD extends RelatedActionAbstract<ID>,
+        CC extends RelatedActionCriteriaAbstract<ID, CD>,
+        DTO extends BaseDto<ID>,
+        CS extends BaseChildDomainCrudService<ID, USER, DTO>
         > extends ParentChildCrudRestResource<ID, USER, CD, DTO, CS> {
 
     Logger log = LoggerFactory.getLogger(BaseDeleteRelatedActionCrudRestResource.class);
 
-
-    @DeleteMapping("{parentId}/related-action")
+    @DeleteMapping("{parentId}/related-action/" + Operations.DELETE)
+    @Operation(
+            summary = "Delete related action",
+            description = "Deletes a related action under the specified parent domain based on criteria"
+    )
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Return id of deleted domain or null"),
-            @ApiResponse(code = 400, message = "Bad request", response = BadRequestResponse.class),
-            @ApiResponse(code = 404, message = "Domain not found", response = DomainNotFoundException.class)
+            @ApiResponse(responseCode = "200", description = "Return DTO of deleted domain or null", content = @Content(schema = @Schema(implementation = BaseDto.class))),
+            @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(implementation = BadRequestResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Domain not found", content = @Content(schema = @Schema(implementation = DomainNotFoundException.class)))
     })
     @MethodStats
     @Scope(element = Elements.RELATED_ACTION, operation = Operations.DELETE)
-    default ResponseEntity<Mono<DTO>> delete(@PathVariable("parentId") ID parentId, CC childCriteria, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
-        log.debug("REST request to delete childdomain-action by criteria, parentId {}, id {}", parentId, childCriteria);
+    default ResponseEntity<Mono<DTO>> delete(
+            @PathVariable("parentId") ID parentId,
+            CC childCriteria,
+            ServerWebExchange serverWebExchange,
+            Principal principal
+    ) throws BadRequestException, DomainNotFoundException {
+
+        log.debug(
+                "REST request to delete related action by criteria, parentId {}, criteria {}",
+                parentId, childCriteria
+        );
 
         USER user = getUser(serverWebExchange, principal);
-        return ResponseEntity.status(OperationsStatus.DELETE).body(getChildService().delete(parentId, childCriteria, getChildDomainClass(), user));
-
+        return ResponseEntity.status(OperationsStatus.DELETE)
+                .body(getChildService().delete(parentId, childCriteria, getChildDomainClass(), user));
     }
 
 }
