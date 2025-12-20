@@ -34,6 +34,10 @@
             <artifactId>modelmapper</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.hibernate.reactive</groupId>
+            <artifactId>hibernate-reactive-core</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
