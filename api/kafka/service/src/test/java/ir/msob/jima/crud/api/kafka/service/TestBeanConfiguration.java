@@ -1,5 +1,6 @@
 package ir.msob.jima.crud.api.kafka.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dasniko.testcontainers.keycloak.KeycloakContainer;
 import ir.msob.jima.core.beans.properties.JimaProperties;
 import ir.msob.jima.core.ral.kafka.test.KafkaContainerConfiguration;
@@ -29,4 +30,8 @@ public class TestBeanConfiguration {
         };
     }
 
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
+    }
 }

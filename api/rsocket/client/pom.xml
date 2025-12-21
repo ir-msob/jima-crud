@@ -22,7 +22,7 @@
         <dependency>
             <groupId>ir.msob.jima.core</groupId>
             <artifactId>core-api-rsocket-commons</artifactId>
-            <version>${jima-commons.version}</version>
+            <version>${jima-core.version}</version>
         </dependency>
 
         <dependency>

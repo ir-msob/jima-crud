@@ -1,5 +1,6 @@
 package ir.msob.jima.crud.ral.jpa.it;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.msob.jima.core.beans.properties.JimaProperties;
 import ir.msob.jima.core.ral.postgresql.test.PostgreSQLContainerConfiguration;
 import jakarta.persistence.EntityManager;
@@ -35,6 +36,11 @@ public class TestBeanConfiguration {
                 return null;
             });
         };
+    }
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
     }
 
 

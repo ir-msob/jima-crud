@@ -17,7 +17,7 @@
         <dependency>
             <groupId>ir.msob.jima.core</groupId>
             <artifactId>core-api-rsocket-commons</artifactId>
-            <version>${jima-commons.version}</version>
+            <version>${jima-core.version}</version>
         </dependency>
         <dependency>
             <groupId>ir.msob.jima.crud</groupId>
@@ -37,7 +37,7 @@
         <dependency>
             <groupId>ir.msob.jima.core</groupId>
             <artifactId>core-ral-mongo-test</artifactId>
-            <version>${jima-commons.version}</version>
+            <version>${jima-core.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

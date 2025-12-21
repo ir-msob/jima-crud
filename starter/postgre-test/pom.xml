@@ -16,7 +16,7 @@
         <dependency>
             <groupId>ir.msob.jima.core</groupId>
             <artifactId>core-ral-postgre-test</artifactId>
-            <version>${jima-commons.version}</version>
+            <version>${jima-core.version}</version>
         </dependency>
     </dependencies>
 </project>

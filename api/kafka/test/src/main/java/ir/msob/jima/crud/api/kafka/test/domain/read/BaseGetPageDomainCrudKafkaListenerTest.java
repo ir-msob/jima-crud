@@ -82,7 +82,7 @@ public interface BaseGetPageDomainCrudKafkaListenerTest<
                 .build();
 
         String message = getObjectMapper().writeValueAsString(channelMessage);
-        getKafkaTemplate().send(topic, message);
+        getKafkaTemplate().executeInTransaction(operations -> operations.send(topic, message));
 
         startListener(channelMessage.getCallbacks().getFirst().getChannel(), s -> assertable.assertThan(cast(s, getChannelMessagePageReferenceType()).getData().getPage()));
 

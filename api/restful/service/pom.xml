@@ -22,7 +22,7 @@
         <dependency>
             <groupId>ir.msob.jima.core</groupId>
             <artifactId>core-api-restful-beans</artifactId>
-            <version>${jima-commons.version}</version>
+            <version>${jima-core.version}</version>
         </dependency>
 
         <dependency>
@@ -34,7 +34,7 @@
         <dependency>
             <groupId>ir.msob.jima.core</groupId>
             <artifactId>core-ral-mongo-test</artifactId>
-            <version>${jima-commons.version}</version>
+            <version>${jima-core.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -74,6 +74,11 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security-oauth2-client</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-webtestclient</artifactId>

@@ -16,7 +16,7 @@
         <dependency>
             <groupId>ir.msob.jima.core</groupId>
             <artifactId>core-ral-mongo-test</artifactId>
-            <version>${jima-commons.version}</version>
+            <version>${jima-core.version}</version>
         </dependency>
     </dependencies>
 </project>

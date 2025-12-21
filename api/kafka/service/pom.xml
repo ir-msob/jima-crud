@@ -27,19 +27,25 @@
         <dependency>
             <groupId>ir.msob.jima.core</groupId>
             <artifactId>core-api-kafka-commons</artifactId>
-            <version>${jima-commons.version}</version>
+            <version>${jima-core.version}</version>
         </dependency>
         <!-- Test -->
         <dependency>
             <groupId>ir.msob.jima.core</groupId>
             <artifactId>core-ral-mongo-test</artifactId>
-            <version>${jima-commons.version}</version>
+            <version>${jima-core.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>ir.msob.jima.core</groupId>
             <artifactId>core-ral-kafka-test</artifactId>
-            <version>${jima-commons.version}</version>
+            <version>${jima-core.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>ir.msob.jima.core</groupId>
+            <artifactId>core-ral-kafka-it</artifactId>
+            <version>${jima-core.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

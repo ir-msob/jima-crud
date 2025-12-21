@@ -13,6 +13,7 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
 import ir.msob.jima.crud.test.domain.write.BaseEditManyDomainCrudResourceTest;
+import lombok.SneakyThrows;
 import org.springframework.http.MediaType;
 
 import java.io.Serializable;
@@ -53,6 +54,7 @@ public interface BaseEditManyDomainCrudRestResourceTest<
      * @param savedDto  The data transfer object (DTO) representing the entities to be edited.
      * @param jsonPatch The JSON Patch representing the changes to be applied to the entities.
      */
+    @SneakyThrows
     @Override
     default void editManyRequest(DTO savedDto, JsonPatch jsonPatch, Assertable<Collection<DTO>> assertable) {
         // Send a PATCH request to the EDIT_MANY operation URI with the ID of the entities to be edited
@@ -65,7 +67,8 @@ public interface BaseEditManyDomainCrudRestResourceTest<
                 .patch()
                 .uri(String.format("%s/%s?%s.eq=%s", getBaseUri(), Operations.EDIT_MANY, savedDto.getIdName(), savedDto.getId()))
                 .headers(this::prepareHeader)
-                .bodyValue(jsonPatch)
+                .contentType(MediaType.valueOf("application/json-patch+json"))
+                .bodyValue(getObjectMapper().writer().writeValueAsString(jsonPatch))
                 .exchange()
                 .expectStatus().isEqualTo(OperationsStatus.EDIT_MANY)
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)

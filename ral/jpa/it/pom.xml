@@ -17,7 +17,7 @@
         <dependency>
             <groupId>ir.msob.jima.core</groupId>
             <artifactId>core-ral-jpa-it</artifactId>
-            <version>${jima-commons.version}</version>
+            <version>${jima-core.version}</version>
         </dependency>
         <dependency>
             <groupId>ir.msob.jima.crud</groupId>
@@ -50,7 +50,7 @@
         <dependency>
             <groupId>ir.msob.jima.core</groupId>
             <artifactId>core-ral-postgre-test</artifactId>
-            <version>${jima-commons.version}</version>
+            <version>${jima-core.version}</version>
             <scope>test</scope>
         </dependency>
 

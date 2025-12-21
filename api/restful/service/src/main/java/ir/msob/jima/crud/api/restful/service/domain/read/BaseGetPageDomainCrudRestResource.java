@@ -55,7 +55,7 @@ public interface BaseGetPageDomainCrudRestResource<
 
     Logger log = LoggerFactory.getLogger(BaseGetPageDomainCrudRestResource.class);
 
-    @GetMapping(Operations.GET_PAGE)
+    @GetMapping
     @Operation(summary = "Get page of domains by criteria", description = "Returns a page of domain DTOs matching the given criteria")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Returns a page of matching domain DTOs", content = @Content(schema = @Schema(implementation = BaseDto.class))),

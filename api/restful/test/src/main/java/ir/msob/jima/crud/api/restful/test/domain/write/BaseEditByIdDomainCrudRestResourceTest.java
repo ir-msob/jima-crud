@@ -12,6 +12,7 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
 import ir.msob.jima.crud.test.domain.write.BaseEditByIdDomainCrudResourceTest;
+import lombok.SneakyThrows;
 import org.springframework.http.MediaType;
 
 import java.io.Serializable;
@@ -51,6 +52,7 @@ public interface BaseEditByIdDomainCrudRestResourceTest<
      * @param savedDto  The data transfer object (DTO) representing the entity to be edited.
      * @param jsonPatch The JSON Patch representing the changes to be applied to the entity.
      */
+    @SneakyThrows
     @Override
     default void editByIdRequest(DTO savedDto, JsonPatch jsonPatch, Assertable<DTO> assertable) {
         // Send a PATCH request to the base URI with the ID of the entity to be edited
@@ -63,7 +65,8 @@ public interface BaseEditByIdDomainCrudRestResourceTest<
                 .patch()
                 .uri(String.format("%s/%s", getBaseUri(), savedDto.getId()))
                 .headers(this::prepareHeader)
-                .bodyValue(jsonPatch)
+                .contentType(MediaType.valueOf("application/json-patch+json"))
+                .bodyValue(getObjectMapper().writer().writeValueAsString(jsonPatch))
                 .exchange()
                 .expectStatus().isEqualTo(OperationsStatus.EDIT_BY_ID)
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)

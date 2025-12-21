@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.security.Principal;
 
@@ -56,7 +57,7 @@ public interface BaseEditByIdDomainCrudRestResource<
 
     Logger log = LoggerFactory.getLogger(BaseEditByIdDomainCrudRestResource.class);
 
-    @PatchMapping("{id}")
+    @PatchMapping(value = "{id}", consumes = "application/json-patch+json")
     @Operation(summary = "Edit a domain by its ID", description = "Edits a domain partially using JSON Patch by providing the domain ID and patch object")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "If the domain was successfully updated, returns the updated domain", content = @Content(schema = @Schema(implementation = BaseDto.class))),
@@ -65,12 +66,12 @@ public interface BaseEditByIdDomainCrudRestResource<
     })
     @MethodStats
     @Scope(operation = Operations.EDIT_BY_ID)
-    default ResponseEntity<Mono<DTO>> editById(@PathVariable("id") ID id, @RequestBody JsonPatch dto, ServerWebExchange serverWebExchange, Principal principal)
-            throws BadRequestException, DomainNotFoundException {
+    default ResponseEntity<Mono<DTO>> editById(@PathVariable("id") ID id, @RequestBody String dto, ServerWebExchange serverWebExchange, Principal principal)
+            throws BadRequestException, DomainNotFoundException, IOException {
         log.debug("REST request to edit domain, id {}, dto {}", id, dto);
 
         USER user = getUser(serverWebExchange, principal);
-        Mono<DTO> res = this.getService().edit(id, dto, user);
+        Mono<DTO> res = this.getService().edit(id, JsonPatch.fromJson(getService().getObjectMapper().readTree(dto)), user);
         return ResponseEntity.status(OperationsStatus.EDIT_BY_ID).body(res);
     }
 }

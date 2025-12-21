@@ -1,5 +1,6 @@
 package ir.msob.jima.crud.ral.hr.it;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.r2dbc.spi.ConnectionFactory;
 import ir.msob.jima.core.beans.properties.JimaProperties;
 import ir.msob.jima.core.commons.element.BaseElement;
@@ -53,4 +54,10 @@ public class TestBeanConfiguration {
             return Mono.just(entity);
         };
     }
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
+    }
+
 }

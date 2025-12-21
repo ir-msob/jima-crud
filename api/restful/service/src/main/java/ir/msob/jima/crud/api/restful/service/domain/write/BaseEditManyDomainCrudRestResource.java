@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.security.Principal;
 import java.util.Collection;
@@ -56,7 +57,7 @@ public interface BaseEditManyDomainCrudRestResource<
 
     Logger log = LoggerFactory.getLogger(BaseEditManyDomainCrudRestResource.class);
 
-    @PatchMapping(Operations.EDIT_MANY)
+    @PatchMapping(value = Operations.EDIT_MANY, consumes = "application/json-patch+json")
     @Operation(summary = "Edit multiple domains based on criteria", description = "Edits multiple domains partially using JSON Patch based on given criteria")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "If domains were successfully edited, returns the updated domains", content = @Content(schema = @Schema(implementation = BaseDto.class))),
@@ -65,12 +66,12 @@ public interface BaseEditManyDomainCrudRestResource<
     })
     @MethodStats
     @Scope(operation = Operations.EDIT_MANY)
-    default ResponseEntity<Mono<Collection<DTO>>> editMany(@RequestBody JsonPatch dto, C criteria, ServerWebExchange serverWebExchange, Principal principal)
-            throws BadRequestException, DomainNotFoundException {
+    default ResponseEntity<Mono<Collection<DTO>>> editMany(@RequestBody String dto, C criteria, ServerWebExchange serverWebExchange, Principal principal)
+            throws BadRequestException, DomainNotFoundException, IOException {
         log.debug("REST request to edit many domains, dto: {}, criteria: {}", dto, criteria);
 
         USER user = getUser(serverWebExchange, principal);
-        Mono<Collection<DTO>> res = this.getService().editMany(criteria, dto, user);
+        Mono<Collection<DTO>> res = this.getService().editMany(criteria, JsonPatch.fromJson(getService().getObjectMapper().readTree(dto)), user);
         return ResponseEntity.status(OperationsStatus.EDIT_MANY).body(res);
     }
 }

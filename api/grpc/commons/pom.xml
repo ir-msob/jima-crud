@@ -70,7 +70,7 @@
             <plugin>
                 <groupId>ir.msob.jima.core</groupId>
                 <artifactId>core-api-grpc-interface-service</artifactId>
-                <version>${jima-commons.version}</version>
+                <version>${jima-core.version}</version>
                 <executions>
                     <execution>
                         <goals>
