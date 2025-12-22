@@ -1,22 +1,17 @@
 package ir.msob.jima.crud.api.rsocket.service.domain.base;
 
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ir.msob.jima.core.api.rsocket.commons.BaseRSocketRequesterMetadata;
 import ir.msob.jima.core.it.criteria.ProjectCriteria;
 import ir.msob.jima.core.it.domain.ProjectDomain;
 import ir.msob.jima.core.it.dto.ProjectDto;
 import ir.msob.jima.core.it.security.ProjectUser;
-import ir.msob.jima.core.ral.mongo.it.test.TestDtoTypeReference;
 import ir.msob.jima.crud.api.rsocket.test.BaseDomainCrudRsocketResourceTest;
 import ir.msob.jima.crud.ral.mongo.it.base.DomainCrudDataProvider;
 import ir.msob.jima.crud.ral.mongo.it.base.DomainCrudService;
 import ir.msob.jima.crud.ral.mongo.it.base.MongoDomainCrudRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.lang.reflect.Type;
-import java.util.Collection;
 
 
 public abstract class DomainCrudRsocketResourceTest<

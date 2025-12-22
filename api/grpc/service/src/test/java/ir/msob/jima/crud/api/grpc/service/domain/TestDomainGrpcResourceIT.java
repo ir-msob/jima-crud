@@ -1,6 +1,5 @@
 package ir.msob.jima.crud.api.grpc.service.domain;
 
-import ir.msob.jima.core.commons.security.BaseTokenService;
 import ir.msob.jima.core.ral.mongo.it.test.TestCriteria;
 import ir.msob.jima.core.ral.mongo.it.test.TestDomain;
 import ir.msob.jima.core.ral.mongo.it.test.TestDto;
