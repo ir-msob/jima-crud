@@ -15,6 +15,7 @@ import ir.msob.jima.crud.test.domain.write.BaseUpdateByIdDomainCrudResourceTest;
 import ir.msob.jima.crud.test.domain.write.BaseUpdateDomainCrudResourceTest;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * The {@code BaseUpdateDomainCrudGraphqlRestResourceTest} interface represents a set of GraphQL-specific test methods for updating entities using GraphQL mutations.
@@ -73,7 +74,7 @@ public interface BaseUpdateByIdDomainCrudGraphqlRestResourceTest<
                 .build();
         // Execute the GraphQL mutation with the created input and extract the result from the response
         DtoType res = getGraphQlTester().document(DOCUMENT)
-                .variable("input", input)
+                .variable("input", getObjectMapper().convertValue(input, Map.class))
                 .execute()
                 .path(PATH)
                 .entity(DtoType.class)

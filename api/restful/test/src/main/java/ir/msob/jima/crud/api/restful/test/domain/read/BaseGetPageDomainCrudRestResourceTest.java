@@ -7,13 +7,13 @@ import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.commons.shared.PageDto;
 import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.restful.test.domain.ParentDomainCrudRestResourceTest;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
 import ir.msob.jima.crud.test.domain.read.BaseGetPageDomainCrudResourceTest;
-import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 
 import java.io.Serializable;
@@ -55,7 +55,7 @@ public interface BaseGetPageDomainCrudRestResourceTest<
      * @throws BadRequestException     If the request is not valid.
      */
     @Override
-    default void getPageRequest(DTO savedDto, Assertable<Page<DTO>> assertable) throws DomainNotFoundException, BadRequestException {
+    default void getPageRequest(DTO savedDto, Assertable<PageDto<DTO>> assertable) throws DomainNotFoundException, BadRequestException {
         // Send a GET request to the GET_PAGE operation URI with the ID of the entities to be retrieved
         // Prepare the request header
         // Expect the status to be equal to the GET_PAGE operation status
@@ -68,7 +68,7 @@ public interface BaseGetPageDomainCrudRestResourceTest<
                 .exchange()
                 .expectStatus().isEqualTo(OperationsStatus.GET_PAGE)
                 .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
-                .expectBody(cast(getPageResponseReferenceType()))
+                .expectBody(cast(getPageDtoReferenceType()))
                 .value(assertable::assertThan);
     }
 }

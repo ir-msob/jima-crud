@@ -14,10 +14,10 @@ import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.shared.ModelType;
+import ir.msob.jima.core.commons.shared.PageDto;
 import ir.msob.jima.crud.client.BaseCrudClient;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -541,7 +541,7 @@ public class DomainCrudRsocketClient implements BaseCrudClient {
     @MethodStats
     @SneakyThrows
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Page<DTO>> getPage(Class<DTO> dtoClass, C criteria, USER user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<PageDto<DTO>> getPage(Class<DTO> dtoClass, C criteria, USER user) {
         CriteriaMessage<ID, C> data = createData(criteria);
         ChannelMessage<USER, CriteriaMessage<ID, C>> channelMessage = createChannelMessage(data);
         String route = prepareRoute(dtoClass, Operations.GET_PAGE);
@@ -551,8 +551,8 @@ public class DomainCrudRsocketClient implements BaseCrudClient {
                 .route(route)
                 .metadata(rSocketRequesterMetadata::metadata)
                 .data(channelMessage)
-                .retrieveMono(Page.class)
-                .map(page -> (Page<DTO>) page);
+                .retrieveMono(PageDto.class)
+                .map(page -> (PageDto<DTO>) page);
     }
 
     /**

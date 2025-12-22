@@ -6,6 +6,7 @@ import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.commons.shared.PageDto;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.CriteriaPageableInput;
@@ -15,10 +16,10 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
 import ir.msob.jima.crud.test.domain.read.BaseGetPageDomainCrudResourceTest;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * The {@code BaseGetPageDomainCrudGraphqlRestResourceTest} interface represents a set of GraphQL-specific test methods
@@ -75,13 +76,13 @@ public interface BaseGetPageDomainCrudGraphqlRestResourceTest<
      * @throws BadRequestException     If the request is malformed or contains invalid parameters.
      */
     @Override
-    default void getPageRequest(DTO savedDto, Assertable<Page<DTO>> assertable) throws DomainNotFoundException, BadRequestException {
+    default void getPageRequest(DTO savedDto, Assertable<PageDto<DTO>> assertable) throws DomainNotFoundException, BadRequestException {
         CriteriaPageableInput input = CriteriaPageableInput.builder()
                 .criteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getId())))
                 .pageable(convertToString(PageRequest.of(0, 10)))
                 .build();
         PageType res = getGraphQlTester().document(DOCUMENT)
-                .variable("input", input)
+                .variable("input", getObjectMapper().convertValue(input, Map.class))
                 .execute()
                 .path(PATH)
                 .entity(PageType.class)

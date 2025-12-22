@@ -15,6 +15,7 @@ import ir.msob.jima.crud.test.domain.write.BaseSaveManyDomainCrudResourceTest;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Map;
 
 
 /**
@@ -72,7 +73,7 @@ public interface BaseSaveManyDomainCrudGraphqlRestResourceTest<
                 .dtos(convertToStrings(dtos))
                 .build();
         DtosType res = getGraphQlTester().document(DOCUMENT)
-                .variable("input", input)
+                .variable("input", getObjectMapper().convertValue(input, Map.class))
                 .execute()
                 .path(PATH)
                 .entity(DtosType.class)

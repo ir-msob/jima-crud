@@ -3,9 +3,9 @@ package ir.msob.jima.crud.client.domain;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.commons.shared.PageDto;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.crud.client.BaseClient;
-import org.springframework.data.domain.Page;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -161,5 +161,5 @@ public interface BaseReadDomainClient extends BaseClient {
      * @param user     A user object associated with the request.
      * @return A Mono containing a page of retrieved data items.
      */
-    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Page<DTO>> getPage(Class<DTO> dtoClass, C criteria, USER user);
+    <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<PageDto<DTO>> getPage(Class<DTO> dtoClass, C criteria, USER user);
 }

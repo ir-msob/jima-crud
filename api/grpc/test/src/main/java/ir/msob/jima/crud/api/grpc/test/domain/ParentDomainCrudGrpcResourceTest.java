@@ -7,14 +7,14 @@ import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.commons.shared.PageDto;
+import ir.msob.jima.core.commons.shared.PageableDto;
 import ir.msob.jima.crud.api.grpc.commons.CrudServiceGrpc;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
 import ir.msob.jima.crud.test.domain.ParentDomainCrudResourceTest;
 import lombok.SneakyThrows;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -129,14 +129,14 @@ public interface ParentDomainCrudGrpcResourceTest<
     }
 
     /**
-     * Converts a JSON string to a Pageable object.
+     * Converts a JSON string to a PageableDto object.
      *
      * @param pageable The JSON string.
-     * @return The Pageable object.
+     * @return The PageableDto object.
      */
     @SneakyThrows
-    default Pageable convertToPageable(String pageable) {
-        return getObjectMapper().reader().readValue(pageable, Pageable.class);
+    default PageableDto convertToPageable(String pageable) {
+        return getObjectMapper().reader().readValue(pageable, PageableDto.class);
     }
 
     /**
@@ -146,8 +146,8 @@ public interface ParentDomainCrudGrpcResourceTest<
      * @return The Page of DTOs.
      */
     @SneakyThrows
-    default Page<DTO> convertToPage(String page) {
-        return getObjectMapper().reader().readValue(page, Page.class);
+    default PageDto<DTO> convertToPage(String page) {
+        return getObjectMapper().reader().readValue(page, PageDto.class);
     }
 
     /**

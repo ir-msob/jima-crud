@@ -10,6 +10,8 @@ import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundExceptio
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.shared.ModelType;
+import ir.msob.jima.core.commons.shared.PageDto;
+import ir.msob.jima.core.commons.shared.PageableDto;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.kafka.test.domain.ParentDomainCrudKafkaListenerTest;
@@ -18,7 +20,6 @@ import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
 import ir.msob.jima.crud.test.domain.read.BaseGetPageDomainCrudResourceTest;
 import lombok.SneakyThrows;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import java.io.Serializable;
@@ -61,7 +62,7 @@ public interface BaseGetPageDomainCrudKafkaListenerTest<
      */
     @SneakyThrows
     @Override
-    default void getPageRequest(DTO savedDto, Assertable<Page<DTO>> assertable) throws DomainNotFoundException, BadRequestException {
+    default void getPageRequest(DTO savedDto, Assertable<PageDto<DTO>> assertable) throws DomainNotFoundException, BadRequestException {
         // Send a GET request to the GET_PAGE operation URI with the ID of the entities to be retrieved
         // Prepare the request header
         // Expect the status to be equal to the GET_PAGE operation status
@@ -71,7 +72,7 @@ public interface BaseGetPageDomainCrudKafkaListenerTest<
         String topic = prepareTopic(Operations.GET_PAGE);
         PageableMessage<ID, C> data = new PageableMessage<>();
         data.setCriteria(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getId()));
-        data.setPageable(PageRequest.of(0, Integer.MAX_VALUE));
+        data.setPageable(PageableDto.from(PageRequest.of(0, Integer.MAX_VALUE)));
 
         ChannelMessage<USER, PageableMessage<ID, C>> channelMessage = ChannelMessage.<USER, PageableMessage<ID, C>>builder()
                 .user(getSampleUser())

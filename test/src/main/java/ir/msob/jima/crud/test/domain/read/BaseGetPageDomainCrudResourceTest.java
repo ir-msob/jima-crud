@@ -8,13 +8,13 @@ import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.commons.shared.PageDto;
 import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
 import ir.msob.jima.crud.test.domain.ParentDomainCrudResourceTest;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.domain.Page;
 import org.springframework.test.annotation.Rollback;
 
 import java.io.Serializable;
@@ -103,5 +103,5 @@ public interface BaseGetPageDomainCrudResourceTest<
     }
 
 
-    void getPageRequest(DTO savedDto, Assertable<Page<DTO>> assertable);
+    void getPageRequest(DTO savedDto, Assertable<PageDto<DTO>> assertable);
 }

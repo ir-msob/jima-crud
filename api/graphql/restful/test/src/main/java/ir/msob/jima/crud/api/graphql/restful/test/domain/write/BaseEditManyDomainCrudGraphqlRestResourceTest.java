@@ -17,6 +17,7 @@ import ir.msob.jima.crud.test.domain.write.BaseEditManyDomainCrudResourceTest;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * The {@code BaseEditManyDomainCrudGraphqlRestResourceTest} interface represents a set of GraphQL-specific test methods
@@ -79,7 +80,7 @@ public interface BaseEditManyDomainCrudGraphqlRestResourceTest<
                 .jsonPatch(convertToString(jsonPatch))
                 .build();
         DtosType res = getGraphQlTester().document(DOCUMENT)
-                .variable("input", input)
+                .variable("input", getObjectMapper().convertValue(input, Map.class))
                 .execute()
                 .path(PATH)
                 .entity(DtosType.class)

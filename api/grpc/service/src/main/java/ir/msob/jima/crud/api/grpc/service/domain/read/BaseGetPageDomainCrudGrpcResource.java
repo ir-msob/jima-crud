@@ -8,6 +8,7 @@ import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.commons.shared.PageDto;
 import ir.msob.jima.crud.api.grpc.commons.CriteriaPageableMsg;
 import ir.msob.jima.crud.api.grpc.commons.PageMsg;
 import ir.msob.jima.crud.api.grpc.service.domain.ParentDomainCrudGrpcResource;
@@ -46,9 +47,9 @@ public interface BaseGetPageDomainCrudGrpcResource<
     @Override
     default void getPage(CriteriaPageableMsg request, StreamObserver<PageMsg> responseObserver) {
         log.debug("Request to get page: dto {}", request);
-        getService().getPage(convertToCriteria(request.getCriteria()), convertToPageable(request.getPageable()), getUser())
+        getService().getPage(convertToCriteria(request.getCriteria()), convertToPageableDto(request.getPageable()).toPageable(), getUser())
                 .map(result -> PageMsg.newBuilder()
-                        .setPage(convertToString(result))
+                        .setPage(convertToString(PageDto.from(result)))
                         .build())
                 .subscribe(
                         responseObserver::onNext,

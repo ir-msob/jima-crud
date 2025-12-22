@@ -8,6 +8,7 @@ import ir.msob.jima.core.it.criteria.ProjectCriteria;
 import ir.msob.jima.core.it.domain.ProjectDomain;
 import ir.msob.jima.core.it.dto.ProjectDto;
 import ir.msob.jima.core.it.security.ProjectUser;
+import ir.msob.jima.core.ral.mongo.it.test.TestDtoTypeReference;
 import ir.msob.jima.crud.api.rsocket.test.BaseDomainCrudRsocketResourceTest;
 import ir.msob.jima.crud.ral.mongo.it.base.DomainCrudDataProvider;
 import ir.msob.jima.crud.ral.mongo.it.base.DomainCrudService;
@@ -32,8 +33,6 @@ public abstract class DomainCrudRsocketResourceTest<
     @Autowired
     ObjectMapper objectMapper;
     @Autowired
-    ProjectUserService projectUserService;
-    @Autowired
     BaseRSocketRequesterMetadata socketRequesterMetadata;
 
     @Override
@@ -56,13 +55,5 @@ public abstract class DomainCrudRsocketResourceTest<
         return socketRequesterMetadata;
     }
 
-    @Override
-    public TypeReference<Collection<String>> getIdsReferenceType() {
-        return new TypeReference<Collection<String>>() {
-            @Override
-            public Type getType() {
-                return super.getType();
-            }
-        };
-    }
+
 }

@@ -4,7 +4,7 @@ package ir.msob.jima.crud.api.kafka.service.domain;
 import com.fasterxml.jackson.core.type.TypeReference;
 import ir.msob.jima.core.beans.properties.JimaProperties;
 import ir.msob.jima.core.commons.resource.BaseResource;
-import ir.msob.jima.core.commons.shared.PageResponse;
+import ir.msob.jima.core.commons.shared.PageDto;
 import ir.msob.jima.core.it.security.ProjectUser;
 import ir.msob.jima.core.ral.kafka.test.KafkaContainerConfiguration;
 import ir.msob.jima.core.ral.mongo.it.test.TestCriteria;
@@ -75,8 +75,8 @@ class TestDomainKafkaResourceIT extends DomainCrudKafkaResourceTest<TestDomain, 
     }
 
     @Override
-    public TypeReference<PageResponse<TestDto>> getPageResponseReferenceType() {
-        return new TypeReference<PageResponse<TestDto>>() {
+    public TypeReference<PageDto<TestDto>> getPageDtoReferenceType() {
+        return new TypeReference<PageDto<TestDto>>() {
             @Override
             public Type getType() {
                 return super.getType();

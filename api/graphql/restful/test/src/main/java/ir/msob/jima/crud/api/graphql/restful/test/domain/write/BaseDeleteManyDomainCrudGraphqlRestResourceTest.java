@@ -17,6 +17,7 @@ import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
 import ir.msob.jima.crud.test.domain.write.BaseDeleteManyDomainCrudResourceTest;
 
 import java.io.Serializable;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -79,7 +80,7 @@ public interface BaseDeleteManyDomainCrudGraphqlRestResourceTest<
                 .criteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getId())))
                 .build();
         IdsType res = getGraphQlTester().document(DOCUMENT)
-                .variable("input", input)
+                .variable("input", getObjectMapper().convertValue(input, Map.class))
                 .execute()
                 .path(PATH)
                 .entity(IdsType.class)

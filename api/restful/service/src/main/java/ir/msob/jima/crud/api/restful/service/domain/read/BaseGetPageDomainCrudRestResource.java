@@ -16,16 +16,15 @@ import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.commons.shared.PageDto;
+import ir.msob.jima.core.commons.shared.PageableDto;
 import ir.msob.jima.crud.api.restful.service.domain.ParentDomainCrudRestResource;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.read.BaseGetPageDomainCrudService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
@@ -63,11 +62,12 @@ public interface BaseGetPageDomainCrudRestResource<
     })
     @MethodStats
     @Scope(operation = Operations.GET_PAGE)
-    default ResponseEntity<Mono<Page<DTO>>> getPage(C criteria, @RequestParam("page") int page, @RequestParam("size") int size, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
+    default ResponseEntity<Mono<PageDto<DTO>>> getPage(C criteria, PageableDto pageable, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to get page of domains with criteria: {}", criteria);
 
         USER user = getUser(serverWebExchange, principal);
-        Mono<Page<DTO>> res = this.getService().getPage(criteria, PageRequest.of(page, size), user);
+        Mono<PageDto<DTO>> res = this.getService().getPage(criteria, pageable.toPageable(), user)
+                .map(PageDto::from);
         return ResponseEntity.status(OperationsStatus.GET_PAGE).body(res);
     }
 }

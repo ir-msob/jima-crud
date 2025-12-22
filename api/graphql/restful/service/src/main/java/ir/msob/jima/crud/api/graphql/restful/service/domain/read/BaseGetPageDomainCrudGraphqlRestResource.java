@@ -9,6 +9,7 @@ import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.commons.shared.PageDto;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.CriteriaPageableInput;
 import ir.msob.jima.crud.api.graphql.restful.commons.model.PageType;
 import ir.msob.jima.crud.api.graphql.restful.service.domain.ParentDomainCrudGraphqlRestResource;
@@ -68,7 +69,7 @@ public interface BaseGetPageDomainCrudGraphqlRestResource<
 
         USER user = getUser(token);
 
-        return getService().getPage(convertToCriteria(input.getCriteria()), convertToPageable(input.getPageable()), user)
-                .map(page -> PageType.builder().page(convertToString(page)).build());
+        return getService().getPage(convertToCriteria(input.getCriteria()), convertToPageableDto(input.getPageable()).toPageable(), user)
+                .map(page -> PageType.builder().page(convertToString(PageDto.from(page))).build());
     }
 }

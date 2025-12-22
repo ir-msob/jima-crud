@@ -8,12 +8,12 @@ import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.resource.BaseResource;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.security.BaseUserService;
+import ir.msob.jima.core.commons.shared.PageableDto;
 import ir.msob.jima.crud.api.grpc.commons.CrudServiceGrpc;
 import ir.msob.jima.crud.commons.BaseCrudResource;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import lombok.SneakyThrows;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.context.SecurityContext;
@@ -173,8 +173,8 @@ public interface ParentDomainCrudGrpcResource<
      * @return A Pageable.
      */
     @SneakyThrows
-    default Pageable convertToPageable(String pageable) {
-        return getObjectMapper().reader().readValue(pageable, Pageable.class);
+    default PageableDto convertToPageableDto(String pageable) {
+        return getObjectMapper().reader().readValue(pageable, PageableDto.class);
     }
 
     /**

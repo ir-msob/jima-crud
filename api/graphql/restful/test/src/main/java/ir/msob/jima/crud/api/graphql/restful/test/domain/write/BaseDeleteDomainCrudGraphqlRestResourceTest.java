@@ -17,6 +17,7 @@ import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
 import ir.msob.jima.crud.test.domain.write.BaseDeleteDomainCrudResourceTest;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * The {@code BaseDeleteDomainCrudGraphqlRestResourceTest} interface represents a set of GraphQL-specific test methods
@@ -77,7 +78,7 @@ public interface BaseDeleteDomainCrudGraphqlRestResourceTest<
                 .criteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getId())))
                 .build();
         IdType res = getGraphQlTester().document(DOCUMENT)
-                .variable("input", input)
+                .variable("input", getObjectMapper().convertValue(input, Map.class))
                 .execute()
                 .path(PATH)
                 .entity(IdType.class)

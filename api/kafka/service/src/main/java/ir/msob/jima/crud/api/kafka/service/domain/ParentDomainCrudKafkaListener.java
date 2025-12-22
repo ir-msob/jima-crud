@@ -9,11 +9,11 @@ import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.shared.ModelType;
+import ir.msob.jima.core.commons.shared.PageDto;
 import ir.msob.jima.core.commons.util.GenericTypeUtil;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import lombok.SneakyThrows;
-import org.springframework.data.domain.Page;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -170,7 +170,7 @@ public interface ParentDomainCrudKafkaListener<
      * @param user    The user who initiated the operation.
      */
     @SneakyThrows
-    default <DATA extends ModelType> void sendCallbackPage(ChannelMessage<USER, DATA> message, Page<DTO> page, Integer status, USER user) {
+    default <DATA extends ModelType> void sendCallbackPage(ChannelMessage<USER, DATA> message, PageDto<DTO> page, Integer status, USER user) {
         if (!message.getCallbacks().isEmpty()) {
             PageMessage<ID, DTO> data = new PageMessage<>();
             data.setPage(page);

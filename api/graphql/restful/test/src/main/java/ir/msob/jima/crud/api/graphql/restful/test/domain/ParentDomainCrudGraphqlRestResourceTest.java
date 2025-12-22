@@ -6,8 +6,8 @@ import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.id.BaseIdService;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.commons.shared.PageDto;
 import lombok.SneakyThrows;
-import org.springframework.data.domain.Page;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -33,9 +33,9 @@ public interface ParentDomainCrudGraphqlRestResourceTest<
         extends BaseCoreGraphqlResourceTest<ID, USER, D, DTO, C> {
 
     /**
-     * Gets the {@link ir.msob.jima.core.commons.service.BaseIdService} associated with the entity's ID type.
+     * Gets the {@link BaseIdService} associated with the entity's ID type.
      *
-     * @return The {@link ir.msob.jima.core.commons.service.BaseIdService} instance.
+     * @return The {@link BaseIdService} instance.
      */
     BaseIdService getIdService();
 
@@ -86,14 +86,14 @@ public interface ParentDomainCrudGraphqlRestResourceTest<
     }
 
     /**
-     * Converts a page JSON string representation to a Spring {@link org.springframework.data.domain.Page} object.
+     * Converts a page JSON string representation to a Spring {@link PageDto} object.
      *
      * @param page The page JSON string representation.
-     * @return The Spring {@link org.springframework.data.domain.Page} object.
+     * @return The Spring {@link PageDto} object.
      */
     @SneakyThrows
-    default Page<DTO> convertToPage(String page) {
-        return getObjectMapper().reader().readValue(page, Page.class);
+    default PageDto<DTO> convertToPage(String page) {
+        return getObjectMapper().reader().readValue(page, PageDto.class);
     }
 }
 

@@ -7,6 +7,7 @@ import ir.msob.jima.core.it.Microservices;
 import ir.msob.jima.core.ral.mongo.it.test.TestCriteria;
 import ir.msob.jima.core.ral.mongo.it.test.TestDomain;
 import ir.msob.jima.core.ral.mongo.it.test.TestDto;
+import ir.msob.jima.core.ral.mongo.it.test.TestDtoTypeReference;
 import ir.msob.jima.crud.api.rsocket.service.domain.base.DomainCrudRsocketResource;
 import ir.msob.jima.crud.ral.mongo.it.test.TestRepository;
 import ir.msob.jima.crud.ral.mongo.it.test.TestServiceDomain;
@@ -19,9 +20,8 @@ import org.springframework.stereotype.Controller;
 @MessageMapping(TestDomainRsocketResource.BASE_URI)
 @RequiredArgsConstructor
 @Resource(value = TestDomain.DOMAIN_URI, type = ResourceType.RSOCKET)
-public class TestDomainRsocketResource extends DomainCrudRsocketResource<TestDomain, TestDto, TestCriteria, TestRepository, TestServiceDomain> {
+public class TestDomainRsocketResource extends DomainCrudRsocketResource<TestDomain, TestDto, TestCriteria, TestRepository, TestServiceDomain> implements TestDtoTypeReference {
 
     public static final String BASE_URI = "api." + Microservices.VERSION + "." + TestDomain.DOMAIN_URI;
-
 
 }

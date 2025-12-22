@@ -8,11 +8,11 @@ import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.resource.BaseResource;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.security.BaseUserService;
+import ir.msob.jima.core.commons.shared.PageableDto;
 import ir.msob.jima.crud.commons.BaseCrudResource;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import lombok.SneakyThrows;
-import org.springframework.data.domain.Pageable;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -159,7 +159,7 @@ public interface ParentDomainCrudGraphqlRestResource<ID extends Comparable<ID> &
      * @return The {@code Pageable} object.
      */
     @SneakyThrows
-    default Pageable convertToPageable(String pageable) {
-        return getObjectMapper().reader().readValue(pageable, Pageable.class);
+    default PageableDto convertToPageableDto(String pageable) {
+        return getObjectMapper().reader().readValue(pageable, PageableDto.class);
     }
 }

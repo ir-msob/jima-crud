@@ -3,7 +3,7 @@ package ir.msob.jima.crud.api.graphql.restful.service.domain;
 import com.fasterxml.jackson.core.type.TypeReference;
 import ir.msob.jima.core.beans.properties.JimaProperties;
 import ir.msob.jima.core.commons.resource.BaseResource;
-import ir.msob.jima.core.commons.shared.PageResponse;
+import ir.msob.jima.core.commons.shared.PageDto;
 import ir.msob.jima.core.it.security.ProjectUser;
 import ir.msob.jima.core.ral.mongo.it.test.TestCriteria;
 import ir.msob.jima.core.ral.mongo.it.test.TestDomain;
@@ -20,12 +20,14 @@ import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.graphql.test.autoconfigure.tester.AutoConfigureGraphQlTester;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.lang.reflect.Type;
 
+@AutoConfigureGraphQlTester
 @AutoConfigureWebTestClient
 @SpringBootTest(classes = {TestApplication.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers
@@ -61,8 +63,8 @@ class TestDomainGraphqlRestResourceIT extends DomainCrudGraphqlRestResourceTest<
     }
 
     @Override
-    public TypeReference<PageResponse<TestDto>> getPageResponseReferenceType() {
-        return new TypeReference<PageResponse<TestDto>>() {
+    public TypeReference<PageDto<TestDto>> getPageDtoReferenceType() {
+        return new TypeReference<PageDto<TestDto>>() {
             @Override
             public Type getType() {
                 return super.getType();

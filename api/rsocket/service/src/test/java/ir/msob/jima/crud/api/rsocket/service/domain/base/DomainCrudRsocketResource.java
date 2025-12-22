@@ -1,11 +1,7 @@
 package ir.msob.jima.crud.api.rsocket.service.domain.base;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ir.msob.jima.core.commons.channel.ChannelMessage;
-import ir.msob.jima.core.commons.channel.message.*;
 import ir.msob.jima.core.commons.security.BaseUserService;
-import ir.msob.jima.core.commons.shared.ModelType;
 import ir.msob.jima.core.it.criteria.ProjectCriteria;
 import ir.msob.jima.core.it.domain.ProjectDomain;
 import ir.msob.jima.core.it.dto.ProjectDto;
@@ -53,71 +49,5 @@ public abstract class DomainCrudRsocketResource<
     @Override
     public ObjectMapper getObjectMapper() {
         return objectMapper;
-    }
-
-    @Override
-    public TypeReference<ChannelMessage<ProjectUser, ModelType>> getChannelMessageModelTypeReferenceType() {
-        return new TypeReference<>() {
-        };
-    }
-
-    @Override
-    public TypeReference<ChannelMessage<ProjectUser, CriteriaMessage<String, C>>> getChannelMessageCriteriaReferenceType() {
-        return new TypeReference<>() {
-        };
-    }
-
-    @Override
-    public TypeReference<ChannelMessage<ProjectUser, PageableMessage<String, C>>> getChannelMessagePageableReferenceType() {
-        return new TypeReference<>() {
-        };
-    }
-
-    @Override
-    public TypeReference<ChannelMessage<ProjectUser, PageMessage<String, DTO>>> getChannelMessagePageReferenceType() {
-        return new TypeReference<>() {
-        };
-    }
-
-    @Override
-    public TypeReference<ChannelMessage<ProjectUser, JsonPatchMessage<String, C>>> getChannelMessageJsonPatchReferenceType() {
-        return new TypeReference<>() {
-        };
-    }
-
-    @Override
-    public TypeReference<ChannelMessage<ProjectUser, DtoMessage<String, DTO>>> getChannelMessageDtoReferenceType() {
-        return new TypeReference<>() {
-        };
-    }
-
-    @Override
-    public TypeReference<ChannelMessage<ProjectUser, DtosMessage<String, DTO>>> getChannelMessageDtosReferenceType() {
-        return new TypeReference<>() {
-        };
-    }
-
-    @Override
-    public TypeReference<ChannelMessage<ProjectUser, IdMessage<String>>> getChannelMessageIdReferenceType() {
-        return new TypeReference<>() {
-        };
-    }
-
-    @Override
-    public TypeReference<ChannelMessage<ProjectUser, IdsMessage<String>>> getChannelMessageIdsReferenceType() {
-        return new TypeReference<>() {
-        };
-    }
-
-    @Override
-    public TypeReference<ChannelMessage<ProjectUser, IdJsonPatchMessage<String>>> getChannelMessageIdJsonPatchReferenceType() {
-        return new TypeReference<>() {
-        };
-    }
-
-    @Override
-    public TypeReference<ChannelMessage<ProjectUser, LongMessage>> getChannelMessageLongReferenceType() {
-        return new TypeReference<>() {
-        };
     }
 }

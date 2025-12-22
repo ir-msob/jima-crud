@@ -13,10 +13,10 @@
     <description>api</description>
     <packaging>pom</packaging>
     <modules>
-        <module>kafka</module>
         <module>restful</module>
+        <module>kafka</module>
+        <module>graphql</module>
         <module>rsocket</module>
         <module>grpc</module>
-        <module>graphql</module>
     </modules>
 </project>

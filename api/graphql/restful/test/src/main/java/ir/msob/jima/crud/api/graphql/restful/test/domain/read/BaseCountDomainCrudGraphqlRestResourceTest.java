@@ -16,6 +16,7 @@ import ir.msob.jima.crud.test.domain.read.BaseCountDomainCrudResourceTest;
 import lombok.SneakyThrows;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * The {@code BaseCountDomainCrudGraphqlRestResourceTest} interface represents a set of GraphQL-specific test methods
@@ -74,7 +75,7 @@ public interface BaseCountDomainCrudGraphqlRestResourceTest<
                 .build();
         CountType res = getGraphQlTester()
                 .document(DOCUMENT)
-                .variable("input", input)
+                .variable("input", getObjectMapper().convertValue(input, Map.class))
                 .execute()
                 .path(PATH)
                 .entity(CountType.class)

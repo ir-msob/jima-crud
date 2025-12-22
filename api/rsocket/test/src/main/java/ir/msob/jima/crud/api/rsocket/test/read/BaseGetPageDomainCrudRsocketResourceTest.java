@@ -9,6 +9,8 @@ import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.commons.shared.PageDto;
+import ir.msob.jima.core.commons.shared.PageableDto;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.rsocket.test.ParentDomainCrudRsocketResourceTest;
@@ -17,7 +19,6 @@ import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
 import ir.msob.jima.crud.test.domain.read.BaseGetPageDomainCrudResourceTest;
 import lombok.SneakyThrows;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import java.io.Serializable;
@@ -61,7 +62,7 @@ public interface BaseGetPageDomainCrudRsocketResourceTest<
      */
     @SneakyThrows
     @Override
-    default void getPageRequest(DTO savedDto, Assertable<Page<DTO>> assertable) throws DomainNotFoundException, BadRequestException {
+    default void getPageRequest(DTO savedDto, Assertable<PageDto<DTO>> assertable) throws DomainNotFoundException, BadRequestException {
         // Create a new PageableMessage
         // Set the criteria of the message to the ID criteria of the DTO
         // Set the pageable of the message to a new PageRequest
@@ -71,7 +72,7 @@ public interface BaseGetPageDomainCrudRsocketResourceTest<
         // Get the result from the Future
         PageableMessage<ID, C> data = new PageableMessage<>();
         data.setCriteria(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getId()));
-        data.setPageable(PageRequest.of(0, 10));
+        data.setPageable(PageableDto.from(PageRequest.of(0, 10)));
 
         ChannelMessage<USER, PageableMessage<ID, C>> message = ChannelMessage.<USER, PageableMessage<ID, C>>builder()
                 .data(data)
@@ -81,7 +82,7 @@ public interface BaseGetPageDomainCrudRsocketResourceTest<
                 .route(getUri(Operations.GET_PAGE))
                 .metadata(getRSocketRequesterMetadata()::metadata)
                 .data(getObjectMapper().writeValueAsString(message))
-                .retrieveMono(Page.class)
+                .retrieveMono(PageDto.class)
                 .doOnSuccess(assertable::assertThan)
                 .toFuture()
                 .get();

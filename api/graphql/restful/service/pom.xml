@@ -46,15 +46,15 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>ir.msob.jima.security</groupId>
-            <artifactId>security-api-restful-it</artifactId>
-            <version>${jima-security.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>ir.msob.jima.crud</groupId>
             <artifactId>crud-api-graphql-restful-test</artifactId>
             <version>${project.parent.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>ir.msob.jima.security</groupId>
+            <artifactId>security-api-restful-it</artifactId>
+            <version>${jima-security.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -76,6 +76,16 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-graphql-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security-oauth2-client</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
@@ -112,11 +122,6 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.graphql</groupId>
-            <artifactId>spring-graphql-test</artifactId>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>

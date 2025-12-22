@@ -13,12 +13,12 @@ import ir.msob.jima.core.commons.exception.runtime.CommonRuntimeException;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.commons.shared.PageDto;
 import ir.msob.jima.crud.api.restful.client.RestUtil;
 import ir.msob.jima.crud.client.BaseCrudClient;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.logging.log4j.util.Strings;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -444,7 +444,7 @@ public class DomainCrudWebClient implements BaseCrudClient, BaseWebClient {
      */
     @MethodStats
     @Override
-    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<Page<DTO>> getPage(Class<DTO> dtoClass, C criteria, USER user) {
+    public <ID extends Comparable<ID> & Serializable, USER extends BaseUser, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>> Mono<PageDto<DTO>> getPage(Class<DTO> dtoClass, C criteria, USER user) {
         return webClient
                 .get()
                 .uri(builder -> getUriWithCriteria(builder, dtoClass, criteria))
@@ -453,9 +453,9 @@ public class DomainCrudWebClient implements BaseCrudClient, BaseWebClient {
                 .bodyToMono(Object.class)
                 .retryWhen(jimaProperties.getClient().getRetryRequest().createRetryBackoffSpec())
                 .map(res -> {
-                    Page<Object> page = objectMapper.convertValue(res, Page.class);
+                    PageDto<Object> page = objectMapper.convertValue(res, PageDto.class);
                     List<DTO> dtos = page.getContent().stream().map(r -> objectMapper.convertValue(r, dtoClass)).toList();
-                    return new PageImpl<>(dtos);
+                    return PageDto.from(new PageImpl<>(dtos));
                 });
     }
 

@@ -14,6 +14,7 @@ import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
 import ir.msob.jima.crud.test.domain.write.BaseSaveDomainCrudResourceTest;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * The {@code BaseSaveDomainCrudGraphqlRestResourceTest} interface represents a set of GraphQL-specific test methods for saving (creating or updating)
@@ -70,7 +71,7 @@ public interface BaseSaveDomainCrudGraphqlRestResourceTest<
                 .dto(convertToString(dto))
                 .build();
         DtoType res = getGraphQlTester().document(DOCUMENT)
-                .variable("input", input)
+                .variable("input", getObjectMapper().convertValue(input, Map.class))
                 .execute()
                 .path(PATH)
                 .entity(DtoType.class)

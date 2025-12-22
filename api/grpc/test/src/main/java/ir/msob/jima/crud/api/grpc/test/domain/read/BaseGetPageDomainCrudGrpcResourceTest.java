@@ -6,6 +6,8 @@ import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.commons.shared.PageDto;
+import ir.msob.jima.core.commons.shared.PageableDto;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.grpc.commons.CriteriaPageableMsg;
@@ -16,7 +18,6 @@ import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
 import ir.msob.jima.crud.test.domain.read.BaseGetPageDomainCrudResourceTest;
 import lombok.SneakyThrows;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import java.io.Serializable;
@@ -60,11 +61,11 @@ public interface BaseGetPageDomainCrudGrpcResourceTest<
      */
     @SneakyThrows
     @Override
-    default void getPageRequest(DTO savedDto, Assertable<Page<DTO>> assertable) throws DomainNotFoundException, BadRequestException {
+    default void getPageRequest(DTO savedDto, Assertable<PageDto<DTO>> assertable) throws DomainNotFoundException, BadRequestException {
         // Create an instance of CriteriaPageableMsg with the ID of the saved entity and the page request details
         CriteriaPageableMsg msg = CriteriaPageableMsg.newBuilder()
                 .setCriteria(convertToString(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getId())))
-                .setPageable(convertToString(PageRequest.of(0, 10)))
+                .setPageable(convertToString(PageableDto.from(PageRequest.of(0, 10))))
                 .build();
         // Execute the gRPC request with the created CriteriaPageableMsg and extract the result from the response
         PageMsg res = getCrudServiceBlockingStub().getPage(msg);

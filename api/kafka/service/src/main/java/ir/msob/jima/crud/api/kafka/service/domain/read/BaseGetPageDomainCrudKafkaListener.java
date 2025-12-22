@@ -12,6 +12,7 @@ import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
 import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.commons.shared.PageDto;
 import ir.msob.jima.crud.api.kafka.client.ChannelUtil;
 import ir.msob.jima.crud.api.kafka.service.domain.ParentDomainCrudKafkaListener;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
@@ -73,7 +74,7 @@ public interface BaseGetPageDomainCrudKafkaListener<
         log.debug("Received message for get page: dto {}", dto);
         ChannelMessage<USER, PageableMessage<ID, C>> message;
         message = getObjectMapper().readValue(dto, getChannelMessagePageableReferenceType());
-        getService().getPage(message.getData().getCriteria(), message.getData().getPageable(), message.getUser())
-                .subscribe(page -> sendCallbackPage(message, page, OperationsStatus.GET_PAGE, message.getUser()));
+        getService().getPage(message.getData().getCriteria(), message.getData().getPageable().toPageable(), message.getUser())
+                .subscribe(page -> sendCallbackPage(message, PageDto.from(page), OperationsStatus.GET_PAGE, message.getUser()));
     }
 }

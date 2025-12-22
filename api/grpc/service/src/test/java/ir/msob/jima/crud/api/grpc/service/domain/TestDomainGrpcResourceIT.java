@@ -1,10 +1,10 @@
 package ir.msob.jima.crud.api.grpc.service.domain;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import ir.msob.jima.core.commons.shared.PageResponse;
+import ir.msob.jima.core.commons.security.BaseTokenService;
 import ir.msob.jima.core.ral.mongo.it.test.TestCriteria;
 import ir.msob.jima.core.ral.mongo.it.test.TestDomain;
 import ir.msob.jima.core.ral.mongo.it.test.TestDto;
+import ir.msob.jima.core.ral.mongo.it.test.TestDtoTypeReference;
 import ir.msob.jima.core.ral.mongo.test.configuration.MongoContainerConfiguration;
 import ir.msob.jima.core.test.CoreTestData;
 import ir.msob.jima.crud.api.grpc.service.TestApplication;
@@ -25,15 +25,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import java.lang.reflect.Type;
-
 @SpringJUnitConfig(classes = {TestApplication.class, MongoContainerConfiguration.class, KeycloakContainerConfiguration.class})
 @Testcontainers
 @CommonsLog
 @EnableConfigurationProperties
 @SpringBootTest
-class TestDomainGrpcResourceIT extends DomainCrudGrpcResourceTest<TestDomain, TestDto, TestCriteria, TestRepository, TestServiceDomain, TestDataProvider> {
-
+class TestDomainGrpcResourceIT extends DomainCrudGrpcResourceTest<TestDomain, TestDto, TestCriteria, TestRepository, TestServiceDomain, TestDataProvider>
+        implements TestDtoTypeReference {
 
     @Autowired
     TestDomainGrpcResourceDomain resource;
@@ -50,8 +48,8 @@ class TestDomainGrpcResourceIT extends DomainCrudGrpcResourceTest<TestDomain, Te
     @BeforeEach
     void beforeEach() {
         getDataProvider().cleanups();
-        getDataProvider().createNewDto();
-        getDataProvider().createMandatoryNewDto();
+        TestDataProvider.createNewDto();
+        TestDataProvider.createMandatoryNewDto();
         registerStub();
     }
 
@@ -70,35 +68,5 @@ class TestDomainGrpcResourceIT extends DomainCrudGrpcResourceTest<TestDomain, Te
         return resource;
     }
 
-
-    @Override
-    public TypeReference<TestDto> getDtoReferenceType() {
-        return new TypeReference<TestDto>() {
-            @Override
-            public Type getType() {
-                return super.getType();
-            }
-        };
-    }
-
-    @Override
-    public TypeReference<TestCriteria> getCriteriaReferenceType() {
-        return new TypeReference<TestCriteria>() {
-            @Override
-            public Type getType() {
-                return super.getType();
-            }
-        };
-    }
-
-    @Override
-    public TypeReference<PageResponse<TestDto>> getPageResponseReferenceType() {
-        return new TypeReference<PageResponse<TestDto>>() {
-            @Override
-            public Type getType() {
-                return super.getType();
-            }
-        };
-    }
 
 }

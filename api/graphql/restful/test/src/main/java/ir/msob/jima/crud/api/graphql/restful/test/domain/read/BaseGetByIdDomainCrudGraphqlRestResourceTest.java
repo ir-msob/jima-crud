@@ -15,6 +15,7 @@ import ir.msob.jima.crud.test.domain.read.BaseGetByIdDomainCrudResourceTest;
 import ir.msob.jima.crud.test.domain.read.BaseGetOneDomainCrudResourceTest;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * The {@code BaseGetOneDomainCrudGraphqlRestResourceTest} interface represents a set of GraphQL-specific test methods
@@ -74,7 +75,7 @@ public interface BaseGetByIdDomainCrudGraphqlRestResourceTest<
                 .id(convertToString(savedDto.getId()))
                 .build();
         DtoType res = getGraphQlTester().document(DOCUMENT)
-                .variable("input", input)
+                .variable("input", getObjectMapper().convertValue(input, Map.class))
                 .execute()
                 .path(PATH)
                 .entity(DtoType.class)
