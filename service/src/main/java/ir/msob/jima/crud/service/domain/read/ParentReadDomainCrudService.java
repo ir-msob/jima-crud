@@ -18,7 +18,6 @@ import java.io.Serializable;
  * @param <D>    The type of the domain entities. It must extend BaseDomain.
  * @param <DTO>  The type of the DTO (Data Transfer Object) entities. It must extend BaseDto.
  * @param <C>    The type of the criteria used for filtering entities. It must extend BaseCriteria.
- * @param <Q>    The type of the query used for filtering entities. It must extend BaseQuery.
  * @param <R>    The type of the CRUD repository used for data access. It must extend BaseDomainCrudRepository.
  */
 public interface ParentReadDomainCrudService<ID extends Comparable<ID> & Serializable, USER extends BaseUser,
