@@ -19,7 +19,6 @@ import java.io.Serializable;
  * @param <D>    The type of the entity domain.
  * @param <DTO>  The type of the Data Transfer Object (DTO).
  * @param <C>    The type of criteria used for querying.
- * @param <Q>    The type of query.
  * @param <R>    The repository for CRUD operations.
  */
 public interface BaseDomainCrudService<
