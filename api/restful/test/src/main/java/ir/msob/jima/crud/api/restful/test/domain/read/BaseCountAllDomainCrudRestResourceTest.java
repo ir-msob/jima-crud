@@ -38,7 +38,7 @@ public interface BaseCountAllDomainCrudRestResourceTest<
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        R extends BaseDomainCrudRepository<ID, D>,
+        R extends BaseDomainCrudRepository<ID, D, C>,
         S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>,
         DP extends BaseDomainCrudDataProvider<ID, USER, D, DTO, C, R, S>>
         extends BaseCountAllDomainCrudResourceTest<ID, USER, D, DTO, C, R, S, DP>,

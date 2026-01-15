@@ -2,6 +2,7 @@ package ir.msob.jima.crud.ral.mongo.it.base;
 
 
 import ir.msob.jima.core.commons.repository.BaseQueryBuilder;
+import ir.msob.jima.core.it.criteria.ProjectCriteria;
 import ir.msob.jima.core.it.domain.ProjectDomain;
 import ir.msob.jima.core.ral.mongo.commons.BaseMongoRepository;
 import ir.msob.jima.crud.ral.mongo.commons.BaseDomainCrudMongoRepository;
@@ -12,9 +13,9 @@ import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
  * @param <D>
  */
 @RequiredArgsConstructor
-public abstract class MongoDomainCrudRepository<D extends ProjectDomain>
-        implements BaseDomainCrudMongoRepository<String, D>
-        , BaseMongoRepository<String, D> {
+public abstract class MongoDomainCrudRepository<D extends ProjectDomain, C extends ProjectCriteria>
+        implements BaseDomainCrudMongoRepository<String, D, C>
+        , BaseMongoRepository<String, D, C> {
 
 
     private final ReactiveMongoTemplate reactiveMongoTemplate;

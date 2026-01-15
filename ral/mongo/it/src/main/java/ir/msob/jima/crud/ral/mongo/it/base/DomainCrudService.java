@@ -16,7 +16,7 @@ public abstract class DomainCrudService<
         D extends ProjectDomain,
         DTO extends ProjectDto,
         C extends ProjectCriteria,
-        R extends MongoDomainCrudRepository<D>>
+        R extends MongoDomainCrudRepository<D, C>>
         implements BaseDomainCrudService<String, ProjectUser, D, DTO, C, R> {
 
     private final BeforeAfterComponent beforeAfterComponent;

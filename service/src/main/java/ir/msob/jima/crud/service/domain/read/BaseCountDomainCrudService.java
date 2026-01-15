@@ -6,7 +6,6 @@ import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
-import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import org.slf4j.Logger;
@@ -29,7 +28,7 @@ import java.io.Serializable;
 public interface BaseCountDomainCrudService<ID extends Comparable<ID> & Serializable, USER extends BaseUser,
         D extends BaseDomain<ID>, DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        R extends BaseDomainCrudRepository<ID, D>> extends ParentReadDomainCrudService<ID, USER, D, DTO, C, R> {
+        R extends BaseDomainCrudRepository<ID, D, C>> extends ParentReadDomainCrudService<ID, USER, D, DTO, C, R> {
     Logger log = LoggerFactory.getLogger(BaseCountDomainCrudService.class);
 
     /**
@@ -46,8 +45,7 @@ public interface BaseCountDomainCrudService<ID extends Comparable<ID> & Serializ
     default Mono<Long> count(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
         log.debug("Count, criteria: {}, user: {}", criteria, user);
         getBeforeAfterComponent().beforeCount(criteria, user, getBeforeAfterDomainOperations());
-        BaseQuery baseQuery = this.getRepository().getQueryBuilder().build(criteria);
-        return this.getRepository().count(baseQuery)
+        return this.getRepository().count(criteria)
                 .doOnSuccess(result -> getBeforeAfterComponent().afterCount(criteria, user, getBeforeAfterDomainOperations()));
     }
 }

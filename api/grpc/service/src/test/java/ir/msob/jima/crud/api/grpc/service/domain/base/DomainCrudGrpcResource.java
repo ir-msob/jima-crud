@@ -22,7 +22,7 @@ public abstract class DomainCrudGrpcResource<
         D extends ProjectDomain,
         DTO extends ProjectDto,
         C extends ProjectCriteria,
-        R extends MongoDomainCrudRepository<D>,
+        R extends MongoDomainCrudRepository<D, C>,
         S extends DomainCrudService<D, DTO, C, R>
         > extends BaseDomainCrudGrpcResource<String, ProjectUser, D, DTO, C, R, S> {
 

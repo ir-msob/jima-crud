@@ -57,7 +57,7 @@
         </dependency>
         <dependency>
             <groupId>ir.msob.jima.security</groupId>
-            <artifactId>security-api-restful-test</artifactId>
+            <artifactId>security-api-restful-oauth2-test</artifactId>
             <version>${jima-security.version}</version>
             <scope>test</scope>
         </dependency>

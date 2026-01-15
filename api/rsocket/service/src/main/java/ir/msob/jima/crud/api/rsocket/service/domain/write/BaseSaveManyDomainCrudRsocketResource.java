@@ -45,7 +45,7 @@ public interface BaseSaveManyDomainCrudRsocketResource<
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        R extends BaseDomainCrudRepository<ID, D>,
+        R extends BaseDomainCrudRepository<ID, D, C>,
         S extends BaseSaveManyDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudRsocketResource<ID, USER, D, DTO, C, R, S> {
     Logger log = LoggerFactory.getLogger(BaseSaveManyDomainCrudRsocketResource.class);

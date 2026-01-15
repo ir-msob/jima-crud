@@ -15,7 +15,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.postgresql.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
@@ -28,8 +28,8 @@ import java.util.concurrent.ExecutionException;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TestRepositoryIt {
 
-    static final PostgreSQLContainer<?> POSTGRESQL_CONTAINER =
-            new PostgreSQLContainer<>(DockerImageName.parse("postgres:17-alpine"))
+    static final PostgreSQLContainer POSTGRESQL_CONTAINER =
+            new PostgreSQLContainer(DockerImageName.parse("postgres:17-alpine"))
                     .withDatabaseName("testdb")
                     .withUsername("test")
                     .withPassword("test");

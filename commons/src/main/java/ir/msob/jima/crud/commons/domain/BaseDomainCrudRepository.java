@@ -1,8 +1,8 @@
 package ir.msob.jima.crud.commons.domain;
 
+import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
-import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.repository.BaseRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,8 +19,8 @@ import java.util.Collection;
  * @param <D>  The type of domain entity.
  * @author Yaqub Abdi
  */
-public interface BaseDomainCrudRepository<ID extends Comparable<ID> & Serializable, D extends BaseDomain<ID>>
-        extends BaseRepository<ID, D> {
+public interface BaseDomainCrudRepository<ID extends Comparable<ID> & Serializable, D extends BaseDomain<ID>, C extends BaseCriteria<ID>>
+        extends BaseRepository<ID, D, C> {
 
     /**
      * Save a domain entity.
@@ -59,48 +59,48 @@ public interface BaseDomainCrudRepository<ID extends Comparable<ID> & Serializab
     /**
      * Get the first domain entity that matches a query.
      *
-     * @param query The query for finding a domain entity.
+     * @param criteria The criteria for finding a domain entity.
      * @return A Mono that emits the found domain entity.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    Mono<D> getOne(BaseQuery query) throws DomainNotFoundException;
+    Mono<D> getOne(C criteria) throws DomainNotFoundException;
 
     /**
      * Get a page of domain entities that match a query.
      *
-     * @param query    The query for finding domain entities.
+     * @param criteria The criteria for finding domain entities.
      * @param pageable Pageable information for pagination.
      * @return A Mono that emits a Page containing domain entities.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    Mono<Page<D>> getPage(BaseQuery query, Pageable pageable) throws DomainNotFoundException;
+    Mono<Page<D>> getPage(C criteria, Pageable pageable) throws DomainNotFoundException;
 
     /**
      * Get a list of domain entities that match a query.
      *
-     * @param query The query for finding domain entities.
+     * @param criteria The criteria for finding domain entities.
      * @return A Flux that emits a list of domain entities.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    Flux<D> getMany(BaseQuery query) throws DomainNotFoundException;
+    Flux<D> getMany(C criteria) throws DomainNotFoundException;
 
     /**
      * Remove one domain entity that matches a query.
      *
-     * @param query The query for finding a domain entity to remove.
+     * @param criteria The criteria for finding a domain entity to remove.
      * @return A Mono that emits the removed domain entity.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    Mono<D> removeOne(BaseQuery query) throws DomainNotFoundException;
+    Mono<D> removeOne(C criteria) throws DomainNotFoundException;
 
     /**
      * Remove multiple domain entities that match a query.
      *
-     * @param query The query for finding domain entities to remove.
+     * @param criteria The criteria for finding domain entities to remove.
      * @return A Flux that emits the removed domain entities.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    Flux<D> removeMany(BaseQuery query) throws DomainNotFoundException;
+    Flux<D> removeMany(C criteria) throws DomainNotFoundException;
 
     /**
      * Remove all domain entities.
@@ -113,11 +113,11 @@ public interface BaseDomainCrudRepository<ID extends Comparable<ID> & Serializab
     /**
      * Get the number of records that match a query.
      *
-     * @param query The query for counting domain entities.
+     * @param criteria The criteria for counting domain entities.
      * @return A Mono that emits the count of matching domain entities.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    Mono<Long> count(BaseQuery query) throws DomainNotFoundException;
+    Mono<Long> count(C criteria) throws DomainNotFoundException;
 
     /**
      * Get the number of all records.

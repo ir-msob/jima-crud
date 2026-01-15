@@ -6,7 +6,6 @@ import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
-import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
@@ -30,7 +29,7 @@ import java.util.Collection;
  * @param <C>    The type of criteria used for filtering entities.
  * @param <R>    The type of repository used for CRUD operations.
  */
-public interface BaseDeleteManyDomainCrudService<ID extends Comparable<ID> & Serializable, USER extends BaseUser, D extends BaseDomain<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>, R extends BaseDomainCrudRepository<ID, D>> extends ParentWriteDomainCrudService<ID, USER, D, DTO, C, R> {
+public interface BaseDeleteManyDomainCrudService<ID extends Comparable<ID> & Serializable, USER extends BaseUser, D extends BaseDomain<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>, R extends BaseDomainCrudRepository<ID, D, C>> extends ParentWriteDomainCrudService<ID, USER, D, DTO, C, R> {
     Logger log = LoggerFactory.getLogger(BaseDeleteManyDomainCrudService.class);
 
     /**
@@ -75,9 +74,8 @@ public interface BaseDeleteManyDomainCrudService<ID extends Comparable<ID> & Ser
                 .flatMap(dto -> this.preDelete(criteria, user).thenReturn(dto))
                 .flatMap(dto -> {
                     C criteriaId = CriteriaUtil.idCriteria(getCriteriaClass(), dto.getId());
-                    BaseQuery baseQuery = this.getRepository().getQueryBuilder().build(criteriaId);
 
-                    return this.getRepository().removeOne(baseQuery).thenReturn(dto);
+                    return this.getRepository().removeOne(criteriaId).thenReturn(dto);
                 })
                 .flatMap(dto -> this.postDelete(dto, criteria, user).thenReturn(dto))
                 .doOnNext(dto -> this.getBeforeAfterComponent().afterDelete(dto, criteria, getDtoClass(), user, getBeforeAfterDomainOperations()))

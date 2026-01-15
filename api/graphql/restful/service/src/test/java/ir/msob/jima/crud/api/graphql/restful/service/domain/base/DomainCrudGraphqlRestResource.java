@@ -23,7 +23,7 @@ public abstract class DomainCrudGraphqlRestResource<
         D extends ProjectDomain,
         DTO extends ProjectDto,
         C extends ProjectCriteria,
-        R extends MongoDomainCrudRepository<D>,
+        R extends MongoDomainCrudRepository<D, C>,
         S extends DomainCrudService<D, DTO, C, R>
         > implements
         BaseDomainCrudGraphqlRestResource<String, ProjectUser, D, DTO, C, R, S> {

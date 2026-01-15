@@ -6,7 +6,6 @@ import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
-import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
@@ -32,7 +31,7 @@ import java.util.Collection;
 public interface BaseGetManyDomainCrudService<ID extends Comparable<ID> & Serializable, USER extends BaseUser,
         D extends BaseDomain<ID>, DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        R extends BaseDomainCrudRepository<ID, D>> extends ParentReadDomainCrudService<ID, USER, D, DTO, C, R> {
+        R extends BaseDomainCrudRepository<ID, D, C>> extends ParentReadDomainCrudService<ID, USER, D, DTO, C, R> {
 
     /**
      * The logger for this service class.
@@ -78,10 +77,9 @@ public interface BaseGetManyDomainCrudService<ID extends Comparable<ID> & Serial
 
     private Mono<Collection<DTO>> doGetMany(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
         getBeforeAfterComponent().beforeGet(criteria, user, getBeforeAfterDomainOperations());
-        BaseQuery baseQuery = this.getRepository().getQueryBuilder().build(criteria);
 
         return this.preGet(criteria, user)
-                .thenMany(this.getRepository().getMany(baseQuery))
+                .thenMany(this.getRepository().getMany(criteria))
                 .map(d -> toDto(d, user))
                 .collectList()
                 .flatMap(dtos -> {

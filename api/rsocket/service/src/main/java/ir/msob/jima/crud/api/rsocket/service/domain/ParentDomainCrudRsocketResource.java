@@ -32,7 +32,7 @@ public interface ParentDomainCrudRsocketResource<
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        R extends BaseDomainCrudRepository<ID, D>,
+        R extends BaseDomainCrudRepository<ID, D, C>,
         S extends ParentDomainCrudService<ID, USER, D, DTO, C, R>>
         extends BaseCoreRsocketResource<ID, USER>,
         BaseCrudResource,

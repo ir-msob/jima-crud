@@ -34,7 +34,7 @@ public abstract class BaseDomainCrudGrpcResource<
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        R extends BaseDomainCrudRepository<ID, D>,
+        R extends BaseDomainCrudRepository<ID, D, C>,
         S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>
         > implements
         BaseCountAllDomainCrudGrpcResource<ID, USER, D, DTO, C, R, S>,

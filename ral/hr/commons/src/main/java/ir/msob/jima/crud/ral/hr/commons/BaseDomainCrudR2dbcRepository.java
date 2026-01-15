@@ -22,7 +22,7 @@ import java.util.Collections;
  * Default CRUD repository base for domain objects over R2DBC.
  */
 public interface BaseDomainCrudR2dbcRepository<ID extends Comparable<ID> & Serializable, D extends BaseDomain<ID>>
-        extends BaseDomainCrudRepository<ID, D> {
+        extends BaseDomainCrudRepository<ID, D, C> {
 
     R2dbcEntityTemplate getR2dbcEntityTemplate();
 

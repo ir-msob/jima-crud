@@ -6,7 +6,6 @@ import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
-import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
@@ -32,7 +31,7 @@ import java.util.Collections;
 public interface BaseGetOneDomainCrudService<ID extends Comparable<ID> & Serializable, USER extends BaseUser,
         D extends BaseDomain<ID>, DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        R extends BaseDomainCrudRepository<ID, D>> extends ParentReadDomainCrudService<ID, USER, D, DTO, C, R> {
+        R extends BaseDomainCrudRepository<ID, D, C>> extends ParentReadDomainCrudService<ID, USER, D, DTO, C, R> {
 
     Logger log = LoggerFactory.getLogger(BaseGetOneDomainCrudService.class);
 
@@ -72,10 +71,8 @@ public interface BaseGetOneDomainCrudService<ID extends Comparable<ID> & Seriali
     private Mono<DTO> doGetOne(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
         getBeforeAfterComponent().beforeGet(criteria, user, getBeforeAfterDomainOperations());
 
-        BaseQuery baseQuery = this.getRepository().getQueryBuilder().build(criteria);
-
         return this.preGet(criteria, user)
-                .then(this.getRepository().getOne(baseQuery))
+                .then(this.getRepository().getOne(criteria))
                 .flatMap(domain -> {
                     DTO dto = toDto(domain, user);
                     Collection<ID> ids = Collections.singletonList(domain.getId());

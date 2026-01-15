@@ -23,7 +23,7 @@ import java.io.Serializable;
 public interface ParentReadDomainCrudService<ID extends Comparable<ID> & Serializable, USER extends BaseUser,
         D extends BaseDomain<ID>, DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        R extends BaseDomainCrudRepository<ID, D>> extends ParentDomainCrudService<ID, USER, D, DTO, C, R> {
+        R extends BaseDomainCrudRepository<ID, D, C>> extends ParentDomainCrudService<ID, USER, D, DTO, C, R> {
 
 
 }

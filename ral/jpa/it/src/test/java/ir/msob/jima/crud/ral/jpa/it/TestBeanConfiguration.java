@@ -10,13 +10,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.DynamicPropertyRegistrar;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
-import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.postgresql.PostgreSQLContainer;
 
 @TestConfiguration
 public class TestBeanConfiguration {
 
     @Bean
-    public DynamicPropertyRegistrar dynamicPropertyRegistrar(PostgreSQLContainer<?> postgreSQLContainer, JimaProperties jimaProperties) {
+    public DynamicPropertyRegistrar dynamicPropertyRegistrar(PostgreSQLContainer postgreSQLContainer, JimaProperties jimaProperties) {
         return registry -> {
             PostgreSQLContainerConfiguration.registry(registry, postgreSQLContainer);
         };

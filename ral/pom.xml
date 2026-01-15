@@ -14,8 +14,8 @@
     <packaging>pom</packaging>
     <modules>
         <module>mongo</module>
-        <module>jpa</module>
+        <!--        <module>jpa</module>-->
         <module>r2dbc</module>
-        <module>hr</module>
+        <!--        <module>hr</module>-->
     </modules>
 </project>

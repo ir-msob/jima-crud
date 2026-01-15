@@ -16,7 +16,7 @@ public abstract class DomainCrudService<
         D extends ProjectDomain,
         DTO extends ProjectDto,
         C extends ProjectCriteria,
-        R extends R2dbcDomainCrudRepository<D>>
+        R extends R2dbcDomainCrudRepository<D, C>>
         implements BaseDomainCrudService<String, ProjectUser, D, DTO, C, R> {
 
     private final BeforeAfterComponent beforeAfterComponent;

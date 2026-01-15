@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.postgresql.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
@@ -36,8 +36,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TestRepositoryIt {
 
-    static final PostgreSQLContainer<?> POSTGRESQL_CONTAINER =
-            new PostgreSQLContainer<>(DockerImageName.parse("postgres:17-alpine"))
+    static final PostgreSQLContainer POSTGRESQL_CONTAINER =
+            new PostgreSQLContainer(DockerImageName.parse("postgres:17-alpine"))
                     .withDatabaseName("testdb")
                     .withUsername("test")
                     .withPassword("test");

@@ -48,7 +48,7 @@ public interface BaseGetPageDomainCrudRestResource<
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        R extends BaseDomainCrudRepository<ID, D>,
+        R extends BaseDomainCrudRepository<ID, D, C>,
         S extends BaseGetPageDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudRestResource<ID, USER, D, DTO, C, R, S> {
 

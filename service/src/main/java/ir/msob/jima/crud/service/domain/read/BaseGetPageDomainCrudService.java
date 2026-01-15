@@ -6,7 +6,6 @@ import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
-import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import org.slf4j.Logger;
@@ -34,7 +33,7 @@ import java.util.List;
 public interface BaseGetPageDomainCrudService<ID extends Comparable<ID> & Serializable, USER extends BaseUser,
         D extends BaseDomain<ID>, DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        R extends BaseDomainCrudRepository<ID, D>> extends ParentReadDomainCrudService<ID, USER, D, DTO, C, R> {
+        R extends BaseDomainCrudRepository<ID, D, C>> extends ParentReadDomainCrudService<ID, USER, D, DTO, C, R> {
 
     /**
      * The logger for this service class.
@@ -77,10 +76,8 @@ public interface BaseGetPageDomainCrudService<ID extends Comparable<ID> & Serial
     private Mono<Page<DTO>> doGetPage(C criteria, Pageable pageable, USER user) throws DomainNotFoundException, BadRequestException {
         getBeforeAfterComponent().beforeGet(criteria, user, getBeforeAfterDomainOperations());
 
-        BaseQuery baseQuery = this.getRepository().getQueryBuilder().build(criteria, pageable);
-
         return this.preGet(criteria, user)
-                .then(this.getRepository().getPage(baseQuery, pageable))
+                .then(this.getRepository().getPage(criteria, pageable))
                 .map(domainPage -> {
                     List<DTO> dtos = domainPage
                             .stream()

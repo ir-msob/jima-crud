@@ -14,7 +14,7 @@ public interface BaseDomainCrudGraphqlRestResource<ID extends Comparable<ID> & S
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        R extends BaseDomainCrudRepository<ID, D>,
+        R extends BaseDomainCrudRepository<ID, D, C>,
         S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>>
         extends BaseReadDomainCrudGraphqlRestResource<ID, USER, D, DTO, C, R, S>
         , BaseWriteDomainCrudGraphqlRestResource<ID, USER, D, DTO, C, R, S> {

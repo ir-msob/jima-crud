@@ -41,7 +41,7 @@ public interface BaseEditByIdDomainCrudRsocketResource<
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        R extends BaseDomainCrudRepository<ID, D>,
+        R extends BaseDomainCrudRepository<ID, D, C>,
 
         S extends BaseEditDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudRsocketResource<ID, USER, D, DTO, C, R, S> {

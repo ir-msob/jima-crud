@@ -27,7 +27,7 @@ public interface BaseDomainCrudService<
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        R extends BaseDomainCrudRepository<ID, D>
+        R extends BaseDomainCrudRepository<ID, D, C>
         > extends
         BaseCountDomainCrudService<ID, USER, D, DTO, C, R>,
         BaseCountAllDomainCrudService<ID, USER, D, DTO, C, R>,

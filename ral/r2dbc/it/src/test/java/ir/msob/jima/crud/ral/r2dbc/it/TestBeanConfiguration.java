@@ -12,7 +12,7 @@ import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.data.r2dbc.mapping.event.BeforeConvertCallback;
 import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.test.context.DynamicPropertyRegistrar;
-import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.postgresql.PostgreSQLContainer;
 import reactor.core.publisher.Mono;
 
 import java.util.UUID;
@@ -21,7 +21,7 @@ import java.util.UUID;
 public class TestBeanConfiguration {
 
     @Bean
-    public DynamicPropertyRegistrar dynamicPropertyRegistrar(PostgreSQLContainer<?> postgreSQLContainer, JimaProperties jimaProperties) {
+    public DynamicPropertyRegistrar dynamicPropertyRegistrar(PostgreSQLContainer postgreSQLContainer, JimaProperties jimaProperties) {
         return registry -> {
             PostgreSQLContainerConfiguration.registry(registry, postgreSQLContainer);
         };

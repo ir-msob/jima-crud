@@ -1,5 +1,6 @@
 package ir.msob.jima.crud.ral.mongo.commons;
 
+import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.repository.BaseQuery;
@@ -23,8 +24,8 @@ import java.util.Collections;
  *
  * @param <D> The type of the domain.
  */
-public interface BaseDomainCrudMongoRepository<ID extends Comparable<ID> & Serializable, D extends BaseDomain<ID>>
-        extends BaseDomainCrudRepository<ID, D> {
+public interface BaseDomainCrudMongoRepository<ID extends Comparable<ID> & Serializable, D extends BaseDomain<ID>, C extends BaseCriteria<ID>>
+        extends BaseDomainCrudRepository<ID, D, C> {
 
     /**
      * Get the ReactiveMongoTemplate instance.
@@ -84,27 +85,27 @@ public interface BaseDomainCrudMongoRepository<ID extends Comparable<ID> & Seria
     /**
      * Get a single domain from the database based on the provided query.
      *
-     * @param baseQuery the query to execute.
+     * @param criteria The criteria to execute.
      * @return a Mono emitting the found domain.
      */
     @Override
     @MethodStats
-    default Mono<D> getOne(BaseQuery baseQuery) {
-        MongoQuery mongoQuery = (MongoQuery) baseQuery;
+    default Mono<D> getOne(C criteria) {
+        MongoQuery mongoQuery = this.getQueryBuilder().build(criteria);
         return this.getReactiveMongoTemplate().findOne(mongoQuery.getQuery(), getDomainClass());
     }
 
     /**
      * Get a page of domains from the database based on the provided query and pageable.
      *
-     * @param baseQuery the query to execute.
-     * @param pageable  the pageable to apply.
+     * @param criteria The criteria to execute.
+     * @param pageable the pageable to apply.
      * @return a Mono emitting a Page of found domains.
      */
     @Override
     @MethodStats
-    default Mono<Page<D>> getPage(BaseQuery baseQuery, Pageable pageable) {
-        MongoQuery mongoQuery = (MongoQuery) baseQuery;
+    default Mono<Page<D>> getPage(C criteria, Pageable pageable) {
+        MongoQuery mongoQuery = this.getQueryBuilder().build(criteria, pageable);
         return this.getReactiveMongoTemplate().count(mongoQuery.getQuery(), getDomainClass())
                 .flatMap(count -> {
                     if (count == 0L) {
@@ -121,12 +122,13 @@ public interface BaseDomainCrudMongoRepository<ID extends Comparable<ID> & Seria
     /**
      * Get multiple domains from the database based on the provided query.
      *
-     * @param baseQuery the query to execute.
+     * @param criteria The criteria to execute.
      * @return a Flux emitting the found domains.
      */
     @Override
     @MethodStats
-    default Flux<D> getMany(BaseQuery baseQuery) {
+    default Flux<D> getMany(C criteria) {
+        BaseQuery baseQuery = this.getQueryBuilder().build(criteria);
         MongoQuery mongoQuery = (MongoQuery) baseQuery;
         return this.getReactiveMongoTemplate().find(mongoQuery.getQuery(), getDomainClass());
     }
@@ -134,12 +136,13 @@ public interface BaseDomainCrudMongoRepository<ID extends Comparable<ID> & Seria
     /**
      * Remove a single domain from the database based on the provided query.
      *
-     * @param baseQuery the query to execute.
+     * @param criteria The criteria to execute.
      * @return a Mono emitting the removed domain.
      */
     @Override
     @MethodStats
-    default Mono<D> removeOne(BaseQuery baseQuery) {
+    default Mono<D> removeOne(C criteria) {
+        BaseQuery baseQuery = this.getQueryBuilder().build(criteria);
         MongoQuery mongoQuery = (MongoQuery) baseQuery;
         return this.getReactiveMongoTemplate().findAndRemove(mongoQuery.getQuery(), getDomainClass());
     }
@@ -147,12 +150,13 @@ public interface BaseDomainCrudMongoRepository<ID extends Comparable<ID> & Seria
     /**
      * Remove multiple domains from the database based on the provided query.
      *
-     * @param baseQuery the query to execute.
+     * @param criteria The criteria to execute.
      * @return a Flux emitting the removed domains.
      */
     @Override
     @MethodStats
-    default Flux<D> removeMany(BaseQuery baseQuery) {
+    default Flux<D> removeMany(C criteria) {
+        BaseQuery baseQuery = this.getQueryBuilder().build(criteria);
         MongoQuery mongoQuery = (MongoQuery) baseQuery;
         return this.getReactiveMongoTemplate().findAllAndRemove(mongoQuery.getQuery(), getDomainClass());
     }
@@ -171,13 +175,13 @@ public interface BaseDomainCrudMongoRepository<ID extends Comparable<ID> & Seria
     /**
      * Count the number of domains in the database that match the provided query.
      *
-     * @param baseQuery the query to execute.
+     * @param criteria The criteria to execute.
      * @return a Mono emitting the count.
      */
 //    @Override
     @MethodStats
-    default Mono<Long> count(BaseQuery baseQuery) {
-        MongoQuery mongoQuery = (MongoQuery) baseQuery;
+    default Mono<Long> count(C criteria) {
+        MongoQuery mongoQuery = this.getQueryBuilder().build(criteria);
         return this.getReactiveMongoTemplate().count(mongoQuery.getQuery(), getDomainClass());
     }
 

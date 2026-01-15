@@ -44,7 +44,7 @@ public interface BaseSaveManyDomainCrudGraphqlRestResource<
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        R extends BaseDomainCrudRepository<ID, D>,
+        R extends BaseDomainCrudRepository<ID, D, C>,
         S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudGraphqlRestResource<ID, USER, D, DTO, C, R, S> {
     Logger log = LoggerFactory.getLogger(BaseSaveManyDomainCrudGraphqlRestResource.class);

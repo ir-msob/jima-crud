@@ -30,7 +30,7 @@ public interface BaseDomainCrudRestResource<
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        R extends BaseDomainCrudRepository<ID, D>,
+        R extends BaseDomainCrudRepository<ID, D, C>,
         S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>
         > extends
         BaseCountAllDomainCrudRestResource<ID, USER, D, DTO, C, R, S>,

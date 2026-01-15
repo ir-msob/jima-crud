@@ -32,7 +32,7 @@ public interface ParentDomainCrudService<
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        R extends BaseRepository<ID, D>>
+        R extends BaseRepository<ID, D, C>>
         extends BaseService<ID, USER, D, DTO, C, R> {
 
     /**

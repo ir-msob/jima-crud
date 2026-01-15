@@ -27,7 +27,7 @@ public abstract class DomainCrudKafkaResourceTest<
         D extends ProjectDomain,
         DTO extends ProjectDto,
         C extends ProjectCriteria,
-        R extends MongoDomainCrudRepository<D>,
+        R extends MongoDomainCrudRepository<D, C>,
         S extends DomainCrudService<D, DTO, C, R>,
         DP extends DomainCrudDataProvider<D, DTO, C, R, S>>
         implements BaseDomainCrudKafkaListenerTest<String, ProjectUser, D, DTO, C, R, S, DP> {

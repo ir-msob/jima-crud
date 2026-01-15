@@ -1,5 +1,6 @@
 package ir.msob.jima.crud.ral.jpa.commons;
 
+import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.ral.jpa.commons.BaseJpaRepository;
@@ -26,8 +27,8 @@ import java.util.Collection;
  * This interface expects that BaseSqlRepository<ID, D> (JPA helpers like find(), delete(), findPage() etc.)
  * is available in the project. We delegate heavy-lifting to those defaults where appropriate.
  */
-public interface BaseDomainCrudJpaRepository<ID extends Comparable<ID> & Serializable, D extends BaseDomain<ID>>
-        extends BaseDomainCrudRepository<ID, D>, BaseJpaRepository<ID, D> {
+public interface BaseDomainCrudJpaRepository<ID extends Comparable<ID> & Serializable, D extends BaseDomain<ID>, C extends BaseCriteria<ID>>
+        extends BaseDomainCrudRepository<ID, D, C>, BaseJpaRepository<ID, D> {
 
     /**
      * Implementations MUST provide EntityManager.

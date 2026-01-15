@@ -1,6 +1,8 @@
 package ir.msob.jima.crud.ral.r2dbc.it.domain;
 
+import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.core.ral.r2dbc.commons.query.R2dbcQuery;
+import ir.msob.jima.core.ral.r2dbc.it.test.TestCriteria;
 import ir.msob.jima.core.ral.r2dbc.it.test.TestDomain;
 import ir.msob.jima.crud.ral.r2dbc.it.TestApplication;
 import ir.msob.jima.crud.ral.r2dbc.it.TestBeanConfiguration;
@@ -11,11 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.relational.core.query.Criteria;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.postgresql.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
 import java.util.List;
@@ -26,8 +27,8 @@ import java.util.List;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TestRepositoryIt {
 
-    static final PostgreSQLContainer<?> POSTGRESQL_CONTAINER =
-            new PostgreSQLContainer<>(DockerImageName.parse("postgres:17-alpine"))
+    static final PostgreSQLContainer POSTGRESQL_CONTAINER =
+            new PostgreSQLContainer(DockerImageName.parse("postgres:17-alpine"))
                     .withDatabaseName("testdb")
                     .withUsername("test")
                     .withPassword("test");
@@ -95,10 +96,8 @@ public class TestRepositoryIt {
     void testGetOne() {
         TestDomain saved = testRepository.insertOne(newDomain()).block();
 
-        R2dbcQuery<TestDomain> query = new R2dbcQuery<TestDomain>()
-                .where(Criteria.where("id").is(saved.getId()));
 
-        TestDomain found = testRepository.getOne(query).block();
+        TestDomain found = testRepository.getOne(CriteriaUtil.idCriteria(saved.getId())).block();
         Assertions.assertNotNull(found);
         Assertions.assertEquals(saved.getId(), found.getId());
     }
@@ -109,9 +108,7 @@ public class TestRepositoryIt {
         testRepository.insertOne(newDomain()).block();
         testRepository.insertOne(newDomain()).block();
 
-        R2dbcQuery<TestDomain> q = new R2dbcQuery<>();
-
-        List<TestDomain> list = testRepository.getMany(q).collectList().block();
+        List<TestDomain> list = testRepository.getMany(new TestCriteria()).collectList().block();
         Assertions.assertTrue(list.size() >= 2);
     }
 
@@ -123,7 +120,7 @@ public class TestRepositoryIt {
         R2dbcQuery<TestDomain> q = new R2dbcQuery<TestDomain>()
                 .with(PageRequest.of(0, 2, Sort.by("id")));
 
-        var page = testRepository.getPage(q, PageRequest.of(0, 2)).block();
+        var page = testRepository.getPage(new TestCriteria(), PageRequest.of(0, 2)).block();
 
         Assertions.assertNotNull(page);
         Assertions.assertEquals(2, page.getContent().size());
@@ -135,10 +132,7 @@ public class TestRepositoryIt {
     void testRemoveOne() {
         TestDomain d = testRepository.insertOne(newDomain()).block();
 
-        R2dbcQuery<TestDomain> q = new R2dbcQuery<TestDomain>()
-                .where(Criteria.where("id").is(d.getId()));
-
-        TestDomain removed = testRepository.removeOne(q).block();
+        TestDomain removed = testRepository.removeOne(CriteriaUtil.idCriteria(d.getId())).block();
         Assertions.assertNotNull(removed);
 
         TestDomain after = testRepository.findById(d.getId()).block();
@@ -153,7 +147,7 @@ public class TestRepositoryIt {
 
         R2dbcQuery<TestDomain> q = new R2dbcQuery<>(); // ALL
 
-        List<TestDomain> removed = testRepository.removeMany(q).collectList().block();
+        List<TestDomain> removed = testRepository.removeMany(new TestCriteria()).collectList().block();
         Assertions.assertTrue(removed.size() >= 2);
 
         Long count = testRepository.countAll().block();
@@ -166,8 +160,7 @@ public class TestRepositoryIt {
         testRepository.insertOne(newDomain()).block();
         testRepository.insertOne(newDomain()).block();
 
-        R2dbcQuery<TestDomain> q = new R2dbcQuery<>();
-        Long count = testRepository.count(q).block();
+        Long count = testRepository.count(new TestCriteria()).block();
         Assertions.assertEquals(2L, count);
     }
 

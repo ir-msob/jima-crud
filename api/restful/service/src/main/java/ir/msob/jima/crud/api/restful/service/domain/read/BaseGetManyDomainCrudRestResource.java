@@ -47,7 +47,7 @@ public interface BaseGetManyDomainCrudRestResource<
         D extends BaseDomain<ID>,
         DTO extends BaseDto<ID>,
         C extends BaseCriteria<ID>,
-        R extends BaseDomainCrudRepository<ID, D>,
+        R extends BaseDomainCrudRepository<ID, D, C>,
         S extends BaseGetManyDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudRestResource<ID, USER, D, DTO, C, R, S> {
 
