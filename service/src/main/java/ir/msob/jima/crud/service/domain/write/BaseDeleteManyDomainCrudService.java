@@ -9,6 +9,7 @@ import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,7 +45,7 @@ public interface BaseDeleteManyDomainCrudService<ID extends Comparable<ID> & Ser
      */
     @Transactional
     @MethodStats
-    default Mono<Collection<ID>> deleteMany(Collection<ID> ids, USER user) throws DomainNotFoundException, BadRequestException {
+    default Mono<@NonNull Collection<ID>> deleteMany(Collection<ID> ids, USER user) throws DomainNotFoundException, BadRequestException {
         return this.doDeleteMany(CriteriaUtil.idCriteria(getCriteriaClass(), ids), user);
     }
 
@@ -60,13 +61,13 @@ public interface BaseDeleteManyDomainCrudService<ID extends Comparable<ID> & Ser
      */
     @Transactional
     @MethodStats
-    default Mono<Collection<ID>> deleteMany(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
+    default Mono<@NonNull Collection<ID>> deleteMany(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
         log.debug("DeleteMany, criteria: {}, user: {}", criteria, user);
 
         return this.doDeleteMany(criteria, user);
     }
 
-    private Mono<Collection<ID>> doDeleteMany(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
+    private Mono<@NonNull Collection<ID>> doDeleteMany(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
         getBeforeAfterOperationComponent().beforeDelete(criteria, user, getBeforeAfterDomainOperations());
 
         return getStream(criteria, user)

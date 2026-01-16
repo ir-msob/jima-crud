@@ -15,6 +15,7 @@ import ir.msob.jima.core.commons.shared.ModelType;
 import ir.msob.jima.crud.api.rsocket.service.domain.ParentDomainCrudRsocketResource;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.read.BaseCountAllDomainCrudService;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -64,7 +65,7 @@ public interface BaseCountAllDomainCrudRsocketResource<
     @MessageMapping(Operations.COUNT_ALL)
     @MethodStats
     @Scope(operation = Operations.COUNT_ALL)
-    default Mono<Long> countAll(@Payload String dto, @AuthenticationPrincipal Jwt principal) throws BadRequestException, DomainNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, JsonProcessingException {
+    default Mono<@NonNull Long> countAll(@Payload String dto, @AuthenticationPrincipal Jwt principal) throws BadRequestException, DomainNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, JsonProcessingException {
         log.debug("RSocket request to count all dto {}", dto);
         ChannelMessage<USER, ModelType> message = getObjectMapper().readValue(dto, getChannelMessageModelTypeReferenceType());
 

@@ -14,6 +14,7 @@ import ir.msob.jima.core.it.security.ProjectUser;
 import ir.msob.jima.crud.api.kafka.service.domain.BaseDomainCrudKafkaListener;
 import ir.msob.jima.crud.ral.mongo.it.base.DomainCrudService;
 import ir.msob.jima.crud.ral.mongo.it.base.MongoDomainCrudRepository;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.ConsumerFactory;
@@ -43,7 +44,7 @@ public abstract class DomainCrudKafkaResource<
     @Autowired
     ObjectMapper objectMapper;
     @Autowired
-    ConsumerFactory<String, String> consumerFactory;
+    ConsumerFactory<@NonNull String, @NonNull String> consumerFactory;
     @Autowired
     BaseAsyncClient asyncClient;
     @Value("${spring.kafka.consumer.group-id}")
@@ -55,7 +56,7 @@ public abstract class DomainCrudKafkaResource<
     }
 
     @Override
-    public ConsumerFactory<String, String> getKafkaConsumerFactory() {
+    public ConsumerFactory<@NonNull String, @NonNull String> getKafkaConsumerFactory() {
         return consumerFactory;
     }
 

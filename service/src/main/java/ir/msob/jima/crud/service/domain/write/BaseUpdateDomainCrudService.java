@@ -10,6 +10,7 @@ import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import jakarta.validation.Valid;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,7 +46,7 @@ public interface BaseUpdateDomainCrudService<ID extends Comparable<ID> & Seriali
     @Override
     @Transactional
     @MethodStats
-    default Mono<DTO> update(ID id, @Valid DTO dto, USER user) {
+    default Mono<@NonNull DTO> update(ID id, @Valid DTO dto, USER user) {
         dto.setId(id);
         return doUpdate(dto, user);
     }
@@ -63,11 +64,11 @@ public interface BaseUpdateDomainCrudService<ID extends Comparable<ID> & Seriali
     @Override
     @Transactional
     @MethodStats
-    default Mono<DTO> update(@Valid DTO dto, USER user) {
+    default Mono<@NonNull DTO> update(@Valid DTO dto, USER user) {
         return doUpdate(dto, user);
     }
 
-    private Mono<DTO> doUpdate(@Valid DTO dto, USER user) {
+    private Mono<@NonNull DTO> doUpdate(@Valid DTO dto, USER user) {
         return getOneById(dto.getId(), user)
                 .flatMap(previousDto -> this.doUpdate(previousDto, dto, user));
     }
@@ -87,11 +88,11 @@ public interface BaseUpdateDomainCrudService<ID extends Comparable<ID> & Seriali
     @Override
     @Transactional
     @MethodStats
-    default Mono<DTO> update(DTO previousDto, @Valid DTO dto, USER user) throws BadRequestException, ValidationException, DomainNotFoundException {
+    default Mono<@NonNull DTO> update(DTO previousDto, @Valid DTO dto, USER user) throws BadRequestException, ValidationException, DomainNotFoundException {
         return doUpdate(previousDto, dto, user);
     }
 
-    private Mono<DTO> doUpdate(DTO previousDto, @Valid DTO dto, USER user) throws BadRequestException, ValidationException, DomainNotFoundException {
+    private Mono<@NonNull DTO> doUpdate(DTO previousDto, @Valid DTO dto, USER user) throws BadRequestException, ValidationException, DomainNotFoundException {
         getBeforeAfterOperationComponent().beforeUpdate(previousDto, dto, user, getBeforeAfterDomainOperations());
 
         D domain = toDomain(dto, user);

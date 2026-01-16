@@ -20,6 +20,7 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.childdomain.ParentChildCrudRestResource;
 import ir.msob.jima.crud.service.childdomain.BaseChildDomainCrudService;
 import jakarta.validation.Valid;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -55,7 +56,7 @@ public interface BaseUpdateByNameContactMediumCrudRestResource<
     })
     @MethodStats
     @Scope(element = Elements.CONTACT_MEDIUM, operation = Operations.UPDATE_BY_NAME)
-    default ResponseEntity<Mono<DTO>> updateByName(
+    default ResponseEntity<@NonNull Mono<@NonNull DTO>> updateByName(
             @PathVariable("parentId") ID parentId,
             @PathVariable("name") String name,
             @RequestBody @Valid CD childDomain,

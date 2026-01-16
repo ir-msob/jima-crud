@@ -10,6 +10,7 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.service.BaseService;
 import ir.msob.jima.crud.service.domain.operation.BeforeAfterOperationComponent;
 import jakarta.validation.Valid;
+import org.jspecify.annotations.NonNull;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -43,7 +44,7 @@ public interface ParentDomainCrudService<
      * @param user     A user context.
      * @return A Mono that emits the found DTO entity.
      */
-    default Mono<DTO> getOne(C criteria, USER user) {
+    default Mono<@NonNull DTO> getOne(C criteria, USER user) {
         return Mono.empty();
     }
 
@@ -54,7 +55,7 @@ public interface ParentDomainCrudService<
      * @param user     A user context.
      * @return A Mono that emits a collection of DTO entities.
      */
-    default Mono<Collection<DTO>> getMany(C criteria, USER user) {
+    default Mono<@NonNull Collection<DTO>> getMany(C criteria, USER user) {
         return Mono.empty();
     }
 
@@ -65,7 +66,7 @@ public interface ParentDomainCrudService<
      * @param user     A user context.
      * @return A Mono that emits a collection of DTO entities.
      */
-    default Flux<DTO> getStream(C criteria, USER user) {
+    default Flux<@NonNull DTO> getStream(C criteria, USER user) {
         return Flux.empty();
     }
 
@@ -76,7 +77,7 @@ public interface ParentDomainCrudService<
      * @param user A user context.
      * @return A Mono that emits the updated DTO entity.
      */
-    default Mono<DTO> update(@Valid DTO dto, USER user) {
+    default Mono<@NonNull DTO> update(@Valid DTO dto, USER user) {
         return Mono.empty();
     }
 
@@ -88,7 +89,7 @@ public interface ParentDomainCrudService<
      * @param user A user context.
      * @return A Mono that emits the updated DTO entity.
      */
-    default Mono<DTO> update(ID id, @Valid DTO dto, USER user) {
+    default Mono<@NonNull DTO> update(ID id, @Valid DTO dto, USER user) {
         return Mono.empty();
     }
 
@@ -100,7 +101,7 @@ public interface ParentDomainCrudService<
      * @param user   A user context.
      * @return A Mono that emits the updated DTO entity.
      */
-    default Mono<DTO> update(DTO oldDto, @Valid DTO dto, USER user) {
+    default Mono<@NonNull DTO> update(DTO oldDto, @Valid DTO dto, USER user) {
         return Mono.empty();
     }
 
@@ -111,7 +112,7 @@ public interface ParentDomainCrudService<
      * @param user A user context.
      * @return A Mono that emits a collection of updated DTO entities.
      */
-    default Mono<Collection<DTO>> updateMany(Collection<@Valid DTO> dtos, USER user) {
+    default Mono<@NonNull Collection<DTO>> updateMany(Collection<@Valid DTO> dtos, USER user) {
         return Mono.empty();
     }
 
@@ -123,7 +124,7 @@ public interface ParentDomainCrudService<
      * @param user    A user context.
      * @return A Mono that emits a collection of updated DTO entities.
      */
-    default Mono<Collection<DTO>> updateMany(Collection<DTO> oldDtos, Collection<@Valid DTO> dtos, USER user) {
+    default Mono<@NonNull Collection<DTO>> updateMany(Collection<DTO> oldDtos, Collection<@Valid DTO> dtos, USER user) {
         return Mono.empty();
     }
 

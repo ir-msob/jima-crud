@@ -20,6 +20,7 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.domain.ParentDomainCrudRestResource;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.write.BaseUpdateDomainCrudService;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -64,12 +65,12 @@ public interface BaseUpdateByIdDomainCrudRestResource<
     })
     @MethodStats
     @Scope(operation = Operations.UPDATE_BY_ID)
-    default ResponseEntity<Mono<DTO>> updateById(@PathVariable("id") ID id, @RequestBody DTO dto, ServerWebExchange serverWebExchange, Principal principal)
+    default ResponseEntity<@NonNull Mono<@NonNull DTO>> updateById(@PathVariable("id") ID id, @RequestBody DTO dto, ServerWebExchange serverWebExchange, Principal principal)
             throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to update domain, id {}, dto: {}", id, dto);
 
         USER user = getUser(serverWebExchange, principal);
-        Mono<DTO> res = this.getService().update(id, dto, user);
+        Mono<@NonNull DTO> res = this.getService().update(id, dto, user);
         return ResponseEntity.status(OperationsStatus.UPDATE_BY_ID).body(res);
     }
 }

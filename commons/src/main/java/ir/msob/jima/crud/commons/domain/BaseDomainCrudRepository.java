@@ -4,6 +4,7 @@ import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.repository.BaseRepository;
+import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import reactor.core.publisher.Flux;
@@ -28,7 +29,7 @@ public interface BaseDomainCrudRepository<ID extends Comparable<ID> & Serializab
      * @param domain The domain entity to be saved.
      * @return A Mono that emits the saved domain entity.
      */
-    Mono<D> insertOne(D domain);
+    Mono<@NonNull D> insertOne(D domain);
 
     /**
      * Save multiple domain entities.
@@ -36,7 +37,7 @@ public interface BaseDomainCrudRepository<ID extends Comparable<ID> & Serializab
      * @param domains A collection of domain entities to be saved.
      * @return A Flux that emits the saved domain entities.
      */
-    Flux<D> insertMany(Collection<D> domains);
+    Flux<@NonNull D> insertMany(Collection<D> domains);
 
     /**
      * Update a domain entity.
@@ -45,7 +46,7 @@ public interface BaseDomainCrudRepository<ID extends Comparable<ID> & Serializab
      * @return A Mono that emits the updated domain entity.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    Mono<D> updateOne(D domain) throws DomainNotFoundException;
+    Mono<@NonNull D> updateOne(D domain) throws DomainNotFoundException;
 
     /**
      * Update multiple domain entities.
@@ -54,7 +55,7 @@ public interface BaseDomainCrudRepository<ID extends Comparable<ID> & Serializab
      * @return A Flux that emits the updated domain entities.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    Flux<D> updateMany(Iterable<D> domains) throws DomainNotFoundException;
+    Flux<@NonNull D> updateMany(Iterable<D> domains) throws DomainNotFoundException;
 
     /**
      * Get the first domain entity that matches a query.
@@ -63,7 +64,7 @@ public interface BaseDomainCrudRepository<ID extends Comparable<ID> & Serializab
      * @return A Mono that emits the found domain entity.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    Mono<D> getOne(C criteria) throws DomainNotFoundException;
+    Mono<@NonNull D> getOne(C criteria) throws DomainNotFoundException;
 
     /**
      * Get a page of domain entities that match a query.
@@ -73,7 +74,7 @@ public interface BaseDomainCrudRepository<ID extends Comparable<ID> & Serializab
      * @return A Mono that emits a Page containing domain entities.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    Mono<Page<D>> getPage(C criteria, Pageable pageable) throws DomainNotFoundException;
+    Mono<@NonNull Page<@NonNull D>> getPage(C criteria, Pageable pageable) throws DomainNotFoundException;
 
     /**
      * Get a list of domain entities that match a query.
@@ -82,7 +83,7 @@ public interface BaseDomainCrudRepository<ID extends Comparable<ID> & Serializab
      * @return A Flux that emits a list of domain entities.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    Flux<D> getMany(C criteria) throws DomainNotFoundException;
+    Flux<@NonNull D> getMany(C criteria) throws DomainNotFoundException;
 
     /**
      * Remove one domain entity that matches a query.
@@ -91,7 +92,7 @@ public interface BaseDomainCrudRepository<ID extends Comparable<ID> & Serializab
      * @return A Mono that emits the removed domain entity.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    Mono<D> removeOne(C criteria) throws DomainNotFoundException;
+    Mono<@NonNull D> removeOne(C criteria) throws DomainNotFoundException;
 
     /**
      * Remove multiple domain entities that match a query.
@@ -100,7 +101,7 @@ public interface BaseDomainCrudRepository<ID extends Comparable<ID> & Serializab
      * @return A Flux that emits the removed domain entities.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    Flux<D> removeMany(C criteria) throws DomainNotFoundException;
+    Flux<@NonNull D> removeMany(C criteria) throws DomainNotFoundException;
 
     /**
      * Remove all domain entities.
@@ -108,7 +109,7 @@ public interface BaseDomainCrudRepository<ID extends Comparable<ID> & Serializab
      * @return A Flux that emits all removed domain entities.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    Flux<D> removeAll() throws DomainNotFoundException;
+    Flux<@NonNull D> removeAll() throws DomainNotFoundException;
 
     /**
      * Get the number of records that match a query.
@@ -117,7 +118,7 @@ public interface BaseDomainCrudRepository<ID extends Comparable<ID> & Serializab
      * @return A Mono that emits the count of matching domain entities.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    Mono<Long> count(C criteria) throws DomainNotFoundException;
+    Mono<@NonNull Long> count(C criteria) throws DomainNotFoundException;
 
     /**
      * Get the number of all records.
@@ -125,7 +126,7 @@ public interface BaseDomainCrudRepository<ID extends Comparable<ID> & Serializab
      * @return A Mono that emits the count of all domain entities.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    Mono<Long> countAll() throws DomainNotFoundException;
+    Mono<@NonNull Long> countAll() throws DomainNotFoundException;
 
 
 }

@@ -21,6 +21,7 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.domain.ParentDomainCrudRestResource;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.write.BaseEditManyDomainCrudService;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -66,12 +67,12 @@ public interface BaseEditManyDomainCrudRestResource<
     })
     @MethodStats
     @Scope(operation = Operations.EDIT_MANY)
-    default ResponseEntity<Mono<Collection<DTO>>> editMany(@RequestBody String dto, C criteria, ServerWebExchange serverWebExchange, Principal principal)
+    default ResponseEntity<@NonNull Mono<@NonNull Collection<DTO>>> editMany(@RequestBody String dto, C criteria, ServerWebExchange serverWebExchange, Principal principal)
             throws BadRequestException, DomainNotFoundException, IOException {
         log.debug("REST request to edit many domains, dto: {}, criteria: {}", dto, criteria);
 
         USER user = getUser(serverWebExchange, principal);
-        Mono<Collection<DTO>> res = this.getService().editMany(criteria, JsonPatch.fromJson(getService().getObjectMapper().readTree(dto)), user);
+        Mono<@NonNull Collection<DTO>> res = this.getService().editMany(criteria, JsonPatch.fromJson(getService().getObjectMapper().readTree(dto)), user);
         return ResponseEntity.status(OperationsStatus.EDIT_MANY).body(res);
     }
 }

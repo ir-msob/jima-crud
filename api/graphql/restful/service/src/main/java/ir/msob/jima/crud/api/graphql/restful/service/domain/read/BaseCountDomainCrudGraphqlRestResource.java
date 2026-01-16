@@ -14,6 +14,7 @@ import ir.msob.jima.crud.api.graphql.restful.commons.model.CriteriaInput;
 import ir.msob.jima.crud.api.graphql.restful.service.domain.ParentDomainCrudGraphqlRestResource;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -61,7 +62,7 @@ public interface BaseCountDomainCrudGraphqlRestResource<
     @MethodStats
     @QueryMapping
     @Scope(operation = Operations.COUNT)
-    default Mono<CountType> count(@Argument("input") CriteriaInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
+    default Mono<@NonNull CountType> count(@Argument("input") CriteriaInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
         log.debug("Request to count: dto {}", input);
 
         USER user = getUser(token);

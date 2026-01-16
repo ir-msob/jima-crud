@@ -20,6 +20,7 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.domain.ParentDomainCrudRestResource;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.write.BaseUpdateManyDomainCrudService;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -64,12 +65,12 @@ public interface BaseUpdateManyDomainCrudRestResource<
     })
     @MethodStats
     @Scope(operation = Operations.UPDATE_MANY)
-    default ResponseEntity<Mono<Collection<DTO>>> updateList(@RequestBody Collection<DTO> dtos, ServerWebExchange serverWebExchange, Principal principal)
+    default ResponseEntity<@NonNull Mono<@NonNull Collection<DTO>>> updateList(@RequestBody Collection<DTO> dtos, ServerWebExchange serverWebExchange, Principal principal)
             throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to update many domains, dtos: {}", dtos);
 
         USER user = getUser(serverWebExchange, principal);
-        Mono<Collection<DTO>> res = this.getService().updateMany(dtos, user);
+        Mono<@NonNull Collection<DTO>> res = this.getService().updateMany(dtos, user);
         return ResponseEntity.status(OperationsStatus.UPDATE_MANY).body(res);
     }
 }

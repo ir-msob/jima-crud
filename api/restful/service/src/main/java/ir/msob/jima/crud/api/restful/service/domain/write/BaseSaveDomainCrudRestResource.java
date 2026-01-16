@@ -20,6 +20,7 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.domain.ParentDomainCrudRestResource;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.write.BaseSaveDomainCrudService;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -63,12 +64,12 @@ public interface BaseSaveDomainCrudRestResource<
     })
     @MethodStats
     @Scope(operation = Operations.SAVE)
-    default ResponseEntity<Mono<DTO>> save(@RequestBody DTO dto, ServerWebExchange serverWebExchange, Principal principal)
+    default ResponseEntity<@NonNull Mono<@NonNull DTO>> save(@RequestBody DTO dto, ServerWebExchange serverWebExchange, Principal principal)
             throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to save new domain, dto: {}", dto);
 
         USER user = getUser(serverWebExchange, principal);
-        Mono<DTO> res = this.getService().save(dto, user);
+        Mono<@NonNull DTO> res = this.getService().save(dto, user);
         return ResponseEntity.status(OperationsStatus.SAVE).body(res);
     }
 }

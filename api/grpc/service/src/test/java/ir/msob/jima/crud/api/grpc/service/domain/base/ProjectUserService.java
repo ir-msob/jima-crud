@@ -61,7 +61,7 @@ public class ProjectUserService implements BaseKeycloakProjectUserService, BaseS
      * This behavior needs to be customized based on the chosen security provider
      * (e.g., Keycloak integration) to fetch user information.
      *
-     * @param A string containing the user identifier (might be null).
+     * @param token string containing the user identifier (might be null).
      * @return An empty `Optional` object indicating no user was found (placeholder implementation).
      */
     @Override

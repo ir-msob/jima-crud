@@ -12,6 +12,7 @@ import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.core.commons.util.DtoUtil;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import jakarta.validation.Valid;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,14 +47,14 @@ public interface BaseSaveDomainCrudService<ID extends Comparable<ID> & Serializa
     @Transactional
     @MethodStats
     @Override
-    default Mono<DTO> save(@Valid DTO dto, USER user) throws BadRequestException, DomainNotFoundException {
+    default Mono<@NonNull DTO> save(@Valid DTO dto, USER user) throws BadRequestException, DomainNotFoundException {
         log.debug("Save, user {}", user);
 
         return safeSave(dto, user)
                 .switchIfEmpty(doSave(dto, user));
     }
 
-    private Mono<DTO> doSave(DTO dto, USER user) {
+    private Mono<@NonNull DTO> doSave(DTO dto, USER user) {
         getBeforeAfterOperationComponent().beforeSave(dto, user, getBeforeAfterDomainOperations());
         D domain = toDomain(dto, user);
         return this.preSave(dto, user)
@@ -63,7 +64,7 @@ public interface BaseSaveDomainCrudService<ID extends Comparable<ID> & Serializa
                 .doOnSuccess(savedDto -> getBeforeAfterOperationComponent().afterSave(dto, savedDto, user, getBeforeAfterDomainOperations()));
     }
 
-    private Mono<DTO> safeSave(DTO dto, USER user) {
+    private Mono<@NonNull DTO> safeSave(DTO dto, USER user) {
         if (SafeSave.info.hasAnnotation(getDtoClass())) {
             String uniqueFieldValue = DtoUtil.uniqueField(getDtoClass(), dto);
             C criteria = CriteriaUtil.uniqueCriteria(getCriteriaClass(), uniqueFieldValue);

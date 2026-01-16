@@ -19,6 +19,7 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.domain.ParentDomainCrudRestResource;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.read.BaseCountAllDomainCrudService;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -60,11 +61,11 @@ public interface BaseCountAllDomainCrudRestResource<
     })
     @MethodStats
     @Scope(operation = Operations.COUNT_ALL)
-    default ResponseEntity<Mono<Long>> countAll(ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
+    default ResponseEntity<@NonNull Mono<@NonNull Long>> countAll(ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to count all domains");
 
         USER user = getUser(serverWebExchange, principal);
-        Mono<Long> res = this.getService().countAll(user);
+        Mono<@NonNull Long> res = this.getService().countAll(user);
         return ResponseEntity.status(OperationsStatus.COUNT_ALL).body(res);
     }
 }

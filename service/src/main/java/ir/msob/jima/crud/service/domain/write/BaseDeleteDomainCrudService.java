@@ -9,6 +9,7 @@ import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +43,7 @@ public interface BaseDeleteDomainCrudService<ID extends Comparable<ID> & Seriali
      */
     @Transactional
     @MethodStats
-    default Mono<ID> delete(ID id, USER user) throws DomainNotFoundException, BadRequestException {
+    default Mono<@NonNull ID> delete(ID id, USER user) throws DomainNotFoundException, BadRequestException {
         return this.doDelete(CriteriaUtil.idCriteria(getCriteriaClass(), id), user);
     }
 
@@ -58,13 +59,13 @@ public interface BaseDeleteDomainCrudService<ID extends Comparable<ID> & Seriali
      */
     @Transactional
     @MethodStats
-    default Mono<ID> delete(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
+    default Mono<@NonNull ID> delete(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
         log.debug("Delete, criteria: {}, user: {}", criteria, user);
 
         return doDelete(criteria, user);
     }
 
-    private Mono<ID> doDelete(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
+    private Mono<@NonNull ID> doDelete(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
         getBeforeAfterOperationComponent().beforeDelete(criteria, user, getBeforeAfterDomainOperations());
 
         return getOne(criteria, user)

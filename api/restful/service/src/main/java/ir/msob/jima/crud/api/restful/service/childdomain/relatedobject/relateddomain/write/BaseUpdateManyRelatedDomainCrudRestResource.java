@@ -19,6 +19,7 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.childdomain.relatedobject.ParentRelatedObjectCrudRestResource;
 import ir.msob.jima.crud.service.childdomain.BaseChildDomainCrudService;
 import jakarta.validation.Valid;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -54,7 +55,7 @@ public interface BaseUpdateManyRelatedDomainCrudRestResource<
     })
     @MethodStats
     @Scope(element = Elements.RELATED_DOMAIN, operation = Operations.UPDATE_MANY)
-    default ResponseEntity<Mono<DTO>> updateMany(
+    default ResponseEntity<@NonNull Mono<@NonNull DTO>> updateMany(
             @PathVariable("parentId") ID parentId,
             @RequestBody Collection<@Valid CD> childDomains,
             ServerWebExchange serverWebExchange,

@@ -21,6 +21,7 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.domain.ParentDomainCrudRestResource;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.write.BaseDeleteDomainCrudService;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -63,11 +64,11 @@ public interface BaseDeleteDomainCrudRestResource<
     })
     @MethodStats
     @Scope(operation = Operations.DELETE)
-    default ResponseEntity<Mono<ID>> delete(C criteria, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
+    default ResponseEntity<@NonNull Mono<@NonNull ID>> delete(C criteria, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("REST request to delete domain with criteria: {}", criteria);
 
         USER user = getUser(serverWebExchange, principal);
-        Mono<ID> res = this.getService().delete(criteria, user);
+        Mono<@NonNull ID> res = this.getService().delete(criteria, user);
         return ResponseEntity.status(OperationsStatus.DELETE).body(res);
     }
 }

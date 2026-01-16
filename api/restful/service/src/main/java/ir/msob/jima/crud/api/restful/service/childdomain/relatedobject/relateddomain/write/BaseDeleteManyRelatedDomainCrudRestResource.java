@@ -19,6 +19,7 @@ import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.childdomain.relatedobject.ParentRelatedObjectCrudRestResource;
 import ir.msob.jima.crud.service.childdomain.BaseChildDomainCrudService;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -53,7 +54,7 @@ public interface BaseDeleteManyRelatedDomainCrudRestResource<
     })
     @MethodStats
     @Scope(element = Elements.RELATED_DOMAIN, operation = Operations.DELETE_MANY)
-    default ResponseEntity<Mono<DTO>> deleteMany(
+    default ResponseEntity<@NonNull Mono<@NonNull DTO>> deleteMany(
             @PathVariable("parentId") ID parentId,
             CC childCriteria,
             ServerWebExchange serverWebExchange,

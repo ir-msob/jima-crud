@@ -1,5 +1,6 @@
 package ir.msob.jima.crud.api.graphql.restful.service;
 
+import org.jspecify.annotations.NonNull;
 import org.springframework.graphql.server.WebGraphQlInterceptor;
 import org.springframework.graphql.server.WebGraphQlRequest;
 import org.springframework.graphql.server.WebGraphQlResponse;
@@ -38,7 +39,7 @@ public class HeaderInterceptor implements WebGraphQlInterceptor {
      * @return A Mono representing the GraphQL response after processing the interceptor chain.
      */
     @Override
-    public Mono<WebGraphQlResponse> intercept(WebGraphQlRequest request, Chain chain) {
+    public @NonNull Mono<@NonNull WebGraphQlResponse> intercept(WebGraphQlRequest request, @NonNull Chain chain) {
         List<String> authorizationHeaders = request.getHeaders().getOrDefault(HttpHeaders.AUTHORIZATION, new ArrayList<>());
         if (!authorizationHeaders.isEmpty()) {
             String firstAuthorizationHeader = authorizationHeaders.getFirst();

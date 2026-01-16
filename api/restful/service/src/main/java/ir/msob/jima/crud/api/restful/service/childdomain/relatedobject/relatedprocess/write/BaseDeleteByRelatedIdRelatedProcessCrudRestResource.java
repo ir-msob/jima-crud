@@ -19,6 +19,7 @@ import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.childdomain.relatedobject.ParentRelatedObjectCrudRestResource;
 import ir.msob.jima.crud.service.childdomain.BaseChildDomainCrudService;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -50,7 +51,7 @@ public interface BaseDeleteByRelatedIdRelatedProcessCrudRestResource<
     })
     @MethodStats
     @Scope(element = Elements.RELATED_PROCESS, operation = Operations.DELETE_BY_RELATED_ID)
-    default ResponseEntity<Mono<DTO>> deleteByRelatedId(
+    default ResponseEntity<@NonNull Mono<@NonNull DTO>> deleteByRelatedId(
             @PathVariable("parentId") ID parentId,
             @PathVariable("relatedId") String relatedId,
             ServerWebExchange serverWebExchange,

@@ -23,7 +23,7 @@ public class RestUtil {
     /**
      * Generates a RESTful URI for a given combination of DTO and domain.
      * <p>
-     * The returned URI follows the format: <code>/api/{version}/{domainName}</code>.
+     * The returned URI follows the format: {@code /api/{version}/{domainName}}.
      * </p>
      *
      * @param dtoInfo    the {@link DtoInfo} containing the version information; must not be null

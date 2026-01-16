@@ -18,6 +18,7 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.childdomain.relatedobject.ParentRelatedObjectCrudRestResource;
 import ir.msob.jima.crud.service.childdomain.BaseChildDomainCrudService;
 import jakarta.validation.Valid;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -49,7 +50,7 @@ public interface BaseSaveManyRelatedPartyCrudRestResource<
     })
     @MethodStats
     @Scope(element = Elements.RELATED_PARTY, operation = Operations.SAVE_MANY)
-    default ResponseEntity<Mono<DTO>> saveMany(
+    default ResponseEntity<@NonNull Mono<@NonNull DTO>> saveMany(
             @PathVariable("parentId") ID parentId,
             @RequestBody Collection<@Valid CD> childDomains,
             ServerWebExchange serverWebExchange,

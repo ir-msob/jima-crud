@@ -9,6 +9,7 @@ import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import jakarta.validation.Valid;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,7 +46,7 @@ public interface BaseSaveManyDomainCrudService<ID extends Comparable<ID> & Seria
      */
     @Transactional
     @MethodStats
-    default Mono<Collection<DTO>> saveMany(Collection<@Valid DTO> dtos, USER user) throws BadRequestException, DomainNotFoundException {
+    default Mono<@NonNull Collection<DTO>> saveMany(Collection<@Valid DTO> dtos, USER user) throws BadRequestException, DomainNotFoundException {
         log.debug("SaveMany, dtos.size: {}, user {}", dtos.size(), user);
 
         // Convert the collection of DTOs into a Flux stream

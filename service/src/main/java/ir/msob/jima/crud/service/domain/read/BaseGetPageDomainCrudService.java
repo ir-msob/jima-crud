@@ -8,6 +8,7 @@ import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundExceptio
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -51,7 +52,7 @@ public interface BaseGetPageDomainCrudService<ID extends Comparable<ID> & Serial
      */
     @Transactional(readOnly = true)
     @MethodStats
-    default Mono<Page<DTO>> getPage(Pageable pageable, USER user) throws DomainNotFoundException, BadRequestException {
+    default Mono<@NonNull Page<@NonNull DTO>> getPage(Pageable pageable, USER user) throws DomainNotFoundException, BadRequestException {
         return this.doGetPage(newCriteriaClass(), pageable, user);
     }
 
@@ -67,13 +68,13 @@ public interface BaseGetPageDomainCrudService<ID extends Comparable<ID> & Serial
      */
     @Transactional(readOnly = true)
     @MethodStats
-    default Mono<Page<DTO>> getPage(C criteria, Pageable pageable, USER user) throws DomainNotFoundException, BadRequestException {
+    default Mono<@NonNull Page<@NonNull DTO>> getPage(C criteria, Pageable pageable, USER user) throws DomainNotFoundException, BadRequestException {
         log.debug("GetPage, criteria: {}, user: {}", criteria, user);
 
         return this.doGetPage(criteria, pageable, user);
     }
 
-    private Mono<Page<DTO>> doGetPage(C criteria, Pageable pageable, USER user) throws DomainNotFoundException, BadRequestException {
+    private Mono<@NonNull Page<@NonNull DTO>> doGetPage(C criteria, Pageable pageable, USER user) throws DomainNotFoundException, BadRequestException {
         getBeforeAfterOperationComponent().beforeGet(criteria, user, getBeforeAfterDomainOperations());
 
         return this.preGet(criteria, user)

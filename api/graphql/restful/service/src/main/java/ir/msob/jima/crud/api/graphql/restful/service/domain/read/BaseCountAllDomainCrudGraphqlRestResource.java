@@ -13,6 +13,7 @@ import ir.msob.jima.crud.api.graphql.restful.commons.model.CountType;
 import ir.msob.jima.crud.api.graphql.restful.service.domain.ParentDomainCrudGraphqlRestResource;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.graphql.data.method.annotation.ContextValue;
@@ -21,7 +22,6 @@ import org.springframework.http.HttpHeaders;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * The {@code BaseCountAllDomainCrudGraphqlRestResource} interface defines GraphQL queries for counting all entities of a CRUD resource.
@@ -53,17 +53,13 @@ public interface BaseCountAllDomainCrudGraphqlRestResource<
      *
      * @param token The authorization token for authentication (optional).
      * @return A {@code Mono} emitting the count of all entities wrapped in a {@code CountType}.
-     * @throws BadRequestException       If the request is malformed or invalid.
-     * @throws DomainNotFoundException   If the domain is not found.
-     * @throws InvocationTargetException If an invocation target exception occurs.
-     * @throws NoSuchMethodException     If the specified method is not found.
-     * @throws InstantiationException    If an instantiation exception occurs.
-     * @throws IllegalAccessException    If an illegal access exception occurs.
+     * @throws BadRequestException     If the request is malformed or invalid.
+     * @throws DomainNotFoundException If the domain is not found.
      */
     @MethodStats
     @QueryMapping
     @Scope(operation = Operations.COUNT_ALL)
-    default Mono<CountType> countAll(@ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    default Mono<@NonNull CountType> countAll(@ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
         log.debug("Request to count all");
 
         USER user = getUser(token);

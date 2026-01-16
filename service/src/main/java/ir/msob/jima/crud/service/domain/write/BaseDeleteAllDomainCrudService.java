@@ -9,6 +9,7 @@ import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +44,7 @@ public interface BaseDeleteAllDomainCrudService<ID extends Comparable<ID> & Seri
      */
     @Transactional
     @MethodStats
-    default Mono<Collection<ID>> deleteAll(USER user) throws DomainNotFoundException, BadRequestException {
+    default Mono<@NonNull Collection<ID>> deleteAll(USER user) throws DomainNotFoundException, BadRequestException {
         log.debug("Delete, user: {}", user);
 
         C criteria = newCriteriaClass();

@@ -15,6 +15,7 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.ParentDomainCrudService;
 import jakarta.validation.Valid;
 import lombok.SneakyThrows;
+import org.jspecify.annotations.NonNull;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
@@ -48,7 +49,7 @@ public interface ParentWriteDomainCrudService<
      * @throws BadRequestException     If the request is malformed.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    default Mono<DTO> getOneById(ID id, USER user) {
+    default Mono<@NonNull DTO> getOneById(ID id, USER user) {
         return getOne(CriteriaUtil.idCriteria(getCriteriaClass(), id), user);
     }
 
@@ -61,7 +62,7 @@ public interface ParentWriteDomainCrudService<
      * @throws BadRequestException     If the request is malformed.
      * @throws DomainNotFoundException If a domain is not found.
      */
-    default Mono<Collection<DTO>> getManyByDto(Collection<DTO> dtos, USER user) {
+    default Mono<@NonNull Collection<DTO>> getManyByDto(Collection<DTO> dtos, USER user) {
         Collection<ID> ids = dtos
                 .stream()
                 .map(BaseDomain::getId)
@@ -107,7 +108,7 @@ public interface ParentWriteDomainCrudService<
      * @throws BadRequestException     If the request is malformed.
      * @throws DomainNotFoundException If the domain is not found.
      */
-    default Mono<DTO> save(@Valid DTO dto, USER user) throws BadRequestException, DomainNotFoundException {
+    default Mono<@NonNull DTO> save(@Valid DTO dto, USER user) throws BadRequestException, DomainNotFoundException {
         return Mono.empty();
     }
 
@@ -123,7 +124,7 @@ public interface ParentWriteDomainCrudService<
      * @throws DomainNotFoundException If the domain is not found.
      */
     @Override
-    default Mono<DTO> update(DTO previousDto, @Valid DTO dto, USER user) throws BadRequestException, ValidationException, DomainNotFoundException {
+    default Mono<@NonNull DTO> update(DTO previousDto, @Valid DTO dto, USER user) throws BadRequestException, ValidationException, DomainNotFoundException {
         return Mono.empty();
     }
 

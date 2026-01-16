@@ -19,6 +19,7 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.domain.ParentDomainCrudRestResource;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.read.BaseGetOneDomainCrudService;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -60,11 +61,11 @@ public interface BaseGetOneDomainCrudRestResource<
     })
     @MethodStats
     @Scope(operation = Operations.GET_ONE)
-    default ResponseEntity<Mono<DTO>> getOne(C criteria, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
+    default ResponseEntity<@NonNull Mono<@NonNull DTO>> getOne(C criteria, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to get one domain with criteria: {}", criteria);
 
         USER user = getUser(serverWebExchange, principal);
-        Mono<DTO> res = this.getService().getOne(criteria, user);
+        Mono<@NonNull DTO> res = this.getService().getOne(criteria, user);
         return ResponseEntity.status(OperationsStatus.GET_ONE).body(res);
     }
 }

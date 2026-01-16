@@ -9,6 +9,7 @@ import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import jakarta.validation.constraints.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +25,6 @@ import java.io.Serializable;
  * @param <D>    The type of the domain entities.
  * @param <DTO>  The type of the DTO (Data Transfer Object) entities.
  * @param <C>    The type of the criteria used for counting entities.
- * @param <Q>    The type of the query used for filtering entities.
  * @param <R>    The type of the CRUD repository used for data access.
  */
 public interface BaseCountAllDomainCrudService<ID extends Comparable<ID> & Serializable, USER extends BaseUser,
@@ -44,7 +44,7 @@ public interface BaseCountAllDomainCrudService<ID extends Comparable<ID> & Seria
      */
     @Transactional(readOnly = true)
     @MethodStats
-    default Mono<Long> countAll(@NotNull USER user) {
+    default Mono<@NonNull Long> countAll(@NotNull USER user) {
         log.debug("CountAll, user: {}", user);
 
         C criteria = newCriteriaClass();

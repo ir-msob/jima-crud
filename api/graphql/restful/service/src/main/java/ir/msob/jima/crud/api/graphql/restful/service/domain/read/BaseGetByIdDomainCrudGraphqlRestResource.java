@@ -14,6 +14,7 @@ import ir.msob.jima.crud.api.graphql.restful.commons.model.IdInput;
 import ir.msob.jima.crud.api.graphql.restful.service.domain.ParentDomainCrudGraphqlRestResource;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -58,7 +59,7 @@ public interface BaseGetByIdDomainCrudGraphqlRestResource<
     @MethodStats
     @QueryMapping
     @Scope(operation = Operations.GET_BY_ID)
-    default Mono<DtoType> getById(@Argument("input") IdInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
+    default Mono<@NonNull DtoType> getById(@Argument("input") IdInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
         log.debug("Request to get by id: dto {}", input);
 
         USER user = getUser(token);

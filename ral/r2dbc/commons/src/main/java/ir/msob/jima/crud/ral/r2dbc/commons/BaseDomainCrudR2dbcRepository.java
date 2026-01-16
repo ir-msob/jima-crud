@@ -6,6 +6,7 @@ import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.ral.r2dbc.commons.query.R2dbcQuery;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import lombok.SneakyThrows;
+import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -29,31 +30,31 @@ public interface BaseDomainCrudR2dbcRepository<ID extends Comparable<ID> & Seria
 
     @Override
     @MethodStats
-    default Mono<D> insertOne(D domain) {
+    default Mono<@NonNull D> insertOne(D domain) {
         return this.getR2dbcEntityTemplate().insert(domain);
     }
 
     @Override
     @MethodStats
-    default Flux<D> insertMany(Collection<D> domains) {
+    default Flux<@NonNull D> insertMany(Collection<D> domains) {
         return Flux.fromIterable(domains).flatMap(this.getR2dbcEntityTemplate()::insert);
     }
 
     @Override
     @MethodStats
-    default Mono<D> updateOne(D domain) {
+    default Mono<@NonNull D> updateOne(D domain) {
         return this.getR2dbcEntityTemplate().update(domain);
     }
 
     @Override
     @MethodStats
-    default Flux<D> updateMany(Iterable<D> domains) {
+    default Flux<@NonNull D> updateMany(Iterable<D> domains) {
         return Flux.fromIterable(domains).flatMap(this.getR2dbcEntityTemplate()::update);
     }
 
     @Override
     @MethodStats
-    default Mono<D> getOne(C criteria) {
+    default Mono<@NonNull D> getOne(C criteria) {
         R2dbcQuery<D> sqlQuery = this.getQueryBuilder().build(criteria);
         Query q = sqlQuery.toQuery();
         return this.getR2dbcEntityTemplate().select(getDomainClass()).matching(q).one();
@@ -61,7 +62,7 @@ public interface BaseDomainCrudR2dbcRepository<ID extends Comparable<ID> & Seria
 
     @Override
     @MethodStats
-    default Mono<Page<D>> getPage(C criteria, Pageable pageable) {
+    default Mono<@NonNull Page<@NonNull D>> getPage(C criteria, Pageable pageable) {
         R2dbcQuery<D> sqlQuery = this.getQueryBuilder().build(criteria, pageable);
         Query q = sqlQuery.toQuery();
         return this.getR2dbcEntityTemplate().count(q, getDomainClass())
@@ -77,7 +78,7 @@ public interface BaseDomainCrudR2dbcRepository<ID extends Comparable<ID> & Seria
 
     @Override
     @MethodStats
-    default Flux<D> getMany(C criteria) {
+    default Flux<@NonNull D> getMany(C criteria) {
         R2dbcQuery<D> sqlQuery = this.getQueryBuilder().build(criteria);
         Query q = sqlQuery.toQuery();
         return this.getR2dbcEntityTemplate().select(getDomainClass()).matching(q).all();
@@ -85,7 +86,7 @@ public interface BaseDomainCrudR2dbcRepository<ID extends Comparable<ID> & Seria
 
     @Override
     @MethodStats
-    default Mono<D> removeOne(C criteria) {
+    default Mono<@NonNull D> removeOne(C criteria) {
         R2dbcQuery<D> sqlQuery = this.getQueryBuilder().build(criteria);
         Query q = sqlQuery.toQuery();
         return this.getR2dbcEntityTemplate().select(getDomainClass()).matching(q).one()
@@ -101,7 +102,7 @@ public interface BaseDomainCrudR2dbcRepository<ID extends Comparable<ID> & Seria
 
     @Override
     @MethodStats
-    default Flux<D> removeMany(C criteria) {
+    default Flux<@NonNull D> removeMany(C criteria) {
         R2dbcQuery<D> sqlQuery = this.getQueryBuilder().build(criteria);
         Query q = sqlQuery.toQuery();
 
@@ -122,21 +123,21 @@ public interface BaseDomainCrudR2dbcRepository<ID extends Comparable<ID> & Seria
 
     @Override
     @MethodStats
-    default Flux<D> removeAll() {
+    default Flux<@NonNull D> removeAll() {
         return this.getR2dbcEntityTemplate().select(getDomainClass()).all()
                 .collectList()
                 .flatMapMany(list -> this.getR2dbcEntityTemplate().delete(getDomainClass()).all().flatMapMany(c -> Flux.fromIterable(list)));
     }
 
     @MethodStats
-    default Mono<Long> count(C criteria) {
+    default Mono<@NonNull Long> count(C criteria) {
         R2dbcQuery<D> sqlQuery = this.getQueryBuilder().build(criteria);
         return this.getR2dbcEntityTemplate().count(sqlQuery.toQuery(), getDomainClass());
     }
 
     @Override
     @MethodStats
-    default Mono<Long> countAll() {
+    default Mono<@NonNull Long> countAll() {
         return this.getR2dbcEntityTemplate().count(Query.empty(), getDomainClass());
     }
 }

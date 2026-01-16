@@ -19,6 +19,7 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.domain.ParentDomainCrudRestResource;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.read.BaseGetManyDomainCrudService;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -61,11 +62,11 @@ public interface BaseGetManyDomainCrudRestResource<
     })
     @MethodStats
     @Scope(operation = Operations.GET_MANY)
-    default ResponseEntity<Mono<Collection<DTO>>> getMany(C criteria, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
+    default ResponseEntity<@NonNull Mono<@NonNull Collection<DTO>>> getMany(C criteria, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to get many domains with criteria: {}", criteria);
 
         USER user = getUser(serverWebExchange, principal);
-        Mono<Collection<DTO>> res = this.getService().getMany(criteria, user);
+        Mono<@NonNull Collection<DTO>> res = this.getService().getMany(criteria, user);
         return ResponseEntity.status(OperationsStatus.GET_MANY).body(res);
     }
 }

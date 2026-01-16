@@ -19,6 +19,7 @@ import ir.msob.jima.core.commons.scope.Scope;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.childdomain.ParentChildCrudRestResource;
 import ir.msob.jima.crud.service.childdomain.BaseChildDomainCrudService;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -65,7 +66,7 @@ public interface BaseDeleteByIdCharacteristicCrudRestResource<
     })
     @MethodStats
     @Scope(element = Elements.CHARACTERISTIC, operation = Operations.DELETE_BY_ID)
-    default ResponseEntity<Mono<DTO>> deleteById(@PathVariable("parentId") ID parentId, @PathVariable("id") ID id, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
+    default ResponseEntity<@NonNull Mono<@NonNull DTO>> deleteById(@PathVariable("parentId") ID parentId, @PathVariable("id") ID id, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
         log.debug("REST request to delete characteristic by id, parentId {}, id {}", parentId, id);
 
         USER user = getUser(serverWebExchange, principal);

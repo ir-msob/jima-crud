@@ -1,6 +1,7 @@
 package ir.msob.jima.crud.api.graphql.restful.service;
 
 import ir.msob.jima.core.commons.Constants;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -28,7 +29,7 @@ public class TestApplication implements ApplicationRunner {
     }
 
     @Override
-    public void run(ApplicationArguments args) {
+    public void run(@NonNull ApplicationArguments args) {
         startup();
     }
 

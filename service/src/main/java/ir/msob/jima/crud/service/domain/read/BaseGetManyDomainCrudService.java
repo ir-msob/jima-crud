@@ -9,6 +9,7 @@ import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,7 +54,7 @@ public interface BaseGetManyDomainCrudService<ID extends Comparable<ID> & Serial
      */
     @Transactional(readOnly = true)
     @MethodStats
-    default Mono<Collection<DTO>> getMany(Collection<ID> ids, USER user) throws DomainNotFoundException, BadRequestException, InvocationTargetException, NoSuchMethodException, IllegalAccessException, InstantiationException {
+    default Mono<@NonNull Collection<DTO>> getMany(Collection<ID> ids, USER user) throws DomainNotFoundException, BadRequestException, InvocationTargetException, NoSuchMethodException, IllegalAccessException, InstantiationException {
         return this.doGetMany(CriteriaUtil.idCriteria(getCriteriaClass(), ids), user);
     }
 
@@ -69,13 +70,13 @@ public interface BaseGetManyDomainCrudService<ID extends Comparable<ID> & Serial
     @Transactional(readOnly = true)
     @MethodStats
     @Override
-    default Mono<Collection<DTO>> getMany(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
+    default Mono<@NonNull Collection<DTO>> getMany(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
         log.debug("GetMany, criteria: {}, user: {}", criteria, user);
 
         return this.doGetMany(criteria, user);
     }
 
-    private Mono<Collection<DTO>> doGetMany(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
+    private Mono<@NonNull Collection<DTO>> doGetMany(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
         getBeforeAfterOperationComponent().beforeGet(criteria, user, getBeforeAfterDomainOperations());
 
         return this.preGet(criteria, user)

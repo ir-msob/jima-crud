@@ -15,6 +15,7 @@ import ir.msob.jima.crud.api.kafka.test.domain.BaseDomainCrudKafkaListenerTest;
 import ir.msob.jima.crud.ral.mongo.it.base.DomainCrudDataProvider;
 import ir.msob.jima.crud.ral.mongo.it.base.DomainCrudService;
 import ir.msob.jima.crud.ral.mongo.it.base.MongoDomainCrudRepository;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.ConsumerFactory;
@@ -39,9 +40,9 @@ public abstract class DomainCrudKafkaResourceTest<
     @Autowired
     ProjectUserService projectUserService;
     @Autowired
-    KafkaTemplate<String, String> kafkaTemplate;
+    KafkaTemplate<@NonNull String, @NonNull String> kafkaTemplate;
     @Autowired
-    ConsumerFactory<String, String> consumerFactory;
+    ConsumerFactory<@NonNull String, @NonNull String> consumerFactory;
     @Value("${spring.kafka.consumer.group-id}")
     private String groupId;
 
@@ -127,7 +128,7 @@ public abstract class DomainCrudKafkaResourceTest<
     }
 
     @Override
-    public ConsumerFactory<String, String> getConsumerFactory() {
+    public ConsumerFactory<@NonNull String, @NonNull String> getConsumerFactory() {
         return consumerFactory;
     }
 
@@ -137,7 +138,7 @@ public abstract class DomainCrudKafkaResourceTest<
     }
 
     @Override
-    public KafkaTemplate<String, String> getKafkaTemplate() {
+    public KafkaTemplate<@NonNull String, @NonNull String> getKafkaTemplate() {
         return kafkaTemplate;
     }
 

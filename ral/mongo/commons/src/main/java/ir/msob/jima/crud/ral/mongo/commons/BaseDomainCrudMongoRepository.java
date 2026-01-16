@@ -6,6 +6,7 @@ import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.ral.mongo.commons.query.MongoQuery;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
+import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -42,7 +43,7 @@ public interface BaseDomainCrudMongoRepository<ID extends Comparable<ID> & Seria
      */
     @Override
     @MethodStats
-    default Mono<D> insertOne(D domain) {
+    default Mono<@NonNull D> insertOne(D domain) {
         return this.getReactiveMongoTemplate().insert(domain);
     }
 
@@ -54,7 +55,7 @@ public interface BaseDomainCrudMongoRepository<ID extends Comparable<ID> & Seria
      */
     @Override
     @MethodStats
-    default Flux<D> insertMany(Collection<D> domains) {
+    default Flux<@NonNull D> insertMany(Collection<D> domains) {
         return this.getReactiveMongoTemplate().insertAll(domains);
     }
 
@@ -66,7 +67,7 @@ public interface BaseDomainCrudMongoRepository<ID extends Comparable<ID> & Seria
      */
     @Override
     @MethodStats
-    default Mono<D> updateOne(D domain) {
+    default Mono<@NonNull D> updateOne(D domain) {
         return this.getReactiveMongoTemplate().save(domain);
     }
 
@@ -78,7 +79,7 @@ public interface BaseDomainCrudMongoRepository<ID extends Comparable<ID> & Seria
      */
     @Override
     @MethodStats
-    default Flux<D> updateMany(Iterable<D> domains) {
+    default Flux<@NonNull D> updateMany(Iterable<D> domains) {
         return Flux.fromIterable(domains).flatMap(this.getReactiveMongoTemplate()::save);
     }
 
@@ -90,7 +91,7 @@ public interface BaseDomainCrudMongoRepository<ID extends Comparable<ID> & Seria
      */
     @Override
     @MethodStats
-    default Mono<D> getOne(C criteria) {
+    default Mono<@NonNull D> getOne(C criteria) {
         MongoQuery mongoQuery = this.getQueryBuilder().build(criteria);
         return this.getReactiveMongoTemplate().findOne(mongoQuery.getQuery(), getDomainClass());
     }
@@ -104,7 +105,7 @@ public interface BaseDomainCrudMongoRepository<ID extends Comparable<ID> & Seria
      */
     @Override
     @MethodStats
-    default Mono<Page<D>> getPage(C criteria, Pageable pageable) {
+    default Mono<@NonNull Page<@NonNull D>> getPage(C criteria, Pageable pageable) {
         MongoQuery mongoQuery = this.getQueryBuilder().build(criteria, pageable);
         return this.getReactiveMongoTemplate().count(mongoQuery.getQuery(), getDomainClass())
                 .flatMap(count -> {
@@ -127,7 +128,7 @@ public interface BaseDomainCrudMongoRepository<ID extends Comparable<ID> & Seria
      */
     @Override
     @MethodStats
-    default Flux<D> getMany(C criteria) {
+    default Flux<@NonNull D> getMany(C criteria) {
         BaseQuery baseQuery = this.getQueryBuilder().build(criteria);
         MongoQuery mongoQuery = (MongoQuery) baseQuery;
         return this.getReactiveMongoTemplate().find(mongoQuery.getQuery(), getDomainClass());
@@ -141,7 +142,7 @@ public interface BaseDomainCrudMongoRepository<ID extends Comparable<ID> & Seria
      */
     @Override
     @MethodStats
-    default Mono<D> removeOne(C criteria) {
+    default Mono<@NonNull D> removeOne(C criteria) {
         BaseQuery baseQuery = this.getQueryBuilder().build(criteria);
         MongoQuery mongoQuery = (MongoQuery) baseQuery;
         return this.getReactiveMongoTemplate().findAndRemove(mongoQuery.getQuery(), getDomainClass());
@@ -155,7 +156,7 @@ public interface BaseDomainCrudMongoRepository<ID extends Comparable<ID> & Seria
      */
     @Override
     @MethodStats
-    default Flux<D> removeMany(C criteria) {
+    default Flux<@NonNull D> removeMany(C criteria) {
         BaseQuery baseQuery = this.getQueryBuilder().build(criteria);
         MongoQuery mongoQuery = (MongoQuery) baseQuery;
         return this.getReactiveMongoTemplate().findAllAndRemove(mongoQuery.getQuery(), getDomainClass());
@@ -168,7 +169,7 @@ public interface BaseDomainCrudMongoRepository<ID extends Comparable<ID> & Seria
      */
     @Override
     @MethodStats
-    default Flux<D> removeAll() {
+    default Flux<@NonNull D> removeAll() {
         return this.getReactiveMongoTemplate().findAllAndRemove(new Query(), getDomainClass());
     }
 
@@ -180,7 +181,7 @@ public interface BaseDomainCrudMongoRepository<ID extends Comparable<ID> & Seria
      */
 //    @Override
     @MethodStats
-    default Mono<Long> count(C criteria) {
+    default Mono<@NonNull Long> count(C criteria) {
         MongoQuery mongoQuery = this.getQueryBuilder().build(criteria);
         return this.getReactiveMongoTemplate().count(mongoQuery.getQuery(), getDomainClass());
     }
@@ -192,7 +193,7 @@ public interface BaseDomainCrudMongoRepository<ID extends Comparable<ID> & Seria
      */
     @Override
     @MethodStats
-    default Mono<Long> countAll() {
+    default Mono<@NonNull Long> countAll() {
         return this.getReactiveMongoTemplate().count(new MongoQuery().getQuery(), getDomainClass());
     }
 

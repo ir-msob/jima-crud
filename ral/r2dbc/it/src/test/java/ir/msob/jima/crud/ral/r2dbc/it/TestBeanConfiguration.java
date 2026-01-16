@@ -22,9 +22,7 @@ public class TestBeanConfiguration {
 
     @Bean
     public DynamicPropertyRegistrar dynamicPropertyRegistrar(PostgreSQLContainer postgreSQLContainer, JimaProperties jimaProperties) {
-        return registry -> {
-            PostgreSQLContainerConfiguration.registry(registry, postgreSQLContainer);
-        };
+        return registry -> PostgreSQLContainerConfiguration.registry(registry, postgreSQLContainer);
     }
 
 

@@ -16,6 +16,7 @@ import ir.msob.jima.core.commons.shared.PageDto;
 import ir.msob.jima.crud.api.rsocket.service.domain.ParentDomainCrudRsocketResource;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.read.BaseGetPageDomainCrudService;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -64,7 +65,7 @@ public interface BaseGetPageDomainCrudRsocketResource<
     @MessageMapping(Operations.GET_PAGE)
     @MethodStats
     @Scope(operation = Operations.GET_PAGE)
-    default Mono<PageDto<DTO>> getPage(@Payload String dto, @AuthenticationPrincipal Jwt principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
+    default Mono<@NonNull PageDto<DTO>> getPage(@Payload String dto, @AuthenticationPrincipal Jwt principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("RSocket request to get page domain, dto {}", dto);
         ChannelMessage<USER, PageableMessage<ID, C>> message = getObjectMapper().readValue(dto, getChannelMessagePageableReferenceType());
 

@@ -15,6 +15,7 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.rsocket.service.domain.ParentDomainCrudRsocketResource;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.write.BaseEditManyDomainCrudService;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -64,7 +65,7 @@ public interface BaseEditManyDomainCrudRsocketResource<
     @MessageMapping(Operations.EDIT_MANY)
     @MethodStats
     @Scope(operation = Operations.EDIT_MANY)
-    default Mono<Collection<DTO>> editMany(@Payload String dto, @AuthenticationPrincipal Jwt principal)
+    default Mono<@NonNull Collection<DTO>> editMany(@Payload String dto, @AuthenticationPrincipal Jwt principal)
             throws BadRequestException, DomainNotFoundException, JsonProcessingException {
         log.debug("RSocket request to edit many, dto : {}", dto);
         ChannelMessage<USER, JsonPatchMessage<ID, C>> message = getObjectMapper().readValue(dto, getChannelMessageJsonPatchReferenceType());

@@ -8,6 +8,7 @@ import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundExceptio
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +43,7 @@ public interface BaseCountDomainCrudService<ID extends Comparable<ID> & Serializ
      */
     @Transactional(readOnly = true)
     @MethodStats
-    default Mono<Long> count(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
+    default Mono<@NonNull Long> count(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
         log.debug("Count, criteria: {}, user: {}", criteria, user);
         getBeforeAfterOperationComponent().beforeCount(criteria, user, getBeforeAfterDomainOperations());
         return this.getRepository().count(criteria)

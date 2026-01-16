@@ -9,6 +9,7 @@ import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,7 +50,7 @@ public interface BaseGetStreamDomainCrudService<ID extends Comparable<ID> & Seri
      */
     @Transactional(readOnly = true)
     @MethodStats
-    default Flux<DTO> getStream(Collection<ID> ids, USER user) throws DomainNotFoundException, BadRequestException {
+    default Flux<@NonNull DTO> getStream(Collection<ID> ids, USER user) throws DomainNotFoundException, BadRequestException {
         return this.doGetStream(CriteriaUtil.idCriteria(getCriteriaClass(), ids), user);
     }
 
@@ -65,13 +66,13 @@ public interface BaseGetStreamDomainCrudService<ID extends Comparable<ID> & Seri
     @Transactional(readOnly = true)
     @MethodStats
     @Override
-    default Flux<DTO> getStream(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
+    default Flux<@NonNull DTO> getStream(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
         log.debug("GetStream, criteria: {}, user: {}", criteria, user);
 
         return this.doGetStream(criteria, user);
     }
 
-    private Flux<DTO> doGetStream(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
+    private Flux<@NonNull DTO> doGetStream(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
         getBeforeAfterOperationComponent().beforeGet(criteria, user, getBeforeAfterDomainOperations());
 
         return this.preGet(criteria, user)

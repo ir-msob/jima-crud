@@ -14,6 +14,7 @@ import ir.msob.jima.crud.api.graphql.restful.commons.model.IdsType;
 import ir.msob.jima.crud.api.graphql.restful.service.domain.ParentDomainCrudGraphqlRestResource;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -62,7 +63,7 @@ public interface BaseDeleteManyDomainCrudGraphqlRestResource<
     @MethodStats
     @MutationMapping
     @Scope(operation = Operations.DELETE_MANY)
-    default Mono<IdsType> deleteMany(@Argument("input") CriteriaInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
+    default Mono<@NonNull IdsType> deleteMany(@Argument("input") CriteriaInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
         log.debug("Request to delete many: dto {}", input);
 
         USER user = getUser(token);

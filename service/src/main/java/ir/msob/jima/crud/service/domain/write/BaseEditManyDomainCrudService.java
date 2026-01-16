@@ -12,6 +12,7 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import org.apache.commons.lang3.SerializationUtils;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,7 +48,7 @@ public interface BaseEditManyDomainCrudService<ID extends Comparable<ID> & Seria
      */
     @Transactional
     @MethodStats
-    default Mono<Collection<DTO>> editMany(Collection<ID> ids, JsonPatch jsonPatch, USER user) throws BadRequestException, DomainNotFoundException {
+    default Mono<@NonNull Collection<DTO>> editMany(Collection<ID> ids, JsonPatch jsonPatch, USER user) throws BadRequestException, DomainNotFoundException {
         return this.doEditMany(CriteriaUtil.idCriteria(getCriteriaClass(), ids), jsonPatch, user);
     }
 
@@ -64,13 +65,13 @@ public interface BaseEditManyDomainCrudService<ID extends Comparable<ID> & Seria
      */
     @Transactional
     @MethodStats
-    default Mono<Collection<DTO>> editMany(C criteria, JsonPatch jsonPatch, USER user) throws BadRequestException, DomainNotFoundException {
+    default Mono<@NonNull Collection<DTO>> editMany(C criteria, JsonPatch jsonPatch, USER user) throws BadRequestException, DomainNotFoundException {
         log.debug("EditMany, jsonPatch: {}, criteria: {}, user {}", jsonPatch, criteria, user);
 
         return this.doEditMany(criteria, jsonPatch, user);
     }
 
-    private Mono<Collection<DTO>> doEditMany(C criteria, JsonPatch jsonPatch, USER user) throws BadRequestException, DomainNotFoundException {
+    private Mono<@NonNull Collection<DTO>> doEditMany(C criteria, JsonPatch jsonPatch, USER user) throws BadRequestException, DomainNotFoundException {
         return getMany(criteria, user).flatMap(dtos -> {
             Collection<DTO> previousDtos = dtos.stream()
                     .map(SerializationUtils::clone)

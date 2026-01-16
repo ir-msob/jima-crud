@@ -18,6 +18,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.SneakyThrows;
 import org.apache.logging.log4j.util.Strings;
+import org.jspecify.annotations.NonNull;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
@@ -54,7 +55,7 @@ public interface BaseChildDomainCrudService<
      * @param user A user context.
      * @return A Mono that emits the found DTO entity.
      */
-    Mono<DTO> getDto(ID id, USER user);
+    Mono<@NonNull DTO> getDto(ID id, USER user);
 
     /**
      * Update a DTO entity.
@@ -64,7 +65,7 @@ public interface BaseChildDomainCrudService<
      * @param user A user context.
      * @return A Mono that emits the updated DTO entity.
      */
-    Mono<DTO> updateDto(ID id, @Valid DTO dto, USER user);
+    Mono<@NonNull DTO> updateDto(ID id, @Valid DTO dto, USER user);
 
     /**
      * Update a child domain entity by key.
@@ -80,7 +81,7 @@ public interface BaseChildDomainCrudService<
      */
     @SneakyThrows
     @MethodStats
-    default <CD extends BaseChildDomain<ID>, CC extends BaseChildCriteriaKey<ID, CD>> Mono<DTO> updateByKey(@NotNull ID parentId, @NotBlank String key, CD childDomain, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
+    default <CD extends BaseChildDomain<ID>, CC extends BaseChildCriteriaKey<ID, CD>> Mono<@NonNull DTO> updateByKey(@NotNull ID parentId, @NotBlank String key, CD childDomain, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
         CC criteria = (CC) ChildDomainUtil.getCriteriaClass(cdClass, getParentDtoClass()).getConstructor().newInstance();
         criteria.setKey(Filter.eq(key));
         return this.update(parentId, childDomain, criteria, cdClass, user);
@@ -100,7 +101,7 @@ public interface BaseChildDomainCrudService<
      */
     @SneakyThrows
     @MethodStats
-    default <RID extends Comparable<RID> & Serializable, CD extends BaseChildDomain<ID>, CC extends BaseChildCriteriaRelatedId<ID, RID, CD>> Mono<DTO> updateByRelatedId(@NotNull ID parentId, @NotNull RID relatedId, CD childDomain, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
+    default <RID extends Comparable<RID> & Serializable, CD extends BaseChildDomain<ID>, CC extends BaseChildCriteriaRelatedId<ID, RID, CD>> Mono<@NonNull DTO> updateByRelatedId(@NotNull ID parentId, @NotNull RID relatedId, CD childDomain, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
         CC criteria = (CC) ChildDomainUtil.getCriteriaClass(cdClass, getParentDtoClass()).getConstructor().newInstance();
         criteria.setRelatedId(Filter.eq(relatedId));
         return this.update(parentId, childDomain, criteria, cdClass, user);
@@ -120,7 +121,7 @@ public interface BaseChildDomainCrudService<
      */
     @SneakyThrows
     @MethodStats
-    default <CD extends BaseChildDomain<ID>, CC extends BaseChildCriteriaName<ID, CD>> Mono<DTO> updateByName(@NotNull ID parentId, @NotBlank String name, CD childDomain, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
+    default <CD extends BaseChildDomain<ID>, CC extends BaseChildCriteriaName<ID, CD>> Mono<@NonNull DTO> updateByName(@NotNull ID parentId, @NotBlank String name, CD childDomain, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
         CC criteria = (CC) ChildDomainUtil.getCriteriaClass(cdClass, getParentDtoClass()).getConstructor().newInstance();
         criteria.setName(Filter.eq(name));
         return this.update(parentId, childDomain, criteria, cdClass, user);
@@ -140,7 +141,7 @@ public interface BaseChildDomainCrudService<
      */
     @SneakyThrows
     @MethodStats
-    default <CD extends BaseChildDomain<ID>, CC extends BaseChildCriteriaType<ID, CD>> Mono<DTO> updateByType(@NotNull ID parentId, @NotBlank String type, CD childDomain, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
+    default <CD extends BaseChildDomain<ID>, CC extends BaseChildCriteriaType<ID, CD>> Mono<@NonNull DTO> updateByType(@NotNull ID parentId, @NotBlank String type, CD childDomain, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
         CC criteria = (CC) ChildDomainUtil.getCriteriaClass(cdClass, getParentDtoClass()).getConstructor().newInstance();
         criteria.setType(Filter.eq(type));
         return this.update(parentId, childDomain, criteria, cdClass, user);
@@ -160,7 +161,7 @@ public interface BaseChildDomainCrudService<
      */
     @SneakyThrows
     @MethodStats
-    default <CD extends BaseChildDomain<ID>, CC extends BaseChildCriteria<ID, CD>> Mono<DTO> updateById(@NotNull ID parentId, @NotNull ID id, CD childDomain, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
+    default <CD extends BaseChildDomain<ID>, CC extends BaseChildCriteria<ID, CD>> Mono<@NonNull DTO> updateById(@NotNull ID parentId, @NotNull ID id, CD childDomain, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
         CC criteria = (CC) ChildDomainUtil.getCriteriaClass(cdClass, getParentDtoClass()).getConstructor().newInstance();
         criteria.setId(Filter.eq(id));
         return this.update(parentId, childDomain, criteria, cdClass, user);
@@ -179,7 +180,7 @@ public interface BaseChildDomainCrudService<
      * @throws BadRequestException     If the request is invalid.
      */
     @MethodStats
-    default <CD extends BaseChildDomain<ID>, CC extends BaseChildCriteria<ID, CD>> Mono<DTO> update(@NotNull ID parentId, CD childDomain, @NotNull CC childCriteria, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
+    default <CD extends BaseChildDomain<ID>, CC extends BaseChildCriteria<ID, CD>> Mono<@NonNull DTO> update(@NotNull ID parentId, CD childDomain, @NotNull CC childCriteria, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
         return getDto(parentId, user)
                 .doOnNext(dto -> {
 
@@ -215,7 +216,7 @@ public interface BaseChildDomainCrudService<
      * @throws BadRequestException     If the request is invalid.
      */
     @MethodStats
-    default <CD extends BaseChildDomain<ID>> Mono<DTO> updateMany(@NotNull ID parentId, Collection<CD> childDomains, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
+    default <CD extends BaseChildDomain<ID>> Mono<@NonNull DTO> updateMany(@NotNull ID parentId, Collection<CD> childDomains, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
         return getDto(parentId, user)
                 .doOnNext(dto -> {
                     Iterator<CD> iterator = ChildDomainUtil.getFunction(cdClass, getParentDtoClass()).apply(dto).iterator();
@@ -252,7 +253,7 @@ public interface BaseChildDomainCrudService<
      */
     @SneakyThrows
     @MethodStats
-    default <CD extends BaseChildDomain<ID>, CC extends BaseChildCriteriaKey<ID, CD>> Mono<DTO> deleteByKey(@NotNull ID parentId, @NotBlank String key, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
+    default <CD extends BaseChildDomain<ID>, CC extends BaseChildCriteriaKey<ID, CD>> Mono<@NonNull DTO> deleteByKey(@NotNull ID parentId, @NotBlank String key, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
         CC criteria = (CC) ChildDomainUtil.getCriteriaClass(cdClass, getParentDtoClass()).getConstructor().newInstance();
         criteria.setKey(Filter.eq(key));
         return delete(parentId, criteria, cdClass, user);
@@ -271,7 +272,7 @@ public interface BaseChildDomainCrudService<
      */
     @SneakyThrows
     @MethodStats
-    default <CD extends BaseChildDomain<ID>, CC extends BaseChildCriteriaName<ID, CD>> Mono<DTO> deleteByName(@NotNull ID parentId, @NotBlank String name, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
+    default <CD extends BaseChildDomain<ID>, CC extends BaseChildCriteriaName<ID, CD>> Mono<@NonNull DTO> deleteByName(@NotNull ID parentId, @NotBlank String name, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
         CC criteria = (CC) ChildDomainUtil.getCriteriaClass(cdClass, getParentDtoClass()).getConstructor().newInstance();
         criteria.setName(Filter.eq(name));
         return delete(parentId, criteria, cdClass, user);
@@ -290,7 +291,7 @@ public interface BaseChildDomainCrudService<
      */
     @SneakyThrows
     @MethodStats
-    default <CD extends BaseChildDomain<ID>, CC extends BaseChildCriteriaType<ID, CD>> Mono<DTO> deleteByType(@NotNull ID parentId, @NotBlank String type, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
+    default <CD extends BaseChildDomain<ID>, CC extends BaseChildCriteriaType<ID, CD>> Mono<@NonNull DTO> deleteByType(@NotNull ID parentId, @NotBlank String type, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
         CC criteria = (CC) ChildDomainUtil.getCriteriaClass(cdClass, getParentDtoClass()).getConstructor().newInstance();
         criteria.setType(Filter.eq(type));
         return delete(parentId, criteria, cdClass, user);
@@ -309,7 +310,7 @@ public interface BaseChildDomainCrudService<
      */
     @SneakyThrows
     @MethodStats
-    default <CD extends BaseChildDomain<ID>, CC extends BaseChildCriteria<ID, CD>> Mono<DTO> deleteById(@NotNull ID parentId, @NotNull ID id, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
+    default <CD extends BaseChildDomain<ID>, CC extends BaseChildCriteria<ID, CD>> Mono<@NonNull DTO> deleteById(@NotNull ID parentId, @NotNull ID id, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
         CC criteria = (CC) ChildDomainUtil.getCriteriaClass(cdClass, getParentDtoClass()).getConstructor().newInstance();
         criteria.setId(Filter.eq(id));
         return delete(parentId, criteria, cdClass, user);
@@ -328,7 +329,7 @@ public interface BaseChildDomainCrudService<
      */
     @SneakyThrows
     @MethodStats
-    default <RID extends Comparable<RID> & Serializable, CD extends BaseChildDomain<ID>, CC extends BaseChildCriteriaRelatedId<ID, RID, CD>> Mono<DTO> deleteByRelatedId(@NotNull ID parentId, @NotNull RID relatedId, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
+    default <RID extends Comparable<RID> & Serializable, CD extends BaseChildDomain<ID>, CC extends BaseChildCriteriaRelatedId<ID, RID, CD>> Mono<@NonNull DTO> deleteByRelatedId(@NotNull ID parentId, @NotNull RID relatedId, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
         CC criteria = (CC) ChildDomainUtil.getCriteriaClass(cdClass, getParentDtoClass()).getConstructor().newInstance();
         criteria.setRelatedId(Filter.eq(relatedId));
         return delete(parentId, criteria, cdClass, user);
@@ -346,7 +347,7 @@ public interface BaseChildDomainCrudService<
      * @throws BadRequestException     If the request is invalid.
      */
     @MethodStats
-    default <CD extends BaseChildDomain<ID>, CC extends BaseChildCriteria<ID, CD>> Mono<DTO> delete(@NotNull ID parentId, @NotNull CC childCriteria, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
+    default <CD extends BaseChildDomain<ID>, CC extends BaseChildCriteria<ID, CD>> Mono<@NonNull DTO> delete(@NotNull ID parentId, @NotNull CC childCriteria, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
         return getDto(parentId, user)
                 .doOnNext(dto -> {
 
@@ -383,7 +384,7 @@ public interface BaseChildDomainCrudService<
      * @throws BadRequestException     If the request is invalid.
      */
     @MethodStats
-    default <CD extends BaseChildDomain<ID>, CC extends BaseChildCriteria<ID, CD>> Mono<DTO> deleteMany(@NotNull ID parentId, @NotNull CC childCriteria, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
+    default <CD extends BaseChildDomain<ID>, CC extends BaseChildCriteria<ID, CD>> Mono<@NonNull DTO> deleteMany(@NotNull ID parentId, @NotNull CC childCriteria, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
         return getDto(parentId, user)
                 .doOnNext(dto -> {
                     Iterator<CD> iterator = ChildDomainUtil.getFunction(cdClass, getParentDtoClass()).apply(dto).iterator();
@@ -416,7 +417,7 @@ public interface BaseChildDomainCrudService<
      * @throws BadRequestException     If the request is invalid.
      */
     @MethodStats
-    default <CD extends BaseChildDomain<ID>> Mono<DTO> save(@NotNull ID parentId, @NotNull @Valid CD childDomain, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
+    default <CD extends BaseChildDomain<ID>> Mono<@NonNull DTO> save(@NotNull ID parentId, @NotNull @Valid CD childDomain, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
         return saveMany(parentId, Collections.singletonList(childDomain), cdClass, user);
     }
 
@@ -432,7 +433,7 @@ public interface BaseChildDomainCrudService<
      * @throws BadRequestException     If the request is invalid.
      */
     @MethodStats
-    default <CD extends BaseChildDomain<ID>> Mono<DTO> saveMany(@NotNull ID parentId, @NotEmpty Collection<@Valid CD> childDomains, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
+    default <CD extends BaseChildDomain<ID>> Mono<@NonNull DTO> saveMany(@NotNull ID parentId, @NotEmpty Collection<@Valid CD> childDomains, Class<CD> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
         return getDto(parentId, user)
                 .doOnNext(dto -> {
                     for (CD cd : childDomains) {

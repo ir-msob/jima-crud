@@ -10,6 +10,7 @@ import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import jakarta.validation.Valid;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,7 +48,7 @@ public interface BaseUpdateManyDomainCrudService<ID extends Comparable<ID> & Ser
     @Override
     @Transactional
     @MethodStats
-    default Mono<Collection<DTO>> updateMany(Collection<@Valid DTO> dtos, USER user) {
+    default Mono<@NonNull Collection<DTO>> updateMany(Collection<@Valid DTO> dtos, USER user) {
         return getManyByDto(dtos, user)
                 .flatMap(previousDtos -> this.doUpdateMany(previousDtos, dtos, user));
     }
@@ -67,13 +68,13 @@ public interface BaseUpdateManyDomainCrudService<ID extends Comparable<ID> & Ser
     @Override
     @Transactional
     @MethodStats
-    default Mono<Collection<DTO>> updateMany(Collection<DTO> previousDtos, Collection<@Valid DTO> dtos, USER user) {
+    default Mono<@NonNull Collection<DTO>> updateMany(Collection<DTO> previousDtos, Collection<@Valid DTO> dtos, USER user) {
         log.debug("UpdateMany, dto.size {}, user {}", dtos.size(), user);
 
         return this.doUpdateMany(previousDtos, dtos, user);
     }
 
-    private Mono<Collection<DTO>> doUpdateMany(Collection<DTO> previousDtos, Collection<@Valid DTO> dtos, USER user) {
+    private Mono<@NonNull Collection<DTO>> doUpdateMany(Collection<DTO> previousDtos, Collection<@Valid DTO> dtos, USER user) {
 
         return Flux.fromIterable(dtos)
                 .flatMap(dto -> {
