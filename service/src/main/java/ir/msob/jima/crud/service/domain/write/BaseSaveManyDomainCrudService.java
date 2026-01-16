@@ -5,13 +5,13 @@ import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import jakarta.validation.Valid;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -32,7 +32,7 @@ import java.util.Collection;
  * @param <R>    The type of repository used for CRUD operations.
  */
 public interface BaseSaveManyDomainCrudService<ID extends Comparable<ID> & Serializable, USER extends BaseUser, D extends BaseDomain<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>, R extends BaseDomainCrudRepository<ID, D, C>> extends ParentWriteDomainCrudService<ID, USER, D, DTO, C, R> {
-    Logger log = LoggerFactory.getLogger(BaseSaveManyDomainCrudService.class);
+    Logger logger = LoggerFactory.getLogger(BaseSaveManyDomainCrudService.class);
 
     /**
      * Executes a batch save operation for a collection of entities (DTOs). Each DTO is validated, prepared, and saved individually.
@@ -47,7 +47,7 @@ public interface BaseSaveManyDomainCrudService<ID extends Comparable<ID> & Seria
     @Transactional
     @MethodStats
     default Mono<@NonNull Collection<DTO>> saveMany(Collection<@Valid DTO> dtos, USER user) throws BadRequestException, DomainNotFoundException {
-        log.debug("SaveMany, dtos.size: {}, user {}", dtos.size(), user);
+        logger.debug("SaveMany, dtos.size: {}, user {}", dtos.size(), user);
 
         // Convert the collection of DTOs into a Flux stream
         // For each DTO in the stream, call the save method

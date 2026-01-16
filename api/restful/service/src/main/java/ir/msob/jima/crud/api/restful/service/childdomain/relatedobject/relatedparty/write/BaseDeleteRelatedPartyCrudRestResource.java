@@ -11,6 +11,8 @@ import ir.msob.jima.core.commons.element.Elements;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestResponse;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
@@ -19,8 +21,6 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.childdomain.relatedobject.ParentRelatedObjectCrudRestResource;
 import ir.msob.jima.crud.service.childdomain.BaseChildDomainCrudService;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,7 +39,7 @@ public interface BaseDeleteRelatedPartyCrudRestResource<
         CS extends BaseChildDomainCrudService<ID, USER, DTO>
         > extends ParentRelatedObjectCrudRestResource<ID, String, USER, CD, DTO, CS> {
 
-    Logger log = LoggerFactory.getLogger(BaseDeleteRelatedPartyCrudRestResource.class);
+    Logger logger = LoggerFactory.getLogger(BaseDeleteRelatedPartyCrudRestResource.class);
 
     @DeleteMapping("{parentId}/related-party")
     @ApiResponses(value = {
@@ -56,7 +56,7 @@ public interface BaseDeleteRelatedPartyCrudRestResource<
             Principal principal
     ) throws BadRequestException, DomainNotFoundException {
 
-        log.debug("REST request to delete related party by criteria, parentId {}, criteria {}", parentId, childCriteria);
+        logger.debug("REST request to delete related party by criteria, parentId {}, criteria {}", parentId, childCriteria);
 
         USER user = getUser(serverWebExchange, principal);
         return ResponseEntity.status(OperationsStatus.DELETE)

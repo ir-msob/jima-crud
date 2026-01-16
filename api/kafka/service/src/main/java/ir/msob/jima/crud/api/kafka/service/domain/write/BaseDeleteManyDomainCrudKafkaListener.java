@@ -7,6 +7,8 @@ import ir.msob.jima.core.commons.channel.message.CriteriaMessage;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
@@ -18,8 +20,6 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import jakarta.annotation.PostConstruct;
 import lombok.SneakyThrows;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
@@ -45,7 +45,7 @@ public interface BaseDeleteManyDomainCrudKafkaListener<
         S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudKafkaListener<ID, USER, D, DTO, C, R, S> {
 
-    Logger log = LoggerFactory.getLogger(BaseDeleteManyDomainCrudKafkaListener.class);
+    Logger logger = LoggerFactory.getLogger(BaseDeleteManyDomainCrudKafkaListener.class);
 
     /**
      * Initializes the listener for the DELETE_MANY operation.
@@ -70,7 +70,7 @@ public interface BaseDeleteManyDomainCrudKafkaListener<
     @Scope(operation = Operations.DELETE_MANY)
     @Transactional
     default void deleteMany(String dto) {
-        log.debug("Received message for delete many: dto {}", dto);
+        logger.debug("Received message for delete many: dto {}", dto);
         ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getChannelMessageCriteriaReferenceType());
         getService().deleteMany(message.getData().getCriteria(), message.getUser())
                 .subscribe(deletedIds -> sendCallbackIds(message, deletedIds, OperationsStatus.DELETE_MANY, message.getUser()));

@@ -6,14 +6,14 @@ import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import org.apache.commons.lang3.SerializationUtils;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
@@ -31,7 +31,7 @@ import java.io.Serializable;
  * @param <R>    The type of repository used for CRUD operations.
  */
 public interface BaseEditDomainCrudService<ID extends Comparable<ID> & Serializable, USER extends BaseUser, D extends BaseDomain<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>, R extends BaseDomainCrudRepository<ID, D, C>> extends ParentWriteDomainCrudService<ID, USER, D, DTO, C, R> {
-    Logger log = LoggerFactory.getLogger(BaseEditDomainCrudService.class);
+    Logger logger = LoggerFactory.getLogger(BaseEditDomainCrudService.class);
 
     /**
      * Executes an update operation on a single entity based on a JSON patch and an entity ID.
@@ -64,7 +64,7 @@ public interface BaseEditDomainCrudService<ID extends Comparable<ID> & Serializa
     @Transactional
     @MethodStats
     default Mono<@NonNull DTO> edit(C criteria, JsonPatch jsonPatch, USER user) throws BadRequestException, DomainNotFoundException {
-        log.debug("Edit, jsonPatch: {}, criteria: {}, user {}", jsonPatch, criteria, user);
+        logger.debug("Edit, jsonPatch: {}, criteria: {}, user {}", jsonPatch, criteria, user);
 
         return this.doEdit(criteria, jsonPatch, user);
     }

@@ -4,6 +4,8 @@ import io.grpc.stub.StreamObserver;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.scope.Scope;
@@ -12,8 +14,6 @@ import ir.msob.jima.crud.api.grpc.commons.IdMsg;
 import ir.msob.jima.crud.api.grpc.service.domain.ParentDomainCrudGrpcResource;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 
@@ -38,14 +38,14 @@ public interface BaseDeleteByIdDomainCrudGrpcResource<
         S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>>
         extends ParentDomainCrudGrpcResource<ID, USER, D, DTO, C, R, S> {
 
-    Logger log = LoggerFactory.getLogger(BaseDeleteByIdDomainCrudGrpcResource.class);
+    Logger logger = LoggerFactory.getLogger(BaseDeleteByIdDomainCrudGrpcResource.class);
 
 
     @MethodStats
     @Scope(operation = Operations.DELETE_BY_ID)
     @Override
     default void deleteById(IdMsg request, StreamObserver<IdMsg> responseObserver) {
-        log.debug("Request to delete by id: dto {}", request);
+        logger.debug("Request to delete by id: dto {}", request);
         getService().delete(convertToId(request.getId()), getUser())
                 .map(result -> IdMsg.newBuilder()
                         .setId(convertToString(result))

@@ -12,6 +12,8 @@ import ir.msob.jima.core.commons.element.Elements;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestResponse;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
@@ -21,8 +23,6 @@ import ir.msob.jima.crud.api.restful.service.childdomain.ParentChildCrudRestReso
 import ir.msob.jima.crud.service.childdomain.BaseChildDomainCrudService;
 import jakarta.validation.Valid;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -42,7 +42,7 @@ public interface BaseUpdateByIdRelatedActionCrudRestResource<
         CS extends BaseChildDomainCrudService<ID, USER, DTO>
         > extends ParentChildCrudRestResource<ID, USER, CD, DTO, CS> {
 
-    Logger log = LoggerFactory.getLogger(BaseUpdateByIdRelatedActionCrudRestResource.class);
+    Logger logger = LoggerFactory.getLogger(BaseUpdateByIdRelatedActionCrudRestResource.class);
 
     @PutMapping("{parentId}/related-action/" + Operations.UPDATE_BY_ID + "/{id}")
     @Operation(
@@ -64,7 +64,7 @@ public interface BaseUpdateByIdRelatedActionCrudRestResource<
             Principal principal
     ) throws BadRequestException, DomainNotFoundException {
 
-        log.debug(
+        logger.debug(
                 "REST request to update related action by ID, parentId {}, id {}, childDomain {}",
                 parentId, id, childDomain
         );

@@ -7,6 +7,8 @@ import ir.msob.jima.core.commons.channel.message.IdJsonPatchMessage;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
@@ -18,8 +20,6 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import jakarta.annotation.PostConstruct;
 import lombok.SneakyThrows;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
@@ -45,7 +45,7 @@ public interface BaseEditByIdDomainCrudKafkaListener<
         S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudKafkaListener<ID, USER, D, DTO, C, R, S> {
 
-    Logger log = LoggerFactory.getLogger(BaseEditByIdDomainCrudKafkaListener.class);
+    Logger logger = LoggerFactory.getLogger(BaseEditByIdDomainCrudKafkaListener.class);
 
     /**
      * Initializes the listener for the EDIT_BY_ID operation.
@@ -70,7 +70,7 @@ public interface BaseEditByIdDomainCrudKafkaListener<
     @Scope(operation = Operations.EDIT_BY_ID)
     @Transactional
     default void editById(String dto) {
-        log.debug("Received message for edit by id: dto {}", dto);
+        logger.debug("Received message for edit by id: dto {}", dto);
         ChannelMessage<USER, IdJsonPatchMessage<ID>> message = getObjectMapper().readValue(dto, getChannelMessageIdJsonPatchReferenceType());
         getService().edit(message.getData().getId(), message.getData().getJsonPatch(), message.getUser())
                 .subscribe(editedDto -> sendCallbackDto(message, editedDto, OperationsStatus.EDIT_BY_ID, message.getUser()));

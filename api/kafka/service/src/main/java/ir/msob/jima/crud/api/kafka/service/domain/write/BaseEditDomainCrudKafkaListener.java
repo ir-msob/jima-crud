@@ -7,6 +7,8 @@ import ir.msob.jima.core.commons.channel.message.JsonPatchMessage;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
@@ -18,8 +20,6 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import jakarta.annotation.PostConstruct;
 import lombok.SneakyThrows;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
@@ -45,7 +45,7 @@ public interface BaseEditDomainCrudKafkaListener<
         S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudKafkaListener<ID, USER, D, DTO, C, R, S> {
 
-    Logger log = LoggerFactory.getLogger(BaseEditDomainCrudKafkaListener.class);
+    Logger logger = LoggerFactory.getLogger(BaseEditDomainCrudKafkaListener.class);
 
     /**
      * Initializes the listener for the EDIT operation.
@@ -70,7 +70,7 @@ public interface BaseEditDomainCrudKafkaListener<
     @Scope(operation = Operations.EDIT)
     @Transactional
     default void edit(String dto) {
-        log.debug("Received message for edit: dto {}", dto);
+        logger.debug("Received message for edit: dto {}", dto);
         ChannelMessage<USER, JsonPatchMessage<ID, C>> message = getObjectMapper().readValue(dto, getChannelMessageJsonPatchReferenceType());
         getService().edit(message.getData().getCriteria(), message.getData().getJsonPatch(), message.getUser())
                 .subscribe(editedDto -> sendCallbackDto(message, editedDto, OperationsStatus.EDIT, message.getUser()));

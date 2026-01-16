@@ -7,6 +7,8 @@ import ir.msob.jima.core.commons.channel.message.CriteriaMessage;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
@@ -18,8 +20,6 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import jakarta.annotation.PostConstruct;
 import lombok.SneakyThrows;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
@@ -45,7 +45,7 @@ public interface BaseGetOneDomainCrudKafkaListener<
         S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudKafkaListener<ID, USER, D, DTO, C, R, S> {
 
-    Logger log = LoggerFactory.getLogger(BaseGetOneDomainCrudKafkaListener.class);
+    Logger logger = LoggerFactory.getLogger(BaseGetOneDomainCrudKafkaListener.class);
 
     /**
      * Initializes the listener for the GET_ONE operation.
@@ -70,7 +70,7 @@ public interface BaseGetOneDomainCrudKafkaListener<
     @Scope(operation = Operations.GET_ONE)
     @Transactional
     default void getOne(String dto) {
-        log.debug("Received message for get one: dto {}", dto);
+        logger.debug("Received message for get one: dto {}", dto);
         ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getChannelMessageCriteriaReferenceType());
         getService().getOne(message.getData().getCriteria(), message.getUser())
                 .subscribe(getOneDto -> sendCallbackDto(message, getOneDto, OperationsStatus.GET_ONE, message.getUser()));

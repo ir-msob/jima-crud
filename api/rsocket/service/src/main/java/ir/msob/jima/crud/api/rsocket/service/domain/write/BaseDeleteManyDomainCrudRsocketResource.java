@@ -8,6 +8,8 @@ import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.scope.Scope;
@@ -16,8 +18,6 @@ import ir.msob.jima.crud.api.rsocket.service.domain.ParentDomainCrudRsocketResou
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.write.BaseDeleteManyDomainCrudService;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -49,7 +49,7 @@ public interface BaseDeleteManyDomainCrudRsocketResource<
         R extends BaseDomainCrudRepository<ID, D, C>,
         S extends BaseDeleteManyDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudRsocketResource<ID, USER, D, DTO, C, R, S> {
-    Logger log = LoggerFactory.getLogger(BaseDeleteManyDomainCrudRsocketResource.class);
+    Logger logger = LoggerFactory.getLogger(BaseDeleteManyDomainCrudRsocketResource.class);
 
     /**
      * This method provides a RSocket API for deleting multiple domains based on a specific criteria.
@@ -66,7 +66,7 @@ public interface BaseDeleteManyDomainCrudRsocketResource<
     @MethodStats
     @Scope(operation = Operations.DELETE_MANY)
     default Mono<@NonNull Collection<ID>> deleteMany(@Payload String dto, @AuthenticationPrincipal Jwt principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
-        log.debug("RSocket request to delete many domain, dto {}", dto);
+        logger.debug("RSocket request to delete many domain, dto {}", dto);
         ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getChannelMessageCriteriaReferenceType());
 
         USER user = getUser(message.getUser(), principal);

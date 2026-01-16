@@ -12,6 +12,8 @@ import ir.msob.jima.core.commons.element.Elements;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestResponse;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
@@ -21,8 +23,6 @@ import ir.msob.jima.crud.api.restful.service.childdomain.relatedobject.ParentRel
 import ir.msob.jima.crud.service.childdomain.BaseChildDomainCrudService;
 import jakarta.validation.Valid;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -42,7 +42,7 @@ public interface BaseUpdateByRelatedIdRelatedDomainCrudRestResource<
         CS extends BaseChildDomainCrudService<ID, USER, DTO>
         > extends ParentRelatedObjectCrudRestResource<ID, ID, USER, CD, DTO, CS> {
 
-    Logger log = LoggerFactory.getLogger(BaseUpdateByRelatedIdRelatedDomainCrudRestResource.class);
+    Logger logger = LoggerFactory.getLogger(BaseUpdateByRelatedIdRelatedDomainCrudRestResource.class);
 
     @PutMapping("{parentId}/related-domain/related-id/{relatedId}")
     @Operation(
@@ -64,7 +64,7 @@ public interface BaseUpdateByRelatedIdRelatedDomainCrudRestResource<
             Principal principal
     ) throws BadRequestException, DomainNotFoundException {
 
-        log.debug("REST request to update related domain by relatedId, parentId {}, relatedId {}, childDomain {}", parentId, relatedId, childDomain);
+        logger.debug("REST request to update related domain by relatedId, parentId {}, relatedId {}, childDomain {}", parentId, relatedId, childDomain);
 
         USER user = getUser(serverWebExchange, principal);
         return ResponseEntity.status(OperationsStatus.UPDATE_BY_RELATED_ID)

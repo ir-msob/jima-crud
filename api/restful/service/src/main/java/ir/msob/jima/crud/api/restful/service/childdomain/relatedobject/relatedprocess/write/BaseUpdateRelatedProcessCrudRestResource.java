@@ -12,6 +12,8 @@ import ir.msob.jima.core.commons.element.Elements;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestResponse;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
@@ -21,8 +23,6 @@ import ir.msob.jima.crud.api.restful.service.childdomain.relatedobject.ParentRel
 import ir.msob.jima.crud.service.childdomain.BaseChildDomainCrudService;
 import jakarta.validation.Valid;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -42,7 +42,7 @@ public interface BaseUpdateRelatedProcessCrudRestResource<
         CS extends BaseChildDomainCrudService<ID, USER, DTO>
         > extends ParentRelatedObjectCrudRestResource<ID, String, USER, CD, DTO, CS> {
 
-    Logger log = LoggerFactory.getLogger(BaseUpdateRelatedProcessCrudRestResource.class);
+    Logger logger = LoggerFactory.getLogger(BaseUpdateRelatedProcessCrudRestResource.class);
 
     @Operation(summary = "Update a related process", description = "Update a related process child domain for a given parent ID")
     @PutMapping("{parentId}/related-process")
@@ -60,7 +60,7 @@ public interface BaseUpdateRelatedProcessCrudRestResource<
             ServerWebExchange serverWebExchange,
             Principal principal
     ) throws BadRequestException, DomainNotFoundException {
-        log.debug("REST request to update childdomain process, parentId {}, childDomain {}, childCriteria {}", parentId, childDomain, childCriteria);
+        logger.debug("REST request to update childdomain process, parentId {}, childDomain {}, childCriteria {}", parentId, childDomain, childCriteria);
 
         USER user = getUser(serverWebExchange, principal);
         return ResponseEntity.status(OperationsStatus.UPDATE)

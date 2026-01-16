@@ -4,6 +4,8 @@ import io.grpc.stub.StreamObserver;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.scope.Scope;
@@ -12,8 +14,6 @@ import ir.msob.jima.crud.api.grpc.commons.DtoMsg;
 import ir.msob.jima.crud.api.grpc.service.domain.ParentDomainCrudGrpcResource;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 
@@ -38,14 +38,14 @@ public interface BaseUpdateDomainCrudGrpcResource<
         S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>>
         extends ParentDomainCrudGrpcResource<ID, USER, D, DTO, C, R, S> {
 
-    Logger log = LoggerFactory.getLogger(BaseUpdateDomainCrudGrpcResource.class);
+    Logger logger = LoggerFactory.getLogger(BaseUpdateDomainCrudGrpcResource.class);
 
 
     @MethodStats
     @Scope(operation = Operations.UPDATE)
     @Override
     default void update(DtoMsg request, StreamObserver<DtoMsg> responseObserver) {
-        log.debug("Request to update: dto {}", request);
+        logger.debug("Request to update: dto {}", request);
         getService().update(convertToDto(request.getDto()), getUser())
                 .map(result -> DtoMsg.newBuilder()
                         .setDto(convertToString(result))

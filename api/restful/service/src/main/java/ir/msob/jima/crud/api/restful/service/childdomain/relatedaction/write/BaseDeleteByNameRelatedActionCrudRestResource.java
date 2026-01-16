@@ -12,6 +12,8 @@ import ir.msob.jima.core.commons.element.Elements;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestResponse;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
@@ -20,8 +22,6 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.api.restful.service.childdomain.ParentChildCrudRestResource;
 import ir.msob.jima.crud.service.childdomain.BaseChildDomainCrudService;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,7 +40,7 @@ public interface BaseDeleteByNameRelatedActionCrudRestResource<
         CS extends BaseChildDomainCrudService<ID, USER, DTO>
         > extends ParentChildCrudRestResource<ID, USER, CD, DTO, CS> {
 
-    Logger log = LoggerFactory.getLogger(BaseDeleteByNameRelatedActionCrudRestResource.class);
+    Logger logger = LoggerFactory.getLogger(BaseDeleteByNameRelatedActionCrudRestResource.class);
 
     @DeleteMapping("{parentId}/related-action/" + Operations.DELETE_BY_NAME + "/{name}")
     @Operation(
@@ -61,7 +61,7 @@ public interface BaseDeleteByNameRelatedActionCrudRestResource<
             Principal principal
     ) throws BadRequestException, DomainNotFoundException {
 
-        log.debug("REST request to delete related action by name, parentId {}, name {}", parentId, name);
+        logger.debug("REST request to delete related action by name, parentId {}, name {}", parentId, name);
 
         USER user = getUser(serverWebExchange, principal);
         return ResponseEntity.status(OperationsStatus.DELETE_BY_NAME)

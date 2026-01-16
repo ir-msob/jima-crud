@@ -7,6 +7,8 @@ import ir.msob.jima.core.commons.channel.message.DtosMessage;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
@@ -18,8 +20,6 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import jakarta.annotation.PostConstruct;
 import lombok.SneakyThrows;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
@@ -45,7 +45,7 @@ public interface BaseUpdateManyDomainCrudKafkaListener<
         S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudKafkaListener<ID, USER, D, DTO, C, R, S> {
 
-    Logger log = LoggerFactory.getLogger(BaseUpdateManyDomainCrudKafkaListener.class);
+    Logger logger = LoggerFactory.getLogger(BaseUpdateManyDomainCrudKafkaListener.class);
 
     /**
      * Initializes the listener for the UPDATE_MANY operation.
@@ -70,7 +70,7 @@ public interface BaseUpdateManyDomainCrudKafkaListener<
     @Scope(operation = Operations.UPDATE_MANY)
     @Transactional
     default void updateMany(String dto) {
-        log.debug("Received message for update many: dto {}", dto);
+        logger.debug("Received message for update many: dto {}", dto);
         // Parse the message from the JSON string
         ChannelMessage<USER, DtosMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getChannelMessageDtosReferenceType());
         // Call the service to update the entities and send a callback with the result

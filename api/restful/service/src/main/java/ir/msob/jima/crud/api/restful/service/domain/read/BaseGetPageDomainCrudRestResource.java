@@ -11,6 +11,8 @@ import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestResponse;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
@@ -22,8 +24,6 @@ import ir.msob.jima.crud.api.restful.service.domain.ParentDomainCrudRestResource
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.read.BaseGetPageDomainCrudService;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.server.ServerWebExchange;
@@ -53,7 +53,7 @@ public interface BaseGetPageDomainCrudRestResource<
         S extends BaseGetPageDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudRestResource<ID, USER, D, DTO, C, R, S> {
 
-    Logger log = LoggerFactory.getLogger(BaseGetPageDomainCrudRestResource.class);
+    Logger logger = LoggerFactory.getLogger(BaseGetPageDomainCrudRestResource.class);
 
     @GetMapping
     @Operation(summary = "Get page of domains by criteria", description = "Returns a page of domain DTOs matching the given criteria")
@@ -64,7 +64,7 @@ public interface BaseGetPageDomainCrudRestResource<
     @MethodStats
     @Scope(operation = Operations.GET_PAGE)
     default ResponseEntity<@NonNull Mono<@NonNull PageDto<DTO>>> getPage(C criteria, PageableDto pageable, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
-        log.debug("REST request to get page of domains with criteria: {}", criteria);
+        logger.debug("REST request to get page of domains with criteria: {}", criteria);
 
         USER user = getUser(serverWebExchange, principal);
         Mono<@NonNull PageDto<DTO>> res = this.getService().getPage(criteria, pageable.toPageable(), user)

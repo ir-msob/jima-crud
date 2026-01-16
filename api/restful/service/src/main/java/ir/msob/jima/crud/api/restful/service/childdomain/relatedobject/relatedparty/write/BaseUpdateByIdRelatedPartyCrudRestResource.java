@@ -11,6 +11,8 @@ import ir.msob.jima.core.commons.element.Elements;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestResponse;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
@@ -20,8 +22,6 @@ import ir.msob.jima.crud.api.restful.service.childdomain.relatedobject.ParentRel
 import ir.msob.jima.crud.service.childdomain.BaseChildDomainCrudService;
 import jakarta.validation.Valid;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -41,7 +41,7 @@ public interface BaseUpdateByIdRelatedPartyCrudRestResource<
         CS extends BaseChildDomainCrudService<ID, USER, DTO>
         > extends ParentRelatedObjectCrudRestResource<ID, String, USER, CD, DTO, CS> {
 
-    Logger log = LoggerFactory.getLogger(BaseUpdateByIdRelatedPartyCrudRestResource.class);
+    Logger logger = LoggerFactory.getLogger(BaseUpdateByIdRelatedPartyCrudRestResource.class);
 
     @PutMapping("{parentId}/related-party/{id}")
     @ApiResponses(value = {
@@ -59,7 +59,7 @@ public interface BaseUpdateByIdRelatedPartyCrudRestResource<
             Principal principal
     ) throws BadRequestException, DomainNotFoundException {
 
-        log.debug("REST request to update childdomain party, parentId {}, id {}, childDomain {}", parentId, id, childDomain);
+        logger.debug("REST request to update childdomain party, parentId {}, id {}, childDomain {}", parentId, id, childDomain);
 
         USER user = getUser(serverWebExchange, principal);
         return ResponseEntity.status(OperationsStatus.UPDATE_BY_ID)

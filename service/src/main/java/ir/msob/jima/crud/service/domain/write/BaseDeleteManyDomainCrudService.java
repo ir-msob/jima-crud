@@ -5,13 +5,13 @@ import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
@@ -31,7 +31,7 @@ import java.util.Collection;
  * @param <R>    The type of repository used for CRUD operations.
  */
 public interface BaseDeleteManyDomainCrudService<ID extends Comparable<ID> & Serializable, USER extends BaseUser, D extends BaseDomain<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>, R extends BaseDomainCrudRepository<ID, D, C>> extends ParentWriteDomainCrudService<ID, USER, D, DTO, C, R> {
-    Logger log = LoggerFactory.getLogger(BaseDeleteManyDomainCrudService.class);
+    Logger logger = LoggerFactory.getLogger(BaseDeleteManyDomainCrudService.class);
 
     /**
      * Executes the delete operation to remove multiple entities based on a collection of IDs.
@@ -62,7 +62,7 @@ public interface BaseDeleteManyDomainCrudService<ID extends Comparable<ID> & Ser
     @Transactional
     @MethodStats
     default Mono<@NonNull Collection<ID>> deleteMany(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
-        log.debug("DeleteMany, criteria: {}, user: {}", criteria, user);
+        logger.debug("DeleteMany, criteria: {}, user: {}", criteria, user);
 
         return this.doDeleteMany(criteria, user);
     }

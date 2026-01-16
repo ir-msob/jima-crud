@@ -12,6 +12,8 @@ import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestResponse;
 import ir.msob.jima.core.commons.exception.conflict.ConflictResponse;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
@@ -21,8 +23,6 @@ import ir.msob.jima.crud.api.restful.service.domain.ParentDomainCrudRestResource
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.write.BaseUpdateDomainCrudService;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -53,7 +53,7 @@ public interface BaseUpdateDomainCrudRestResource<
         S extends BaseUpdateDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudRestResource<ID, USER, D, DTO, C, R, S> {
 
-    Logger log = LoggerFactory.getLogger(BaseUpdateDomainCrudRestResource.class);
+    Logger logger = LoggerFactory.getLogger(BaseUpdateDomainCrudRestResource.class);
 
     @PutMapping(Operations.UPDATE)
     @Operation(summary = "Update domain", description = "Updates an existing domain using the provided DTO")
@@ -66,7 +66,7 @@ public interface BaseUpdateDomainCrudRestResource<
     @Scope(operation = Operations.UPDATE)
     default ResponseEntity<@NonNull Mono<@NonNull DTO>> update(@RequestBody DTO dto, ServerWebExchange serverWebExchange, Principal principal)
             throws BadRequestException, DomainNotFoundException {
-        log.debug("REST request to update domain, dto: {}", dto);
+        logger.debug("REST request to update domain, dto: {}", dto);
 
         USER user = getUser(serverWebExchange, principal);
         Mono<@NonNull DTO> res = this.getService().update(dto, user);

@@ -7,6 +7,8 @@ import ir.msob.jima.core.commons.channel.message.IdMessage;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
@@ -18,8 +20,6 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import jakarta.annotation.PostConstruct;
 import lombok.SneakyThrows;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
@@ -45,7 +45,7 @@ public interface BaseDeleteByIdDomainCrudKafkaListener<
         S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudKafkaListener<ID, USER, D, DTO, C, R, S> {
 
-    Logger log = LoggerFactory.getLogger(BaseDeleteByIdDomainCrudKafkaListener.class);
+    Logger logger = LoggerFactory.getLogger(BaseDeleteByIdDomainCrudKafkaListener.class);
 
     /**
      * Initializes the listener for the DELETE_BY_ID operation.
@@ -70,7 +70,7 @@ public interface BaseDeleteByIdDomainCrudKafkaListener<
     @Scope(operation = Operations.DELETE_BY_ID)
     @Transactional
     default void deleteById(String dto) {
-        log.debug("Received message for delete by id: dto {}", dto);
+        logger.debug("Received message for delete by id: dto {}", dto);
         ChannelMessage<USER, IdMessage<ID>> message = getObjectMapper().readValue(dto, getChannelMessageIdReferenceType());
         getService().delete(message.getData().getId(), message.getUser())
                 .subscribe(deletedId -> sendCallbackId(message, deletedId, OperationsStatus.DELETE_BY_ID, message.getUser()));

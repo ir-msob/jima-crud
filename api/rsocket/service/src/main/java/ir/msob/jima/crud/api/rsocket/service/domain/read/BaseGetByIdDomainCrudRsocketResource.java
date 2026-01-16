@@ -8,6 +8,8 @@ import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.scope.Scope;
@@ -16,8 +18,6 @@ import ir.msob.jima.crud.api.rsocket.service.domain.ParentDomainCrudRsocketResou
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.read.BaseGetOneDomainCrudService;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -49,7 +49,7 @@ public interface BaseGetByIdDomainCrudRsocketResource<
         S extends BaseGetOneDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudRsocketResource<ID, USER, D, DTO, C, R, S> {
 
-    Logger log = LoggerFactory.getLogger(BaseGetByIdDomainCrudRsocketResource.class);
+    Logger logger = LoggerFactory.getLogger(BaseGetByIdDomainCrudRsocketResource.class);
 
     /**
      * It validates the operation, retrieves the user, and then calls the service to get the domain.
@@ -67,7 +67,7 @@ public interface BaseGetByIdDomainCrudRsocketResource<
     @MethodStats
     @Scope(operation = Operations.GET_BY_ID)
     default Mono<@NonNull DTO> getById(@Payload String dto, @AuthenticationPrincipal Jwt principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
-        log.debug("RSocket request to get by id domain, dto {}", dto);
+        logger.debug("RSocket request to get by id domain, dto {}", dto);
         ChannelMessage<USER, IdMessage<ID>> message = getObjectMapper().readValue(dto, getChannelMessageIdReferenceType());
 
         USER user = getUser(message.getUser(), principal);

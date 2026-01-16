@@ -8,6 +8,8 @@ import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.scope.Scope;
@@ -16,8 +18,6 @@ import ir.msob.jima.crud.api.rsocket.service.domain.ParentDomainCrudRsocketResou
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.write.BaseUpdateManyDomainCrudService;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -49,7 +49,7 @@ public interface BaseUpdateManyDomainCrudRsocketResource<
         R extends BaseDomainCrudRepository<ID, D, C>,
         S extends BaseUpdateManyDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudRsocketResource<ID, USER, D, DTO, C, R, S> {
-    Logger log = LoggerFactory.getLogger(BaseUpdateManyDomainCrudRsocketResource.class);
+    Logger logger = LoggerFactory.getLogger(BaseUpdateManyDomainCrudRsocketResource.class);
 
     /**
      * This method provides a RSocket API for updating multiple domains.
@@ -67,7 +67,7 @@ public interface BaseUpdateManyDomainCrudRsocketResource<
     @Scope(operation = Operations.UPDATE_MANY)
     default Mono<@NonNull Collection<DTO>> updateMany(@Payload String dto, @AuthenticationPrincipal Jwt principal)
             throws BadRequestException, DomainNotFoundException, JsonProcessingException {
-        log.debug("RSocket request to update many domain, dtos : {}", dto);
+        logger.debug("RSocket request to update many domain, dtos : {}", dto);
         ChannelMessage<USER, DtosMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getChannelMessageDtosReferenceType());
 
         USER user = getUser(message.getUser(), principal);

@@ -10,6 +10,8 @@ import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.exception.runtime.CommonRuntimeException;
 import ir.msob.jima.core.commons.filter.Filter;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.GenericTypeUtil;
@@ -23,8 +25,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.test.annotation.Rollback;
 
 import java.io.Serializable;
@@ -63,7 +63,7 @@ public interface ParentChildCrudResourceTest<
         , CDP extends BaseChildCrudDataProvider<ID, USER, CD, DTO, CS>>
         extends BaseCoreResourceTest<ID, USER, D, DTO, C> {
 
-    Logger log = LoggerFactory.getLogger(ParentChildCrudResourceTest.class);
+    Logger logger = LoggerFactory.getLogger(ParentChildCrudResourceTest.class);
 
 
     default Class<CD> getChildDomainClass() {

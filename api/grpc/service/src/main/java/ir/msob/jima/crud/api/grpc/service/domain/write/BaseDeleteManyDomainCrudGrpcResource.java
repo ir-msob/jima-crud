@@ -4,6 +4,8 @@ import io.grpc.stub.StreamObserver;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.scope.Scope;
@@ -13,8 +15,6 @@ import ir.msob.jima.crud.api.grpc.commons.IdsMsg;
 import ir.msob.jima.crud.api.grpc.service.domain.ParentDomainCrudGrpcResource;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 
@@ -39,14 +39,14 @@ public interface BaseDeleteManyDomainCrudGrpcResource<
         S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>>
         extends ParentDomainCrudGrpcResource<ID, USER, D, DTO, C, R, S> {
 
-    Logger log = LoggerFactory.getLogger(BaseDeleteManyDomainCrudGrpcResource.class);
+    Logger logger = LoggerFactory.getLogger(BaseDeleteManyDomainCrudGrpcResource.class);
 
 
     @MethodStats
     @Scope(operation = Operations.DELETE_MANY)
     @Override
     default void deleteMany(CriteriaMsg request, StreamObserver<IdsMsg> responseObserver) {
-        log.debug("Request to delete many: dto {}", request);
+        logger.debug("Request to delete many: dto {}", request);
         getService().deleteMany(convertToCriteria(request.getCriteria()), getUser())
                 .map(result -> IdsMsg.newBuilder()
                         .addAllIds(convertToStrings(result))

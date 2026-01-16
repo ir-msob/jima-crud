@@ -12,6 +12,8 @@ import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestResponse;
 import ir.msob.jima.core.commons.exception.conflict.ConflictResponse;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
@@ -21,8 +23,6 @@ import ir.msob.jima.crud.api.restful.service.domain.ParentDomainCrudRestResource
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.write.BaseSaveDomainCrudService;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -53,7 +53,7 @@ public interface BaseSaveDomainCrudRestResource<
         S extends BaseSaveDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudRestResource<ID, USER, D, DTO, C, R, S> {
 
-    Logger log = LoggerFactory.getLogger(BaseSaveDomainCrudRestResource.class);
+    Logger logger = LoggerFactory.getLogger(BaseSaveDomainCrudRestResource.class);
 
     @PostMapping
     @Operation(summary = "Save a new domain", description = "Creates a new domain using the provided DTO")
@@ -66,7 +66,7 @@ public interface BaseSaveDomainCrudRestResource<
     @Scope(operation = Operations.SAVE)
     default ResponseEntity<@NonNull Mono<@NonNull DTO>> save(@RequestBody DTO dto, ServerWebExchange serverWebExchange, Principal principal)
             throws BadRequestException, DomainNotFoundException {
-        log.debug("REST request to save new domain, dto: {}", dto);
+        logger.debug("REST request to save new domain, dto: {}", dto);
 
         USER user = getUser(serverWebExchange, principal);
         Mono<@NonNull DTO> res = this.getService().save(dto, user);

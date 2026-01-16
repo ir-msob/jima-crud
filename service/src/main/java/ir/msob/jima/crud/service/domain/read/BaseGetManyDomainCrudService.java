@@ -5,13 +5,13 @@ import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
@@ -37,7 +37,7 @@ public interface BaseGetManyDomainCrudService<ID extends Comparable<ID> & Serial
     /**
      * The logger for this service class.
      */
-    Logger log = LoggerFactory.getLogger(BaseGetManyDomainCrudService.class);
+    Logger logger = LoggerFactory.getLogger(BaseGetManyDomainCrudService.class);
 
     /**
      * Retrieve multiple DTO entities based on a collection of entity IDs.
@@ -71,7 +71,7 @@ public interface BaseGetManyDomainCrudService<ID extends Comparable<ID> & Serial
     @MethodStats
     @Override
     default Mono<@NonNull Collection<DTO>> getMany(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
-        log.debug("GetMany, criteria: {}, user: {}", criteria, user);
+        logger.debug("GetMany, criteria: {}, user: {}", criteria, user);
 
         return this.doGetMany(criteria, user);
     }

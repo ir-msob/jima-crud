@@ -5,13 +5,13 @@ import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
@@ -34,7 +34,7 @@ public interface BaseGetOneDomainCrudService<ID extends Comparable<ID> & Seriali
         C extends BaseCriteria<ID>,
         R extends BaseDomainCrudRepository<ID, D, C>> extends ParentReadDomainCrudService<ID, USER, D, DTO, C, R> {
 
-    Logger log = LoggerFactory.getLogger(BaseGetOneDomainCrudService.class);
+    Logger logger = LoggerFactory.getLogger(BaseGetOneDomainCrudService.class);
 
     /**
      * Retrieve a single DTO entity based on an entity ID.
@@ -64,7 +64,7 @@ public interface BaseGetOneDomainCrudService<ID extends Comparable<ID> & Seriali
     @MethodStats
     @Override
     default Mono<@NonNull DTO> getOne(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
-        log.debug("GetOne, criteria: {}, user: {}", criteria, user);
+        logger.debug("GetOne, criteria: {}, user: {}", criteria, user);
 
         return this.doGetOne(criteria, user);
     }

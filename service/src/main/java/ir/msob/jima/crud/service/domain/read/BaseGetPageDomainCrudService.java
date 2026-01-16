@@ -5,12 +5,12 @@ import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -39,7 +39,7 @@ public interface BaseGetPageDomainCrudService<ID extends Comparable<ID> & Serial
     /**
      * The logger for this service class.
      */
-    Logger log = LoggerFactory.getLogger(BaseGetPageDomainCrudService.class);
+    Logger logger = LoggerFactory.getLogger(BaseGetPageDomainCrudService.class);
 
     /**
      * Retrieve a page of DTO entities based on specific criteria and pagination.
@@ -69,7 +69,7 @@ public interface BaseGetPageDomainCrudService<ID extends Comparable<ID> & Serial
     @Transactional(readOnly = true)
     @MethodStats
     default Mono<@NonNull Page<@NonNull DTO>> getPage(C criteria, Pageable pageable, USER user) throws DomainNotFoundException, BadRequestException {
-        log.debug("GetPage, criteria: {}, user: {}", criteria, user);
+        logger.debug("GetPage, criteria: {}, user: {}", criteria, user);
 
         return this.doGetPage(criteria, pageable, user);
     }

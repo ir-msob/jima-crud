@@ -7,6 +7,8 @@ import ir.msob.jima.core.commons.channel.message.DtoMessage;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
@@ -18,8 +20,6 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import jakarta.annotation.PostConstruct;
 import lombok.SneakyThrows;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
@@ -45,7 +45,7 @@ public interface BaseSaveDomainCrudKafkaListener<
         S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudKafkaListener<ID, USER, D, DTO, C, R, S> {
 
-    Logger log = LoggerFactory.getLogger(BaseSaveDomainCrudKafkaListener.class);
+    Logger logger = LoggerFactory.getLogger(BaseSaveDomainCrudKafkaListener.class);
 
     /**
      * Initializes the listener for the SAVE operation.
@@ -70,7 +70,7 @@ public interface BaseSaveDomainCrudKafkaListener<
     @Scope(operation = Operations.SAVE)
     @Transactional
     default void save(String dto) {
-        log.debug("Received message for save: dto {}", dto);
+        logger.debug("Received message for save: dto {}", dto);
         ChannelMessage<USER, DtoMessage<ID, DTO>> message = getObjectMapper().readValue(dto, getChannelMessageDtoReferenceType());
         getService().save(message.getData().getDto(), message.getUser())
                 .subscribe(savedDto -> sendCallbackDto(message, savedDto, OperationsStatus.SAVE, message.getUser()));

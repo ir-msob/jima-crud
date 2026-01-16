@@ -8,6 +8,8 @@ import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.scope.Scope;
@@ -16,8 +18,6 @@ import ir.msob.jima.crud.api.rsocket.service.domain.ParentDomainCrudRsocketResou
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.read.BaseGetOneDomainCrudService;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -48,7 +48,7 @@ public interface BaseGetOneDomainCrudRsocketResource<
         R extends BaseDomainCrudRepository<ID, D, C>,
         S extends BaseGetOneDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudRsocketResource<ID, USER, D, DTO, C, R, S> {
-    Logger log = LoggerFactory.getLogger(BaseGetOneDomainCrudRsocketResource.class);
+    Logger logger = LoggerFactory.getLogger(BaseGetOneDomainCrudRsocketResource.class);
 
     /**
      * This method provides a RSocket API for retrieving a single domain based on a specific criteria.
@@ -65,7 +65,7 @@ public interface BaseGetOneDomainCrudRsocketResource<
     @MethodStats
     @Scope(operation = Operations.GET_ONE)
     default Mono<@NonNull DTO> getOne(@Payload String dto, @AuthenticationPrincipal Jwt principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
-        log.debug("RSocket request to get one domain, dto {}", dto);
+        logger.debug("RSocket request to get one domain, dto {}", dto);
         ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getChannelMessageCriteriaReferenceType());
 
         USER user = getUser(message.getUser(), principal);

@@ -7,6 +7,8 @@ import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.scope.Scope;
@@ -16,8 +18,6 @@ import ir.msob.jima.crud.api.rsocket.service.domain.ParentDomainCrudRsocketResou
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.read.BaseCountAllDomainCrudService;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -49,7 +49,7 @@ public interface BaseCountAllDomainCrudRsocketResource<
         R extends BaseDomainCrudRepository<ID, D, C>,
         S extends BaseCountAllDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudRsocketResource<ID, USER, D, DTO, C, R, S> {
-    Logger log = LoggerFactory.getLogger(BaseCountAllDomainCrudRsocketResource.class);
+    Logger logger = LoggerFactory.getLogger(BaseCountAllDomainCrudRsocketResource.class);
 
     /**
      * This method provides a RSocket API for counting all domains of a specific type.
@@ -66,7 +66,7 @@ public interface BaseCountAllDomainCrudRsocketResource<
     @MethodStats
     @Scope(operation = Operations.COUNT_ALL)
     default Mono<@NonNull Long> countAll(@Payload String dto, @AuthenticationPrincipal Jwt principal) throws BadRequestException, DomainNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, JsonProcessingException {
-        log.debug("RSocket request to count all dto {}", dto);
+        logger.debug("RSocket request to count all dto {}", dto);
         ChannelMessage<USER, ModelType> message = getObjectMapper().readValue(dto, getChannelMessageModelTypeReferenceType());
 
         USER user = getUser(message.getUser(), principal);

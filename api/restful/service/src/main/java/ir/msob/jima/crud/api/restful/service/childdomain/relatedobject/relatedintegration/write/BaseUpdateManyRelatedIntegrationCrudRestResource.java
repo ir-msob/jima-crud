@@ -10,6 +10,8 @@ import ir.msob.jima.core.commons.element.Elements;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestResponse;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
@@ -19,8 +21,6 @@ import ir.msob.jima.crud.api.restful.service.childdomain.relatedobject.ParentRel
 import ir.msob.jima.crud.service.childdomain.BaseChildDomainCrudService;
 import jakarta.validation.Valid;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -40,7 +40,7 @@ public interface BaseUpdateManyRelatedIntegrationCrudRestResource<
         CS extends BaseChildDomainCrudService<ID, USER, DTO>
         > extends ParentRelatedObjectCrudRestResource<ID, String, USER, CD, DTO, CS> {
 
-    Logger log = LoggerFactory.getLogger(BaseUpdateManyRelatedIntegrationCrudRestResource.class);
+    Logger logger = LoggerFactory.getLogger(BaseUpdateManyRelatedIntegrationCrudRestResource.class);
 
     @PutMapping("{parentId}/related-integration/" + Operations.UPDATE_MANY)
     @ApiResponses(value = {
@@ -57,7 +57,7 @@ public interface BaseUpdateManyRelatedIntegrationCrudRestResource<
             Principal principal
     ) throws BadRequestException, DomainNotFoundException {
 
-        log.debug("REST request to update many related integrations, parentId {}, childDomains {}", parentId, childDomains);
+        logger.debug("REST request to update many related integrations, parentId {}, childDomains {}", parentId, childDomains);
 
         USER user = getUser(serverWebExchange, principal);
         return ResponseEntity.status(OperationsStatus.UPDATE_MANY)

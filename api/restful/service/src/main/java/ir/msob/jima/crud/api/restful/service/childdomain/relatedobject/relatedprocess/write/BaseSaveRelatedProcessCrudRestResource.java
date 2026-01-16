@@ -11,6 +11,8 @@ import ir.msob.jima.core.commons.element.Elements;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestResponse;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
@@ -20,8 +22,6 @@ import ir.msob.jima.crud.api.restful.service.childdomain.relatedobject.ParentRel
 import ir.msob.jima.crud.service.childdomain.BaseChildDomainCrudService;
 import jakarta.validation.Valid;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,7 +40,7 @@ public interface BaseSaveRelatedProcessCrudRestResource<
         CS extends BaseChildDomainCrudService<ID, USER, DTO>
         > extends ParentRelatedObjectCrudRestResource<ID, String, USER, CD, DTO, CS> {
 
-    Logger log = LoggerFactory.getLogger(BaseSaveRelatedProcessCrudRestResource.class);
+    Logger logger = LoggerFactory.getLogger(BaseSaveRelatedProcessCrudRestResource.class);
 
     @Operation(summary = "Save related process", description = "Save a single related process child domain for a given parent ID")
     @PostMapping("{parentId}/related-process")
@@ -57,7 +57,7 @@ public interface BaseSaveRelatedProcessCrudRestResource<
             ServerWebExchange serverWebExchange,
             Principal principal
     ) throws BadRequestException, DomainNotFoundException {
-        log.debug("REST request to save childdomain process, parentId {}, childDomain {}", parentId, childDomain);
+        logger.debug("REST request to save childdomain process, parentId {}, childDomain {}", parentId, childDomain);
 
         USER user = getUser(serverWebExchange, principal);
         return ResponseEntity.status(OperationsStatus.SAVE)

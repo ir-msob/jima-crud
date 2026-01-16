@@ -11,6 +11,8 @@ import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestResponse;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
@@ -20,8 +22,6 @@ import ir.msob.jima.crud.api.restful.service.domain.ParentDomainCrudRestResource
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.write.BaseDeleteDomainCrudService;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -52,7 +52,7 @@ public interface BaseDeleteByIdDomainCrudRestResource<
         S extends BaseDeleteDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudRestResource<ID, USER, D, DTO, C, R, S> {
 
-    Logger log = LoggerFactory.getLogger(BaseDeleteByIdDomainCrudRestResource.class);
+    Logger logger = LoggerFactory.getLogger(BaseDeleteByIdDomainCrudRestResource.class);
 
     @DeleteMapping("{id}")
     @Operation(summary = "Delete domain by ID", description = "Deletes a domain by its ID and returns the deleted ID")
@@ -64,7 +64,7 @@ public interface BaseDeleteByIdDomainCrudRestResource<
     @MethodStats
     @Scope(operation = Operations.DELETE_BY_ID)
     default ResponseEntity<@NonNull Mono<@NonNull ID>> deleteById(@PathVariable("id") ID id, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
-        log.debug("REST request to delete domain by ID: {}", id);
+        logger.debug("REST request to delete domain by ID: {}", id);
 
         USER user = getUser(serverWebExchange, principal);
         Mono<@NonNull ID> res = this.getService().delete(id, user);

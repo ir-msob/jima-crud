@@ -3,12 +3,12 @@ package ir.msob.jima.crud.test.domain;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.test.BaseCoreResourceTest;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 
@@ -36,7 +36,7 @@ public interface ParentDomainCrudResourceTest<
         DP extends BaseDomainCrudDataProvider<ID, USER, D, DTO, C, R, S>>
         extends BaseCoreResourceTest<ID, USER, D, DTO, C> {
 
-    Logger log = LoggerFactory.getLogger(ParentDomainCrudResourceTest.class);
+    Logger logger = LoggerFactory.getLogger(ParentDomainCrudResourceTest.class);
 
 
     /**

@@ -12,6 +12,8 @@ import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestResponse;
 import ir.msob.jima.core.commons.exception.conflict.ConflictResponse;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
@@ -21,8 +23,6 @@ import ir.msob.jima.crud.api.restful.service.domain.ParentDomainCrudRestResource
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.write.BaseUpdateManyDomainCrudService;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -54,7 +54,7 @@ public interface BaseUpdateManyDomainCrudRestResource<
         S extends BaseUpdateManyDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudRestResource<ID, USER, D, DTO, C, R, S> {
 
-    Logger log = LoggerFactory.getLogger(BaseUpdateManyDomainCrudRestResource.class);
+    Logger logger = LoggerFactory.getLogger(BaseUpdateManyDomainCrudRestResource.class);
 
     @PutMapping(Operations.UPDATE_MANY)
     @Operation(summary = "Update multiple domains", description = "Updates multiple existing domains using the provided DTOs")
@@ -67,7 +67,7 @@ public interface BaseUpdateManyDomainCrudRestResource<
     @Scope(operation = Operations.UPDATE_MANY)
     default ResponseEntity<@NonNull Mono<@NonNull Collection<DTO>>> updateList(@RequestBody Collection<DTO> dtos, ServerWebExchange serverWebExchange, Principal principal)
             throws BadRequestException, DomainNotFoundException {
-        log.debug("REST request to update many domains, dtos: {}", dtos);
+        logger.debug("REST request to update many domains, dtos: {}", dtos);
 
         USER user = getUser(serverWebExchange, principal);
         Mono<@NonNull Collection<DTO>> res = this.getService().updateMany(dtos, user);

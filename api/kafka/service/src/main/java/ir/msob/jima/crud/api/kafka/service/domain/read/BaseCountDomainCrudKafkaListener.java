@@ -7,6 +7,8 @@ import ir.msob.jima.core.commons.channel.message.CriteriaMessage;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
@@ -18,8 +20,6 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import jakarta.annotation.PostConstruct;
 import lombok.SneakyThrows;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
@@ -45,7 +45,7 @@ public interface BaseCountDomainCrudKafkaListener<
         S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudKafkaListener<ID, USER, D, DTO, C, R, S> {
 
-    Logger log = LoggerFactory.getLogger(BaseCountDomainCrudKafkaListener.class);
+    Logger logger = LoggerFactory.getLogger(BaseCountDomainCrudKafkaListener.class);
 
     /**
      * Initializes the listener for the COUNT operation.
@@ -70,7 +70,7 @@ public interface BaseCountDomainCrudKafkaListener<
     @Scope(operation = Operations.COUNT)
     @Transactional
     default void count(String dto) {
-        log.debug("Received message for count: dto {}", dto);
+        logger.debug("Received message for count: dto {}", dto);
         ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getChannelMessageCriteriaReferenceType());
         getService().count(message.getData().getCriteria(), message.getUser())
                 .subscribe(count -> sendCallbackCount(message, count, OperationsStatus.COUNT, message.getUser()));

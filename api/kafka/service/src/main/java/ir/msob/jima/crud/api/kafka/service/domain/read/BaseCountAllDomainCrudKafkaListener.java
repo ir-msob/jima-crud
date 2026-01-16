@@ -6,6 +6,8 @@ import ir.msob.jima.core.commons.channel.ChannelMessage;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
@@ -18,8 +20,6 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import jakarta.annotation.PostConstruct;
 import lombok.SneakyThrows;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
@@ -45,7 +45,7 @@ public interface BaseCountAllDomainCrudKafkaListener<
         S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudKafkaListener<ID, USER, D, DTO, C, R, S> {
 
-    Logger log = LoggerFactory.getLogger(BaseCountAllDomainCrudKafkaListener.class);
+    Logger logger = LoggerFactory.getLogger(BaseCountAllDomainCrudKafkaListener.class);
 
     /**
      * Initializes the listener for the COUNT_ALL operation.
@@ -70,7 +70,7 @@ public interface BaseCountAllDomainCrudKafkaListener<
     @Scope(operation = Operations.COUNT_ALL)
     @Transactional
     default void countAll(String dto) {
-        log.debug("Received message for count all: dto {}", dto);
+        logger.debug("Received message for count all: dto {}", dto);
         ChannelMessage<USER, ModelType> message = getObjectMapper().readValue(dto, getChannelMessageModelTypeReferenceType());
         getService().countAll(message.getUser())
                 .subscribe(count -> sendCallbackCountAll(message, count, OperationsStatus.COUNT_ALL, message.getUser()));

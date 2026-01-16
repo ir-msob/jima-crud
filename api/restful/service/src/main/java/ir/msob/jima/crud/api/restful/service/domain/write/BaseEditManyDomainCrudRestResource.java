@@ -13,6 +13,8 @@ import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestResponse;
 import ir.msob.jima.core.commons.exception.conflict.ConflictResponse;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
@@ -22,8 +24,6 @@ import ir.msob.jima.crud.api.restful.service.domain.ParentDomainCrudRestResource
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.write.BaseEditManyDomainCrudService;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -56,7 +56,7 @@ public interface BaseEditManyDomainCrudRestResource<
         S extends BaseEditManyDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudRestResource<ID, USER, D, DTO, C, R, S> {
 
-    Logger log = LoggerFactory.getLogger(BaseEditManyDomainCrudRestResource.class);
+    Logger logger = LoggerFactory.getLogger(BaseEditManyDomainCrudRestResource.class);
 
     @PatchMapping(value = Operations.EDIT_MANY, consumes = "application/json-patch+json")
     @Operation(summary = "Edit multiple domains based on criteria", description = "Edits multiple domains partially using JSON Patch based on given criteria")
@@ -69,7 +69,7 @@ public interface BaseEditManyDomainCrudRestResource<
     @Scope(operation = Operations.EDIT_MANY)
     default ResponseEntity<@NonNull Mono<@NonNull Collection<DTO>>> editMany(@RequestBody String dto, C criteria, ServerWebExchange serverWebExchange, Principal principal)
             throws BadRequestException, DomainNotFoundException, IOException {
-        log.debug("REST request to edit many domains, dto: {}, criteria: {}", dto, criteria);
+        logger.debug("REST request to edit many domains, dto: {}, criteria: {}", dto, criteria);
 
         USER user = getUser(serverWebExchange, principal);
         Mono<@NonNull Collection<DTO>> res = this.getService().editMany(criteria, JsonPatch.fromJson(getService().getObjectMapper().readTree(dto)), user);

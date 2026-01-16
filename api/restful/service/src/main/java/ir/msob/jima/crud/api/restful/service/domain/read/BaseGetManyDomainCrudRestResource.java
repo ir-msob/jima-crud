@@ -11,6 +11,8 @@ import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestResponse;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
@@ -20,8 +22,6 @@ import ir.msob.jima.crud.api.restful.service.domain.ParentDomainCrudRestResource
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.read.BaseGetManyDomainCrudService;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.server.ServerWebExchange;
@@ -52,7 +52,7 @@ public interface BaseGetManyDomainCrudRestResource<
         S extends BaseGetManyDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudRestResource<ID, USER, D, DTO, C, R, S> {
 
-    Logger log = LoggerFactory.getLogger(BaseGetManyDomainCrudRestResource.class);
+    Logger logger = LoggerFactory.getLogger(BaseGetManyDomainCrudRestResource.class);
 
     @GetMapping(Operations.GET_MANY)
     @Operation(summary = "Get multiple domains by criteria", description = "Returns a collection of domain DTOs matching the given criteria")
@@ -63,7 +63,7 @@ public interface BaseGetManyDomainCrudRestResource<
     @MethodStats
     @Scope(operation = Operations.GET_MANY)
     default ResponseEntity<@NonNull Mono<@NonNull Collection<DTO>>> getMany(C criteria, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
-        log.debug("REST request to get many domains with criteria: {}", criteria);
+        logger.debug("REST request to get many domains with criteria: {}", criteria);
 
         USER user = getUser(serverWebExchange, principal);
         Mono<@NonNull Collection<DTO>> res = this.getService().getMany(criteria, user);

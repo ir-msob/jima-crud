@@ -7,6 +7,8 @@ import ir.msob.jima.core.commons.channel.message.CriteriaMessage;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
@@ -18,8 +20,6 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import jakarta.annotation.PostConstruct;
 import lombok.SneakyThrows;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
@@ -45,7 +45,7 @@ public interface BaseGetManyDomainCrudKafkaListener<
         S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudKafkaListener<ID, USER, D, DTO, C, R, S> {
 
-    Logger log = LoggerFactory.getLogger(BaseGetManyDomainCrudKafkaListener.class);
+    Logger logger = LoggerFactory.getLogger(BaseGetManyDomainCrudKafkaListener.class);
 
     /**
      * Initializes the listener for the GET_MANY operation.
@@ -70,7 +70,7 @@ public interface BaseGetManyDomainCrudKafkaListener<
     @Scope(operation = Operations.GET_MANY)
     @Transactional
     default void getMany(String dto) {
-        log.debug("Received message for get many: dto {}", dto);
+        logger.debug("Received message for get many: dto {}", dto);
         ChannelMessage<USER, CriteriaMessage<ID, C>> message = getObjectMapper().readValue(dto, getChannelMessageCriteriaReferenceType());
         getService().getMany(message.getData().getCriteria(), message.getUser())
                 .subscribe(getListDto -> sendCallbackDtos(message, getListDto, OperationsStatus.GET_MANY, message.getUser()));

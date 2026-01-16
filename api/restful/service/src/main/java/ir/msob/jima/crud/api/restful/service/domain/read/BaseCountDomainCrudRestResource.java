@@ -11,6 +11,8 @@ import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestResponse;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
@@ -20,8 +22,6 @@ import ir.msob.jima.crud.api.restful.service.domain.ParentDomainCrudRestResource
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.read.BaseCountDomainCrudService;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.server.ServerWebExchange;
@@ -51,7 +51,7 @@ public interface BaseCountDomainCrudRestResource<
         S extends BaseCountDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudRestResource<ID, USER, D, DTO, C, R, S> {
 
-    Logger log = LoggerFactory.getLogger(BaseCountDomainCrudRestResource.class);
+    Logger logger = LoggerFactory.getLogger(BaseCountDomainCrudRestResource.class);
 
     @GetMapping(Operations.COUNT)
     @Operation(summary = "Count domains by criteria", description = "Returns the count of domain records matching the given criteria")
@@ -62,7 +62,7 @@ public interface BaseCountDomainCrudRestResource<
     @MethodStats
     @Scope(operation = Operations.COUNT)
     default ResponseEntity<@NonNull Mono<@NonNull Long>> count(C criteria, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
-        log.debug("REST request to count domains with criteria: {}", criteria);
+        logger.debug("REST request to count domains with criteria: {}", criteria);
 
         USER user = getUser(serverWebExchange, principal);
         Mono<@NonNull Long> res = this.getService().count(criteria, user);

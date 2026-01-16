@@ -7,6 +7,8 @@ import ir.msob.jima.core.commons.channel.message.PageableMessage;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
@@ -19,8 +21,6 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import jakarta.annotation.PostConstruct;
 import lombok.SneakyThrows;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
@@ -46,7 +46,7 @@ public interface BaseGetPageDomainCrudKafkaListener<
         S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudKafkaListener<ID, USER, D, DTO, C, R, S> {
 
-    Logger log = LoggerFactory.getLogger(BaseGetPageDomainCrudKafkaListener.class);
+    Logger logger = LoggerFactory.getLogger(BaseGetPageDomainCrudKafkaListener.class);
 
     /**
      * Initializes the listener for the GET_PAGE operation.
@@ -71,7 +71,7 @@ public interface BaseGetPageDomainCrudKafkaListener<
     @Scope(operation = Operations.GET_PAGE)
     @Transactional
     default void getPage(String dto) {
-        log.debug("Received message for get page: dto {}", dto);
+        logger.debug("Received message for get page: dto {}", dto);
         ChannelMessage<USER, PageableMessage<ID, C>> message;
         message = getObjectMapper().readValue(dto, getChannelMessagePageableReferenceType());
         getService().getPage(message.getData().getCriteria(), message.getData().getPageable().toPageable(), message.getUser())

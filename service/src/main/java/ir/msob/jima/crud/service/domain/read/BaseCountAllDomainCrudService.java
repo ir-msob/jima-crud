@@ -5,13 +5,13 @@ import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import jakarta.validation.constraints.NotNull;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
@@ -32,7 +32,7 @@ public interface BaseCountAllDomainCrudService<ID extends Comparable<ID> & Seria
         C extends BaseCriteria<ID>,
         R extends BaseDomainCrudRepository<ID, D, C>> extends ParentReadDomainCrudService<ID, USER, D, DTO, C, R> {
 
-    Logger log = LoggerFactory.getLogger(BaseCountAllDomainCrudService.class);
+    Logger logger = LoggerFactory.getLogger(BaseCountAllDomainCrudService.class);
 
     /**
      * Count all domain entities, potentially based on certain criteria.
@@ -45,7 +45,7 @@ public interface BaseCountAllDomainCrudService<ID extends Comparable<ID> & Seria
     @Transactional(readOnly = true)
     @MethodStats
     default Mono<@NonNull Long> countAll(@NotNull USER user) {
-        log.debug("CountAll, user: {}", user);
+        logger.debug("CountAll, user: {}", user);
 
         C criteria = newCriteriaClass();
         getBeforeAfterOperationComponent().beforeCount(criteria, user, getBeforeAfterDomainOperations());

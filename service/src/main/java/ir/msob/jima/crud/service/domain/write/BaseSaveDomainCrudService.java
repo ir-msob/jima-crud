@@ -5,6 +5,8 @@ import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.safemodify.SafeSave;
 import ir.msob.jima.core.commons.security.BaseUser;
@@ -13,8 +15,6 @@ import ir.msob.jima.core.commons.util.DtoUtil;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import jakarta.validation.Valid;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
@@ -32,7 +32,7 @@ import java.io.Serializable;
  * @param <R>    The type of repository used for CRUD operations.
  */
 public interface BaseSaveDomainCrudService<ID extends Comparable<ID> & Serializable, USER extends BaseUser, D extends BaseDomain<ID>, DTO extends BaseDto<ID>, C extends BaseCriteria<ID>, R extends BaseDomainCrudRepository<ID, D, C>> extends ParentWriteDomainCrudService<ID, USER, D, DTO, C, R> {
-    Logger log = LoggerFactory.getLogger(BaseSaveDomainCrudService.class);
+    Logger logger = LoggerFactory.getLogger(BaseSaveDomainCrudService.class);
 
     /**
      * Executes a save operation for a single entity (DTO). Validates, prepares, and saves the entity.
@@ -48,7 +48,7 @@ public interface BaseSaveDomainCrudService<ID extends Comparable<ID> & Serializa
     @MethodStats
     @Override
     default Mono<@NonNull DTO> save(@Valid DTO dto, USER user) throws BadRequestException, DomainNotFoundException {
-        log.debug("Save, user {}", user);
+        logger.debug("Save, user {}", user);
 
         return safeSave(dto, user)
                 .switchIfEmpty(doSave(dto, user));

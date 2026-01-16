@@ -13,6 +13,8 @@ import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestResponse;
 import ir.msob.jima.core.commons.exception.conflict.ConflictResponse;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
@@ -22,8 +24,6 @@ import ir.msob.jima.crud.api.restful.service.domain.ParentDomainCrudRestResource
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.write.BaseDeleteManyDomainCrudService;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.server.ServerWebExchange;
@@ -54,7 +54,7 @@ public interface BaseDeleteManyDomainCrudRestResource<
         S extends BaseDeleteManyDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudRestResource<ID, USER, D, DTO, C, R, S> {
 
-    Logger log = LoggerFactory.getLogger(BaseDeleteManyDomainCrudRestResource.class);
+    Logger logger = LoggerFactory.getLogger(BaseDeleteManyDomainCrudRestResource.class);
 
     @DeleteMapping(Operations.DELETE_MANY)
     @Operation(summary = "Delete multiple domains by criteria", description = "Deletes domains matching the given criteria and returns the deleted IDs")
@@ -66,7 +66,7 @@ public interface BaseDeleteManyDomainCrudRestResource<
     @MethodStats
     @Scope(operation = Operations.DELETE_MANY)
     default ResponseEntity<@NonNull Mono<@NonNull Collection<ID>>> deleteMany(C criteria, ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException, JsonProcessingException {
-        log.debug("REST request to delete many domains with criteria: {}", criteria);
+        logger.debug("REST request to delete many domains with criteria: {}", criteria);
 
         USER user = getUser(serverWebExchange, principal);
         Mono<@NonNull Collection<ID>> res = this.getService().deleteMany(criteria, user);

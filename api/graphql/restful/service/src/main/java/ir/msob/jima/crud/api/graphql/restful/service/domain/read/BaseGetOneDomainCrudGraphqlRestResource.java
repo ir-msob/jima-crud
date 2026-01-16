@@ -5,6 +5,8 @@ import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.scope.Scope;
@@ -15,8 +17,6 @@ import ir.msob.jima.crud.api.graphql.restful.service.domain.ParentDomainCrudGrap
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.ContextValue;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -49,7 +49,7 @@ public interface BaseGetOneDomainCrudGraphqlRestResource<
         R extends BaseDomainCrudRepository<ID, D, C>,
         S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudGraphqlRestResource<ID, USER, D, DTO, C, R, S> {
-    Logger log = LoggerFactory.getLogger(BaseGetOneDomainCrudGraphqlRestResource.class);
+    Logger logger = LoggerFactory.getLogger(BaseGetOneDomainCrudGraphqlRestResource.class);
 
     /**
      * Retrieves a single entity based on specified criteria for the specified CRUD resource.
@@ -64,7 +64,7 @@ public interface BaseGetOneDomainCrudGraphqlRestResource<
     @QueryMapping
     @Scope(operation = Operations.GET_ONE)
     default Mono<@NonNull DtoType> getOne(@Argument("input") CriteriaInput input, @ContextValue(value = HttpHeaders.AUTHORIZATION, required = false) String token) throws BadRequestException, DomainNotFoundException {
-        log.debug("Request to get one: dto {}", input);
+        logger.debug("Request to get one: dto {}", input);
 
         USER user = getUser(token);
 

@@ -4,6 +4,8 @@ import io.grpc.stub.StreamObserver;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.scope.Scope;
@@ -13,8 +15,6 @@ import ir.msob.jima.crud.api.grpc.commons.DtosMsg;
 import ir.msob.jima.crud.api.grpc.service.domain.ParentDomainCrudGrpcResource;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 
@@ -39,14 +39,14 @@ public interface BaseGetManyDomainCrudGrpcResource<
         S extends BaseDomainCrudService<ID, USER, D, DTO, C, R>>
         extends ParentDomainCrudGrpcResource<ID, USER, D, DTO, C, R, S> {
 
-    Logger log = LoggerFactory.getLogger(BaseGetManyDomainCrudGrpcResource.class);
+    Logger logger = LoggerFactory.getLogger(BaseGetManyDomainCrudGrpcResource.class);
 
 
     @MethodStats
     @Scope(operation = Operations.GET_MANY)
     @Override
     default void getMany(CriteriaMsg request, StreamObserver<DtosMsg> responseObserver) {
-        log.debug("Request to get many: dto {}", request);
+        logger.debug("Request to get many: dto {}", request);
         getService().getMany(convertToCriteria(request.getCriteria()), getUser())
                 .map(result -> DtosMsg.newBuilder()
                         .addAllDtos(convertToStrings(result))

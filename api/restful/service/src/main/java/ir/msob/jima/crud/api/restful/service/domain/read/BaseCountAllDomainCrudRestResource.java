@@ -11,6 +11,8 @@ import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestResponse;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.logger.Logger;
+import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.operation.Operations;
 import ir.msob.jima.core.commons.operation.OperationsStatus;
@@ -20,8 +22,6 @@ import ir.msob.jima.crud.api.restful.service.domain.ParentDomainCrudRestResource
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.read.BaseCountAllDomainCrudService;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.server.ServerWebExchange;
@@ -51,7 +51,7 @@ public interface BaseCountAllDomainCrudRestResource<
         S extends BaseCountAllDomainCrudService<ID, USER, D, DTO, C, R>
         > extends ParentDomainCrudRestResource<ID, USER, D, DTO, C, R, S> {
 
-    Logger log = LoggerFactory.getLogger(BaseCountAllDomainCrudRestResource.class);
+    Logger logger = LoggerFactory.getLogger(BaseCountAllDomainCrudRestResource.class);
 
     @GetMapping(Operations.COUNT_ALL)
     @Operation(summary = "Count all domains", description = "Returns the count of all domain records")
@@ -62,7 +62,7 @@ public interface BaseCountAllDomainCrudRestResource<
     @MethodStats
     @Scope(operation = Operations.COUNT_ALL)
     default ResponseEntity<@NonNull Mono<@NonNull Long>> countAll(ServerWebExchange serverWebExchange, Principal principal) throws BadRequestException, DomainNotFoundException {
-        log.debug("REST request to count all domains");
+        logger.debug("REST request to count all domains");
 
         USER user = getUser(serverWebExchange, principal);
         Mono<@NonNull Long> res = this.getService().countAll(user);
