@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.concurrent.ExecutionException;
 
 /**
  * This service interface defines the contract for executing save operations for a single entity (DTO).

@@ -3,10 +3,6 @@ package ir.msob.jima.crud.service.domain.write;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
-import ir.msob.jima.core.commons.childdomain.ChildDomainUtil;
-import ir.msob.jima.core.commons.childdomain.auditdomain.AuditDomainAbstract;
-import ir.msob.jima.core.commons.childdomain.auditdomain.AuditDomainActionType;
-import ir.msob.jima.core.commons.childdomain.relatedobject.relatedparty.RelatedPartyAbstract;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
@@ -22,9 +18,7 @@ import lombok.SneakyThrows;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.time.Instant;
 import java.util.Collection;
-import java.util.Date;
 
 /**
  * This interface represents a service for performing write operations on entities in a CRUD application.
@@ -132,8 +126,6 @@ public interface ParentWriteDomainCrudService<
     default Mono<DTO> update(DTO previousDto, @Valid DTO dto, USER user) throws BadRequestException, ValidationException, DomainNotFoundException {
         return Mono.empty();
     }
-
-
 
 
 }

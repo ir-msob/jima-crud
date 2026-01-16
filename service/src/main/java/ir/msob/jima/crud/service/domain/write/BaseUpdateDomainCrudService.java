@@ -1,14 +1,10 @@
 package ir.msob.jima.crud.service.domain.write;
 
-import ir.msob.jima.core.commons.childdomain.auditdomain.AuditDomainAbstract;
-import ir.msob.jima.core.commons.childdomain.auditdomain.AuditDomainActionType;
-import ir.msob.jima.core.commons.childdomain.auditdomain.BaseAuditDomainContainer;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
-import ir.msob.jima.core.commons.exception.runtime.CommonRuntimeException;
 import ir.msob.jima.core.commons.exception.validation.ValidationException;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.security.BaseUser;
@@ -107,7 +103,6 @@ public interface BaseUpdateDomainCrudService<ID extends Comparable<ID> & Seriali
                 .doOnSuccess(updatedDto ->
                         getBeforeAfterOperationComponent().afterUpdate(previousDto, updatedDto, user, getBeforeAfterDomainOperations()));
     }
-
 
 
 }
