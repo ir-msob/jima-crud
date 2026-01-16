@@ -69,7 +69,7 @@ public interface BaseGetOneDomainCrudService<ID extends Comparable<ID> & Seriali
     }
 
     private Mono<DTO> doGetOne(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
-        getBeforeAfterComponent().beforeGet(criteria, user, getBeforeAfterDomainOperations());
+        getBeforeAfterOperationComponent().beforeGet(criteria, user, getBeforeAfterDomainOperations());
 
         return this.preGet(criteria, user)
                 .then(this.getRepository().getOne(criteria))
@@ -79,7 +79,7 @@ public interface BaseGetOneDomainCrudService<ID extends Comparable<ID> & Seriali
                     Collection<DTO> dtos = Collections.singletonList(dto);
 
                     return this.postGet(ids, dtos, criteria, user)
-                            .doOnSuccess(x -> getBeforeAfterComponent().afterGet(ids, dtos, criteria, user, getBeforeAfterDomainOperations()))
+                            .doOnSuccess(x -> getBeforeAfterOperationComponent().afterGet(ids, dtos, criteria, user, getBeforeAfterDomainOperations()))
                             .thenReturn(dto);
                 });
     }

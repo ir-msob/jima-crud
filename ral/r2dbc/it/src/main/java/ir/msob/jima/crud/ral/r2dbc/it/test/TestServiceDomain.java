@@ -7,7 +7,7 @@ import ir.msob.jima.core.ral.r2dbc.it.test.TestCriteria;
 import ir.msob.jima.core.ral.r2dbc.it.test.TestDomain;
 import ir.msob.jima.core.ral.r2dbc.it.test.TestDto;
 import ir.msob.jima.crud.ral.r2dbc.it.base.DomainCrudService;
-import ir.msob.jima.crud.service.domain.BeforeAfterComponent;
+import ir.msob.jima.crud.service.domain.operation.BeforeAfterOperationComponent;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +19,8 @@ public class TestServiceDomain extends DomainCrudService<TestDomain, TestDto, Te
 
     private final ModelMapper modelMapper;
 
-    public TestServiceDomain(BeforeAfterComponent beforeAfterComponent, ObjectMapper objectMapper, TestRepository repository, ModelMapper modelMapper) {
-        super(beforeAfterComponent, objectMapper, repository);
+    public TestServiceDomain(BeforeAfterOperationComponent beforeAfterOperationComponent, ObjectMapper objectMapper, TestRepository repository, ModelMapper modelMapper) {
+        super(beforeAfterOperationComponent, objectMapper, repository);
         this.modelMapper = modelMapper;
     }
 

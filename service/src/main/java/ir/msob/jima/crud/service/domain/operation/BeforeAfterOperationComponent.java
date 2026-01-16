@@ -1,4 +1,4 @@
-package ir.msob.jima.crud.service.domain;
+package ir.msob.jima.crud.service.domain.operation;
 
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDto;
@@ -23,11 +23,11 @@ import java.util.Collection;
  */
 @Service
 @RequiredArgsConstructor
-public class BeforeAfterComponent {
+public class BeforeAfterOperationComponent {
     /**
      * A collection of BaseBeforeAfterOperation instances.
      */
-    private final Collection<BaseBeforeAfterOperation> beforeAfterServices;
+    private final Collection<BaseBeforeAfterOperation> beforeAfterOperations;
 
     /**
      * Executes before counting records based on the provided criteria.
@@ -42,8 +42,8 @@ public class BeforeAfterComponent {
             USER extends BaseUser,
             DTO extends BaseDto<ID>,
             C extends BaseCriteria<ID>> void beforeCount(C criteria, USER user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainInfos) throws DomainNotFoundException, BadRequestException {
-        if (beforeAfterServices != null && !beforeAfterServices.isEmpty()) {
-            for (BaseBeforeAfterOperation beforeAfterService : beforeAfterServices) {
+        if (beforeAfterOperations != null && !beforeAfterOperations.isEmpty()) {
+            for (BaseBeforeAfterOperation beforeAfterService : beforeAfterOperations) {
                 beforeAfterService.beforeCount(criteria, user);
             }
         }
@@ -67,8 +67,8 @@ public class BeforeAfterComponent {
             USER extends BaseUser,
             DTO extends BaseDto<ID>,
             C extends BaseCriteria<ID>> void afterCount(C criteria, USER user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainInfos) throws DomainNotFoundException, BadRequestException {
-        if (beforeAfterServices != null && !beforeAfterServices.isEmpty()) {
-            for (BaseBeforeAfterOperation beforeAfterService : beforeAfterServices) {
+        if (beforeAfterOperations != null && !beforeAfterOperations.isEmpty()) {
+            for (BaseBeforeAfterOperation beforeAfterService : beforeAfterOperations) {
                 beforeAfterService.afterCount(criteria, user);
             }
         }
@@ -92,8 +92,8 @@ public class BeforeAfterComponent {
             USER extends BaseUser,
             DTO extends BaseDto<ID>,
             C extends BaseCriteria<ID>> void beforeGet(C criteria, USER user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainInfos) throws DomainNotFoundException, BadRequestException {
-        if (beforeAfterServices != null && !beforeAfterServices.isEmpty()) {
-            for (BaseBeforeAfterOperation beforeAfterService : beforeAfterServices) {
+        if (beforeAfterOperations != null && !beforeAfterOperations.isEmpty()) {
+            for (BaseBeforeAfterOperation beforeAfterService : beforeAfterOperations) {
                 beforeAfterService.beforeGet(criteria, user);
             }
         }
@@ -119,8 +119,8 @@ public class BeforeAfterComponent {
             USER extends BaseUser,
             DTO extends BaseDto<ID>,
             C extends BaseCriteria<ID>> void afterGet(Collection<ID> ids, Collection<DTO> dtos, C criteria, USER user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainInfos) throws DomainNotFoundException, BadRequestException {
-        if (beforeAfterServices != null && !beforeAfterServices.isEmpty()) {
-            for (BaseBeforeAfterOperation beforeAfterService : beforeAfterServices) {
+        if (beforeAfterOperations != null && !beforeAfterOperations.isEmpty()) {
+            for (BaseBeforeAfterOperation beforeAfterService : beforeAfterOperations) {
                 beforeAfterService.afterGet(ids, dtos, criteria, user);
             }
         }
@@ -144,8 +144,8 @@ public class BeforeAfterComponent {
             USER extends BaseUser,
             DTO extends BaseDto<ID>,
             C extends BaseCriteria<ID>> void beforeSave(DTO dto, USER user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainInfos) throws DomainNotFoundException, BadRequestException {
-        if (beforeAfterServices != null && !beforeAfterServices.isEmpty()) {
-            for (BaseBeforeAfterOperation beforeAfterService : beforeAfterServices) {
+        if (beforeAfterOperations != null && !beforeAfterOperations.isEmpty()) {
+            for (BaseBeforeAfterOperation beforeAfterService : beforeAfterOperations) {
                 beforeAfterService.beforeSave(dto, user);
             }
         }
@@ -170,8 +170,8 @@ public class BeforeAfterComponent {
             USER extends BaseUser,
             DTO extends BaseDto<ID>,
             C extends BaseCriteria<ID>> void afterSave(DTO dto, DTO savedDto, USER user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainInfos) throws DomainNotFoundException, BadRequestException {
-        if (beforeAfterServices != null && !beforeAfterServices.isEmpty()) {
-            for (BaseBeforeAfterOperation beforeAfterService : beforeAfterServices) {
+        if (beforeAfterOperations != null && !beforeAfterOperations.isEmpty()) {
+            for (BaseBeforeAfterOperation beforeAfterService : beforeAfterOperations) {
                 beforeAfterService.afterSave(dto, savedDto, user);
             }
         }
@@ -196,8 +196,8 @@ public class BeforeAfterComponent {
             USER extends BaseUser,
             DTO extends BaseDto<ID>,
             C extends BaseCriteria<ID>> void beforeUpdate(DTO previousDto, DTO dto, USER user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainInfos) throws DomainNotFoundException, BadRequestException {
-        if (beforeAfterServices != null && !beforeAfterServices.isEmpty()) {
-            for (BaseBeforeAfterOperation beforeAfterService : beforeAfterServices) {
+        if (beforeAfterOperations != null && !beforeAfterOperations.isEmpty()) {
+            for (BaseBeforeAfterOperation beforeAfterService : beforeAfterOperations) {
                 beforeAfterService.beforeUpdate(previousDto, dto, user);
             }
         }
@@ -222,8 +222,8 @@ public class BeforeAfterComponent {
             USER extends BaseUser,
             DTO extends BaseDto<ID>,
             C extends BaseCriteria<ID>> void afterUpdate(DTO dto, DTO updatedDto, USER user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainInfos) throws DomainNotFoundException, BadRequestException {
-        if (beforeAfterServices != null && !beforeAfterServices.isEmpty()) {
-            for (BaseBeforeAfterOperation beforeAfterService : beforeAfterServices) {
+        if (beforeAfterOperations != null && !beforeAfterOperations.isEmpty()) {
+            for (BaseBeforeAfterOperation beforeAfterService : beforeAfterOperations) {
                 beforeAfterService.afterUpdate(dto, updatedDto, user);
             }
         }
@@ -247,8 +247,8 @@ public class BeforeAfterComponent {
             USER extends BaseUser,
             DTO extends BaseDto<ID>,
             C extends BaseCriteria<ID>> void beforeDelete(C criteria, USER user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainInfos) throws DomainNotFoundException, BadRequestException {
-        if (beforeAfterServices != null && !beforeAfterServices.isEmpty()) {
-            for (BaseBeforeAfterOperation beforeAfterService : beforeAfterServices) {
+        if (beforeAfterOperations != null && !beforeAfterOperations.isEmpty()) {
+            for (BaseBeforeAfterOperation beforeAfterService : beforeAfterOperations) {
                 beforeAfterService.beforeDelete(criteria, user);
             }
         }
@@ -274,8 +274,8 @@ public class BeforeAfterComponent {
             USER extends BaseUser,
             DTO extends BaseDto<ID>,
             C extends BaseCriteria<ID>> void afterDelete(DTO dto, C criteria, Class<DTO> dtoClass, USER user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainInfos) throws DomainNotFoundException, BadRequestException {
-        if (beforeAfterServices != null && !beforeAfterServices.isEmpty()) {
-            for (BaseBeforeAfterOperation beforeAfterService : beforeAfterServices) {
+        if (beforeAfterOperations != null && !beforeAfterOperations.isEmpty()) {
+            for (BaseBeforeAfterOperation beforeAfterService : beforeAfterOperations) {
                 beforeAfterService.afterDelete(dto, criteria, dtoClass, user);
             }
         }

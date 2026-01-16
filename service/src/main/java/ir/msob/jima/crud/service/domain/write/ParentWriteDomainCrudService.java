@@ -24,6 +24,7 @@ import reactor.core.publisher.Mono;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Collection;
+import java.util.Date;
 
 /**
  * This interface represents a service for performing write operations on entities in a CRUD application.
@@ -133,30 +134,6 @@ public interface ParentWriteDomainCrudService<
     }
 
 
-    /**
-     * Adds audit information to a DTO.
-     *
-     * @param dto        The DTO to be audited.
-     * @param actionType The type of audit action to record.
-     * @param user       A user object.
-     */
-    default void addAudit(DTO dto, AuditDomainActionType actionType, USER user) {
 
-        RelatedPartyAbstract<ID> relatedParty = new RelatedPartyAbstract<>() {
-        };
-        relatedParty.setRelatedId(user.getId());
-        relatedParty.setName(user.getName());
-
-        AuditDomainAbstract<ID, RelatedPartyAbstract<ID>> auditDomain = new AuditDomainAbstract<>() {
-        };
-        auditDomain.setActionDate(Instant.now());
-        auditDomain.setActionType(actionType.name());
-        auditDomain.setRelatedParty(relatedParty);
-
-        if (ChildDomainUtil.hasFunction((Class<AuditDomainAbstract<ID, RelatedPartyAbstract<ID>>>) auditDomain.getClass(), getDtoClass())) {
-            ChildDomainUtil.getFunction((Class<AuditDomainAbstract<ID, RelatedPartyAbstract<ID>>>) auditDomain.getClass(), getDtoClass()).apply(dto).add(auditDomain);
-        }
-
-    }
 
 }

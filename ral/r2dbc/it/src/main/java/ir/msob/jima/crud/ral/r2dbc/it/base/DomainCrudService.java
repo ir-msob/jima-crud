@@ -6,7 +6,7 @@ import ir.msob.jima.core.it.domain.ProjectDomain;
 import ir.msob.jima.core.it.dto.ProjectDto;
 import ir.msob.jima.core.it.security.ProjectUser;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
-import ir.msob.jima.crud.service.domain.BeforeAfterComponent;
+import ir.msob.jima.crud.service.domain.operation.BeforeAfterOperationComponent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 
@@ -19,13 +19,12 @@ public abstract class DomainCrudService<
         R extends R2dbcDomainCrudRepository<D, C>>
         implements BaseDomainCrudService<String, ProjectUser, D, DTO, C, R> {
 
-    private final BeforeAfterComponent beforeAfterComponent;
+    private final BeforeAfterOperationComponent beforeAfterOperationComponent;
     private final ObjectMapper objectMapper;
     private final R repository;
 
-    @Override
-    public BeforeAfterComponent getBeforeAfterComponent() {
-        return beforeAfterComponent;
+    public BeforeAfterOperationComponent getBeforeAfterOperationComponent() {
+        return beforeAfterOperationComponent;
     }
 
     @Override

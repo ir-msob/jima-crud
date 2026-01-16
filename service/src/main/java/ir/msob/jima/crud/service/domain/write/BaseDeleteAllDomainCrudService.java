@@ -6,7 +6,6 @@ import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
-import ir.msob.jima.core.commons.repository.BaseQuery;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
@@ -48,6 +47,7 @@ public interface BaseDeleteAllDomainCrudService<ID extends Comparable<ID> & Seri
         log.debug("Delete, user: {}", user);
 
         C criteria = newCriteriaClass();
+        getBeforeAfterOperationComponent().beforeDelete(criteria, user, getBeforeAfterDomainOperations());
 
         return getStream(criteria, user)
                 .flatMap(dto -> this.preDelete(criteria, user).thenReturn(dto))
@@ -56,7 +56,7 @@ public interface BaseDeleteAllDomainCrudService<ID extends Comparable<ID> & Seri
                     return this.getRepository().removeOne(criteriaId).thenReturn(dto);
                 })
                 .flatMap(dto -> this.postDelete(dto, criteria, user).thenReturn(dto))
-                .doOnNext(dto -> this.getBeforeAfterComponent().afterDelete(dto, criteria, getDtoClass(), user, getBeforeAfterDomainOperations()))
+                .doOnNext(dto -> this.getBeforeAfterOperationComponent().afterDelete(dto, criteria, getDtoClass(), user, getBeforeAfterDomainOperations()))
                 .map(BaseDomain::getId)
                 .collectList()
                 .map(ArrayList::new);

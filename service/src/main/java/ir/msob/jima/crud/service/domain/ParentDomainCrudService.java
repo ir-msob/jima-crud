@@ -8,6 +8,7 @@ import ir.msob.jima.core.commons.operation.BaseBeforeAfterDomainOperation;
 import ir.msob.jima.core.commons.repository.BaseRepository;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.service.BaseService;
+import ir.msob.jima.crud.service.domain.operation.BeforeAfterOperationComponent;
 import jakarta.validation.Valid;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -131,7 +132,7 @@ public interface ParentDomainCrudService<
      *
      * @return The before/after component.
      */
-    BeforeAfterComponent getBeforeAfterComponent();
+    BeforeAfterOperationComponent getBeforeAfterOperationComponent();
 
     /**
      * Get the collection of before/after domain operations.

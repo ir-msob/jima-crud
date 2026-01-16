@@ -48,9 +48,9 @@ public interface BaseCountAllDomainCrudService<ID extends Comparable<ID> & Seria
         log.debug("CountAll, user: {}", user);
 
         C criteria = newCriteriaClass();
-        getBeforeAfterComponent().beforeCount(criteria, user, getBeforeAfterDomainOperations());
+        getBeforeAfterOperationComponent().beforeCount(criteria, user, getBeforeAfterDomainOperations());
 
         return this.getRepository().countAll()
-                .doOnSuccess(aLong -> getBeforeAfterComponent().afterCount(criteria, user, getBeforeAfterDomainOperations()));
+                .doOnSuccess(aLong -> getBeforeAfterOperationComponent().afterCount(criteria, user, getBeforeAfterDomainOperations()));
     }
 }

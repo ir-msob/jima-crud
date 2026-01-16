@@ -65,10 +65,10 @@ public interface BaseDeleteDomainCrudService<ID extends Comparable<ID> & Seriali
     }
 
     private Mono<ID> doDelete(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
-        getBeforeAfterComponent().beforeDelete(criteria, user, getBeforeAfterDomainOperations());
+        getBeforeAfterOperationComponent().beforeDelete(criteria, user, getBeforeAfterDomainOperations());
 
         return getOne(criteria, user)
-                .doOnNext(dto -> getBeforeAfterComponent().beforeDelete(criteria, user, getBeforeAfterDomainOperations()))
+                .doOnNext(dto -> getBeforeAfterOperationComponent().beforeDelete(criteria, user, getBeforeAfterDomainOperations()))
                 .flatMap(dto -> this.preDelete(criteria, user).thenReturn(dto))
                 .flatMap(dto -> {
                     C criteriaId = CriteriaUtil.idCriteria(getCriteriaClass(), dto.getId());
@@ -76,7 +76,7 @@ public interface BaseDeleteDomainCrudService<ID extends Comparable<ID> & Seriali
                     return this.getRepository().removeOne(criteriaId).thenReturn(dto);
                 })
                 .flatMap(dto -> this.postDelete(dto, criteria, user).thenReturn(dto))
-                .doOnNext(dto -> this.getBeforeAfterComponent().afterDelete(dto, criteria, getDtoClass(), user, getBeforeAfterDomainOperations()))
+                .doOnNext(dto -> this.getBeforeAfterOperationComponent().afterDelete(dto, criteria, getDtoClass(), user, getBeforeAfterDomainOperations()))
                 .map(BaseDomain::getId);
     }
 }

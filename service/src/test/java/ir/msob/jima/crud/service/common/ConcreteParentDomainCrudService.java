@@ -7,7 +7,7 @@ import ir.msob.jima.core.commons.domain.SampleDto;
 import ir.msob.jima.core.commons.operation.BaseBeforeAfterDomainOperation;
 import ir.msob.jima.core.commons.repository.BaseRepository;
 import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.crud.service.domain.BeforeAfterComponent;
+import ir.msob.jima.crud.service.domain.operation.BeforeAfterOperationComponent;
 import ir.msob.jima.crud.service.domain.ParentDomainCrudService;
 
 import java.util.Collection;
@@ -37,7 +37,7 @@ public class ConcreteParentDomainCrudService implements
     }
 
     @Override
-    public BeforeAfterComponent getBeforeAfterComponent() {
+    public BeforeAfterOperationComponent getBeforeAfterOperationComponent() {
         return null;
     }
 

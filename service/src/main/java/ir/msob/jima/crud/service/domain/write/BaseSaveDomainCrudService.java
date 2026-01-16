@@ -1,13 +1,15 @@
 package ir.msob.jima.crud.service.domain.write;
 
-import ir.msob.jima.core.commons.childdomain.auditdomain.AuditDomainActionType;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
+import ir.msob.jima.core.commons.safemodify.SafeSave;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.core.commons.util.CriteriaUtil;
+import ir.msob.jima.core.commons.util.DtoUtil;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
+import java.util.concurrent.ExecutionException;
 
 /**
  * This service interface defines the contract for executing save operations for a single entity (DTO).
@@ -47,13 +50,26 @@ public interface BaseSaveDomainCrudService<ID extends Comparable<ID> & Serializa
     default Mono<DTO> save(@Valid DTO dto, USER user) throws BadRequestException, DomainNotFoundException {
         log.debug("Save, user {}", user);
 
+        return safeSave(dto, user)
+                .switchIfEmpty(doSave(dto, user));
+    }
+
+    private Mono<DTO> doSave(DTO dto, USER user) {
+        getBeforeAfterOperationComponent().beforeSave(dto, user, getBeforeAfterDomainOperations());
         D domain = toDomain(dto, user);
-        getBeforeAfterComponent().beforeSave(dto, user, getBeforeAfterDomainOperations());
         return this.preSave(dto, user)
-                .doOnSuccess(unused -> addAudit(dto, AuditDomainActionType.CREATE, user))
                 .then(this.getRepository().insertOne(domain))
                 .doOnSuccess(savedDomain -> this.postSave(dto, savedDomain, user))
                 .flatMap(savedDomain -> getOneById(savedDomain.getId(), user))
-                .doOnSuccess(savedDto -> getBeforeAfterComponent().afterSave(dto, savedDto, user, getBeforeAfterDomainOperations()));
+                .doOnSuccess(savedDto -> getBeforeAfterOperationComponent().afterSave(dto, savedDto, user, getBeforeAfterDomainOperations()));
+    }
+
+    private Mono<DTO> safeSave(DTO dto, USER user) {
+        if (SafeSave.info.hasAnnotation(getDtoClass())) {
+            String uniqueFieldValue = DtoUtil.uniqueField(getDtoClass(), dto);
+            C criteria = CriteriaUtil.uniqueCriteria(getCriteriaClass(), uniqueFieldValue);
+            return this.getOne(criteria, user);
+        }
+        return Mono.empty();
     }
 }

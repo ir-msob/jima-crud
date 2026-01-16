@@ -1,11 +1,14 @@
 package ir.msob.jima.crud.service.domain.write;
 
+import ir.msob.jima.core.commons.childdomain.auditdomain.AuditDomainAbstract;
 import ir.msob.jima.core.commons.childdomain.auditdomain.AuditDomainActionType;
+import ir.msob.jima.core.commons.childdomain.auditdomain.BaseAuditDomainContainer;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
+import ir.msob.jima.core.commons.exception.runtime.CommonRuntimeException;
 import ir.msob.jima.core.commons.exception.validation.ValidationException;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.security.BaseUser;
@@ -93,17 +96,18 @@ public interface BaseUpdateDomainCrudService<ID extends Comparable<ID> & Seriali
     }
 
     private Mono<DTO> doUpdate(DTO previousDto, @Valid DTO dto, USER user) throws BadRequestException, ValidationException, DomainNotFoundException {
+        getBeforeAfterOperationComponent().beforeUpdate(previousDto, dto, user, getBeforeAfterDomainOperations());
+
         D domain = toDomain(dto, user);
 
-        getBeforeAfterComponent().beforeUpdate(previousDto, dto, user, getBeforeAfterDomainOperations());
-
         return this.preUpdate(dto, user)
-                .doOnSuccess(unused -> addAudit(dto, AuditDomainActionType.UPDATE, user))
                 .then(this.getRepository().updateOne(domain))
                 .flatMap(updatedDomain -> this.postUpdate(dto, updatedDomain, user).thenReturn(updatedDomain))
                 .flatMap(updatedDomain -> getOneById(updatedDomain.getId(), user))
                 .doOnSuccess(updatedDto ->
-                        getBeforeAfterComponent().afterUpdate(previousDto, updatedDto, user, getBeforeAfterDomainOperations()));
+                        getBeforeAfterOperationComponent().afterUpdate(previousDto, updatedDto, user, getBeforeAfterDomainOperations()));
     }
+
+
 
 }

@@ -44,8 +44,8 @@ public interface BaseCountDomainCrudService<ID extends Comparable<ID> & Serializ
     @MethodStats
     default Mono<Long> count(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
         log.debug("Count, criteria: {}, user: {}", criteria, user);
-        getBeforeAfterComponent().beforeCount(criteria, user, getBeforeAfterDomainOperations());
+        getBeforeAfterOperationComponent().beforeCount(criteria, user, getBeforeAfterDomainOperations());
         return this.getRepository().count(criteria)
-                .doOnSuccess(result -> getBeforeAfterComponent().afterCount(criteria, user, getBeforeAfterDomainOperations()));
+                .doOnSuccess(result -> getBeforeAfterOperationComponent().afterCount(criteria, user, getBeforeAfterDomainOperations()));
     }
 }
