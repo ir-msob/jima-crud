@@ -20,14 +20,14 @@ public abstract class DomainCrudDataProvider<
         S extends DomainCrudService<D, DTO, C, R>>
         implements BaseDomainCrudDataProvider<String, ProjectUser, D, DTO, C, R, S> {
 
-    public final ProjectUser SAMPLE_USER;
+    private final ProjectUser sampleUser;
     private final ObjectMapper objectMapper;
     private final S service;
 
     protected DomainCrudDataProvider(BaseIdService idService, ObjectMapper objectMapper, S service) {
         this.objectMapper = objectMapper;
         this.service = service;
-        this.SAMPLE_USER = ProjectUser.builder()
+        this.sampleUser = ProjectUser.builder()
                 .id(idService.newId().toString())
                 .sessionId(idService.newId().toString())
                 .username("user")
@@ -38,7 +38,7 @@ public abstract class DomainCrudDataProvider<
 
     @Override
     public ProjectUser getSampleUser() {
-        return SAMPLE_USER;
+        return sampleUser;
     }
 
     @Override

@@ -25,7 +25,7 @@ import java.util.List;
 @Testcontainers
 @CommonsLog
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class TestRepositoryIt {
+class TestRepositoryIt {
 
     static final PostgreSQLContainer POSTGRESQL_CONTAINER =
             new PostgreSQLContainer(DockerImageName.parse("postgres:17-alpine"))
@@ -117,10 +117,7 @@ public class TestRepositoryIt {
     void testGetPage() {
         for (int i = 0; i < 5; i++) testRepository.insertOne(newDomain()).block();
 
-        R2dbcQuery<TestDomain> q = new R2dbcQuery<TestDomain>()
-                .with(PageRequest.of(0, 2, Sort.by("id")));
-
-        var page = testRepository.getPage(new TestCriteria(), PageRequest.of(0, 2)).block();
+        var page = testRepository.getPage(new TestCriteria(), PageRequest.of(0, 2, Sort.by("id"))).block();
 
         Assertions.assertNotNull(page);
         Assertions.assertEquals(2, page.getContent().size());
@@ -144,8 +141,6 @@ public class TestRepositoryIt {
     void testRemoveMany() {
         testRepository.insertOne(newDomain()).block();
         testRepository.insertOne(newDomain()).block();
-
-        R2dbcQuery<TestDomain> q = new R2dbcQuery<>(); // ALL
 
         List<TestDomain> removed = testRepository.removeMany(new TestCriteria()).collectList().block();
         Assertions.assertTrue(removed.size() >= 2);
