@@ -18,7 +18,7 @@ import java.io.Serializable;
 
 /**
  * The {@code BaseGetOneDomainCrudRestResourceTest} interface represents a set of RESTful-specific test methods for retrieving a single entity.
- * It extends both the {@code BaseGetOneDomainCrudResourceTest} and {@code BaseParentChildCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
+ * It extends both the {@code BaseGetOneDomainCrudResourceTest} and {@code BaseEmbeddedDomainCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to retrieve a single entity using RESTful API. The result of the get operation is the DTO of the retrieved entity.
  *

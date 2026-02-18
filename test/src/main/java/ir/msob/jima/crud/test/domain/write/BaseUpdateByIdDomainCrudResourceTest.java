@@ -12,6 +12,7 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
 import ir.msob.jima.crud.test.domain.ParentDomainCrudResourceTest;
+import org.apache.commons.lang3.SerializationUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.annotation.Rollback;
 
@@ -70,9 +71,10 @@ public interface BaseUpdateByIdDomainCrudResourceTest<
             return;
 
         DTO savedDto = getDataProvider().saveNew();
-        this.getDataProvider().updateDto(savedDto);
+        DTO savedDtoForUpdate = savedDto.copy();
+        this.getDataProvider().updateDto(savedDtoForUpdate);
         Long countBefore = getDataProvider().countDb();
-        updateByIdRequest(savedDto, updatedDto -> getDataProvider().assertUpdate(savedDto, updatedDto));
+        updateByIdRequest(savedDtoForUpdate, updatedDto -> getDataProvider().assertUpdate(savedDto, updatedDto));
         getDataProvider().assertCount(countBefore);
     }
 
@@ -99,9 +101,10 @@ public interface BaseUpdateByIdDomainCrudResourceTest<
             return;
 
         DTO savedDto = getDataProvider().saveNewMandatory();
-        this.getDataProvider().updateMandatoryDto(savedDto);
+        DTO savedDtoForUpdate = savedDto.copy();
+        this.getDataProvider().updateMandatoryDto(savedDtoForUpdate);
         Long countBefore = getDataProvider().countDb();
-        updateByIdRequest(savedDto, updatedDto -> getDataProvider().assertMandatoryUpdate(savedDto, updatedDto));
+        updateByIdRequest(savedDtoForUpdate, updatedDto -> getDataProvider().assertMandatoryUpdate(savedDto, updatedDto));
         getDataProvider().assertCount(countBefore);
     }
 

@@ -68,9 +68,10 @@ public interface BaseEditManyDomainCrudResourceTest<
             return;
 
         DTO savedDto = getDataProvider().saveNew();
-        this.getDataProvider().updateDto(savedDto);
+        DTO savedDtoForUpdate = savedDto.copy();
+        this.getDataProvider().updateDto(savedDtoForUpdate);
         Long countBefore = getDataProvider().countDb();
-        editManyRequest(savedDto, getDataProvider().getJsonPatch(),
+        editManyRequest(savedDtoForUpdate, getDataProvider().getJsonPatch(),
                 updatedDtos -> {
                     DTO updatedDto = getDataProvider().getObjectMapper().convertValue(updatedDtos.stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());
                     getDataProvider().assertUpdate(savedDto, updatedDto);
@@ -97,9 +98,10 @@ public interface BaseEditManyDomainCrudResourceTest<
             return;
 
         DTO savedDto = getDataProvider().saveNewMandatory();
-        this.getDataProvider().updateMandatoryDto(savedDto);
+        DTO savedDtoForUpdate = savedDto.copy();
+        this.getDataProvider().updateMandatoryDto(savedDtoForUpdate);
         Long countBefore = getDataProvider().countDb();
-        editManyRequest(savedDto, getDataProvider().getMandatoryJsonPatch(),
+        editManyRequest(savedDtoForUpdate, getDataProvider().getMandatoryJsonPatch(),
                 updatedDtos -> {
                     DTO updatedDto = getDataProvider().getObjectMapper().convertValue(updatedDtos.stream().findFirst().orElseThrow(DomainNotFoundException::new), getDtoClass());
                     getDataProvider().assertMandatoryUpdate(savedDto, updatedDto);

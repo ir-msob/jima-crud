@@ -17,7 +17,7 @@ import java.io.Serializable;
 
 /**
  * The {@code BaseGetByIdDomainCrudRestResourceTest} interface represents a set of RESTful-specific test methods for retrieving an entity by its ID.
- * It extends both the {@code BaseGetByIdDomainCrudResourceTest} and {@code BaseParentChildCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
+ * It extends both the {@code BaseGetByIdDomainCrudResourceTest} and {@code BaseEmbeddedDomainCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to retrieve an entity by its ID using RESTful API. The result of the get operation is the DTO of the retrieved entity.
  *

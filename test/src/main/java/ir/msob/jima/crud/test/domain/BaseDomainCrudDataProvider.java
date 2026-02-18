@@ -42,9 +42,7 @@ public interface BaseDomainCrudDataProvider<
     /**
      * Deletes all entities from the repository.
      */
-    default void cleanups() throws BadRequestException, DomainNotFoundException, ExecutionException,
-            InterruptedException, NoSuchMethodException, InstantiationException,
-            IllegalAccessException, InvocationTargetException {
+    default void cleanups() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException {
         getService().deleteAll(getSampleUser()).toFuture().get();
     }
 

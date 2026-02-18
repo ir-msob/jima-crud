@@ -20,7 +20,7 @@ import java.io.Serializable;
 
 /**
  * The {@code BaseEditDomainCrudRestResourceTest} interface represents a set of RESTful-specific test methods for editing an entity.
- * It extends both the {@code BaseEditDomainCrudResourceTest} and {@code BaseParentChildCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
+ * It extends both the {@code BaseEditDomainCrudResourceTest} and {@code BaseEmbeddedDomainCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to edit an entity using RESTful API. The result of the edit operation is the DTO of the edited entity.
  *

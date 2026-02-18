@@ -67,9 +67,10 @@ public interface BaseUpdateDomainCrudResourceTest<
             return;
 
         DTO savedDto = getDataProvider().saveNew();
-        this.getDataProvider().updateDto(savedDto);
+        DTO savedDtoForUpdate = savedDto.copy();
+        this.getDataProvider().updateDto(savedDtoForUpdate);
         Long countBefore = getDataProvider().countDb();
-        updateRequest(savedDto, updatedDto -> getDataProvider().assertUpdate(savedDto, updatedDto));
+        updateRequest(savedDtoForUpdate, updatedDto -> getDataProvider().assertUpdate(savedDto, updatedDto));
         getDataProvider().assertCount(countBefore);
     }
 
@@ -92,9 +93,10 @@ public interface BaseUpdateDomainCrudResourceTest<
             return;
 
         DTO savedDto = getDataProvider().saveNewMandatory();
-        this.getDataProvider().updateMandatoryDto(savedDto);
+        DTO savedDtoForUpdate = savedDto.copy();
+        this.getDataProvider().updateMandatoryDto(savedDtoForUpdate);
         Long countBefore = getDataProvider().countDb();
-        updateRequest(savedDto, updatedDto -> getDataProvider().assertMandatoryUpdate(savedDto, updatedDto));
+        updateRequest(savedDtoForUpdate, updatedDto -> getDataProvider().assertMandatoryUpdate(savedDto, updatedDto));
         getDataProvider().assertCount(countBefore);
     }
 
