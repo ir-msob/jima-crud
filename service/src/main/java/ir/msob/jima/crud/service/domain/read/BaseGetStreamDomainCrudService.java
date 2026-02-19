@@ -14,10 +14,12 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import org.jspecify.annotations.NonNull;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
 
 /**
  * This interface defines a service for retrieving multiple domain entities based on specific criteria or IDs.
@@ -53,6 +55,49 @@ public interface BaseGetStreamDomainCrudService<ID extends Comparable<ID> & Seri
     default Flux<@NonNull DTO> getStream(Collection<ID> ids, USER user) throws DomainNotFoundException, BadRequestException {
         return this.doGetStream(CriteriaUtil.idCriteria(getCriteriaClass(), ids), user);
     }
+
+    /**
+     * Retrieve multiple DTO entities based on a collection of entity IDs.
+     *
+     * <p>This method fetches entities matching the provided IDs and returns them
+     * as a {@link Map} where the key is the entity ID and the value is the corresponding DTO.
+     * The retrieval is performed reactively and returns a {@link Mono} emitting the resulting map.</p>
+     *
+     * @param ids  a collection of entity IDs to fetch; must not be null
+     * @param user the user performing the operation; used for context or authorization
+     * @return a {@link Mono} emitting a {@link Map} of entity IDs to their corresponding DTOs
+     * @throws DomainNotFoundException if any of the requested domains are not found
+     * @throws BadRequestException     if the request is invalid or violates business rules
+     */
+    @Transactional(readOnly = true)
+    @MethodStats
+    default Mono<@NonNull Map<ID, DTO>> getMap(Collection<ID> ids, USER user)
+            throws DomainNotFoundException, BadRequestException {
+        return this.doGetStream(CriteriaUtil.idCriteria(getCriteriaClass(), ids), user)
+                .collectMap(DTO::getId);
+    }
+
+    /**
+     * Retrieve multiple DTO entities based on specific criteria.
+     *
+     * <p>This method fetches entities matching the provided criteria and returns them
+     * as a {@link Map} where the key is the entity ID and the value is the corresponding DTO.
+     * The retrieval is performed reactively and returns a {@link Mono} emitting the resulting map.</p>
+     *
+     * @param criteria the criteria used to filter entities; must not be null
+     * @param user     the user performing the operation; used for context or authorization
+     * @return a {@link Mono} emitting a {@link Map} of entity IDs to their corresponding DTOs
+     * @throws DomainNotFoundException if no entities match the given criteria
+     * @throws BadRequestException     if the request is invalid or violates business rules
+     */
+    @Transactional(readOnly = true)
+    @MethodStats
+    default Mono<@NonNull Map<ID, DTO>> getMap(C criteria, USER user)
+            throws DomainNotFoundException, BadRequestException {
+        return this.doGetStream(criteria, user)
+                .collectMap(DTO::getId);
+    }
+
 
     /**
      * Retrieve multiple DTO entities based on specific criteria.
