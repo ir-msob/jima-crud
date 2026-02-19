@@ -10,8 +10,10 @@ import ir.msob.jima.crud.service.domain.ParentDomainCrudService;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * This interface defines a parent service for reading entities based on specific criteria.
@@ -30,18 +32,22 @@ public interface ParentReadDomainCrudService<ID extends Comparable<ID> & Seriali
         R extends BaseDomainCrudRepository<ID, D, C>> extends ParentDomainCrudService<ID, USER, D, DTO, C, R> {
 
     /**
-     * Enrich a collection of DTOs by setting dependent objects from a map.
+     * Enriches a collection of DTOs by setting a dependent object from the provided map.
      *
-     * <p>For each DTO in the given collection, this method retrieves the corresponding dependent
-     * object from the provided map using the ID obtained from the DTO, and then applies the
-     * provided setter function to set the dependent object into the DTO.</p>
+     * <p>For each DTO, the dependent ID is extracted using {@code dependentIdGetter}.
+     * If a matching entry exists in the map, the {@code setter} is invoked to inject
+     * the dependent object into the DTO.</p>
      *
-     * @param dtos              the collection of DTOs to enrich; must not be null
-     * @param map               a map of IDs to dependent objects; must not be null
-     * @param dependentIdGetter a function that extracts the dependent ID from a DTO
-     * @param setter            a function that sets the dependent object into a DTO
-     * @param <DEPENDENT>       the type of the dependent objects to be set into the DTOs
+     * <p>This method is typically used when the dependent relationship is directly
+     * located on the root DTO level.</p>
+     *
+     * @param dtos              the DTO collection to enrich (ignored if null)
+     * @param map               the map containing dependent objects keyed by ID (ignored if null)
+     * @param dependentIdGetter extracts the dependent ID from a DTO
+     * @param setter            sets the dependent object into the DTO
+     * @param <DEPENDENT>       the type of the dependent object
      */
+
     default <DEPENDENT> void enrichFromMap(
             Collection<DTO> dtos,
             Map<ID, DEPENDENT> map,
@@ -57,6 +63,48 @@ public interface ParentReadDomainCrudService<ID extends Comparable<ID> & Seriali
                 setter.accept(dto, dependent);
             }
         });
+    }
+
+    /**
+     * Enriches nested child objects inside a collection of DTOs using a lookup map.
+     *
+     * <p>For each DTO, child elements are extracted using {@code childExtractor}.
+     * The dependent ID is obtained from each child via {@code idGetter}.
+     * If a corresponding entry exists in the map, the {@code setter} injects
+     * the dependent object into the child.</p>
+     *
+     * <p>This method is useful for enriching nested structures such as
+     * collections within DTOs (e.g. stages inside workflows).</p>
+     *
+     * @param dtos           the DTO collection to process (ignored if null)
+     * @param map            the map containing dependent objects keyed by ID (ignored if null)
+     * @param childExtractor extracts child elements from each DTO as a Stream
+     * @param idGetter       extracts the dependent ID from each child
+     * @param setter         sets the dependent object into the child
+     * @param <CHILD>        the type of the nested element
+     * @param <DEPENDENT>    the type of the dependent object
+     */
+    default <CHILD, DEPENDENT> void enrichNestedFromMap(
+            Collection<DTO> dtos,
+            Map<ID, DEPENDENT> map,
+            Function<DTO, Stream<CHILD>> childExtractor,
+            Function<CHILD, ID> idGetter,
+            BiConsumer<CHILD, DEPENDENT> setter
+    ) {
+        if (dtos == null || map == null) return;
+
+        dtos.stream()
+                .filter(Objects::nonNull)
+                .flatMap(childExtractor)
+                .forEach(child -> {
+                    ID dependentId = idGetter.apply(child);
+                    if (dependentId == null) return;
+
+                    DEPENDENT dependent = map.get(dependentId);
+                    if (dependent != null) {
+                        setter.accept(child, dependent);
+                    }
+                });
     }
 
 
