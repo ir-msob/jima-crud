@@ -52,9 +52,6 @@ public interface BaseCountAllChildDomainCrudService<ID extends Comparable<ID> & 
         C criteria = newCriteriaClass();
         criteria.setParentId(Filter.eq(parentId));
 
-        getBeforeAfterOperationComponent().beforeCount(criteria, user, getBeforeAfterDomainOperations());
-
-        return this.getRepository().countAll()
-                .doOnSuccess(aLong -> getBeforeAfterOperationComponent().afterCount(criteria, user, getBeforeAfterDomainOperations()));
+        return doCount(criteria, user);
     }
 }

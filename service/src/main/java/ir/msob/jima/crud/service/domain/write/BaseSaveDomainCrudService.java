@@ -8,10 +8,7 @@ import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundExceptio
 import ir.msob.jima.core.commons.logger.Logger;
 import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
-import ir.msob.jima.core.commons.safemodify.SafeSave;
 import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.core.commons.util.CriteriaUtil;
-import ir.msob.jima.core.commons.util.DtoUtil;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import jakarta.validation.Valid;
 import org.jspecify.annotations.NonNull;
@@ -46,30 +43,10 @@ public interface BaseSaveDomainCrudService<ID extends Comparable<ID> & Serializa
      */
     @Transactional
     @MethodStats
-    @Override
     default Mono<@NonNull DTO> save(@Valid DTO dto, USER user) throws BadRequestException, DomainNotFoundException {
         logger.debug("Save, user {}", user);
 
-        return safeSave(dto, user)
-                .switchIfEmpty(doSave(dto, user));
+        return doSave(dto, user);
     }
 
-    private Mono<@NonNull DTO> doSave(DTO dto, USER user) {
-        getBeforeAfterOperationComponent().beforeSave(dto, user, getBeforeAfterDomainOperations());
-        D domain = toDomain(dto, user);
-        return this.preSave(dto, user)
-                .then(this.getRepository().insertOne(domain))
-                .doOnSuccess(savedDomain -> this.postSave(dto, savedDomain, user))
-                .flatMap(savedDomain -> getOneById(savedDomain.getId(), user))
-                .doOnSuccess(savedDto -> getBeforeAfterOperationComponent().afterSave(dto, savedDto, user, getBeforeAfterDomainOperations()));
-    }
-
-    private Mono<@NonNull DTO> safeSave(DTO dto, USER user) {
-        if (SafeSave.info.hasAnnotation(getDtoClass())) {
-            String uniqueFieldValue = DtoUtil.uniqueField(getDtoClass(), dto);
-            C criteria = CriteriaUtil.uniqueCriteria(getCriteriaClass(), uniqueFieldValue);
-            return this.getOne(criteria, user);
-        }
-        return Mono.empty();
-    }
 }

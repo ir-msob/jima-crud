@@ -43,7 +43,6 @@ public interface BaseUpdateDomainCrudService<ID extends Comparable<ID> & Seriali
      * @throws BadRequestException     if the operation encounters a bad request scenario.
      * @throws DomainNotFoundException if the entity to be updated is not found.
      */
-    @Override
     @Transactional
     @MethodStats
     default Mono<@NonNull DTO> update(ID id, @Valid DTO dto, USER user) {
@@ -61,17 +60,12 @@ public interface BaseUpdateDomainCrudService<ID extends Comparable<ID> & Seriali
      * @throws BadRequestException     if the operation encounters a bad request scenario.
      * @throws DomainNotFoundException if the entity to be updated is not found.
      */
-    @Override
     @Transactional
     @MethodStats
     default Mono<@NonNull DTO> update(@Valid DTO dto, USER user) {
         return doUpdate(dto, user);
     }
 
-    private Mono<@NonNull DTO> doUpdate(@Valid DTO dto, USER user) {
-        return getOneById(dto.getId(), user)
-                .flatMap(previousDto -> this.doUpdate(previousDto, dto, user));
-    }
 
     /**
      * Updates a single entity based on a previous DTO and a new DTO. Validates, prepares, and updates the entity.
@@ -85,25 +79,10 @@ public interface BaseUpdateDomainCrudService<ID extends Comparable<ID> & Seriali
      * @throws ValidationException     if validation fails during the update.
      * @throws DomainNotFoundException if the entity to be updated is not found.
      */
-    @Override
     @Transactional
     @MethodStats
     default Mono<@NonNull DTO> update(DTO previousDto, @Valid DTO dto, USER user) throws BadRequestException, ValidationException, DomainNotFoundException {
         return doUpdate(previousDto, dto, user);
     }
-
-    private Mono<@NonNull DTO> doUpdate(DTO previousDto, @Valid DTO dto, USER user) throws BadRequestException, ValidationException, DomainNotFoundException {
-        getBeforeAfterOperationComponent().beforeUpdate(previousDto, dto, user, getBeforeAfterDomainOperations());
-
-        D domain = toDomain(dto, user);
-
-        return this.preUpdate(dto, user)
-                .then(this.getRepository().updateOne(domain))
-                .flatMap(updatedDomain -> this.postUpdate(dto, updatedDomain, user).thenReturn(updatedDomain))
-                .flatMap(updatedDomain -> getOneById(updatedDomain.getId(), user))
-                .doOnSuccess(updatedDto ->
-                        getBeforeAfterOperationComponent().afterUpdate(previousDto, updatedDto, user, getBeforeAfterDomainOperations()));
-    }
-
 
 }

@@ -50,8 +50,7 @@ public interface BaseCountChildDomainCrudService<
         logger.debug("Count, criteria: {}, user: {}", criteria, user);
         criteria.setParentId(Filter.eq(parentId));
 
-        getBeforeAfterOperationComponent().beforeCount(criteria, user, getBeforeAfterDomainOperations());
-        return this.getRepository().count(criteria)
-                .doOnSuccess(result -> getBeforeAfterOperationComponent().afterCount(criteria, user, getBeforeAfterDomainOperations()));
+        return doCount(criteria, user);
     }
+
 }

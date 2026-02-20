@@ -69,25 +69,10 @@ public interface BaseGetManyDomainCrudService<ID extends Comparable<ID> & Serial
      */
     @Transactional(readOnly = true)
     @MethodStats
-    @Override
     default Mono<@NonNull Collection<DTO>> getMany(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
         logger.debug("GetMany, criteria: {}, user: {}", criteria, user);
 
         return this.doGetMany(criteria, user);
     }
 
-    private Mono<@NonNull Collection<DTO>> doGetMany(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
-        getBeforeAfterOperationComponent().beforeGet(criteria, user, getBeforeAfterDomainOperations());
-
-        return this.preGet(criteria, user)
-                .thenMany(this.getRepository().getMany(criteria))
-                .map(d -> toDto(d, user))
-                .collectList()
-                .flatMap(dtos -> {
-                    Collection<ID> ids = prepareIds(dtos);
-                    return this.postGet(ids, dtos, criteria, user)
-                            .doOnSuccess(x -> getBeforeAfterOperationComponent().afterGet(ids, dtos, criteria, user, getBeforeAfterDomainOperations()))
-                            .thenReturn(dtos);
-                });
-    }
 }

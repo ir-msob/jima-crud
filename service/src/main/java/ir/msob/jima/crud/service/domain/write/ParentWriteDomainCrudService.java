@@ -1,20 +1,14 @@
 package ir.msob.jima.crud.service.domain.write;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.fge.jsonpatch.JsonPatch;
 import ir.msob.jima.core.commons.domain.BaseCriteria;
 import ir.msob.jima.core.commons.domain.BaseDomain;
 import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
-import ir.msob.jima.core.commons.exception.validation.ValidationException;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.ParentDomainCrudService;
-import jakarta.validation.Valid;
-import lombok.SneakyThrows;
 import org.jspecify.annotations.NonNull;
 import reactor.core.publisher.Mono;
 
@@ -50,7 +44,7 @@ public interface ParentWriteDomainCrudService<
      * @throws DomainNotFoundException If the domain is not found.
      */
     default Mono<@NonNull DTO> getOneById(ID id, USER user) {
-        return getOne(CriteriaUtil.idCriteria(getCriteriaClass(), id), user);
+        return doGetOne(CriteriaUtil.idCriteria(getCriteriaClass(), id), user);
     }
 
     /**
@@ -67,66 +61,7 @@ public interface ParentWriteDomainCrudService<
                 .stream()
                 .map(BaseDomain::getId)
                 .toList();
-        return this.getMany(CriteriaUtil.idCriteria(getCriteriaClass(), ids), user);
+        return this.doGetMany(CriteriaUtil.idCriteria(getCriteriaClass(), ids), user);
     }
-
-    /**
-     * Applies a JSON patch to a collection of DTOs.
-     *
-     * @param dtos         A collection of DTOs to be patched.
-     * @param jsonPatch    The JSON patch to apply.
-     * @param objectMapper The ObjectMapper for JSON processing.
-     * @return A collection of patched DTOs.
-     */
-    default Collection<DTO> applyJsonPatch(Collection<DTO> dtos, JsonPatch jsonPatch, ObjectMapper objectMapper) {
-        return dtos.stream()
-                .map(dto -> applyJsonPatch(jsonPatch, dto, objectMapper))
-                .toList();
-    }
-
-    /**
-     * Applies a JSON patch to a DTO.
-     *
-     * @param jsonPatch    The JSON patch to apply.
-     * @param dto          The DTO to be patched.
-     * @param objectMapper The ObjectMapper for JSON processing.
-     * @return The patched DTO.
-     */
-    @SneakyThrows
-    default DTO applyJsonPatch(JsonPatch jsonPatch, DTO dto, ObjectMapper objectMapper) {
-        JsonNode patched = jsonPatch.apply(objectMapper.convertValue(dto, JsonNode.class));
-        return (DTO) objectMapper.treeToValue(patched, dto.getClass());
-    }
-
-
-    /**
-     * Saves a DTO.
-     *
-     * @param dto  The DTO to be saved.
-     * @param user A user object.
-     * @return A Mono that emits the saved DTO.
-     * @throws BadRequestException     If the request is malformed.
-     * @throws DomainNotFoundException If the domain is not found.
-     */
-    default Mono<@NonNull DTO> save(@Valid DTO dto, USER user) throws BadRequestException, DomainNotFoundException {
-        return Mono.empty();
-    }
-
-    /**
-     * Updates a DTO.
-     *
-     * @param previousDto The previous DTO before update.
-     * @param dto         The DTO to be updated.
-     * @param user        A user object.
-     * @return A Mono that emits the updated DTO.
-     * @throws BadRequestException     If the request is malformed.
-     * @throws ValidationException     If the DTO is not valid.
-     * @throws DomainNotFoundException If the domain is not found.
-     */
-    @Override
-    default Mono<@NonNull DTO> update(DTO previousDto, @Valid DTO dto, USER user) throws BadRequestException, ValidationException, DomainNotFoundException {
-        return Mono.empty();
-    }
-
 
 }

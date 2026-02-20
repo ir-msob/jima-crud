@@ -5,8 +5,8 @@ import ir.msob.jima.core.commons.domain.SampleCriteria;
 import ir.msob.jima.core.commons.domain.SampleDomain;
 import ir.msob.jima.core.commons.domain.SampleDto;
 import ir.msob.jima.core.commons.operation.BaseBeforeAfterDomainOperation;
-import ir.msob.jima.core.commons.repository.BaseRepository;
 import ir.msob.jima.core.commons.security.BaseUser;
+import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.ParentDomainCrudService;
 import ir.msob.jima.crud.service.domain.operation.BeforeAfterOperationComponent;
 
@@ -18,11 +18,11 @@ public class ConcreteParentDomainCrudService implements
                 SampleDomain<String>,
                 SampleDto<String>,
                 SampleCriteria<String>,
-                BaseRepository<String, SampleDomain<String>, SampleCriteria<String>>> {
+                BaseDomainCrudRepository<String, SampleDomain<String>, SampleCriteria<String>>> {
 
 
     @Override
-    public BaseRepository<String, SampleDomain<String>, SampleCriteria<String>> getRepository() {
+    public BaseDomainCrudRepository<String, SampleDomain<String>, SampleCriteria<String>> getRepository() {
         return null;
     }
 

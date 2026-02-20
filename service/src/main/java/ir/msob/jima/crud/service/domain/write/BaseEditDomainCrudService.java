@@ -12,7 +12,6 @@ import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
-import org.apache.commons.lang3.SerializationUtils;
 import org.jspecify.annotations.NonNull;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
@@ -69,10 +68,4 @@ public interface BaseEditDomainCrudService<ID extends Comparable<ID> & Serializa
         return this.doEdit(criteria, jsonPatch, user);
     }
 
-    private Mono<@NonNull DTO> doEdit(C criteria, JsonPatch jsonPatch, USER user) throws BadRequestException, DomainNotFoundException {
-        return getOne(criteria, user).flatMap(dto -> {
-            DTO previousDto = SerializationUtils.clone(dto);
-            return update(previousDto, applyJsonPatch(jsonPatch, dto, getObjectMapper()), user);
-        });
-    }
 }

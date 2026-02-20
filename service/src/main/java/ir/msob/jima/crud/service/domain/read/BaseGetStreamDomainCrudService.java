@@ -18,7 +18,6 @@ import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -110,25 +109,9 @@ public interface BaseGetStreamDomainCrudService<ID extends Comparable<ID> & Seri
      */
     @Transactional(readOnly = true)
     @MethodStats
-    @Override
     default Flux<@NonNull DTO> getStream(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
         logger.debug("GetStream, criteria: {}, user: {}", criteria, user);
 
         return this.doGetStream(criteria, user);
-    }
-
-    private Flux<@NonNull DTO> doGetStream(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
-        getBeforeAfterOperationComponent().beforeGet(criteria, user, getBeforeAfterDomainOperations());
-
-        return this.preGet(criteria, user)
-                .thenMany(this.getRepository().getMany(criteria))
-                .flatMap(domain -> {
-                    DTO dto = toDto(domain, user);
-                    Collection<DTO> dtos = Collections.singleton(dto);
-                    Collection<ID> ids = Collections.singleton(domain.getId());
-                    return this.postGet(ids, dtos, criteria, user)
-                            .doOnSuccess(x -> getBeforeAfterOperationComponent().afterGet(ids, dtos, criteria, user, getBeforeAfterDomainOperations()))
-                            .thenReturn(dto);
-                });
     }
 }

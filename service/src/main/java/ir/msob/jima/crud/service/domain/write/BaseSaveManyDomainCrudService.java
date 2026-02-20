@@ -53,7 +53,7 @@ public interface BaseSaveManyDomainCrudService<ID extends Comparable<ID> & Seria
         // For each DTO in the stream, call the save method
         // Collect the result into a list and convert it into an ArrayList
         return Flux.fromIterable(dtos)
-                .flatMap(dto -> save(dto, user))
+                .flatMap(dto -> doSave(dto, user))
                 .collectList()
                 .map(ArrayList::new);
     }

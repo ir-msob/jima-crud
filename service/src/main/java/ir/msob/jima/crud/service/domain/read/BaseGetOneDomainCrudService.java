@@ -16,8 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Collections;
 
 /**
  * This interface defines a service for retrieving a single DTO entity based on specific criteria or an entity ID.
@@ -62,27 +60,9 @@ public interface BaseGetOneDomainCrudService<ID extends Comparable<ID> & Seriali
      */
     @Transactional(readOnly = true)
     @MethodStats
-    @Override
     default Mono<@NonNull DTO> getOne(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
         logger.debug("GetOne, criteria: {}, user: {}", criteria, user);
-
         return this.doGetOne(criteria, user);
-    }
-
-    private Mono<@NonNull DTO> doGetOne(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
-        getBeforeAfterOperationComponent().beforeGet(criteria, user, getBeforeAfterDomainOperations());
-
-        return this.preGet(criteria, user)
-                .then(this.getRepository().getOne(criteria))
-                .flatMap(domain -> {
-                    DTO dto = toDto(domain, user);
-                    Collection<ID> ids = Collections.singletonList(domain.getId());
-                    Collection<DTO> dtos = Collections.singletonList(dto);
-
-                    return this.postGet(ids, dtos, criteria, user)
-                            .doOnSuccess(x -> getBeforeAfterOperationComponent().afterGet(ids, dtos, criteria, user, getBeforeAfterDomainOperations()))
-                            .thenReturn(dto);
-                });
     }
 
 }

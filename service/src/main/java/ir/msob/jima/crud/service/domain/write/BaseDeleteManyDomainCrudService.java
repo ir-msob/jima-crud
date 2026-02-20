@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -67,21 +66,4 @@ public interface BaseDeleteManyDomainCrudService<ID extends Comparable<ID> & Ser
         return this.doDeleteMany(criteria, user);
     }
 
-    private Mono<@NonNull Collection<ID>> doDeleteMany(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
-        getBeforeAfterOperationComponent().beforeDelete(criteria, user, getBeforeAfterDomainOperations());
-
-        return getStream(criteria, user)
-                .doOnNext(dto -> getBeforeAfterOperationComponent().beforeDelete(criteria, user, getBeforeAfterDomainOperations()))
-                .flatMap(dto -> this.preDelete(criteria, user).thenReturn(dto))
-                .flatMap(dto -> {
-                    C criteriaId = CriteriaUtil.idCriteria(getCriteriaClass(), dto.getId());
-
-                    return this.getRepository().removeOne(criteriaId).thenReturn(dto);
-                })
-                .flatMap(dto -> this.postDelete(dto, criteria, user).thenReturn(dto))
-                .doOnNext(dto -> this.getBeforeAfterOperationComponent().afterDelete(dto, criteria, getDtoClass(), user, getBeforeAfterDomainOperations()))
-                .map(BaseDomain::getId)
-                .collectList()
-                .map(ArrayList::new);
-    }
 }

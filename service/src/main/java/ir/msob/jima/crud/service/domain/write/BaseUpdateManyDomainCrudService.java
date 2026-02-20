@@ -14,11 +14,9 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import jakarta.validation.Valid;
 import org.jspecify.annotations.NonNull;
 import org.springframework.transaction.annotation.Transactional;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -45,7 +43,6 @@ public interface BaseUpdateManyDomainCrudService<ID extends Comparable<ID> & Ser
      * @throws BadRequestException     if the operation encounters a bad request scenario.
      * @throws DomainNotFoundException if an entity to be updated is not found.
      */
-    @Override
     @Transactional
     @MethodStats
     default Mono<@NonNull Collection<DTO>> updateMany(Collection<@Valid DTO> dtos, USER user) {
@@ -65,27 +62,12 @@ public interface BaseUpdateManyDomainCrudService<ID extends Comparable<ID> & Ser
      * @throws ValidationException     if validation fails during the update.
      * @throws DomainNotFoundException if an entity to be updated is not found.
      */
-    @Override
     @Transactional
     @MethodStats
     default Mono<@NonNull Collection<DTO>> updateMany(Collection<DTO> previousDtos, Collection<@Valid DTO> dtos, USER user) {
         logger.debug("UpdateMany, dto.size {}, user {}", dtos.size(), user);
 
         return this.doUpdateMany(previousDtos, dtos, user);
-    }
-
-    private Mono<@NonNull Collection<DTO>> doUpdateMany(Collection<DTO> previousDtos, Collection<@Valid DTO> dtos, USER user) {
-
-        return Flux.fromIterable(dtos)
-                .flatMap(dto -> {
-                    DTO previousDto = previousDtos.stream()
-                            .filter(pd -> pd.getId().equals(dto.getId()))
-                            .findFirst()
-                            .orElseThrow();
-                    return update(previousDto, dto, user);
-                })
-                .collectList()
-                .map(ArrayList::new);
     }
 
 }

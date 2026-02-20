@@ -12,14 +12,11 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * This interface defines a service for retrieving a page of DTO entities based on specific criteria and pagination.
@@ -70,29 +67,6 @@ public interface BaseGetPageDomainCrudService<ID extends Comparable<ID> & Serial
     @MethodStats
     default Mono<@NonNull Page<@NonNull DTO>> getPage(C criteria, Pageable pageable, USER user) throws DomainNotFoundException, BadRequestException {
         logger.debug("GetPage, criteria: {}, user: {}", criteria, user);
-
         return this.doGetPage(criteria, pageable, user);
     }
-
-    private Mono<@NonNull Page<@NonNull DTO>> doGetPage(C criteria, Pageable pageable, USER user) throws DomainNotFoundException, BadRequestException {
-        getBeforeAfterOperationComponent().beforeGet(criteria, user, getBeforeAfterDomainOperations());
-
-        return this.preGet(criteria, user)
-                .then(this.getRepository().getPage(criteria, pageable))
-                .map(domainPage -> {
-                    List<DTO> dtos = domainPage
-                            .stream()
-                            .map(domain -> toDto(domain, user))
-                            .toList();
-
-                    return new PageImpl<>(dtos, domainPage.getPageable(), domainPage.getTotalElements());
-                })
-                .flatMap(dtoPage -> {
-                    Collection<ID> ids = prepareIds(dtoPage.getContent());
-                    return this.postGet(ids, dtoPage.getContent(), criteria, user)
-                            .doOnSuccess(x -> getBeforeAfterOperationComponent().afterGet(ids, dtoPage.getContent(), criteria, user, getBeforeAfterDomainOperations()))
-                            .thenReturn(dtoPage);
-                });
-    }
-
 }

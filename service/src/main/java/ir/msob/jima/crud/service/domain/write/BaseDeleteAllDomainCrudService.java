@@ -9,14 +9,12 @@ import ir.msob.jima.core.commons.logger.Logger;
 import ir.msob.jima.core.commons.logger.LoggerFactory;
 import ir.msob.jima.core.commons.methodstats.MethodStats;
 import ir.msob.jima.core.commons.security.BaseUser;
-import ir.msob.jima.core.commons.util.CriteriaUtil;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import org.jspecify.annotations.NonNull;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -48,19 +46,7 @@ public interface BaseDeleteAllDomainCrudService<ID extends Comparable<ID> & Seri
         logger.debug("Delete, user: {}", user);
 
         C criteria = newCriteriaClass();
-        getBeforeAfterOperationComponent().beforeDelete(criteria, user, getBeforeAfterDomainOperations());
-
-        return getStream(criteria, user)
-                .flatMap(dto -> this.preDelete(criteria, user).thenReturn(dto))
-                .flatMap(dto -> {
-                    C criteriaId = CriteriaUtil.idCriteria(getCriteriaClass(), dto.getId());
-                    return this.getRepository().removeOne(criteriaId).thenReturn(dto);
-                })
-                .flatMap(dto -> this.postDelete(dto, criteria, user).thenReturn(dto))
-                .doOnNext(dto -> this.getBeforeAfterOperationComponent().afterDelete(dto, criteria, getDtoClass(), user, getBeforeAfterDomainOperations()))
-                .map(BaseDomain::getId)
-                .collectList()
-                .map(ArrayList::new);
+        return doDeleteMany(criteria, user);
     }
 
 }
