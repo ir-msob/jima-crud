@@ -18,8 +18,8 @@ import org.springframework.http.MediaType;
 import java.io.Serializable;
 
 /**
- * The {@code BaseEditByIdDomainCrudRestResourceTest} interface represents a set of RESTful-specific test methods for editing an entity by its ID.
- * It extends both the {@code BaseEditByIdDomainCrudResourceTest} and {@code BaseEmbeddedDomainCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
+ * The {@code BaseEditByIdChildDomainCrudRestResourceTest} interface represents a set of RESTful-specific test methods for editing an entity by its ID.
+ * It extends both the {@code BaseEditByIdChildDomainCrudResourceTest} and {@code BaseEmbeddedDomainCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to edit an entity by its ID using RESTful API. The result of the edit operation is the DTO of the edited entity.
  *

@@ -18,7 +18,7 @@ import java.util.Collection;
 
 /**
  * The {@code BaseSaveManyDomainCrudGrpcResourceTest} interface represents a set of gRPC-specific test methods for saving multiple entities.
- * It extends both the {@code BaseSaveManyDomainCrudResourceTest} and {@code ParentDomainCrudGrpcResourceTest} interfaces, providing gRPC-specific testing capabilities.
+ * It extends both the {@code BaseSaveManyChildDomainCrudResourceTest} and {@code ParentDomainCrudGrpcResourceTest} interfaces, providing gRPC-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to save multiple entities using gRPC. The result of the save operation is a collection of DTOs of the saved entities.
  *

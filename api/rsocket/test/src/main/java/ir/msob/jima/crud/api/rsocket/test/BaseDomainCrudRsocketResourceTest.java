@@ -22,8 +22,8 @@ import java.io.Serializable;
  * @param <DTO>  the type of the DTO object, which extends BaseDto
  * @param <C>    the type of the criteria object, which extends BaseCriteria
  * @param <R>    the type of the repository object, which extends BaseDomainCrudRepository
- * @param <S>    the type of the service object, which extends BaseDomainCrudService
- * @param <DP>   the type of the data provider object, which extends BaseDomainCrudDataProvider
+ * @param <S>    the type of the service object, which extends BaseChildDomainCrudService
+ * @param <DP>   the type of the data provider object, which extends BaseChildDomainCrudDataProvider
  */
 public interface BaseDomainCrudRsocketResourceTest<
         ID extends Comparable<ID> & Serializable,

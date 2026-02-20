@@ -18,8 +18,8 @@ import java.io.Serializable;
 import java.util.Collection;
 
 /**
- * The {@code BaseSaveManyDomainCrudRestResourceTest} interface represents a set of RESTful-specific test methods for saving multiple entities.
- * It extends both the {@code BaseSaveManyDomainCrudResourceTest} and {@code BaseEmbeddedDomainCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
+ * The {@code BaseSaveManyChildDomainCrudRestResourceTest} interface represents a set of RESTful-specific test methods for saving multiple entities.
+ * It extends both the {@code BaseSaveManyChildDomainCrudResourceTest} and {@code BaseEmbeddedDomainCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to save multiple entities using RESTful API. The result of the save operation is a collection of DTOs of the saved entities.
  *

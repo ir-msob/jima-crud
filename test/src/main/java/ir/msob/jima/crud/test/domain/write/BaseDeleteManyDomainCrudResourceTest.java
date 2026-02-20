@@ -25,8 +25,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * The {@code BaseDeleteManyDomainCrudResourceTest} interface defines test cases for the deleteMany functionality of a CRUD resource.
- * It extends the {@code ParentDomainCrudResourceTest} interface and provides methods to test the deleteMany operation for CRUD resources.
+ * The {@code BaseDeleteManyChildDomainCrudResourceTest} interface defines test cases for the deleteMany functionality of a CRUD resource.
+ * It extends the {@code ParentChildDomainCrudResourceTest} interface and provides methods to test the deleteMany operation for CRUD resources.
  * The tests include scenarios for normal deleteMany and mandatory deleteMany operations.
  * The interface is generic, allowing customization for different types such as ID, USER, D, DTO, C, R, S, and DP.
  *
@@ -36,8 +36,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @param <DTO>  The type of the data transfer object associated with the resource, extending {@code BaseDto<ID>}.
  * @param <C>    The type of criteria associated with the resource, extending {@code BaseCriteria<ID, USER>}.
  * @param <R>    The type of the CRUD repository associated with the resource, extending {@code BaseDomainCrudRepository<ID, USER, D, C>}.
- * @param <S>    The type of the CRUD service associated with the resource, extending {@code BaseDomainCrudService<ID, USER, D, DTO, C, R>}.
- * @param <DP>   The type of the data provider associated with the resource, extending {@code BaseDomainCrudDataProvider<ID, USER, D, DTO, C, R, S>}.
+ * @param <S>    The type of the CRUD service associated with the resource, extending {@code BaseChildDomainCrudService<ID, USER, D, DTO, C, R>}.
+ * @param <DP>   The type of the data provider associated with the resource, extending {@code BaseChildDomainCrudDataProvider<ID, USER, D, DTO, C, R, S>}.
  * @see ParentDomainCrudResourceTest
  */
 public interface BaseDeleteManyDomainCrudResourceTest<

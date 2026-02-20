@@ -18,7 +18,7 @@ import java.util.Collection;
 
 /**
  * The {@code BaseUpdateManyDomainCrudGrpcResourceTest} interface represents a set of gRPC-specific test methods for updating multiple entities.
- * It extends both the {@code BaseUpdateManyDomainCrudResourceTest} and {@code ParentDomainCrudGrpcResourceTest} interfaces, providing gRPC-specific testing capabilities.
+ * It extends both the {@code BaseUpdateManyChildDomainCrudResourceTest} and {@code ParentDomainCrudGrpcResourceTest} interfaces, providing gRPC-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to update multiple entities using gRPC. The result of the update operation is a collection of DTOs of the updated entities.
  *

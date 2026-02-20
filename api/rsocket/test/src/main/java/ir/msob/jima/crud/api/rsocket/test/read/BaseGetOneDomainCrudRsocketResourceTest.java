@@ -20,7 +20,7 @@ import java.io.Serializable;
 
 /**
  * The {@code BaseGetOneDomainCrudRsocketResourceTest} interface represents a set of RSocket-specific test methods for retrieving a single entity.
- * It extends both the {@code BaseGetOneDomainCrudResourceTest} and {@code ParentDomainCrudRsocketResourceTest} interfaces, providing RSocket-specific testing capabilities.
+ * It extends both the {@code BaseGetOneChildDomainCrudResourceTest} and {@code ParentDomainCrudRsocketResourceTest} interfaces, providing RSocket-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to retrieve a single entity using RSocket API. The entity to be retrieved is determined by the criteria provided in the DTO.
  *

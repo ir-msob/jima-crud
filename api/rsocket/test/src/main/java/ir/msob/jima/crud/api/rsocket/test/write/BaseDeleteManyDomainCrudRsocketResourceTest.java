@@ -23,7 +23,7 @@ import java.util.Set;
 
 /**
  * The {@code BaseDeleteManyDomainCrudRsocketResourceTest} interface represents a set of RSocket-specific test methods for deleting multiple entities.
- * It extends both the {@code BaseDeleteManyDomainCrudResourceTest} and {@code ParentDomainCrudRsocketResourceTest} interfaces, providing RSocket-specific testing capabilities.
+ * It extends both the {@code BaseDeleteManyChildDomainCrudResourceTest} and {@code ParentDomainCrudRsocketResourceTest} interfaces, providing RSocket-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to delete multiple entities using RSocket API. The entities to be deleted are determined by the criteria provided in the DTO.
  *

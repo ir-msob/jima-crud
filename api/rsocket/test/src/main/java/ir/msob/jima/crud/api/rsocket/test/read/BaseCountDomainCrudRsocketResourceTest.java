@@ -20,7 +20,7 @@ import java.io.Serializable;
 
 /**
  * The {@code BaseCountDomainCrudRsocketResourceTest} interface represents a set of RSocket-specific test methods for counting entities.
- * It extends both the {@code BaseCountDomainCrudResourceTest} and {@code ParentDomainCrudRsocketResourceTest} interfaces, providing RSocket-specific testing capabilities.
+ * It extends both the {@code BaseCountChildDomainCrudResourceTest} and {@code ParentDomainCrudRsocketResourceTest} interfaces, providing RSocket-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to count entities using RSocket API. The result of the count operation is the total number of entities that match the provided criteria.
  *

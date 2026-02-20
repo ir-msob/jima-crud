@@ -16,7 +16,7 @@ import java.io.Serializable;
 
 /**
  * The {@code BaseCountAllDomainCrudGraphqlRestResourceTest} interface represents a set of GraphQL-specific test methods
- * for counting all entities in the context of CRUD operations. It extends both the {@code BaseCountAllDomainCrudResourceTest}
+ * for counting all entities in the context of CRUD operations. It extends both the {@code BaseCountAllChildDomainCrudResourceTest}
  * and {@code ParentDomainCrudGraphqlRestResourceTest} interfaces, providing GraphQL-specific testing capabilities.
  * <p>
  * The interface defines a GraphQL query document and a corresponding path for counting all entities.

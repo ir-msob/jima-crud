@@ -22,7 +22,7 @@ import java.io.Serializable;
 
 /**
  * The {@code BaseDeleteDomainCrudRsocketResourceTest} interface represents a set of RSocket-specific test methods for deleting an entity.
- * It extends both the {@code BaseDeleteDomainCrudResourceTest} and {@code ParentDomainCrudRsocketResourceTest} interfaces, providing RSocket-specific testing capabilities.
+ * It extends both the {@code BaseDeleteChildDomainCrudResourceTest} and {@code ParentDomainCrudRsocketResourceTest} interfaces, providing RSocket-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to delete an entity using RSocket API. The entity to be deleted is determined by the criteria provided in the DTO.
  *

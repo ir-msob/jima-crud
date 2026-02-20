@@ -19,8 +19,8 @@ import org.springframework.http.MediaType;
 import java.io.Serializable;
 
 /**
- * The {@code BaseGetPageDomainCrudRestResourceTest} interface represents a set of RESTful-specific test methods for retrieving a page of entities.
- * It extends both the {@code BaseGetPageDomainCrudResourceTest} and {@code BaseEmbeddedDomainCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
+ * The {@code BaseGetPageChildDomainCrudRestResourceTest} interface represents a set of RESTful-specific test methods for retrieving a page of entities.
+ * It extends both the {@code BaseGetPageChildDomainCrudResourceTest} and {@code BaseEmbeddedDomainCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to retrieve a page of entities using RESTful API. The result of the get operation is a page of DTOs of the retrieved entities.
  *

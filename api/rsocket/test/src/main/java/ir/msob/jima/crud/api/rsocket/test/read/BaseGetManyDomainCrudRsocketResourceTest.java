@@ -21,7 +21,7 @@ import java.util.Collection;
 
 /**
  * The {@code BaseGetManyDomainCrudRsocketResourceTest} interface represents a set of RSocket-specific test methods for retrieving multiple entities.
- * It extends both the {@code BaseGetManyDomainCrudResourceTest} and {@code ParentDomainCrudRsocketResourceTest} interfaces, providing RSocket-specific testing capabilities.
+ * It extends both the {@code BaseGetManyChildDomainCrudResourceTest} and {@code ParentDomainCrudRsocketResourceTest} interfaces, providing RSocket-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to retrieve multiple entities using RSocket API. The entities to be retrieved are determined by the criteria provided in the DTO.
  *

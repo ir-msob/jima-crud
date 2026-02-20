@@ -24,7 +24,7 @@ import java.io.Serializable;
 
 /**
  * The {@code BaseGetPageDomainCrudGrpcResourceTest} interface represents a set of gRPC-specific test methods for retrieving a page of entities based on a given criteria.
- * It extends both the {@code BaseGetPageDomainCrudResourceTest} and {@code ParentDomainCrudGrpcResourceTest} interfaces, providing gRPC-specific testing capabilities.
+ * It extends both the {@code BaseGetPageChildDomainCrudResourceTest} and {@code ParentDomainCrudGrpcResourceTest} interfaces, providing gRPC-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to retrieve a page of entities based on a given criteria using gRPC. The result of the retrieval operation is a {@code Page<DTO>}
  * representing the page of entities that match the given criteria.

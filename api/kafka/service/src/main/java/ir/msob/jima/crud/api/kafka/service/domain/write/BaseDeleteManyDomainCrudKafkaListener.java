@@ -33,7 +33,7 @@ import java.io.Serializable;
  * @param <DTO>  The type of the DTO, which must extend BaseDto.
  * @param <C>    The type of the Criteria, which must extend BaseCriteria.
  * @param <R>    The type of the Repository, which must extend BaseDomainCrudRepository.
- * @param <S>    The type of the Service, which must extend BaseDomainCrudService.
+ * @param <S>    The type of the Service, which must extend BaseChildDomainCrudService.
  */
 public interface BaseDeleteManyDomainCrudKafkaListener<
         ID extends Comparable<ID> & Serializable,

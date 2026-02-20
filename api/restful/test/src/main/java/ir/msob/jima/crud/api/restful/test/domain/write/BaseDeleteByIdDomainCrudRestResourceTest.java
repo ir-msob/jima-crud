@@ -17,8 +17,8 @@ import ir.msob.jima.crud.test.domain.write.BaseDeleteByIdDomainCrudResourceTest;
 import java.io.Serializable;
 
 /**
- * The {@code BaseDeleteByIdDomainCrudRestResourceTest} interface represents a set of RESTful-specific test methods for deleting an entity by its ID.
- * It extends both the {@code BaseDeleteByIdDomainCrudResourceTest} and {@code BaseEmbeddedDomainCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
+ * The {@code BaseDeleteByIdChildDomainCrudRestResourceTest} interface represents a set of RESTful-specific test methods for deleting an entity by its ID.
+ * It extends both the {@code BaseDeleteByIdChildDomainCrudResourceTest} and {@code BaseEmbeddedDomainCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to delete an entity by its ID using RESTful API. The result of the delete operation is the ID of the deleted entity.
  *

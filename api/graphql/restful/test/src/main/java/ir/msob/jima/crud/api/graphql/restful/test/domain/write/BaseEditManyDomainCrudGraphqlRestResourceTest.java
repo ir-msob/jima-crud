@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * The {@code BaseEditManyDomainCrudGraphqlRestResourceTest} interface represents a set of GraphQL-specific test methods
  * for editing (updating) multiple entities based on criteria using JSON Patch operations. It extends both the
- * {@code BaseEditManyDomainCrudResourceTest} and {@code ParentDomainCrudGraphqlRestResourceTest} interfaces, providing GraphQL-specific
+ * {@code BaseEditManyChildDomainCrudResourceTest} and {@code ParentDomainCrudGraphqlRestResourceTest} interfaces, providing GraphQL-specific
  * testing capabilities.
  * <p>
  * The interface defines a GraphQL mutation document and a corresponding path for editing multiple entities based on criteria

@@ -23,7 +23,7 @@ import java.io.Serializable;
 
 /**
  * The {@code BaseDeleteDomainCrudKafkaListenerTest} interface represents a set of RESTful-specific test methods for deleting an entity.
- * It extends both the {@code BaseDeleteDomainCrudResourceTest} and {@code ParentDomainCrudKafkaListenerTest} interfaces, providing RESTful-specific testing capabilities.
+ * It extends both the {@code BaseDeleteChildDomainCrudResourceTest} and {@code ParentDomainCrudKafkaListenerTest} interfaces, providing RESTful-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to delete an entity using RESTful API. The result of the delete operation is the ID of the deleted entity.
  *

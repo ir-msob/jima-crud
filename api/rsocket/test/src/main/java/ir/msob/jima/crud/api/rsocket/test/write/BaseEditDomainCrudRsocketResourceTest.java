@@ -21,7 +21,7 @@ import java.io.Serializable;
 
 /**
  * The {@code BaseEditDomainCrudRsocketResourceTest} interface represents a set of RSocket-specific test methods for editing an entity.
- * It extends both the {@code BaseEditDomainCrudResourceTest} and {@code ParentDomainCrudRsocketResourceTest} interfaces, providing RSocket-specific testing capabilities.
+ * It extends both the {@code BaseEditChildDomainCrudResourceTest} and {@code ParentDomainCrudRsocketResourceTest} interfaces, providing RSocket-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to edit an entity using RSocket API. The entity to be edited and the changes to be made are determined by the DTO and the JsonPatch respectively.
  *

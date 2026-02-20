@@ -17,7 +17,7 @@ import java.io.Serializable;
 
 /**
  * The {@code BaseUpdateDomainCrudGrpcResourceTest} interface represents a set of gRPC-specific test methods for updating an entity.
- * It extends both the {@code BaseUpdateDomainCrudResourceTest} and {@code ParentDomainCrudGrpcResourceTest} interfaces, providing gRPC-specific testing capabilities.
+ * It extends both the {@code BaseUpdateChildDomainCrudResourceTest} and {@code ParentDomainCrudGrpcResourceTest} interfaces, providing gRPC-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to update an entity using gRPC. The result of the update operation is the DTO of the updated entity.
  *

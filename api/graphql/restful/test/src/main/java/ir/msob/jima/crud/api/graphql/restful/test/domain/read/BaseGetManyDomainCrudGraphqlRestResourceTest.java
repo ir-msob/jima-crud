@@ -21,7 +21,7 @@ import java.util.Map;
 /**
  * The {@code BaseGetManyDomainCrudGraphqlRestResourceTest} interface represents a set of GraphQL-specific test methods
  * for retrieving multiple entities based on criteria in the context of CRUD operations. It extends both the
- * {@code BaseGetManyDomainCrudResourceTest} and {@code ParentDomainCrudGraphqlRestResourceTest} interfaces, providing GraphQL-specific
+ * {@code BaseGetManyChildDomainCrudResourceTest} and {@code ParentDomainCrudGraphqlRestResourceTest} interfaces, providing GraphQL-specific
  * testing capabilities.
  * <p>
  * The interface defines a GraphQL query document and a corresponding path for retrieving multiple entities based on criteria.

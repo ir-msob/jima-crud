@@ -19,7 +19,7 @@ import java.util.Collection;
 
 /**
  * The {@code BaseGetManyDomainCrudGrpcResourceTest} interface represents a set of gRPC-specific test methods for retrieving multiple entities based on a given criteria.
- * It extends both the {@code BaseGetManyDomainCrudResourceTest} and {@code ParentDomainCrudGrpcResourceTest} interfaces, providing gRPC-specific testing capabilities.
+ * It extends both the {@code BaseGetManyChildDomainCrudResourceTest} and {@code ParentDomainCrudGrpcResourceTest} interfaces, providing gRPC-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to retrieve multiple entities based on a given criteria using gRPC. The result of the retrieval operation is a {@code Collection<DTO>}
  * representing the entities that match the given criteria.

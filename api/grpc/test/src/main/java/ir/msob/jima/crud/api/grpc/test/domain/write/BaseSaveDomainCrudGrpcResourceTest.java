@@ -17,7 +17,7 @@ import java.io.Serializable;
 
 /**
  * The {@code BaseSaveDomainCrudGrpcResourceTest} interface represents a set of gRPC-specific test methods for saving an entity.
- * It extends both the {@code BaseSaveDomainCrudResourceTest} and {@code ParentDomainCrudGrpcResourceTest} interfaces, providing gRPC-specific testing capabilities.
+ * It extends both the {@code BaseSaveChildDomainCrudResourceTest} and {@code ParentDomainCrudGrpcResourceTest} interfaces, providing gRPC-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to save an entity using gRPC. The result of the save operation is the DTO of the saved entity.
  *

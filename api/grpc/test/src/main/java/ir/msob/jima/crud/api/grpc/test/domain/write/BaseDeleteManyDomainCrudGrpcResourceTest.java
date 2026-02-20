@@ -23,7 +23,7 @@ import java.util.Set;
 
 /**
  * The {@code BaseDeleteManyDomainCrudGrpcResourceTest} interface represents a set of gRPC-specific test methods for deleting multiple entities based on a given criteria.
- * It extends both the {@code BaseDeleteManyDomainCrudResourceTest} and {@code ParentDomainCrudGrpcResourceTest} interfaces, providing gRPC-specific testing capabilities.
+ * It extends both the {@code BaseDeleteManyChildDomainCrudResourceTest} and {@code ParentDomainCrudGrpcResourceTest} interfaces, providing gRPC-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to delete multiple entities based on a given criteria using gRPC. The result of the deletion operation is a set of IDs of the deleted entities.
  *

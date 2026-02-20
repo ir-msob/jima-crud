@@ -1,7 +1,6 @@
 package ir.msob.jima.crud.ral.r2dbc.it.domain;
 
 import ir.msob.jima.core.commons.util.CriteriaUtil;
-import ir.msob.jima.core.ral.r2dbc.commons.query.R2dbcQuery;
 import ir.msob.jima.core.ral.r2dbc.it.test.TestCriteria;
 import ir.msob.jima.core.ral.r2dbc.it.test.TestDomain;
 import ir.msob.jima.crud.ral.r2dbc.it.TestApplication;

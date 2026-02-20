@@ -19,7 +19,7 @@ import java.io.Serializable;
 
 /**
  * The {@code BaseGetByIdDomainCrudRsocketResourceTest} interface represents a set of RSocket-specific test methods for retrieving an entity by its ID.
- * It extends both the {@code BaseGetByIdDomainCrudResourceTest} and {@code ParentDomainCrudRsocketResourceTest} interfaces, providing RSocket-specific testing capabilities.
+ * It extends both the {@code BaseGetByIdChildDomainCrudResourceTest} and {@code ParentDomainCrudRsocketResourceTest} interfaces, providing RSocket-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to retrieve an entity by its ID using RSocket API. The result of the get operation is the DTO of the retrieved entity.
  *

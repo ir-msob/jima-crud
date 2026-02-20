@@ -19,7 +19,7 @@ import java.io.Serializable;
 
 /**
  * The {@code BaseGetOneDomainCrudGrpcResourceTest} interface represents a set of gRPC-specific test methods for retrieving a single entity based on a given criteria.
- * It extends both the {@code BaseGetOneDomainCrudResourceTest} and {@code ParentDomainCrudGrpcResourceTest} interfaces, providing gRPC-specific testing capabilities.
+ * It extends both the {@code BaseGetOneChildDomainCrudResourceTest} and {@code ParentDomainCrudGrpcResourceTest} interfaces, providing gRPC-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to retrieve a single entity based on a given criteria using gRPC. The result of the retrieval operation is a {@code DTO}
  * representing the entity that matches the given criteria.

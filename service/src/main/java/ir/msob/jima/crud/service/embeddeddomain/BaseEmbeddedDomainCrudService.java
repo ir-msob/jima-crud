@@ -2,10 +2,8 @@ package ir.msob.jima.crud.service.embeddeddomain;
 
 import ir.msob.jima.core.commons.domain.BaseDto;
 import ir.msob.jima.core.commons.embeddeddomain.BaseEmbeddedDomain;
-import ir.msob.jima.core.commons.embeddeddomain.BaseEmbeddedDomainKey;
-import ir.msob.jima.core.commons.embeddeddomain.BaseEmbeddedDomainName;
 import ir.msob.jima.core.commons.embeddeddomain.EmbeddedDomainUtil;
-import ir.msob.jima.core.commons.embeddeddomain.criteria.*;
+import ir.msob.jima.core.commons.embeddeddomain.criteria.BaseEmbeddedCriteria;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.datanotfound.DataNotFoundException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
@@ -16,7 +14,6 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.commons.util.GenericTypeUtil;
 import ir.msob.jima.core.commons.util.Strings;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.SneakyThrows;
@@ -70,93 +67,13 @@ public interface BaseEmbeddedDomainCrudService<
     Mono<@NonNull DTO> updateDto(ID id, @Valid DTO dto, USER user);
 
     /**
-     * Update a embedded domain entity by key.
-     *
-     * @param parentId    The id of the parent entity.
-     * @param key         The key of the embedded domain entity.
-     * @param embeddedDomain The embedded domain entity to be updated.
-     * @param cdClass     The class of the embedded domain entity.
-     * @param user        A user context.
-     * @return A Mono that emits the updated DTO entity.
-     * @throws DomainNotFoundException If the domain is not found.
-     * @throws BadRequestException     If the request is invalid.
-     */
-    @SneakyThrows
-    @MethodStats
-    default <ED extends BaseEmbeddedDomainKey<ID>, EC extends BaseEmbeddedCriteriaKey<ID, ED>> Mono<@NonNull DTO> updateByKey(@NotNull ID parentId, @NotBlank String key, ED embeddedDomain, Class<ED> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
-        EC criteria = (EC) EmbeddedDomainUtil.getCriteriaClass(cdClass, getParentDtoClass()).getConstructor().newInstance();
-        criteria.setKey(Filter.eq(key));
-        return this.update(parentId, embeddedDomain, criteria, cdClass, user);
-    }
-
-    /**
-     * Update a embedded domain entity by related id.
-     *
-     * @param parentId    The id of the parent entity.
-     * @param relatedId   The related id of the embedded domain entity.
-     * @param embeddedDomain The embedded domain entity to be updated.
-     * @param cdClass     The class of the embedded domain entity.
-     * @param user        A user context.
-     * @return A Mono that emits the updated DTO entity.
-     * @throws DomainNotFoundException If the domain is not found.
-     * @throws BadRequestException     If the request is invalid.
-     */
-    @SneakyThrows
-    @MethodStats
-    default <RID extends Comparable<RID> & Serializable, ED extends BaseEmbeddedDomain<ID>, EC extends BaseEmbeddedCriteriaRelatedId<ID, RID, ED>> Mono<@NonNull DTO> updateByRelatedId(@NotNull ID parentId, @NotNull RID relatedId, ED embeddedDomain, Class<ED> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
-        EC criteria = (EC) EmbeddedDomainUtil.getCriteriaClass(cdClass, getParentDtoClass()).getConstructor().newInstance();
-        criteria.setRelatedId(Filter.eq(relatedId));
-        return this.update(parentId, embeddedDomain, criteria, cdClass, user);
-    }
-
-    /**
-     * Update a embedded domain entity by name.
-     *
-     * @param parentId    The id of the parent entity.
-     * @param name        The name of the embedded domain entity.
-     * @param embeddedDomain The embedded domain entity to be updated.
-     * @param cdClass     The class of the embedded domain entity.
-     * @param user        A user context.
-     * @return A Mono that emits the updated DTO entity.
-     * @throws DomainNotFoundException If the domain is not found.
-     * @throws BadRequestException     If the request is invalid.
-     */
-    @SneakyThrows
-    @MethodStats
-    default <ED extends BaseEmbeddedDomainName<ID>, EC extends BaseEmbeddedCriteriaName<ID, ED>> Mono<@NonNull DTO> updateByName(@NotNull ID parentId, @NotBlank String name, ED embeddedDomain, Class<ED> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
-        EC criteria = (EC) EmbeddedDomainUtil.getCriteriaClass(cdClass, getParentDtoClass()).getConstructor().newInstance();
-        criteria.setName(Filter.eq(name));
-        return this.update(parentId, embeddedDomain, criteria, cdClass, user);
-    }
-
-    /**
-     * Update a embedded domain entity by type.
-     *
-     * @param parentId    The id of the parent entity.
-     * @param type        The type of the embedded domain entity.
-     * @param embeddedDomain The embedded domain entity to be updated.
-     * @param cdClass     The class of the embedded domain entity.
-     * @param user        A user context.
-     * @return A Mono that emits the updated DTO entity.
-     * @throws DomainNotFoundException If the domain is not found.
-     * @throws BadRequestException     If the request is invalid.
-     */
-    @SneakyThrows
-    @MethodStats
-    default <ED extends BaseEmbeddedDomain<ID>, EC extends BaseEmbeddedCriteriaType<ID, ED>> Mono<@NonNull DTO> updateByType(@NotNull ID parentId, @NotBlank String type, ED embeddedDomain, Class<ED> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
-        EC criteria = (EC) EmbeddedDomainUtil.getCriteriaClass(cdClass, getParentDtoClass()).getConstructor().newInstance();
-        criteria.setType(Filter.eq(type));
-        return this.update(parentId, embeddedDomain, criteria, cdClass, user);
-    }
-
-    /**
      * Update a embedded domain entity by id.
      *
-     * @param parentId    The id of the parent entity.
-     * @param id          The id of the embedded domain entity.
+     * @param parentId       The id of the parent entity.
+     * @param id             The id of the embedded domain entity.
      * @param embeddedDomain The embedded domain entity to be updated.
-     * @param cdClass     The class of the embedded domain entity.
-     * @param user        A user context.
+     * @param cdClass        The class of the embedded domain entity.
+     * @param user           A user context.
      * @return A Mono that emits the updated DTO entity.
      * @throws DomainNotFoundException If the domain is not found.
      * @throws BadRequestException     If the request is invalid.
@@ -172,11 +89,11 @@ public interface BaseEmbeddedDomainCrudService<
     /**
      * Update a embedded domain entity based on criteria.
      *
-     * @param parentId      The id of the parent entity.
+     * @param parentId         The id of the parent entity.
      * @param embeddedDomain   The embedded domain entity to be updated.
      * @param embeddedCriteria The criteria to match the embedded domain entity.
-     * @param cdClass       The class of the embedded domain entity.
-     * @param user          A user context.
+     * @param cdClass          The class of the embedded domain entity.
+     * @param user             A user context.
      * @return A Mono that emits the updated DTO entity.
      * @throws DomainNotFoundException If the domain is not found.
      * @throws BadRequestException     If the request is invalid.
@@ -209,10 +126,10 @@ public interface BaseEmbeddedDomainCrudService<
     /**
      * Update multiple embedded domain entities.
      *
-     * @param parentId     The id of the parent entity.
+     * @param parentId        The id of the parent entity.
      * @param embeddedDomains The collection of embedded domain entities to be updated.
-     * @param cdClass      The class of the embedded domain entities.
-     * @param user         A user context.
+     * @param cdClass         The class of the embedded domain entities.
+     * @param user            A user context.
      * @return A Mono that emits the updated DTO entity.
      * @throws DomainNotFoundException If the domain is not found.
      * @throws BadRequestException     If the request is invalid.
@@ -243,63 +160,6 @@ public interface BaseEmbeddedDomainCrudService<
     }
 
     /**
-     * Delete a embedded domain entity by key.
-     *
-     * @param parentId The id of the parent entity.
-     * @param key      The key of the embedded domain entity.
-     * @param cdClass  The class of the embedded domain entity.
-     * @param user     A user context.
-     * @return A Mono that emits the updated DTO entity.
-     * @throws DomainNotFoundException If the domain is not found.
-     * @throws BadRequestException     If the request is invalid.
-     */
-    @SneakyThrows
-    @MethodStats
-    default <ED extends BaseEmbeddedDomainKey<ID>, EC extends BaseEmbeddedCriteriaKey<ID, ED>> Mono<@NonNull DTO> deleteByKey(@NotNull ID parentId, @NotBlank String key, Class<ED> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
-        EC criteria = (EC) EmbeddedDomainUtil.getCriteriaClass(cdClass, getParentDtoClass()).getConstructor().newInstance();
-        criteria.setKey(Filter.eq(key));
-        return delete(parentId, criteria, cdClass, user);
-    }
-
-    /**
-     * Delete a embedded domain entity by name.
-     *
-     * @param parentId The id of the parent entity.
-     * @param name     The name of the embedded domain entity.
-     * @param cdClass  The class of the embedded domain entity.
-     * @param user     A user context.
-     * @return A Mono that emits the updated DTO entity.
-     * @throws DomainNotFoundException If the domain is not found.
-     * @throws BadRequestException     If the request is invalid.
-     */
-    @SneakyThrows
-    @MethodStats
-    default <ED extends BaseEmbeddedDomainName<ID>, EC extends BaseEmbeddedCriteriaName<ID, ED>> Mono<@NonNull DTO> deleteByName(@NotNull ID parentId, @NotBlank String name, Class<ED> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
-        EC criteria = (EC) EmbeddedDomainUtil.getCriteriaClass(cdClass, getParentDtoClass()).getConstructor().newInstance();
-        criteria.setName(Filter.eq(name));
-        return delete(parentId, criteria, cdClass, user);
-    }
-
-    /**
-     * Delete a embedded domain entity by type.
-     *
-     * @param parentId The id of the parent entity.
-     * @param type     The type of the embedded domain entity.
-     * @param cdClass  The class of the embedded domain entity.
-     * @param user     A user context.
-     * @return A Mono that emits the updated DTO entity.
-     * @throws DomainNotFoundException If the domain is not found.
-     * @throws BadRequestException     If the request is invalid.
-     */
-    @SneakyThrows
-    @MethodStats
-    default <ED extends BaseEmbeddedDomain<ID>, EC extends BaseEmbeddedCriteriaType<ID, ED>> Mono<@NonNull DTO> deleteByType(@NotNull ID parentId, @NotBlank String type, Class<ED> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
-        EC criteria = (EC) EmbeddedDomainUtil.getCriteriaClass(cdClass, getParentDtoClass()).getConstructor().newInstance();
-        criteria.setType(Filter.eq(type));
-        return delete(parentId, criteria, cdClass, user);
-    }
-
-    /**
      * Delete a embedded domain entity by id.
      *
      * @param parentId The id of the parent entity.
@@ -319,31 +179,12 @@ public interface BaseEmbeddedDomainCrudService<
     }
 
     /**
-     * Delete a embedded domain entity by related id.
-     *
-     * @param parentId  The id of the parent entity.
-     * @param relatedId The related id of the embedded domain entity.
-     * @param cdClass   The class of the embedded domain entity.
-     * @param user      A user context.
-     * @return A Mono that emits the updated DTO entity.
-     * @throws DomainNotFoundException If the domain is not found.
-     * @throws BadRequestException     If the request is invalid.
-     */
-    @SneakyThrows
-    @MethodStats
-    default <RID extends Comparable<RID> & Serializable, ED extends BaseEmbeddedDomain<ID>, EC extends BaseEmbeddedCriteriaRelatedId<ID, RID, ED>> Mono<@NonNull DTO> deleteByRelatedId(@NotNull ID parentId, @NotNull RID relatedId, Class<ED> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
-        EC criteria = (EC) EmbeddedDomainUtil.getCriteriaClass(cdClass, getParentDtoClass()).getConstructor().newInstance();
-        criteria.setRelatedId(Filter.eq(relatedId));
-        return delete(parentId, criteria, cdClass, user);
-    }
-
-    /**
      * Delete a embedded domain entity based on criteria.
      *
-     * @param parentId      The id of the parent entity.
+     * @param parentId         The id of the parent entity.
      * @param embeddedCriteria The criteria to match the embedded domain entity.
-     * @param cdClass       The class of the embedded domain entity.
-     * @param user          A user context.
+     * @param cdClass          The class of the embedded domain entity.
+     * @param user             A user context.
      * @return A Mono that emits the updated DTO entity.
      * @throws DomainNotFoundException If the domain is not found.
      * @throws BadRequestException     If the request is invalid.
@@ -377,10 +218,10 @@ public interface BaseEmbeddedDomainCrudService<
     /**
      * Deletes multiple embedded domain entities based on criteria.
      *
-     * @param parentId      The id of the parent entity.
+     * @param parentId         The id of the parent entity.
      * @param embeddedCriteria The criteria to match the embedded domain entities.
-     * @param cdClass       The class of the embedded domain entities.
-     * @param user          A user context.
+     * @param cdClass          The class of the embedded domain entities.
+     * @param user             A user context.
      * @return A Mono that emits the updated DTO entity.
      * @throws DomainNotFoundException If the domain is not found.
      * @throws BadRequestException     If the request is invalid.
@@ -410,10 +251,10 @@ public interface BaseEmbeddedDomainCrudService<
     /**
      * Saves a single embedded domain entity.
      *
-     * @param parentId    The id of the parent entity.
+     * @param parentId       The id of the parent entity.
      * @param embeddedDomain The embedded domain entity to be saved.
-     * @param cdClass     The class of the embedded domain entity.
-     * @param user        A user context.
+     * @param cdClass        The class of the embedded domain entity.
+     * @param user           A user context.
      * @return A Mono that emits the updated DTO entity.
      * @throws DomainNotFoundException If the domain is not found.
      * @throws BadRequestException     If the request is invalid.
@@ -426,10 +267,10 @@ public interface BaseEmbeddedDomainCrudService<
     /**
      * Saves multiple embedded domain entities.
      *
-     * @param parentId     The id of the parent entity.
+     * @param parentId        The id of the parent entity.
      * @param embeddedDomains The collection of embedded domain entities to be saved.
-     * @param cdClass      The class of the embedded domain entities.
-     * @param user         A user context.
+     * @param cdClass         The class of the embedded domain entities.
+     * @param user            A user context.
      * @return A Mono that emits the updated DTO entity.
      * @throws DomainNotFoundException If the domain is not found.
      * @throws BadRequestException     If the request is invalid.

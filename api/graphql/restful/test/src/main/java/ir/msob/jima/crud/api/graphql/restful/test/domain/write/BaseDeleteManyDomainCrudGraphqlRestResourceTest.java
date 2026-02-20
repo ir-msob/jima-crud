@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 /**
  * The {@code BaseDeleteManyDomainCrudGraphqlRestResourceTest} interface represents a set of GraphQL-specific test methods
  * for deleting multiple entities based on criteria in the context of CRUD operations. It extends both the
- * {@code BaseDeleteManyDomainCrudResourceTest} and {@code ParentDomainCrudGraphqlRestResourceTest} interfaces, providing GraphQL-specific
+ * {@code BaseDeleteManyChildDomainCrudResourceTest} and {@code ParentDomainCrudGraphqlRestResourceTest} interfaces, providing GraphQL-specific
  * testing capabilities.
  * <p>
  * The interface defines a GraphQL mutation document and a corresponding path for deleting multiple entities based on criteria.

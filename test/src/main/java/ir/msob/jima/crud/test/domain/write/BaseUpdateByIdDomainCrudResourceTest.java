@@ -12,7 +12,6 @@ import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import ir.msob.jima.crud.test.domain.BaseDomainCrudDataProvider;
 import ir.msob.jima.crud.test.domain.ParentDomainCrudResourceTest;
-import org.apache.commons.lang3.SerializationUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.annotation.Rollback;
 
@@ -21,8 +20,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.ExecutionException;
 
 /**
- * The {@code BaseUpdateDomainCrudResourceTest} interface defines test cases for the update functionality of a CRUD resource.
- * It extends the {@code ParentDomainCrudResourceTest} interface and provides methods to test the update operation for CRUD resources.
+ * The {@code BaseUpdateChildDomainCrudResourceTest} interface defines test cases for the update functionality of a CRUD resource.
+ * It extends the {@code ParentChildDomainCrudResourceTest} interface and provides methods to test the update operation for CRUD resources.
  * The tests include scenarios for normal update and mandatory update operations.
  * The interface is generic, allowing customization for different types such as ID, USER, D, DTO, C, R, S, and DP.
  *
@@ -32,8 +31,8 @@ import java.util.concurrent.ExecutionException;
  * @param <DTO>  The type of the data transfer object associated with the resource, extending {@code BaseDto<ID>}.
  * @param <C>    The type of criteria associated with the resource, extending {@code BaseCriteria<ID, USER>}.
  * @param <R>    The type of the CRUD repository associated with the resource, extending {@code BaseDomainCrudRepository<ID, USER, D, C>}.
- * @param <S>    The type of the CRUD service associated with the resource, extending {@code BaseDomainCrudService<ID, USER, D, DTO, C, R>}.
- * @param <DP>   The type of the data provider associated with the resource, extending {@code BaseDomainCrudDataProvider<ID, USER, D, DTO, C, R, S>}.
+ * @param <S>    The type of the CRUD service associated with the resource, extending {@code BaseChildDomainCrudService<ID, USER, D, DTO, C, R>}.
+ * @param <DP>   The type of the data provider associated with the resource, extending {@code BaseChildDomainCrudDataProvider<ID, USER, D, DTO, C, R, S>}.
  * @see ParentDomainCrudResourceTest
  */
 public interface BaseUpdateByIdDomainCrudResourceTest<

@@ -18,7 +18,7 @@ import java.util.Map;
 
 /**
  * The {@code BaseUpdateDomainCrudGraphqlRestResourceTest} interface represents a set of GraphQL-specific test methods for updating entities using GraphQL mutations.
- * It extends both the {@code BaseUpdateDomainCrudResourceTest} and {@code ParentDomainCrudGraphqlRestResourceTest} interfaces, providing GraphQL-specific testing capabilities.
+ * It extends both the {@code BaseUpdateChildDomainCrudResourceTest} and {@code ParentDomainCrudGraphqlRestResourceTest} interfaces, providing GraphQL-specific testing capabilities.
  * <p>
  * The interface defines a GraphQL mutation document and a corresponding path for updating entities. It includes an implementation for making a request
  * to update an entity with GraphQL, including the conversion of the DTO to the required format. The result of the update operation is a {@code DtoType}

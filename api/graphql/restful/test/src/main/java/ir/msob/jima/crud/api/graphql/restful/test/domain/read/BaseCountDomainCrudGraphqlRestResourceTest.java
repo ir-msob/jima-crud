@@ -20,7 +20,7 @@ import java.util.Map;
 
 /**
  * The {@code BaseCountDomainCrudGraphqlRestResourceTest} interface represents a set of GraphQL-specific test methods
- * for counting entities in the context of CRUD operations. It extends both the {@code BaseCountDomainCrudResourceTest}
+ * for counting entities in the context of CRUD operations. It extends both the {@code BaseCountChildDomainCrudResourceTest}
  * and {@code ParentDomainCrudGraphqlRestResourceTest} interfaces, providing GraphQL-specific testing capabilities.
  * <p>
  * The interface defines a GraphQL query document and a corresponding path for counting entities based on criteria.

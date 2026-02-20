@@ -19,7 +19,7 @@ import java.io.Serializable;
 
 /**
  * The {@code BaseDeleteByIdDomainCrudGrpcResourceTest} interface represents a set of gRPC-specific test methods for deleting entities by their ID.
- * It extends both the {@code BaseDeleteByIdDomainCrudResourceTest} and {@code ParentDomainCrudGrpcResourceTest} interfaces, providing gRPC-specific testing capabilities.
+ * It extends both the {@code BaseDeleteByIdChildDomainCrudResourceTest} and {@code ParentDomainCrudGrpcResourceTest} interfaces, providing gRPC-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to delete an entity by its ID using gRPC. The result of the deletion operation is an {@code IdMsg}
  * representing the ID of the deleted entity.

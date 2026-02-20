@@ -21,7 +21,7 @@ import java.util.Collection;
 
 /**
  * The {@code ParentDomainCrudGrpcResourceTest} interface represents a set of gRPC-specific test methods for CRUD operations.
- * It extends the {@code ParentDomainCrudResourceTest} interface, providing gRPC-specific testing capabilities.
+ * It extends the {@code ParentChildDomainCrudResourceTest} interface, providing gRPC-specific testing capabilities.
  * <p>
  * The interface includes methods for converting between different data types and formats, such as DTOs, JSON patches, and pageable objects.
  *

@@ -18,8 +18,8 @@ import java.io.Serializable;
 import java.util.Collection;
 
 /**
- * The {@code BaseUpdateManyDomainCrudRestResourceTest} interface represents a set of RESTful-specific test methods for updating multiple entities.
- * It extends both the {@code BaseUpdateManyDomainCrudResourceTest} and {@code BaseEmbeddedDomainCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
+ * The {@code BaseUpdateManyChildDomainCrudRestResourceTest} interface represents a set of RESTful-specific test methods for updating multiple entities.
+ * It extends both the {@code BaseUpdateManyChildDomainCrudResourceTest} and {@code BaseEmbeddedDomainCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to update multiple entities using RESTful API. The result of the update operation is a collection of DTOs of the updated entities.
  *

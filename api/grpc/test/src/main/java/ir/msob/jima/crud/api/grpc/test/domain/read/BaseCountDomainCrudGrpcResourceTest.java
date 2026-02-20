@@ -19,7 +19,7 @@ import java.io.Serializable;
 
 /**
  * The {@code BaseCountDomainCrudGrpcResourceTest} interface represents a set of gRPC-specific test methods for counting entities based on a given criteria.
- * It extends both the {@code BaseCountDomainCrudResourceTest} and {@code ParentDomainCrudGrpcResourceTest} interfaces, providing gRPC-specific testing capabilities.
+ * It extends both the {@code BaseCountChildDomainCrudResourceTest} and {@code ParentDomainCrudGrpcResourceTest} interfaces, providing gRPC-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to count entities based on a given criteria using gRPC. The result of the count operation is a {@code Long}
  * representing the total number of entities that match the given criteria.

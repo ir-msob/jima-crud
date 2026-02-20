@@ -19,7 +19,7 @@ import java.io.Serializable;
 
 /**
  * The {@code BaseEditByIdDomainCrudGrpcResourceTest} interface represents a set of gRPC-specific test methods for editing entities by their ID.
- * It extends both the {@code BaseEditByIdDomainCrudResourceTest} and {@code ParentDomainCrudGrpcResourceTest} interfaces, providing gRPC-specific testing capabilities.
+ * It extends both the {@code BaseEditByIdChildDomainCrudResourceTest} and {@code ParentDomainCrudGrpcResourceTest} interfaces, providing gRPC-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to edit an entity by its ID using gRPC. The result of the edit operation is a {@code DtoMsg}
  * representing the edited entity.

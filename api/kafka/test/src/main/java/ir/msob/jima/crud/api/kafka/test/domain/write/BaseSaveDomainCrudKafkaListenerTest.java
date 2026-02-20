@@ -20,7 +20,7 @@ import java.io.Serializable;
 
 /**
  * The {@code BaseSaveDomainCrudKafkaListenerTest} interface represents a set of RESTful-specific test methods for saving an entity.
- * It extends both the {@code BaseSaveDomainCrudResourceTest} and {@code ParentDomainCrudKafkaListenerTest} interfaces, providing RESTful-specific testing capabilities.
+ * It extends both the {@code BaseSaveChildDomainCrudResourceTest} and {@code ParentDomainCrudKafkaListenerTest} interfaces, providing RESTful-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to save an entity using RESTful API. The result of the save operation is the DTO of the saved entity.
  *

@@ -25,7 +25,7 @@ import java.util.Set;
 
 /**
  * The {@code BaseDeleteManyDomainCrudKafkaListenerTest} interface represents a set of RESTful-specific test methods for deleting multiple entities.
- * It extends both the {@code BaseDeleteManyDomainCrudResourceTest} and {@code ParentDomainCrudKafkaListenerTest} interfaces, providing RESTful-specific testing capabilities.
+ * It extends both the {@code BaseDeleteManyChildDomainCrudResourceTest} and {@code ParentDomainCrudKafkaListenerTest} interfaces, providing RESTful-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to delete multiple entities using RESTful API. The result of the delete operation is a set of IDs of the deleted entities.
  *

@@ -18,7 +18,7 @@ import java.util.Map;
 
 /**
  * The {@code BaseSaveDomainCrudGraphqlRestResourceTest} interface represents a set of GraphQL-specific test methods for saving (creating or updating)
- * entities using GraphQL mutations. It extends both the {@code BaseSaveDomainCrudResourceTest} and {@code ParentDomainCrudGraphqlRestResourceTest} interfaces,
+ * entities using GraphQL mutations. It extends both the {@code BaseSaveChildDomainCrudResourceTest} and {@code ParentDomainCrudGraphqlRestResourceTest} interfaces,
  * providing GraphQL-specific testing capabilities.
  * <p>
  * The interface defines a GraphQL mutation document and a corresponding path for saving (creating or updating) an entity. It includes

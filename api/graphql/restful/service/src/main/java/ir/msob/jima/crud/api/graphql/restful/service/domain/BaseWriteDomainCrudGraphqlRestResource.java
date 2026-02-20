@@ -22,7 +22,7 @@ import java.io.Serializable;
  * @param <DTO>  The type of the data transfer object associated with the resource, extending {@code BaseDto<ID>}.
  * @param <C>    The type of criteria associated with the resource, extending {@code BaseCriteria<ID, USER>}.
  * @param <R>    The type of the CRUD repository associated with the resource, extending {@code BaseDomainCrudRepository<ID, USER, D, C>}.
- * @param <S>    The type of the CRUD service associated with the resource, extending {@code BaseDomainCrudService<ID, USER, D, DTO, C, R>}.
+ * @param <S>    The type of the CRUD service associated with the resource, extending {@code BaseChildDomainCrudService<ID, USER, D, DTO, C, R>}.
  * @see BaseDeleteDomainCrudGraphqlRestResource
  * @see BaseDeleteManyDomainCrudGraphqlRestResource
  * @see BaseEditDomainCrudGraphqlRestResource

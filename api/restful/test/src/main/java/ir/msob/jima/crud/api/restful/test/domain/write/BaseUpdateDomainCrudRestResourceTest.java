@@ -17,8 +17,8 @@ import org.springframework.http.MediaType;
 import java.io.Serializable;
 
 /**
- * The {@code BaseUpdateDomainCrudRestResourceTest} interface represents a set of RESTful-specific test methods for updating an entity.
- * It extends both the {@code BaseUpdateDomainCrudResourceTest} and {@code BaseEmbeddedDomainCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
+ * The {@code BaseUpdateChildDomainCrudRestResourceTest} interface represents a set of RESTful-specific test methods for updating an entity.
+ * It extends both the {@code BaseUpdateChildDomainCrudResourceTest} and {@code BaseEmbeddedDomainCrudRestResourceTest} interfaces, providing RESTful-specific testing capabilities.
  * <p>
  * The interface includes an implementation for making a request to update an entity using RESTful API. The result of the update operation is the DTO of the updated entity.
  *

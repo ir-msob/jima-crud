@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * The {@code BaseDeleteDomainCrudGraphqlRestResourceTest} interface represents a set of GraphQL-specific test methods
  * for deleting an entity based on criteria in the context of CRUD operations. It extends both the
- * {@code BaseDeleteDomainCrudResourceTest} and {@code ParentDomainCrudGraphqlRestResourceTest} interfaces, providing GraphQL-specific
+ * {@code BaseDeleteChildDomainCrudResourceTest} and {@code ParentDomainCrudGraphqlRestResourceTest} interfaces, providing GraphQL-specific
  * testing capabilities.
  * <p>
  * The interface defines a GraphQL mutation document and a corresponding path for deleting an entity based on criteria.
