@@ -10,7 +10,6 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.childdomain.BaseChildDomainCrudService;
-import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import ir.msob.jima.crud.test.childdomain.BaseChildDomainCrudDataProvider;
 import ir.msob.jima.crud.test.childdomain.ParentChildDomainCrudResourceTest;
 import org.junit.jupiter.api.Test;

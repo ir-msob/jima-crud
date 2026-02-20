@@ -9,7 +9,6 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.test.BaseCoreDataProvider;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.childdomain.BaseChildDomainCrudService;
-import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import lombok.SneakyThrows;
 
 import java.io.Serializable;
@@ -44,7 +43,7 @@ public interface BaseChildDomainCrudDataProvider<
      * Deletes all entities from the repository.
      */
     default void cleanups() throws BadRequestException, DomainNotFoundException, ExecutionException, InterruptedException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-        getService().doDelete(getCriteriaClass().getConstructor().newInstance(),getSampleUser()).toFuture().get();
+        getService().doDelete(getCriteriaClass().getConstructor().newInstance(), getSampleUser()).toFuture().get();
     }
 
     /**
@@ -55,7 +54,7 @@ public interface BaseChildDomainCrudDataProvider<
     default Long countDb() throws BadRequestException, DomainNotFoundException, ExecutionException,
             InterruptedException, InvocationTargetException, NoSuchMethodException,
             InstantiationException, IllegalAccessException {
-        return getService().countAll(getNewDto().getParentId(),getSampleUser()).toFuture().get();
+        return getService().countAll(getNewDto().getParentId(), getSampleUser()).toFuture().get();
     }
 
     /**
@@ -65,7 +64,7 @@ public interface BaseChildDomainCrudDataProvider<
      */
     default DTO saveNew() throws BadRequestException, DomainNotFoundException,
             ExecutionException, InterruptedException {
-        return getService().save(getNewDto().getParentId(),getNewDto(), getSampleUser()).toFuture().get();
+        return getService().save(getNewDto().getParentId(), getNewDto(), getSampleUser()).toFuture().get();
     }
 
     /**
@@ -75,7 +74,7 @@ public interface BaseChildDomainCrudDataProvider<
      */
     default DTO saveNewMandatory() throws BadRequestException, DomainNotFoundException,
             ExecutionException, InterruptedException {
-        return getService().save(getMandatoryNewDto().getParentId(),getMandatoryNewDto(), getSampleUser()).toFuture().get();
+        return getService().save(getMandatoryNewDto().getParentId(), getMandatoryNewDto(), getSampleUser()).toFuture().get();
     }
 
     /**

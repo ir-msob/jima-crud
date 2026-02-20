@@ -1,8 +1,8 @@
 package ir.msob.jima.crud.api.restful.test.childdomain.write;
 
-import ir.msob.jima.core.commons.childdomain.criteria.BaseChildCriteria;
 import ir.msob.jima.core.commons.childdomain.BaseChildDomain;
 import ir.msob.jima.core.commons.childdomain.BaseChildDto;
+import ir.msob.jima.core.commons.childdomain.criteria.BaseChildCriteria;
 import ir.msob.jima.core.commons.exception.badrequest.BadRequestException;
 import ir.msob.jima.core.commons.exception.domainnotfound.DomainNotFoundException;
 import ir.msob.jima.core.commons.operation.Operations;
@@ -12,7 +12,6 @@ import ir.msob.jima.core.test.Assertable;
 import ir.msob.jima.crud.api.restful.test.childdomain.ParentChildDomainCrudRestResourceTest;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.childdomain.BaseChildDomainCrudService;
-import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 import ir.msob.jima.crud.test.childdomain.BaseChildDomainCrudDataProvider;
 import ir.msob.jima.crud.test.childdomain.write.BaseDeleteManyChildDomainCrudResourceTest;
 import ir.msob.jima.crud.test.domain.write.BaseDeleteManyDomainCrudResourceTest;
@@ -57,7 +56,7 @@ public interface BaseDeleteManyChildDomainCrudRestResourceTest<
      * @throws BadRequestException     If the request is not valid.
      */
     @Override
-    default void deleteManyRequest(ID parentId,DTO savedDto, Assertable<Set<ID>> assertable) throws DomainNotFoundException, BadRequestException {
+    default void deleteManyRequest(ID parentId, DTO savedDto, Assertable<Set<ID>> assertable) throws DomainNotFoundException, BadRequestException {
         // Send a DELETE request to the DELETE_MANY operation URI with the ID of the entities to be deleted
         // Prepare the request header
         // Expect the status to be equal to the DELETE_MANY operation status

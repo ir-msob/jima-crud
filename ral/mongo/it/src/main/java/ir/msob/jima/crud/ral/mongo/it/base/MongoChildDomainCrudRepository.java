@@ -4,8 +4,6 @@ package ir.msob.jima.crud.ral.mongo.it.base;
 import ir.msob.jima.core.commons.repository.BaseQueryBuilder;
 import ir.msob.jima.core.it.childcriteria.ProjectChildCriteria;
 import ir.msob.jima.core.it.childdomain.ProjectChildDomain;
-import ir.msob.jima.core.it.criteria.ProjectCriteria;
-import ir.msob.jima.core.it.domain.ProjectDomain;
 import ir.msob.jima.core.ral.mongo.commons.BaseMongoRepository;
 import ir.msob.jima.crud.ral.mongo.commons.BaseDomainCrudMongoRepository;
 import lombok.RequiredArgsConstructor;

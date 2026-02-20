@@ -9,13 +9,11 @@ import com.github.fge.jsonpatch.JsonPatchOperation;
 import com.github.fge.jsonpatch.ReplaceOperation;
 import ir.msob.jima.core.commons.id.BaseIdService;
 import ir.msob.jima.core.ral.mongo.it.test.TestDomain;
-import ir.msob.jima.core.ral.mongo.it.test.TestDto;
 import ir.msob.jima.core.ral.mongo.it.testchild.TestChildCriteria;
 import ir.msob.jima.core.ral.mongo.it.testchild.TestChildDomain;
 import ir.msob.jima.core.ral.mongo.it.testchild.TestChildDto;
 import ir.msob.jima.crud.ral.mongo.it.base.ChildDomainCrudDataProvider;
 import ir.msob.jima.crud.ral.mongo.it.base.DomainCrudDataProvider;
-import ir.msob.jima.crud.ral.mongo.it.test.TestDataProvider;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 

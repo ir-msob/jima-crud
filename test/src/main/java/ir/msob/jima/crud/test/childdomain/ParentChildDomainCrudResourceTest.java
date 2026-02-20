@@ -9,7 +9,6 @@ import ir.msob.jima.core.commons.security.BaseUser;
 import ir.msob.jima.core.test.BaseCoreResourceTest;
 import ir.msob.jima.crud.commons.domain.BaseDomainCrudRepository;
 import ir.msob.jima.crud.service.childdomain.BaseChildDomainCrudService;
-import ir.msob.jima.crud.service.domain.BaseDomainCrudService;
 
 import java.io.Serializable;
 
