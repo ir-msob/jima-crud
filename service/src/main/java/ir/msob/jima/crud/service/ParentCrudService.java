@@ -55,106 +55,190 @@ public interface ParentCrudService<
 
 
     default Mono<@NonNull Long> doCount(C criteria, USER user) {
-        getBeforeAfterOperationComponent().beforeCount(criteria, user, getBeforeAfterDomainOperations());
-        return this.getRepository().count(criteria)
-                .doOnSuccess(result -> getBeforeAfterOperationComponent().afterCount(criteria, user, getBeforeAfterDomainOperations()));
+        return getBeforeAfterOperationComponent()
+                .beforeCount(criteria, user, getBeforeAfterDomainOperations())
+
+                .then(this.getRepository().count(criteria))
+
+                .flatMap(count ->
+                        getBeforeAfterOperationComponent()
+                                .afterCount(criteria, user, getBeforeAfterDomainOperations())
+                                .thenReturn(count)
+                );
     }
 
     default Mono<@NonNull DTO> doGetOne(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
-        getBeforeAfterOperationComponent().beforeGet(criteria, user, getBeforeAfterDomainOperations());
+        return getBeforeAfterOperationComponent()
+                .beforeGet(criteria, user, getBeforeAfterDomainOperations())
 
-        return this.preGet(criteria, user)
+                .then(this.preGet(criteria, user))
+
                 .then(this.getRepository().getOne(criteria))
+
                 .flatMap(domain -> {
-                    DTO dto = toDto(domain, user);
-                    Collection<ID> ids = Collections.singletonList(domain.getId());
-                    Collection<DTO> dtos = Collections.singletonList(dto);
+                    final DTO dto = toDto(domain, user);
+
+                    Collection<ID> ids = Collections.singleton(domain.getId());
+                    Collection<DTO> dtos = Collections.singleton(dto);
 
                     return this.postGet(ids, dtos, criteria, user)
-                            .doOnSuccess(x -> getBeforeAfterOperationComponent().afterGet(ids, dtos, criteria, user, getBeforeAfterDomainOperations()))
+                            .then(getBeforeAfterOperationComponent()
+                                    .afterGet(ids, dtos, criteria, user, getBeforeAfterDomainOperations())
+                            )
                             .thenReturn(dto);
                 });
     }
 
 
     default Mono<@NonNull Collection<DTO>> doGetMany(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
-        getBeforeAfterOperationComponent().beforeGet(criteria, user, getBeforeAfterDomainOperations());
+        return getBeforeAfterOperationComponent()
+                .beforeGet(criteria, user, getBeforeAfterDomainOperations())
 
-        return this.preGet(criteria, user)
+                .then(this.preGet(criteria, user))
+
                 .thenMany(this.getRepository().getMany(criteria))
-                .map(d -> toDto(d, user))
+
+                .concatMap(domain -> Mono.just(toDto(domain, user)))
+
                 .collectList()
+
                 .flatMap(dtos -> {
                     Collection<ID> ids = prepareIds(dtos);
                     return this.postGet(ids, dtos, criteria, user)
-                            .doOnSuccess(x -> getBeforeAfterOperationComponent().afterGet(ids, dtos, criteria, user, getBeforeAfterDomainOperations()))
+                            .then(getBeforeAfterOperationComponent()
+                                    .afterGet(ids, dtos, criteria, user, getBeforeAfterDomainOperations())
+                            )
                             .thenReturn(dtos);
                 });
     }
 
     default Mono<@NonNull Page<@NonNull DTO>> doGetPage(C criteria, Pageable pageable, USER user) throws DomainNotFoundException, BadRequestException {
-        getBeforeAfterOperationComponent().beforeGet(criteria, user, getBeforeAfterDomainOperations());
+        return getBeforeAfterOperationComponent()
+                .beforeGet(criteria, user, getBeforeAfterDomainOperations())
 
-        return this.preGet(criteria, user)
+                .then(this.preGet(criteria, user))
+
                 .then(this.getRepository().getPage(criteria, pageable))
-                .map(domainPage -> {
-                    List<DTO> dtos = domainPage
-                            .stream()
+
+                .flatMap(domainPage -> {
+                    List<DTO> dtos = domainPage.stream()
                             .map(domain -> toDto(domain, user))
                             .toList();
 
-                    return new PageImpl<>(dtos, domainPage.getPageable(), domainPage.getTotalElements());
-                })
-                .flatMap(dtoPage -> {
-                    Collection<ID> ids = prepareIds(dtoPage.getContent());
-                    return this.postGet(ids, dtoPage.getContent(), criteria, user)
-                            .doOnSuccess(x -> getBeforeAfterOperationComponent().afterGet(ids, dtoPage.getContent(), criteria, user, getBeforeAfterDomainOperations()))
+                    Page<DTO> dtoPage = new PageImpl<>(dtos, domainPage.getPageable(), domainPage.getTotalElements());
+                    Collection<ID> ids = prepareIds(dtos);
+
+                    return this.postGet(ids, dtos, criteria, user)
+                            .then(getBeforeAfterOperationComponent()
+                                    .afterGet(ids, dtos, criteria, user, getBeforeAfterDomainOperations())
+                            )
                             .thenReturn(dtoPage);
                 });
     }
 
     default Flux<@NonNull DTO> doGetStream(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
-        getBeforeAfterOperationComponent().beforeGet(criteria, user, getBeforeAfterDomainOperations());
+        return getBeforeAfterOperationComponent()
+                .beforeGet(criteria, user, getBeforeAfterDomainOperations())
 
-        return this.preGet(criteria, user)
+                .thenMany(this.preGet(criteria, user))
+
                 .thenMany(this.getRepository().getMany(criteria))
-                .flatMap(domain -> {
+
+                .concatMap(domain -> {
                     DTO dto = toDto(domain, user);
+
                     Collection<DTO> dtos = Collections.singleton(dto);
                     Collection<ID> ids = Collections.singleton(domain.getId());
+
                     return this.postGet(ids, dtos, criteria, user)
-                            .doOnSuccess(x -> getBeforeAfterOperationComponent().afterGet(ids, dtos, criteria, user, getBeforeAfterDomainOperations()))
+                            .then(getBeforeAfterOperationComponent()
+                                    .afterGet(ids, dtos, criteria, user, getBeforeAfterDomainOperations())
+                            )
                             .thenReturn(dto);
                 });
     }
 
     default Mono<@NonNull ID> doDelete(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
-        getBeforeAfterOperationComponent().beforeDelete(criteria, user, getBeforeAfterDomainOperations());
+        return getBeforeAfterOperationComponent()
+                .beforeDelete(criteria, user, getBeforeAfterDomainOperations())
 
-        return doGetOne(criteria, user)
-                .flatMap(dto -> this.preDelete(criteria, user).thenReturn(dto))
-                .flatMap(dto -> {
-                    C criteriaId = CriteriaUtil.idCriteria(getCriteriaClass(), dto.getId());
+                .then(doGetOne(criteria, user))
 
-                    return this.getRepository().removeOne(criteriaId).thenReturn(dto);
-                })
-                .flatMap(dto -> this.postDelete(dto, criteria, user).thenReturn(dto))
-                .doOnNext(dto -> this.getBeforeAfterOperationComponent().afterDelete(dto, criteria, getDtoClass(), user, getBeforeAfterDomainOperations()))
+                .flatMap(dto ->
+                        this.preDelete(criteria, user)
+                                .thenReturn(dto)
+                )
+
+                .flatMap(dto ->
+                        Mono.defer(() -> {
+                            C criteriaId = CriteriaUtil.idCriteria(
+                                    getCriteriaClass(),
+                                    dto.getId()
+                            );
+
+                            return this.getRepository()
+                                    .removeOne(criteriaId)
+                                    .thenReturn(dto);
+                        })
+                )
+
+                .flatMap(deletedDto ->
+                        this.postDelete(deletedDto, criteria, user)
+                                .thenReturn(deletedDto)
+                )
+
+                .flatMap(deletedDto ->
+                        getBeforeAfterOperationComponent()
+                                .afterDelete(
+                                        deletedDto,
+                                        criteria,
+                                        getDtoClass(),
+                                        user,
+                                        getBeforeAfterDomainOperations()
+                                )
+                                .thenReturn(deletedDto)
+                )
+
                 .map(BaseDto::getId);
     }
 
     default Mono<@NonNull Collection<ID>> doDeleteMany(C criteria, USER user) throws DomainNotFoundException, BadRequestException {
-        getBeforeAfterOperationComponent().beforeDelete(criteria, user, getBeforeAfterDomainOperations());
+        return getBeforeAfterOperationComponent()
+                .beforeDelete(criteria, user, getBeforeAfterDomainOperations())
 
-        return doGetStream(criteria, user)
-                .flatMap(dto -> this.preDelete(criteria, user).thenReturn(dto))
-                .flatMap(dto -> {
-                    C criteriaId = CriteriaUtil.idCriteria(getCriteriaClass(), dto.getId());
+                .thenMany(doGetStream(criteria, user))
 
-                    return this.getRepository().removeOne(criteriaId).thenReturn(dto);
-                })
-                .flatMap(dto -> this.postDelete(dto, criteria, user).thenReturn(dto))
-                .doOnNext(dto -> this.getBeforeAfterOperationComponent().afterDelete(dto, criteria, getDtoClass(), user, getBeforeAfterDomainOperations()))
+                .concatMap(dto ->
+                        this.preDelete(criteria, user)
+
+                                .then(Mono.defer(() -> {
+                                    C criteriaId = CriteriaUtil.idCriteria(
+                                            getCriteriaClass(),
+                                            dto.getId()
+                                    );
+                                    return this.getRepository()
+                                            .removeOne(criteriaId)
+                                            .thenReturn(dto);
+                                }))
+
+                                .flatMap(deletedDto ->
+                                        this.postDelete(deletedDto, criteria, user)
+                                                .thenReturn(deletedDto)
+                                )
+
+                                .flatMap(deletedDto ->
+                                        getBeforeAfterOperationComponent()
+                                                .afterDelete(
+                                                        deletedDto,
+                                                        criteria,
+                                                        getDtoClass(),
+                                                        user,
+                                                        getBeforeAfterDomainOperations()
+                                                )
+                                                .thenReturn(deletedDto)
+                                )
+                )
+
                 .map(BaseDto::getId)
                 .collectList()
                 .map(ArrayList::new);
@@ -173,11 +257,7 @@ public interface ParentCrudService<
             Collection<DTO> previousDtos = dtos.stream()
                     .map(SerializationUtils::clone)
                     .toList();
-            try {
-                return doUpdateMany(previousDtos, applyJsonPatch(dtos, jsonPatch, getObjectMapper()), user);
-            } catch (BadRequestException | ValidationException | DomainNotFoundException e) {
-                return Mono.error(e);
-            }
+            return doUpdateMany(previousDtos, applyJsonPatch(dtos, jsonPatch, getObjectMapper()), user);
         });
     }
 
@@ -187,13 +267,29 @@ public interface ParentCrudService<
     }
 
     private Mono<@NonNull DTO> save(DTO dto, USER user) {
-        getBeforeAfterOperationComponent().beforeSave(dto, user, getBeforeAfterDomainOperations());
-        D domain = toDomain(dto, user);
-        return this.preSave(dto, user)
-                .then(this.getRepository().insertOne(domain))
-                .doOnSuccess(savedDomain -> this.postSave(dto, savedDomain, user))
-                .flatMap(savedDomain -> doGetOne(CriteriaUtil.idCriteria(getCriteriaClass(), savedDomain.getId()), user))
-                .doOnSuccess(savedDto -> getBeforeAfterOperationComponent().afterSave(dto, savedDto, user, getBeforeAfterDomainOperations()));
+        return getBeforeAfterOperationComponent()
+                .beforeSave(dto, user, getBeforeAfterDomainOperations())
+
+                .then(this.preSave(dto, user))
+
+                .then(Mono.defer(() -> {
+                    D domain = toDomain(dto, user);
+                    return this.getRepository().insertOne(domain);
+                }))
+
+                .flatMap(savedDomain -> this.postSave(dto, savedDomain, user)
+                        .thenReturn(savedDomain)
+                )
+
+                .flatMap(savedDomain ->
+                        doGetOne(CriteriaUtil.idCriteria(getCriteriaClass(), savedDomain.getId()), user)
+                )
+
+                .flatMap(savedDto ->
+                        getBeforeAfterOperationComponent()
+                                .afterSave(dto, savedDto, user, getBeforeAfterDomainOperations())
+                                .thenReturn(savedDto)
+                );
     }
 
     private Mono<@NonNull DTO> safeSave(DTO dto, USER user) {
@@ -206,16 +302,27 @@ public interface ParentCrudService<
     }
 
     default Mono<@NonNull DTO> doUpdate(DTO previousDto, @Valid DTO dto, USER user) throws BadRequestException, ValidationException, DomainNotFoundException {
-        getBeforeAfterOperationComponent().beforeUpdate(previousDto, dto, user, getBeforeAfterDomainOperations());
+        return getBeforeAfterOperationComponent()
+                .beforeUpdate(previousDto, dto, user, getBeforeAfterDomainOperations())
 
-        D domain = toDomain(dto, user);
+                .then(this.preUpdate(dto, user))
 
-        return this.preUpdate(dto, user)
-                .then(this.getRepository().updateOne(domain))
-                .flatMap(updatedDomain -> this.postUpdate(dto, updatedDomain, user).thenReturn(updatedDomain))
+                .then(Mono.defer(() -> {
+                    D domain = toDomain(dto, user);
+                    return this.getRepository().updateOne(domain);
+                }))
+
+                .flatMap(updatedDomain -> this.postUpdate(dto, updatedDomain, user)
+                        .thenReturn(updatedDomain)
+                )
+
                 .flatMap(updatedDomain -> doGetOne(CriteriaUtil.idCriteria(getCriteriaClass(), updatedDomain.getId()), user))
-                .doOnSuccess(updatedDto ->
-                        getBeforeAfterOperationComponent().afterUpdate(previousDto, updatedDto, user, getBeforeAfterDomainOperations()));
+
+                .flatMap(updatedDto ->
+                        getBeforeAfterOperationComponent()
+                                .afterUpdate(previousDto, updatedDto, user, getBeforeAfterDomainOperations())
+                                .thenReturn(updatedDto)
+                );
     }
 
     default Mono<@NonNull DTO> doUpdate(@Valid DTO dto, USER user) {
@@ -277,7 +384,7 @@ public interface ParentCrudService<
      *
      * @return The collection of before/after domain operations.
      */
-    Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> getBeforeAfterDomainOperations();
+    List<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> getBeforeAfterDomainOperations();
 
     /**
      * Get the ObjectMapper for handling JSON data.

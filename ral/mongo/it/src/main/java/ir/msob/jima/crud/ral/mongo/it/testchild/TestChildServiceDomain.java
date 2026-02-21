@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Service
 public class TestChildServiceDomain extends ChildDomainCrudService<TestChildDomain, TestChildDto, TestChildCriteria, TestChildRepository> {
@@ -35,7 +36,7 @@ public class TestChildServiceDomain extends ChildDomainCrudService<TestChildDoma
     }
 
     @Override
-    public Collection<BaseBeforeAfterDomainOperation<String, ProjectUser, TestChildDto, TestChildCriteria>> getBeforeAfterDomainOperations() {
+    public List<BaseBeforeAfterDomainOperation<String, ProjectUser, TestChildDto, TestChildCriteria>> getBeforeAfterDomainOperations() {
         return Collections.emptyList();
     }
 

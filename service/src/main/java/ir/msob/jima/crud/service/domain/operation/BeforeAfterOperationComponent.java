@@ -8,10 +8,14 @@ import ir.msob.jima.core.commons.operation.BaseBeforeAfterDomainOperation;
 import ir.msob.jima.core.commons.operation.BaseBeforeAfterOperation;
 import ir.msob.jima.core.commons.security.BaseUser;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * This class provides before and after operations for various CRUD operations.
@@ -27,7 +31,8 @@ public class BeforeAfterOperationComponent {
     /**
      * A collection of BaseBeforeAfterOperation instances.
      */
-    private final Collection<BaseBeforeAfterOperation> beforeAfterOperations;
+    private final List<BaseBeforeAfterOperation> beforeAfterOperations;
+
 
     /**
      * Executes before counting records based on the provided criteria.
@@ -41,17 +46,16 @@ public class BeforeAfterOperationComponent {
     public <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser,
             DTO extends BaseDto<ID>,
-            C extends BaseCriteria<ID>> void beforeCount(C criteria, USER user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainInfos) throws DomainNotFoundException, BadRequestException {
-        if (beforeAfterOperations != null && !beforeAfterOperations.isEmpty()) {
-            for (BaseBeforeAfterOperation beforeAfterService : beforeAfterOperations) {
-                beforeAfterService.beforeCount(criteria, user);
-            }
-        }
-        if (beforeAfterDomainInfos != null && !beforeAfterDomainInfos.isEmpty()) {
-            for (BaseBeforeAfterDomainOperation<ID, USER, DTO, C> beforeAfterService : beforeAfterDomainInfos) {
-                beforeAfterService.beforeCount(criteria, user);
-            }
-        }
+            C extends BaseCriteria<ID>> Mono<@NonNull Void> beforeCount(C criteria, USER user, List<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainInfos) throws DomainNotFoundException, BadRequestException {
+        return Flux.concat(
+                Flux.fromIterable(
+                        beforeAfterOperations == null ? List.of() : beforeAfterOperations
+                ).map(op -> op.beforeCount(criteria, user)),
+
+                Flux.fromIterable(
+                        beforeAfterDomainInfos == null ? List.of() : beforeAfterDomainInfos
+                ).map(op -> op.beforeCount(criteria, user))
+        ).then();
     }
 
     /**
@@ -66,17 +70,16 @@ public class BeforeAfterOperationComponent {
     public <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser,
             DTO extends BaseDto<ID>,
-            C extends BaseCriteria<ID>> void afterCount(C criteria, USER user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainInfos) throws DomainNotFoundException, BadRequestException {
-        if (beforeAfterOperations != null && !beforeAfterOperations.isEmpty()) {
-            for (BaseBeforeAfterOperation beforeAfterService : beforeAfterOperations) {
-                beforeAfterService.afterCount(criteria, user);
-            }
-        }
-        if (beforeAfterDomainInfos != null && !beforeAfterDomainInfos.isEmpty()) {
-            for (BaseBeforeAfterDomainOperation<ID, USER, DTO, C> beforeAfterService : beforeAfterDomainInfos) {
-                beforeAfterService.afterCount(criteria, user);
-            }
-        }
+            C extends BaseCriteria<ID>> Mono<@NonNull Void> afterCount(C criteria, USER user, List<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainInfos) throws DomainNotFoundException, BadRequestException {
+        return Flux.concat(
+                Flux.fromIterable(
+                        beforeAfterOperations == null ? List.of() : beforeAfterOperations
+                ).map(op -> op.afterCount(criteria, user)),
+
+                Flux.fromIterable(
+                        beforeAfterDomainInfos == null ? List.of() : beforeAfterDomainInfos
+                ).map(op -> op.afterCount(criteria, user))
+        ).then();
     }
 
     /**
@@ -91,17 +94,16 @@ public class BeforeAfterOperationComponent {
     public <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser,
             DTO extends BaseDto<ID>,
-            C extends BaseCriteria<ID>> void beforeGet(C criteria, USER user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainInfos) throws DomainNotFoundException, BadRequestException {
-        if (beforeAfterOperations != null && !beforeAfterOperations.isEmpty()) {
-            for (BaseBeforeAfterOperation beforeAfterService : beforeAfterOperations) {
-                beforeAfterService.beforeGet(criteria, user);
-            }
-        }
-        if (beforeAfterDomainInfos != null && !beforeAfterDomainInfos.isEmpty()) {
-            for (BaseBeforeAfterDomainOperation<ID, USER, DTO, C> beforeAfterService : beforeAfterDomainInfos) {
-                beforeAfterService.beforeGet(criteria, user);
-            }
-        }
+            C extends BaseCriteria<ID>> Mono<@NonNull Void> beforeGet(C criteria, USER user, List<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainInfos) throws DomainNotFoundException, BadRequestException {
+        return Flux.concat(
+                Flux.fromIterable(
+                        beforeAfterOperations == null ? List.of() : beforeAfterOperations
+                ).map(op -> op.beforeGet(criteria, user)),
+
+                Flux.fromIterable(
+                        beforeAfterDomainInfos == null ? List.of() : beforeAfterDomainInfos
+                ).map(op -> op.beforeGet(criteria, user))
+        ).then();
     }
 
     /**
@@ -118,17 +120,16 @@ public class BeforeAfterOperationComponent {
     public <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser,
             DTO extends BaseDto<ID>,
-            C extends BaseCriteria<ID>> void afterGet(Collection<ID> ids, Collection<DTO> dtos, C criteria, USER user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainInfos) throws DomainNotFoundException, BadRequestException {
-        if (beforeAfterOperations != null && !beforeAfterOperations.isEmpty()) {
-            for (BaseBeforeAfterOperation beforeAfterService : beforeAfterOperations) {
-                beforeAfterService.afterGet(ids, dtos, criteria, user);
-            }
-        }
-        if (beforeAfterDomainInfos != null && !beforeAfterDomainInfos.isEmpty()) {
-            for (BaseBeforeAfterDomainOperation<ID, USER, DTO, C> beforeAfterService : beforeAfterDomainInfos) {
-                beforeAfterService.afterGet(ids, dtos, criteria, user);
-            }
-        }
+            C extends BaseCriteria<ID>> Mono<@NonNull Void> afterGet(Collection<ID> ids, Collection<DTO> dtos, C criteria, USER user, List<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainInfos) throws DomainNotFoundException, BadRequestException {
+        return Flux.concat(
+                Flux.fromIterable(
+                        beforeAfterOperations == null ? List.of() : beforeAfterOperations
+                ).map(op -> op.afterGet(ids, dtos, criteria, user)),
+
+                Flux.fromIterable(
+                        beforeAfterDomainInfos == null ? List.of() : beforeAfterDomainInfos
+                ).map(op -> op.afterGet(ids, dtos, criteria, user))
+        ).then();
     }
 
     /**
@@ -143,17 +144,16 @@ public class BeforeAfterOperationComponent {
     public <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser,
             DTO extends BaseDto<ID>,
-            C extends BaseCriteria<ID>> void beforeSave(DTO dto, USER user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainInfos) throws DomainNotFoundException, BadRequestException {
-        if (beforeAfterOperations != null && !beforeAfterOperations.isEmpty()) {
-            for (BaseBeforeAfterOperation beforeAfterService : beforeAfterOperations) {
-                beforeAfterService.beforeSave(dto, user);
-            }
-        }
-        if (beforeAfterDomainInfos != null && !beforeAfterDomainInfos.isEmpty()) {
-            for (BaseBeforeAfterDomainOperation<ID, USER, DTO, C> beforeAfterService : beforeAfterDomainInfos) {
-                beforeAfterService.beforeSave(dto, user);
-            }
-        }
+            C extends BaseCriteria<ID>> Mono<@NonNull Void> beforeSave(DTO dto, USER user, List<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainInfos) throws DomainNotFoundException, BadRequestException {
+        return Flux.concat(
+                Flux.fromIterable(
+                        beforeAfterOperations == null ? List.of() : beforeAfterOperations
+                ).map(op -> op.beforeSave(dto, user)),
+
+                Flux.fromIterable(
+                        beforeAfterDomainInfos == null ? List.of() : beforeAfterDomainInfos
+                ).map(op -> op.beforeSave(dto, user))
+        ).then();
     }
 
     /**
@@ -169,17 +169,16 @@ public class BeforeAfterOperationComponent {
     public <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser,
             DTO extends BaseDto<ID>,
-            C extends BaseCriteria<ID>> void afterSave(DTO dto, DTO savedDto, USER user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainInfos) throws DomainNotFoundException, BadRequestException {
-        if (beforeAfterOperations != null && !beforeAfterOperations.isEmpty()) {
-            for (BaseBeforeAfterOperation beforeAfterService : beforeAfterOperations) {
-                beforeAfterService.afterSave(dto, savedDto, user);
-            }
-        }
-        if (beforeAfterDomainInfos != null && !beforeAfterDomainInfos.isEmpty()) {
-            for (BaseBeforeAfterDomainOperation<ID, USER, DTO, C> beforeAfterService : beforeAfterDomainInfos) {
-                beforeAfterService.afterSave(dto, savedDto, user);
-            }
-        }
+            C extends BaseCriteria<ID>> Mono<@NonNull Void> afterSave(DTO dto, DTO savedDto, USER user, List<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainInfos) throws DomainNotFoundException, BadRequestException {
+        return Flux.concat(
+                Flux.fromIterable(
+                        beforeAfterOperations == null ? List.of() : beforeAfterOperations
+                ).map(op -> op.afterSave(dto, savedDto, user)),
+
+                Flux.fromIterable(
+                        beforeAfterDomainInfos == null ? List.of() : beforeAfterDomainInfos
+                ).map(op -> op.afterSave(dto, savedDto, user))
+        ).then();
     }
 
     /**
@@ -195,17 +194,16 @@ public class BeforeAfterOperationComponent {
     public <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser,
             DTO extends BaseDto<ID>,
-            C extends BaseCriteria<ID>> void beforeUpdate(DTO previousDto, DTO dto, USER user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainInfos) throws DomainNotFoundException, BadRequestException {
-        if (beforeAfterOperations != null && !beforeAfterOperations.isEmpty()) {
-            for (BaseBeforeAfterOperation beforeAfterService : beforeAfterOperations) {
-                beforeAfterService.beforeUpdate(previousDto, dto, user);
-            }
-        }
-        if (beforeAfterDomainInfos != null && !beforeAfterDomainInfos.isEmpty()) {
-            for (BaseBeforeAfterDomainOperation<ID, USER, DTO, C> beforeAfterService : beforeAfterDomainInfos) {
-                beforeAfterService.beforeUpdate(previousDto, dto, user);
-            }
-        }
+            C extends BaseCriteria<ID>> Mono<@NonNull Void> beforeUpdate(DTO previousDto, DTO dto, USER user, List<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainInfos) throws DomainNotFoundException, BadRequestException {
+        return Flux.concat(
+                Flux.fromIterable(
+                        beforeAfterOperations == null ? List.of() : beforeAfterOperations
+                ).map(op -> op.beforeUpdate(previousDto, dto, user)),
+
+                Flux.fromIterable(
+                        beforeAfterDomainInfos == null ? List.of() : beforeAfterDomainInfos
+                ).map(op -> op.beforeUpdate(previousDto, dto, user))
+        ).then();
     }
 
     /**
@@ -221,17 +219,16 @@ public class BeforeAfterOperationComponent {
     public <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser,
             DTO extends BaseDto<ID>,
-            C extends BaseCriteria<ID>> void afterUpdate(DTO dto, DTO updatedDto, USER user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainInfos) throws DomainNotFoundException, BadRequestException {
-        if (beforeAfterOperations != null && !beforeAfterOperations.isEmpty()) {
-            for (BaseBeforeAfterOperation beforeAfterService : beforeAfterOperations) {
-                beforeAfterService.afterUpdate(dto, updatedDto, user);
-            }
-        }
-        if (beforeAfterDomainInfos != null && !beforeAfterDomainInfos.isEmpty()) {
-            for (BaseBeforeAfterDomainOperation<ID, USER, DTO, C> beforeAfterService : beforeAfterDomainInfos) {
-                beforeAfterService.afterUpdate(dto, updatedDto, user);
-            }
-        }
+            C extends BaseCriteria<ID>> Mono<@NonNull Void> afterUpdate(DTO dto, DTO updatedDto, USER user, List<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainInfos) throws DomainNotFoundException, BadRequestException {
+        return Flux.concat(
+                Flux.fromIterable(
+                        beforeAfterOperations == null ? List.of() : beforeAfterOperations
+                ).map(op -> op.afterUpdate(dto, updatedDto, user)),
+
+                Flux.fromIterable(
+                        beforeAfterDomainInfos == null ? List.of() : beforeAfterDomainInfos
+                ).map(op -> op.afterUpdate(dto, updatedDto, user))
+        ).then();
     }
 
     /**
@@ -246,17 +243,16 @@ public class BeforeAfterOperationComponent {
     public <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser,
             DTO extends BaseDto<ID>,
-            C extends BaseCriteria<ID>> void beforeDelete(C criteria, USER user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainInfos) throws DomainNotFoundException, BadRequestException {
-        if (beforeAfterOperations != null && !beforeAfterOperations.isEmpty()) {
-            for (BaseBeforeAfterOperation beforeAfterService : beforeAfterOperations) {
-                beforeAfterService.beforeDelete(criteria, user);
-            }
-        }
-        if (beforeAfterDomainInfos != null && !beforeAfterDomainInfos.isEmpty()) {
-            for (BaseBeforeAfterDomainOperation<ID, USER, DTO, C> beforeAfterService : beforeAfterDomainInfos) {
-                beforeAfterService.beforeDelete(criteria, user);
-            }
-        }
+            C extends BaseCriteria<ID>> Mono<@NonNull Void> beforeDelete(C criteria, USER user, List<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainInfos) throws DomainNotFoundException, BadRequestException {
+        return Flux.concat(
+                Flux.fromIterable(
+                        beforeAfterOperations == null ? List.of() : beforeAfterOperations
+                ).map(op -> op.beforeDelete(criteria, user)),
+
+                Flux.fromIterable(
+                        beforeAfterDomainInfos == null ? List.of() : beforeAfterDomainInfos
+                ).map(op -> op.beforeDelete(criteria, user))
+        ).then();
     }
 
     /**
@@ -273,16 +269,15 @@ public class BeforeAfterOperationComponent {
     public <ID extends Comparable<ID> & Serializable,
             USER extends BaseUser,
             DTO extends BaseDto<ID>,
-            C extends BaseCriteria<ID>> void afterDelete(DTO dto, C criteria, Class<DTO> dtoClass, USER user, Collection<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainInfos) throws DomainNotFoundException, BadRequestException {
-        if (beforeAfterOperations != null && !beforeAfterOperations.isEmpty()) {
-            for (BaseBeforeAfterOperation beforeAfterService : beforeAfterOperations) {
-                beforeAfterService.afterDelete(dto, criteria, dtoClass, user);
-            }
-        }
-        if (beforeAfterDomainInfos != null && !beforeAfterDomainInfos.isEmpty()) {
-            for (BaseBeforeAfterDomainOperation<ID, USER, DTO, C> beforeAfterService : beforeAfterDomainInfos) {
-                beforeAfterService.afterDelete(dto, criteria, user);
-            }
-        }
+            C extends BaseCriteria<ID>> Mono<@NonNull Void> afterDelete(DTO dto, C criteria, Class<DTO> dtoClass, USER user, List<BaseBeforeAfterDomainOperation<ID, USER, DTO, C>> beforeAfterDomainInfos) throws DomainNotFoundException, BadRequestException {
+        return Flux.concat(
+                Flux.fromIterable(
+                        beforeAfterOperations == null ? List.of() : beforeAfterOperations
+                ).map(op -> op.afterDelete(dto, criteria, user)),
+
+                Flux.fromIterable(
+                        beforeAfterDomainInfos == null ? List.of() : beforeAfterDomainInfos
+                ).map(op -> op.afterDelete(dto, criteria, user))
+        ).then();
     }
 }

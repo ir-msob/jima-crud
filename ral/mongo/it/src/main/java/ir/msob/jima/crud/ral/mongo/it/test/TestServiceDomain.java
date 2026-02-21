@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Service
 public class TestServiceDomain extends DomainCrudService<TestDomain, TestDto, TestCriteria, TestRepository> {
@@ -35,7 +36,7 @@ public class TestServiceDomain extends DomainCrudService<TestDomain, TestDto, Te
     }
 
     @Override
-    public Collection<BaseBeforeAfterDomainOperation<String, ProjectUser, TestDto, TestCriteria>> getBeforeAfterDomainOperations() {
+    public List<BaseBeforeAfterDomainOperation<String, ProjectUser, TestDto, TestCriteria>> getBeforeAfterDomainOperations() {
         return Collections.emptyList();
     }
 
