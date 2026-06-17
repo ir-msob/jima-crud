@@ -2,7 +2,6 @@ package ir.msob.jima.graphql.restful.reactive.test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import ir.msob.jima.platform.api.channel.ChannelMessage;
-import ir.msob.jima.platform.api.event.publisher.BaseEventPublisher;
 import ir.msob.jima.platform.api.security.BaseUser;
 import ir.msob.jima.platform.api.shared.ModelType;
 import ir.msob.jima.platform.reactive.event.publisher.BaseEventReactivePublisher;

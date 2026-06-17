@@ -1,7 +1,7 @@
 package ir.msob.jima.crud.reactive.testing.base;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ir.msob.jima.crud.reactive.test.dataprovider.childdomain.BaseChildDomainCrudDataProvider;
+import ir.msob.jima.crud.reactive.test.dataprovider.childdomain.BaseChildDomainCrudReactiveDataProvider;
 import ir.msob.jima.platform.api.id.BaseIdService;
 import ir.msob.jima.platform.testing.childcriteria.ProjectChildCriteria;
 import ir.msob.jima.platform.testing.childdomain.ProjectChildDomain;
@@ -18,7 +18,7 @@ public abstract class ChildDomainCrudDataProvider<
         C extends ProjectChildCriteria,
         R extends MongoChildDomainCrudRepository<D, C>,
         S extends ChildDomainCrudService<D, DTO, C, R>>
-        implements BaseChildDomainCrudDataProvider<String, ProjectUser, D, DTO, C, R, S> {
+        implements BaseChildDomainCrudReactiveDataProvider<String, ProjectUser, D, DTO, C, R, S> {
 
     private final ProjectUser sampleUser;
     private final ObjectMapper objectMapper;

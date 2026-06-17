@@ -44,14 +44,14 @@
         <module>graphql-restful/graphql-restful-reactive-starter</module>
 
 
-        <!--        <module>grpc/grpc-api</module>-->
-        <!--        <module>grpc/grpc-core</module>-->
-        <!-- Skip        <module>grpc/grpc-reactive</module>-->
-        <!--        <module>grpc/grpc-autoconfigure</module>-->
-        <!-- Skip       <module>grpc/grpc-test</module>-->
-        <!--        <module>grpc/grpc-testing</module>-->
-        <!--        <module>grpc/grpc-starter</module>-->
-        <!-- Skip        <module>grpc/grpc-reactive-starter</module>-->
+        <module>grpc/grpc-api</module>
+        <module>grpc/grpc-core</module>
+        <module>grpc/grpc-reactive</module>
+        <module>grpc/grpc-autoconfigure</module>
+        <module>grpc/grpc-reactive-test</module>
+        <module>grpc/grpc-testing</module>
+        <module>grpc/grpc-starter</module>
+        <module>grpc/grpc-reactive-starter</module>
 
         <module>kafka/kafka-api</module>
         <module>kafka/kafka-core</module>
