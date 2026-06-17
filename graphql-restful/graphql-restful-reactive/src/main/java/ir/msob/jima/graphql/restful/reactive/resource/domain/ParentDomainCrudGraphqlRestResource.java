@@ -1,0 +1,165 @@
+package ir.msob.jima.graphql.restful.reactive.resource.domain;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.jsonpatch.JsonPatch;
+import ir.msob.jima.crud.api.resource.BaseCrudResource;
+import ir.msob.jima.crud.reactive.service.domain.BaseDomainCrudReactiveService;
+import ir.msob.jima.platform.api.domain.criteria.BaseDomainCriteria;
+import ir.msob.jima.platform.api.domain.domain.BaseDomain;
+import ir.msob.jima.platform.api.domain.dto.BaseDomainDto;
+import ir.msob.jima.platform.api.resource.BaseResource;
+import ir.msob.jima.platform.api.security.BaseUser;
+import ir.msob.jima.platform.api.security.BaseUserService;
+import ir.msob.jima.platform.api.shared.PageableDto;
+import ir.msob.jima.platform.reactive.repository.BaseReactiveRepository;
+import lombok.SneakyThrows;
+
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
+
+/**
+ * The {@code ParentDomainCrudGraphqlRestResource} interface defines a set of common methods for GraphQL-based CRUD operations.
+ * It extends {@code BaseResource<ID, USER>} and implements {@code BaseCrudResource}.
+ * This interface is generic, allowing customization for different types such as ID, USER, D, DTO, C, R, and S.
+ *
+ * @param <ID>   The type of the resource ID, which should be comparable and serializable.
+ * @param <USER> The type of the user associated with the resource, extending {@code BaseUser}.
+ * @param <D>    The type of the resource domain, extending {@code BaseDomain<ID>}.
+ * @param <DTO>  The type of the data transfer object associated with the resource, extending {@code BaseDomainDto<ID>}.
+ * @param <C>    The type of criteria associated with the resource, extending {@code BaseDomainCriteria<ID, USER>}.
+ * @param <R>    The type of the CRUD repository associated with the resource, extending {@code BaseReactiveRepository<ID, USER, D, C>}.
+ * @param <S>    The type of the CRUD service associated with the resource, extending {@code BaseChildDomainCrudService<ID, USER, D, DTO, C, R>}.
+ * @see BaseResource
+ * @see BaseCrudResource
+ */
+public interface ParentDomainCrudGraphqlRestResource<ID extends Comparable<ID> & Serializable,
+        USER extends BaseUser,
+        D extends BaseDomain<ID>,
+        DTO extends BaseDomainDto<ID>,
+        C extends BaseDomainCriteria<ID>,
+        R extends BaseReactiveRepository<ID, D, C>,
+        S extends BaseDomainCrudReactiveService<ID, USER, D, DTO, C, R>>
+        extends BaseCrudResource<ID, USER> {
+
+    /**
+     * Gets the object mapper used for JSON serialization and deserialization.
+     *
+     * @return The object mapper.
+     */
+    ObjectMapper getObjectMapper();
+
+    /**
+     * Gets the CRUD service associated with the domain.
+     *
+     * @return The CRUD service.
+     */
+    S getService();
+
+    /**
+     * Gets the user service responsible for retrieving user information.
+     *
+     * @return The user service.
+     */
+    BaseUserService getUserService();
+
+    /**
+     * Retrieves the user associated with the provided authentication token.
+     *
+     * @param token The authentication token (optional).
+     * @return the user associated with the token, or an empty optional if not authenticated.
+     */
+    default USER getUser(String token) {
+        return getUserService().getUser(token);
+    }
+
+    /**
+     * Converts a list of DTO strings to a collection of DTOs.
+     *
+     * @param dtos The list of DTO strings.
+     * @return A collection of DTOs.
+     */
+    default Collection<DTO> convertToDtos(List<String> dtos) {
+        return dtos.stream()
+                .map(this::convertToDto)
+                .toList();
+    }
+
+    /**
+     * Converts a JSON patch string to a {@code JsonPatch} object.
+     *
+     * @param jsonPatch The JSON patch string.
+     * @return The {@code JsonPatch} object.
+     */
+    @SneakyThrows
+    default JsonPatch convertToJsonPatch(String jsonPatch) {
+        return getObjectMapper().reader().readValue(jsonPatch, JsonPatch.class);
+    }
+
+    /**
+     * Converts a collection of results to a list of strings.
+     *
+     * @param result The collection of results.
+     * @return A list of strings.
+     */
+    default List<String> convertToStrings(Collection<?> result) {
+        return result.stream()
+                .map(this::convertToString)
+                .toList();
+    }
+
+    /**
+     * Converts an object to its string representation using JSON serialization.
+     *
+     * @param o The object to convert.
+     * @return The string representation of the object.
+     */
+    @SneakyThrows
+    default String convertToString(Object o) {
+        return getObjectMapper().writeValueAsString(o);
+    }
+
+    /**
+     * Converts a criteria string to a criteria object.
+     *
+     * @param criteria The criteria string.
+     * @return The criteria object.
+     */
+    @SneakyThrows
+    default C convertToCriteria(String criteria) {
+        return getObjectMapper().reader().readValue(criteria, getService().getCriteriaClass());
+    }
+
+    /**
+     * Converts an ID string to an ID object.
+     *
+     * @param id The ID string.
+     * @return The ID object.
+     */
+    @SneakyThrows
+    default ID convertToId(String id) {
+        return getObjectMapper().reader().readValue(id, getService().getIdClass());
+    }
+
+    /**
+     * Converts a DTO string to a DTO object.
+     *
+     * @param dto The DTO string.
+     * @return The DTO object.
+     */
+    @SneakyThrows
+    default DTO convertToDto(String dto) {
+        return getObjectMapper().reader().readValue(dto, getService().getDtoClass());
+    }
+
+    /**
+     * Converts a pageable string to a {@code Pageable} object.
+     *
+     * @param pageable The pageable string.
+     * @return The {@code Pageable} object.
+     */
+    @SneakyThrows
+    default PageableDto convertToPageableDto(String pageable) {
+        return getObjectMapper().reader().readValue(pageable, PageableDto.class);
+    }
+}

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>ir.msob.jima.framework</groupId>
+    <artifactId>jima-crud</artifactId>
+    <version>2.0.0</version>
+    <packaging>pom</packaging>
+    <name>jima-crud</name>
+    <description>Jima CRUD Aggregator</description>
+    <url>http://www.msob.ir</url>
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>Jima</name>
+            <email>ask@msob.ir</email>
+            <organization>MSob</organization>
+            <organizationUrl>http://www.msob.ir</organizationUrl>
+        </developer>
+    </developers>
+    <scm>
+        <connection>scm:git:https://github.com/ir-msob/jima-crud.git</connection>
+        <developerConnection>scm:git:https://github.com/ir-msob/jima-crud.git</developerConnection>
+        <url>scm:git:https://github.com/ir-msob/jima-crud.git</url>
+    </scm>
+    <modules>
+        <module>crud/crud-api</module>
+        <module>crud/crud-core</module>
+        <module>crud/crud-reactive</module>
+        <module>crud/crud-test</module>
+        <module>crud/crud-reactive-test</module>
+        <module>crud/crud-testing</module>
+        <module>crud/crud-reactive-testing</module>
+
+        <module>graphql-restful/graphql-restful-api</module>
+        <module>graphql-restful/graphql-restful-reactive</module>
+        <module>graphql-restful/graphql-restful-reactive-test</module>
+        <module>graphql-restful/graphql-restful-reactive-starter</module>
+
+
+        <!--        <module>grpc/grpc-api</module>-->
+        <!--        <module>grpc/grpc-core</module>-->
+        <!-- Skip        <module>grpc/grpc-reactive</module>-->
+        <!--        <module>grpc/grpc-autoconfigure</module>-->
+        <!-- Skip       <module>grpc/grpc-test</module>-->
+        <!--        <module>grpc/grpc-testing</module>-->
+        <!--        <module>grpc/grpc-starter</module>-->
+        <!-- Skip        <module>grpc/grpc-reactive-starter</module>-->
+
+        <module>kafka/kafka-api</module>
+        <module>kafka/kafka-core</module>
+        <module>kafka/kafka-reactive</module>
+        <module>kafka/kafka-autoconfigure</module>
+        <module>kafka/kafka-reactive-test</module>
+        <module>kafka/kafka-starter</module>
+        <module>kafka/kafka-reactive-starter</module>
+
+        <module>restful/restful-api</module>
+        <module>restful/restful-core</module>
+        <module>restful/restful-reactive</module>
+        <!--        <module>restful/restful-autoconfigure</module>-->
+        <module>restful/restful-test</module>
+        <module>restful/restful-reactive-test</module>
+        <!--        <module>restful/restful-testing</module>-->
+        <!--        <module>restful/restful-starter</module>-->
+        <module>restful/restful-reactive-starter</module>
+
+        <module>rsocket/rsocket-api</module>
+        <module>rsocket/rsocket-core</module>
+        <module>rsocket/rsocket-reactive</module>
+        <module>rsocket/rsocket-autoconfigure</module>
+        <module>rsocket/rsocket-reactive-test</module>
+        <!--        <module>rsocket/rsocket-testing</module>-->
+        <!--        <module>rsocket/rsocket-starter</module>-->
+        <module>rsocket/rsocket-reactive-starter</module>
+    </modules>
+
+
+</project>

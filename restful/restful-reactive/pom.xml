@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>ir.msob.jima.framework</groupId>
+        <artifactId>jima-framework-parent</artifactId>
+        <version>2.0.0</version>
+    </parent>
+    <artifactId>jima-crud-restful-reactive</artifactId>
+    <name>jima-crud-restful-reactive</name>
+    <description>jima-crud-restful-reactive</description>
+    <dependencies>
+        <!-- Framework -->
+        <dependency>
+            <groupId>ir.msob.jima.framework</groupId>
+            <artifactId>jima-crud-restful-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ir.msob.jima.framework</groupId>
+            <artifactId>jima-platform-restful-reactive</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ir.msob.jima.framework</groupId>
+            <artifactId>jima-crud-reactive</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- Spring -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webflux</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
+        </dependency>
+    </dependencies>
+</project>

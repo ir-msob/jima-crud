@@ -1,0 +1,75 @@
+package ir.msob.jima.crud.rsocket.reactive.test.resource.domain.write;
+
+import com.github.fge.jsonpatch.JsonPatch;
+import ir.msob.jima.crud.reactive.service.domain.BaseDomainCrudReactiveService;
+import ir.msob.jima.crud.reactive.test.dataprovider.domain.BaseDomainCrudReactiveDataProvider;
+import ir.msob.jima.crud.reactive.test.resource.domain.write.BaseEditManyDomainCrudResourceTest;
+import ir.msob.jima.crud.rsocket.reactive.test.resource.domain.ParentDomainCrudRsocketResourceTest;
+import ir.msob.jima.platform.api.channel.ChannelMessage;
+import ir.msob.jima.platform.api.channel.message.JsonPatchMessage;
+import ir.msob.jima.platform.api.domain.criteria.BaseDomainCriteria;
+import ir.msob.jima.platform.api.domain.domain.BaseDomain;
+import ir.msob.jima.platform.api.domain.dto.BaseDomainDto;
+import ir.msob.jima.platform.api.operation.Operations;
+import ir.msob.jima.platform.api.security.BaseUser;
+import ir.msob.jima.platform.api.util.CriteriaUtil;
+import ir.msob.jima.platform.reactive.repository.BaseReactiveRepository;
+import ir.msob.jima.platform.test.Assertable;
+import lombok.SneakyThrows;
+
+import java.io.Serializable;
+import java.util.Collection;
+
+/**
+ * This interface extends the BaseEditManyChildDomainCrudResourceTest and ParentDomainCrudRsocketResourceTest interfaces.
+ * It provides a method for editing multiple resources via RSocket.
+ *
+ * @param <ID>   the type of the ID of the domain object, which must be comparable and serializable
+ * @param <USER> the type of the user, which extends BaseUser
+ * @param <D>    the type of the domain object, which extends BaseDomain
+ * @param <DTO>  the type of the DTO object, which extends BaseDomainDto
+ * @param <C>    the type of the criteria object, which extends BaseDomainCriteria
+ * @param <R>    the type of the repository object, which extends BaseReactiveRepository
+ * @param <S>    the type of the service object, which extends BaseChildDomainCrudReactiveService
+ * @param <DP>   the type of the data provider object, which extends BaseChildDomainCrudDataProvider
+ */
+public interface BaseEditManyDomainCrudRsocketResourceTest<
+        ID extends Comparable<ID> & Serializable,
+        USER extends BaseUser,
+        D extends BaseDomain<ID>,
+        DTO extends BaseDomainDto<ID>,
+        C extends BaseDomainCriteria<ID>,
+        R extends BaseReactiveRepository<ID, D, C>,
+        S extends BaseDomainCrudReactiveService<ID, USER, D, DTO, C, R>,
+        DP extends BaseDomainCrudReactiveDataProvider<ID, USER, D, DTO, C, R, S>>
+        extends BaseEditManyDomainCrudResourceTest<ID, USER, D, DTO, C, R, S, DP>,
+        ParentDomainCrudRsocketResourceTest<ID, USER, D, DTO, C> {
+
+    /**
+     * This method sends an edit request for multiple resources via RSocket.
+     * It creates a JsonPatchMessage with the provided DTO and JsonPatch, and sends it to the specified route.
+     *
+     * @param savedDto  the DTO object that represents the saved state of the resources to be edited
+     * @param jsonPatch the JsonPatch object that represents the changes to be applied to the resources
+     */
+    @SneakyThrows
+    @Override
+    default void editManyRequest(DTO savedDto, JsonPatch jsonPatch, Assertable<Collection<DTO>> assertable) {
+        JsonPatchMessage<ID, C> data = new JsonPatchMessage<>();
+        data.setCriteria(CriteriaUtil.idCriteria(getCriteriaClass(), savedDto.getId()));
+        data.setJsonPatch(jsonPatch);
+
+        ChannelMessage<USER, JsonPatchMessage<ID, C>> message = ChannelMessage.<USER, JsonPatchMessage<ID, C>>builder()
+                .data(data)
+                .build();
+
+        getRSocketRequester()
+                .route(getUri(Operations.EDIT_MANY))
+                .metadata(getRSocketRequesterMetadata()::metadata)
+                .data(getObjectMapper().writeValueAsString(message))
+                .retrieveMono(Collection.class)
+                .doOnSuccess(assertable::assertThan)
+                .toFuture()
+                .get();
+    }
+}
