@@ -138,20 +138,14 @@ public interface BaseEmbeddedDomainCrudReactiveService<
     default <ED extends BaseEmbeddedDomain<ID>> Mono<@NonNull DTO> updateMany(@NotNull ID parentId, Collection<ED> embeddedDomains, Class<ED> cdClass, USER user) throws DomainNotFoundException, BadRequestException {
         return getDto(parentId, user)
                 .doOnNext(dto -> {
-                    Iterator<ED> iterator = EmbeddedDomainUtil.getFunction(cdClass, getParentDtoClass()).apply(dto).iterator();
+                    Collection<ED> embeddedList = EmbeddedDomainUtil.getFunction(cdClass, getParentDtoClass()).apply(dto);
 
                     for (ED cd : embeddedDomains) {
-                        boolean found = false;
-                        while (iterator.hasNext()) {
-                            ED next = iterator.next();
-                            if (Objects.equals(cd.getId(), next.getId())) {
-                                EmbeddedDomainUtil.getFunction(cdClass, getParentDtoClass()).apply(dto).add(cd);
-                                iterator.remove();
-                                found = true;
-                                break;
-                            }
-                        }
-                        if (!found) {
+                        boolean found = embeddedList.removeIf(next -> Objects.equals(cd.getId(), next.getId()));
+
+                        if (found) {
+                            embeddedList.add(cd);
+                        } else {
                             throw new DataNotFoundException("No embeddeddomain model found with Criteria in the parent DTO of type " + dto.getClass().getSimpleName());
                         }
                     }
